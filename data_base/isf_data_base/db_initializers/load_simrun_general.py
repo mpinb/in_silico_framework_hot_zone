@@ -147,7 +147,7 @@ def read_voltage_traces_by_filenames(prefix,
 
 def get_voltage_traces_divisions_by_metadata(metadata, repartition=None):
     assert repartition is not None
-    divisions = metadata[metadata.trailnr == min(metadata.trailnr)]
+    divisions = metadata[metadata.trialnr == min(metadata.trialnr)]
     divisions = list(divisions.sim_trial_index)
     if len(divisions) > 10000 and repartition:
         divisions = [d[0] for d in chunkIt(divisions, 5000)]
@@ -178,13 +178,13 @@ def create_metadata_parallelization_helper(sim_trial_index, simresult_path):
     def voltage_trace_file_list(x):
         '''returns part of the metadata dataframe.'''
         path = x.sim_trial_index
-        path, trailnr = os.path.split(path)
+        path, trialnr = os.path.split(path)
         voltage_traces_file_name = os.path.basename(path)
         voltage_traces_file_name = voltage_traces_file_name.split('_')[-1] \
                                         + '_vm_all_traces.csv'
 
         return pd.Series({'path': path, \
-                          'trailnr': trailnr, \
+                          'trialnr': trialnr, \
                           'voltage_traces_file_name': voltage_traces_file_name})
 
     def synaptic_file_list(x):
@@ -194,7 +194,7 @@ def create_metadata_parallelization_helper(sim_trial_index, simresult_path):
         zfill_synapses = determine_zfill_used_in_simulation(testpath %
                                                             'synapses')
         synapses_file_name = "simulation_run%s_synapses.csv" % str(
-            int(x.trailnr)).zfill(zfill_synapses)
+            int(x.trialnr)).zfill(zfill_synapses)
         return pd.Series({'synapses_file_name': synapses_file_name})
 
     def cells_file_list(x):
@@ -203,20 +203,20 @@ def create_metadata_parallelization_helper(sim_trial_index, simresult_path):
                                 '*%s*.csv')
         zfill_cells = determine_zfill_used_in_simulation(testpath % 'cells')
         cells_file_name = "simulation_run%s_presynaptic_cells.csv" % str(
-            int(x.trailnr)).zfill(zfill_cells)
+            int(x.trialnr)).zfill(zfill_cells)
         return pd.Series({'cells_file_name': cells_file_name})
 
-    path_trailnr = sim_trial_index.apply(voltage_trace_file_list, axis=1)
-    sim_trial_index_complete = pd.concat((sim_trial_index, path_trailnr),
+    path_trialnr = sim_trial_index.apply(voltage_trace_file_list, axis=1)
+    sim_trial_index_complete = pd.concat((sim_trial_index, path_trialnr),
                                          axis=1)
     try:
-        synaptic_files = path_trailnr.apply(synaptic_file_list, axis=1)
+        synaptic_files = path_trialnr.apply(synaptic_file_list, axis=1)
         sim_trial_index_complete = pd.concat(
             (sim_trial_index_complete, synaptic_files), axis=1)
     except IndexError:  # special case if synapse activation data is not in the simulation folder
         warnings.warn('could not find synapse activation files')
     try:
-        cell_files = path_trailnr.apply(cells_file_list, axis=1)
+        cell_files = path_trialnr.apply(cells_file_list, axis=1)
         sim_trial_index_complete = pd.concat(
             (sim_trial_index_complete, cell_files), axis=1)
     except IndexError:
