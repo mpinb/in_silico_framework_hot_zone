@@ -249,10 +249,13 @@ done
 
 
 # -------------------- Cleanup -------------------- #
+rm $SCRIPT_DIR/tempfile
+
+echo ""
 echo -e "\e[1;32m*****************************************************************\e[0m"
 echo -e "\e[1;32m*                                                               *\e[0m"
 echo -e "\e[1;32m*   Succesfully installed In-Silico-Framework for Python 3.8.   *\e[0m"
 echo -e "\e[1;32m*                                                               *\e[0m"
 echo -e "\e[1;32m*****************************************************************\e[0m"
-rm $SCRIPT_DIR/tempfile
+
 exit 0
