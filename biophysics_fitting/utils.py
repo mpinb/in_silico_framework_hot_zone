@@ -49,10 +49,11 @@ def get_inner_sec_dist_dict(
     sec_dist_dict = {
         cell.distance_to_soma(sec, 1.0): sec
         for sec in cell.sections
-        if connected_to_structure_beyond(cell, sec, 
-                                         beyond_dist,
-                                         beyond_struct, 
-                                         n_children_required = n_children_required)
+        if connected_to_structure_beyond(
+            cell, sec, 
+            beyond_dist,
+            beyond_struct, 
+            n_children_required = n_children_required)
     }
     return sec_dist_dict
 
@@ -61,7 +62,8 @@ def get_inner_section_at_distance(
     cell,
     dist,
     beyond_dist=1000,
-    beyond_struct=['ApicalDendrite']):
+    beyond_struct=['ApicalDendrite']
+    ):
     '''Returns the section and relative position of that section, such that the soma distance (along the dendrite) is dist.
     Also, it is assured, that the section returned has children that have a soma distance beyond beyond_dist of the label in
     beyond_struct'''
@@ -143,6 +145,18 @@ def _get_apical_sec_and_i_at_distance(cell, dist):
 
 
 def vmApical(cell, dist=None):
+    """Fetch the membrane voltage of the apical dendrite at a certain distance from the soma.
+    
+    Assumes that the :class:~`single_cell_parser.cell.Cell` object has an apical dendrite::
+    
+        - It contains at least one section with the label "ApicalDendrite"
+        - Such section exists at :py:param:~`dist` distance from the soma
+        - The section has at least one child
+        
+    See :py:meth:~`get_inner_section_at_distance` for more information about which arguments can be used
+    to define an apical section.
+
+    """
     assert dist is not None
     sec, mindx, minSeg = _get_apical_sec_and_i_at_distance(cell, dist)
     return np.array(sec.recVList[minSeg])

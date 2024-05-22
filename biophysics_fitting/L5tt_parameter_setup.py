@@ -313,8 +313,12 @@ def set_morphology(cell_param, filename=None):
 
 
 def set_ephys(cell_param, params=None):
-    """
-    Updates cell_param file. Parameter names reflect the hay naming convention.
+    """Updates cell_param file. 
+    
+    Parameter names reflect the Hay naming convention.
+    
+    Notes:
+        See :cite:`Hay_Hill_Schürmann_Markram_Segev_2011` for more information.
     """
     for k, v in six.iteritems(params):
         cell_param[hay_param_to_scp_neuron_param(k)] = float(v)
@@ -322,8 +326,24 @@ def set_ephys(cell_param, params=None):
 
 
 def set_param(cell_param, params=None):
-    """
-    Updates cell_param file. Parameter names reflect the hierarchy in the cell_param file itself.
+    """Updates cell_param given a dict of params in the dot naming convention.
+    
+    Cell parameters are nested dictionaries, while the input parameters are flat dictionaries,
+    where the hierarchy is defined by dots.
+    
+    Example::
+
+        cell_param = {'a': {'b': {'c': 2}}}
+        params = {'a.b.c': 3}
+        set_param(cell_param, params)
+        # returns {'a': {'b': {'c': 3}}}
+        
+    Args:
+        cell_param (dict): The cell parameter nested dictionary.
+        params (dict): The parameter flat dictionary.
+    
+    Returns:
+        dict: The updated cell_param.
     """
     for k, v in six.iteritems(params):
         p = cell_param
@@ -334,6 +354,26 @@ def set_param(cell_param, params=None):
 
 
 def set_many_param(cell_param, params=None):
+    """Updates cell_param given a dict of params in the dot naming convention.
+    
+    This method is almost identical to :py:meth:`set_param`, but it has a different behavior when
+    a parameter name appears both as a top-level key and as a nested key in :py:param:`params`. In this case, the top-level
+    key will be used as the master value.
+    
+    Example::
+
+        cell_param = {'a': {'b': {'c': 0}}}
+        params = {'a': True, 'a.b.c': False}
+        set_many_param(cell_param, params)
+        # Output: {'a': {'b': {'c': True}}}, NOT {'a': {'b': {'c': False}}}
+        
+    Args:
+        cell_param (dict): The cell parameter nested dictionary.
+        params (dict): The parameter flat dictionary.
+        
+    Returns:
+        dict: The updated cell_param.
+    """
 
     master_values = {}
 

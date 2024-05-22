@@ -107,7 +107,8 @@ class Simulator_Setup:
                 cell_param = fun(cell_param, params=param_selector(params, name))
             except Exception as e:
                 logger.error("Could not run the cell parameter modify function {} ({})".format(name, fun))
-                raise e
+                logger.error(e)
+                raise
             self._check_not_none(cell_param, 'cell_param', name)
         return cell_param
 
@@ -157,8 +158,8 @@ class Simulator_Setup:
             try:
                 cell = fun(cell, params=param_selector(params, name))
             except Exception as e:
-                logger.error("Could not run the cell modify function {} ({})\n{}".format(name, fun))
-                raise e
+                logger.error("Could not run the cell modify function {} ({})\n{}".format(name, fun, e))
+                raise
             self._check_not_none(cell, 'cell', name)
         return cell, params
 

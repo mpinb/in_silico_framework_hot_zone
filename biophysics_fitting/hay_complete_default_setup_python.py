@@ -46,7 +46,7 @@ def record_bAP(cell, recSite1=None, recSite2=None):
     to calculate e.g. backpropagating attenuation.
     
     Args:
-        cell (Cell): The cell object.
+        cell (:class:~`single_cell_parser.cell.Cell`): The cell object.
         recSite1 (float): The distance (um) from the soma to the first recording site.
         recSite2 (float): The distance (um) from the soma to the second recording site.
         
