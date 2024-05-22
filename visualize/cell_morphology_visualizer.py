@@ -740,7 +740,7 @@ class CellMorphologyVisualizer(CMVDataParser):
         highlight_x=None):
         '''
         Creates a python plot of the cell morphology in 3D,
-        You can pass various arguments to adapt the plot, e.g. showing an ovelray of the membrane voltage, or synaptic locations.
+        You can pass various arguments to adapt the plot, e.g. showing an overlay of the membrane voltage, or synaptic locations.
 
         Args:
             - color (str | [[float]]): If you want some other color overlayed on the cell morphology. 
