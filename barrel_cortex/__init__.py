@@ -356,7 +356,7 @@ def transform_point(p, x, y, z, coordinate_system=None):
     Returns:
         numpy.ndarray: Transformed point.
     """
-    x_, y_, z_ = y(coordinate_system)
+    x_, y_, z_ = get_xyz(coordinate_system)
     return np.array(p) + x * x_ + y * y_ + z * z_
 
 
