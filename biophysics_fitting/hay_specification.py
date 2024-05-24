@@ -1,3 +1,8 @@
+"""
+This module provides convenience methods for Hay's model specification (see :cite:`Hay_Hill_Schürmann_Markram_Segev_2011`).
+"""
+
+
 ##############################################
 # hay parameters: parameterboundaries ...
 ##############################################

@@ -1,4 +1,7 @@
 '''
+This module provides the Combiner class and associated classes and functions.
+The Combiner class can be used to combine features computed by an Evaluator object.
+
 Created on Nov 08, 2018
 
 @author: abast

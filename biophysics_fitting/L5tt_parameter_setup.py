@@ -1,3 +1,10 @@
+"""
+This module provides method to set up the parameters for a Layer 5 Pyramidal Tract neuron (L5PT/L5tt)
+
+These parameters and templates are used to set up the biophysical constraints for the L5PT cell in e.g. :py:mod:~`biophysics_fitting.simulator`.
+"""
+
+
 #########################################
 # naming converters scp <--> hay
 #########################################
@@ -30,6 +37,28 @@ def hay_params_to_scp_neuron_params(params):
 
 
 def get_L5tt_template():
+    """Get a template cell parameter dictionary for a L5PT cell.
+    
+    This method returns a nested dictionary-like object that can be used to set up a L5PT cell for simulations.
+    The values of each key are set to None or default values, and need to be filled in with the actual values.
+    This dictionary-like parameter structure is used by e.g. the :class:~`biophysics_fitting.simulator.Simulator` object.
+    It provides information on::
+    
+        - For each section label (for an L5PT: Soma, AIS, ApicalDendrite, Dendrite, Myelin):
+            - neuron.<section_label>.mechanisms: active biophysics of the cell (e.g. ion channel densities)
+            - neuron.<section_label>.properties: passive biophysics of the cell (e.g. membrane capacitance)
+        - sim: simulation parameters:
+            - T: temperature
+            - Vinit: initial voltage
+            - dt: time step
+            - recordingSites: recording sites
+            - tStart: start time
+            - tStop: stop time
+            
+    Returns:
+        sumatra.parameters.NTParameterSet (dict-like): The template cell parameters.       
+    
+    """
     p = {
         'NMODL_mechanisms': {
             'channels': '/'
@@ -278,6 +307,16 @@ def get_L5tt_template():
     return NTParameterSet(p['neuron'])
 
 def get_L5tt_template_v2():
+    """Get a template cell parameter dictionary for a L5PT cell.
+    
+    This method is identical to :py:meth:`get_L5tt_template`, but adds the following specifications::
+    
+        - The CaDynamics_E2 mechanism is replaced with CaDynamics_E2_v2 (see :py:mod:`mechanisms`).
+        - The SKv3_1 mechanism is set to have a linear spatial distribution with intercept (see :cite:`Schaefer_Helmstaedter_Schmitt_Bar_Yehuda_Almog_Ben_Porat_Sakmann_Korngreen_2007`).
+        
+    Returns:
+        sumatra.NTParameterSet (dict-like): The template cell parameters.
+    """
     neup = get_L5tt_template()
     for loc in neup:
         if loc == 'filename':
@@ -308,6 +347,16 @@ def get_L5tt_template_v2():
     return NTParameterSet(p['neuron'])
 
 def set_morphology(cell_param, filename=None):
+    """Add the morphology to a cell parameter object.
+    
+    The morphology is simply a path to a .hoc file in string format.
+    
+    Args:
+        cell_param (sumatra.parameters.NTParameterSet | dict): The cell parameter dictionary.
+        filename (str): The path to the .hoc file.
+        
+    Returns:
+        sumatra.parameters.NTParameterSet | dict: The updated cell parameter dictionary."""
     cell_param.filename = filename
     return cell_param
 
@@ -393,8 +442,20 @@ def set_many_param(cell_param, params=None):
 
 
 def set_hot_zone(cell_param, min_=None, max_=None, outsidescale_sections=None):
-    """
-    Insert Ca_LVAst and Ca_HVA channels along the apical dendrite between ``min_`` and ``max_`` distance from the soma.
+    """Insert Ca_LVAst and Ca_HVA channels along the apical dendrite between ``min_`` and ``max_`` distance from the soma.
+    
+    Args:
+        cell_param (dict): The cell parameter dictionary.
+        min_ (float): The minimum distance from the soma.
+        max_ (float): The maximum distance from the soma.
+        outsidescale_sections (list): A list of sections where the channels should be inserted.
+        
+    Returns:
+        sumatra.parameters.NTParameterSet | dict: The updated cell_param.
+        
+    Notes:
+        This method is specific for a L5PT.
+        For more information about the hot zone, refer to :cite:`Guest_Bast_Narayanan_Oberlaender`
     """
     cell_param['ApicalDendrite'].mechanisms.range['Ca_LVAst']['begin'] = min_
     cell_param['ApicalDendrite'].mechanisms.range['Ca_LVAst']['end'] = max_

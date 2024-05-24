@@ -1,4 +1,6 @@
 '''
+This module provides methods to run Hay's stimulus protocols, and evaluate the resulting voltage traces.
+
 Created on Nov 08, 2018
 
 @author: abast
@@ -197,7 +199,7 @@ def hay_evaluate(cur_stim, tvec, vList):
     Note: 
         I had the problem with python segfaulting as soon as this function got executed.
         In that case, make sure, the mechanisms are correctly compiled and loaded.
-        You can load the mechanisms by importing the mechanisms module.
+        You can load the mechanisms by importing the mechanisms module. - Arco
     '''
     setup_hay_evaluator()
     feature_mean_list = h.evaluator.feature_mean_list

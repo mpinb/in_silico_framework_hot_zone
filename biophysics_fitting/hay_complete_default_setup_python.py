@@ -1,7 +1,5 @@
 '''
-This module provides a complete setup of the Hay stimulus protocol, as described in :cite:`Hay_Hill_Schürmann_Markram_Segev_2011`.
-It is 
-
+A Python translation of the setup for in-silico curernt injection experiments as described in :cite:`Hay_Hill_Schürmann_Markram_Segev_2011`.
 
 Created on Nov 08, 2018
 

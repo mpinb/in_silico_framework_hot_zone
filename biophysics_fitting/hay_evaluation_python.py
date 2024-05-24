@@ -1,4 +1,7 @@
 '''
+A Python translation of the evaluation functions used in :cite:`Hay_Hill_Schürmann_Markram_Segev_2011`.
+This module provides methods to run Hay's stimulus protocols, and evaluate the resulting voltage traces.
+
 Created on Nov 08, 2018
 
 @author: abast
@@ -14,23 +17,39 @@ objectives_step = [
     'DI2', 'ISIcv1', 'ISIcv2', 'ISIcv3', 'TTFS1', 'TTFS2', 'TTFS3', 'fAHPd1',
     'fAHPd2', 'fAHPd3', 'mf1', 'mf2', 'mf3', 'sAHPd1', 'sAHPd2', 'sAHPd3',
     'sAHPt1', 'sAHPt2', 'sAHPt3'
-]
+]  # objectives for the step current injection protocol
 
 objectives_BAC = [
     'BAC_APheight', 'BAC_ISI', 'BAC_ahpdepth', 'BAC_caSpike_height',
     'BAC_caSpike_width', 'BAC_spikecount', 'bAP_APheight', 'bAP_APwidth',
     'bAP_att2', 'bAP_att3', 'bAP_spikecount'
-]
+]  # objectives for the BAC and bAP protocols
 
 from .ephys import *
 
 
 def normalize(raw, mean, std):
+    """Normalize a raw value.
+    
+    Args:
+        raw: raw value
+        mean: mean value
+        std: standard deviation
+        
+    Returns
+        float: normalized value"""
     return np.mean(np.abs(raw - mean)) / std
 
 
 def nan_if_error(fun):
-
+    """Wrapper method that returns nan if an error occurs.
+    
+    Args:
+        fun: function to run
+        
+    Returns
+        function: wrapped function
+    """
     def helper(*args, **kwargs):
         try:
             return fun(*args, **kwargs)
@@ -46,8 +65,7 @@ class BAC:
     to assess the accuracy of some simulation based on the voltage trace
     it produced. These metrics were introduced by Idan Segev, and illustrated in
     "Ion channel distributions in cortical neurons are optimized for energy-efficient
-    active dendritic computations" by Arco Bast and Marcel Oberlaender.
-    TODO: link doi when published.
+    active dendritic computations" by Arco Bast and Marcel Oberlaender (:cite:`Guest_Bast_Narayanan_Oberlaender`).
     """
 
     def __init__(

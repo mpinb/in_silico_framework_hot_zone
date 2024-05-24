@@ -1,4 +1,8 @@
 '''
+This module provides the Evaluator class and associated classes and functions.
+The Evaluator class can be used to extract features from voltage traces.
+
+
 Created on Nov 08, 2018
 
 @author: abast
