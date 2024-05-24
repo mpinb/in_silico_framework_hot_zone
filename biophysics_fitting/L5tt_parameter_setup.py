@@ -12,6 +12,17 @@ import six
 
 
 def hay_param_to_scp_neuron_param(p):
+    """Convert a Hay parameter name to a SCP neuron parameter name.
+    
+    Args:
+        p (str): The Hay parameter name.
+        
+    Returns:
+        str: The SCP neuron parameter name.
+        
+    Note:
+        See :cite:`Hay_Hill_Schürmann_Markram_Segev_2011` for more information.
+    """
     p = p.split('.')
     if p[1] == 'axon':
         p[1] = 'AIS'
@@ -28,6 +39,13 @@ def hay_param_to_scp_neuron_param(p):
 
 
 def hay_params_to_scp_neuron_params(params):
+    """Convert a list of Hay parameter names to a list of SCP neuron parameter names.
+    
+    Args:
+        params (list): The list of Hay parameter names.
+        
+    Returns:
+        list: The list of SCP neuron parameter names."""
     return [hay_param_to_scp_neuron_param(p) for p in params]
 
 

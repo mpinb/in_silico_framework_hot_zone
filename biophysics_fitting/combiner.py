@@ -1,6 +1,6 @@
 '''
-This module provides the Combiner class and associated classes and functions.
-The Combiner class can be used to combine features computed by an Evaluator object.
+This module provides the :class:`Combiner` class and associated classes and functions.
+The :class:`~biophysics_fitting.combiner.Combiner` class can be used to combine features computed by an :class:`~biophysics_fitting.evaluator.Evaluator` object.
 
 Created on Nov 08, 2018
 
@@ -32,13 +32,13 @@ class Combiner_Setup:
 
 class Combiner:
     '''
-    This  class can be used to combine features (usually) computed by an Evaluator object.
+    This  class can be used to combine features (usually) computed by an :class:`Evaluator` object.
     
-    For a Simulator object s and a Evaluator object e and a Combiner object c, the typical usecase is::
+    For a :class:`Simulator` object s, an :class:`E`valuator object e, and a :class:`Combiner` object c, the typical usecase is:
     
-        voltage_traces_dict = s.run(params)
-        features = e.evaluate(voltage_traces_dict)
-        combined_features = c.combine(features)
+        >>> voltage_traces_dict = s.run(params)
+        >>> features = e.evaluate(voltage_traces_dict)
+        >>> combined_features = c.combine(features)
             
     Internally, the Combiner iterates over all names of specified combinations. 
     Each combination is specified not only by a name of the combination, 

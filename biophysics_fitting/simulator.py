@@ -298,6 +298,7 @@ class Simulator:
     
         >>> params = pd.Series({"param1": 1, "param2": 2})
         
+        >>> s = Simulator()
         >>> cell, params = s.setup.get(params)
         >>> s.setup.stim_setup_funs.append(
             ['stim_1.setup', stim_setup_fun])
