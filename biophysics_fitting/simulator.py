@@ -7,7 +7,7 @@ It takes care of equipping a cell with biophysical details, using convenient pd.
 The class :class:`Simulator` is used to transform a parameter vector into simulated voltage traces.
 It allows to apply a variety of stimuli to the cell and extract voltage traces.
 
-The results of this module can be used in conjunction with :py:mod:~`biophysics_fitting.evaluator` to iteratively run and evaluate simulations.
+The results of this module can be used in conjunction with :py:mod:`~biophysics_fitting.evaluator` to iteratively run and evaluate simulations.
 
 Created on Nov 08, 2018
 
@@ -178,7 +178,7 @@ class Simulator_Setup:
     def get_cell_params(self, params):
         '''Get the cell parameters as an NTParameterSet from the parameter vector.
         
-        This can be used with :py:meth:~`biophysics_fitting.single_cell_parser.create_cell` to
+        This can be used with :py:meth:`~biophysics_fitting.single_cell_parser.create_cell` to
         create a :class:`single_cell_parser.cell.Cell` object.
         This is helpful for inspecting what parameters have effectively been used for the simulation.
         
@@ -277,7 +277,7 @@ class Simulator:
         1. Set up a cell with biophysics from a parameter vector. See :class:`Simulator_Setup`
         2. Apply a variety of stimuli to the cell and extract voltage traces.    
     
-    An examplary specification of such a program flow can be found in the module :py:meth:~`biophysics_fitting.hay_complete_default_setup.get_Simulator`.
+    An examplary specification of such a program flow can be found in the module :py:meth:`~biophysics_fitting.hay_complete_default_setup.get_Simulator`.
         
     The usual application is to specify biophysical parameters in a parameter vector and simulate
     current injection responses depending on these parameters.
@@ -307,7 +307,7 @@ class Simulator:
             ['stim_1.measure', stim_response_measure_fun])
             
     Often, it is easier to write functions that accept keyword arguments instead of full parameter vectors
-    This can be done by using :py:meth:~`biophysics_fitting.parameters.params_to_kwargs`.
+    This can be done by using :py:meth:`~biophysics_fitting.parameters.params_to_kwargs`.
     
     Example:
     
@@ -338,7 +338,7 @@ class Simulator:
         >>> s.setup.get_cell_params_with_default_sim_prams(params, ...)
         neuron_parameter_file
     
-    Notes:
+    Note:
         The names for stim_setup_funs, stim_run_funs and stim_response_measure_funs need to start
             with the name of the simulus followed by a dot. For each stimulus, each of the three
             functions needs to be defined exactly once. 
@@ -426,7 +426,7 @@ def run_fun(
         silent (bool): Whether to suppress output.
         
     Returns:
-        (:class:~`single_cell_parser.cell.Cell`): The cell object, containing simulation data.
+        (:class:`~single_cell_parser.cell.Cell`): The cell object, containing simulation data.
     '''
     from sumatra.parameters import NTParameterSet
     sim = {

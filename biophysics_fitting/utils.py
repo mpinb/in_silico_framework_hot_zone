@@ -18,12 +18,12 @@ def connected_to_structure_beyond(
     beyond_struct=['ApicalDendrite'],
     n_children_required=1
     ):
-    '''Checks if a :class:~`single_cell_parser.cell.Cell` section is connected to a structure
+    '''Checks if a :class:`~single_cell_parser.cell.Cell` section is connected to a structure
     at a soma distance larger than :py:param:`beyond_dist`. 
     
     Args:
-        cell (:class:~`single_cell_parser.cell.Cell`): The cell object.
-        sec (:class:~`single_cell_parser.section.Section`): The section to check.
+        cell (:class:`~single_cell_parser.cell.Cell`): The cell object.
+        sec (:class:`~single_cell_parser.section.Section`): The section to check.
         beyond_dist (float): The distance from the soma to check.
         beyond_struct (list): The labels of the structures to check.
         n_children_required (int): The minimum number of children required to have a connection.
@@ -58,7 +58,7 @@ def get_inner_sec_dist_dict(
     This is useful to get sections of the apical trunk of an L5PT, filtering out oblique dendrites.
     
     Args:
-        cell (:class:~`single_cell_parser.cell.Cell`): The cell object.
+        cell (:class:`~single_cell_parser.cell.Cell`): The cell object.
         beyond_dist (float): The minimum distance from the soma (um).
         beyond_struct (list): The labels of the structures to check.
         n_children_required (int): The minimum number of children required to have a connection.
@@ -66,8 +66,8 @@ def get_inner_sec_dist_dict(
     Returns:
         dict: A dictionary with the soma distance as key and the section as value.
         
-    Notes:
-        See also: :py:meth:~`get_inner_section_at_distance` that returns the closest section at a specific distance, rather than all sections beyond some distance.
+    Note:
+        See also: :py:meth:`~get_inner_section_at_distance` that returns the closest section at a specific distance, rather than all sections beyond some distance.
     '''
     sec_dist_dict = {
         cell.distance_to_soma(sec, 1.0): sec
@@ -94,7 +94,7 @@ def get_inner_section_at_distance(
     This is useful to get sections of the apical trunk of an L5PT, filtering out oblique dendrites.
     
     Args:
-        cell (:class:~`single_cell_parser.cell.Cell`): The cell object.
+        cell (:class:`~single_cell_parser.cell.Cell`): The cell object.
         dist (float): The distance from the soma (um).
         beyond_dist (float): The minimum distance from the soma (um).
         beyond_struct (list): The labels of the structures to check.
@@ -102,8 +102,8 @@ def get_inner_section_at_distance(
     Returns:
         tuple: The section and the relative distance from the section to the soma. Only returns the section that's closest to the provided :py:param:`dist`.
         
-    Notes:
-        See also: :py:meth:~`get_inner_sec_dist_dict` that returns all sections beyond some distance, rather than only the closest section at a specific distance.
+    Note:
+        See also: :py:meth:`~get_inner_sec_dist_dict` that returns all sections beyond some distance, rather than only the closest section at a specific distance.
     '''
     import six
     sec_dist_dict = get_inner_sec_dist_dict(cell, beyond_dist, beyond_struct)
@@ -121,13 +121,13 @@ def get_main_bifurcation_section(cell):
     
         - with at least two children
         - whose parent is the soma.
-        - (optional) whose children are beyond a certain distance (default: 1000 um). See :py:meth:~`get_inner_sec_dist_dict` for more information.
+        - (optional) whose children are beyond a certain distance (default: 1000 um). See :py:meth:`~get_inner_sec_dist_dict` for more information.
         
     Args:
-        cell (:class:~`single_cell_parser.cell.Cell`): The cell object.
+        cell (:class:`~single_cell_parser.cell.Cell`): The cell object.
         
     Returns:
-        :class:~`single_cell_parser.section.Section`: The main bifurcation section.
+        :class:`~single_cell_parser.section.Section`: The main bifurcation section.
     '''
     two_children_connected_list = get_inner_sec_dist_dict(cell, n_children_required = 2)
     two_children_connected_list = list(two_children_connected_list.values())
@@ -142,7 +142,7 @@ def augment_cell_with_detailed_labels(cell):
     Assigning these labels to section.label_detailed
     
     Args:
-        cell (:class:~`single_cell_parser.cell.Cell`): The cell object.
+        cell (:class:`~single_cell_parser.cell.Cell`): The cell object.
     
     Returns: 
         None
@@ -177,7 +177,7 @@ def augment_cell_with_detailed_labels(cell):
 
 
 def tVec(cell):
-    """Convenience method to convert a py:attr:~`single_cell_parser.cell.Cell.tVec` to a numpy array."""
+    """Convenience method to convert a py:attr:`~single_cell_parser.cell.Cell.tVec` to a numpy array."""
     return np.array(cell.tVec)
 
 
@@ -197,7 +197,7 @@ def _get_apical_sec_and_i_at_distance(cell, dist):
     """Get the apical section at a certain distance from the soma.
     
     Args:
-        cell (:class:~`single_cell_parser.cell.Cell`): The cell object.
+        cell (:class:`~single_cell_parser.cell.Cell`): The cell object.
         dist (float): The distance from the soma (um).
         
     Returns:
@@ -217,13 +217,13 @@ def _get_apical_sec_and_i_at_distance(cell, dist):
 def vmApical(cell, dist=None):
     """Fetch the membrane voltage of the apical dendrite at a certain distance from the soma.
     
-    Assumes that the :class:~`single_cell_parser.cell.Cell` object has an apical dendrite::
+    Assumes that the :class:`~single_cell_parser.cell.Cell` object has an apical dendrite::
     
         - It contains at least one section with the label "ApicalDendrite"
-        - Such section exists at :py:param:~`dist` distance from the soma
+        - Such section exists at :py:param:`~dist` distance from the soma
         - The section has at least one child
         
-    See :py:meth:~`get_inner_section_at_distance` for more information about which arguments can be used
+    See :py:meth:`~get_inner_section_at_distance` for more information about which arguments can be used
     to define an apical section.
 
     """

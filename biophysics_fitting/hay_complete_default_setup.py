@@ -1,6 +1,6 @@
 '''
 This module provides a complete setup for the Hay stimulus protocol on a Layer 5 Pyramidal Tract (L5PT) neuron.
-While :py:mod:~`biophysics_fitting.hay_evaluation` is a direct Python translation of :cite:`Hay_Hill_Schürmann_Markram_Segev_2011`,
+While :py:mod:`~biophysics_fitting.hay_evaluation` is a direct Python translation of :cite:`Hay_Hill_Schürmann_Markram_Segev_2011`,
 this module has been adapted to allow for more flexibility and integration with ISF.
 
 Created on Nov 08, 2018
@@ -72,7 +72,7 @@ def record_bAP(cell, recSite1=None, recSite2=None):
     stimulus in a pyramidal neuron. The two apical recording sites are used
     to calculate e.g. backpropagation attenuation.
     
-    Uses the convenience methods :py:meth:~`biophysics_fitting.utils.vmSoma` and :py:meth:~`biophysics_fitting.utils.vmApical`.
+    Uses the convenience methods :py:meth:`~biophysics_fitting.utils.vmSoma` and :py:meth:`~biophysics_fitting.utils.vmApical`.
     
     Args:
         cell (:class:`single_cell_parser.cell.Cell`): The cell object.
@@ -82,7 +82,7 @@ def record_bAP(cell, recSite1=None, recSite2=None):
     Returns:
         dict: A dictionary with the voltage traces.
         
-    Notes:
+    Note:
         See :cite:`Hay_Hill_Schürmann_Markram_Segev_2011` for more information.
     """
     assert recSite1 is not None
@@ -102,7 +102,7 @@ def record_BAC(cell, recSite=None):
     
     These can be used to quantify the voltage trace of a bAP-Activated Ca2+ (BAC) stimulus.
     
-    Uses the convenience methods :py:meth:~`biophysics_fitting.utils.vmSoma` and :py:meth:~`biophysics_fitting.utils.vmApical`.
+    Uses the convenience methods :py:meth:`~biophysics_fitting.utils.vmSoma` and :py:meth:`~biophysics_fitting.utils.vmApical`.
     
     Args:
         cell (:class:`single_cell_parser.cell.Cell`): The cell object.
@@ -111,7 +111,7 @@ def record_BAC(cell, recSite=None):
     Returns:
         dict: A dictionary with the voltage traces.
         
-    Notes:
+    Note:
         See :cite:`Hay_Hill_Schürmann_Markram_Segev_2011` for more information.
     """
     return {
@@ -125,7 +125,7 @@ def record_Step(cell):
     
     These can be used to quantify the response of the soma to step currents.
     
-    Uses the convenience method :py:meth:~`biophysics_fitting.utils.vmSoma`.
+    Uses the convenience method :py:meth:`~biophysics_fitting.utils.vmSoma`.
     
     Args:
         cell (:class:`single_cell_parser.cell.Cell`): The cell object.
@@ -133,7 +133,7 @@ def record_Step(cell):
     Returns:
         dict: A dictionary with the voltage traces.
         
-    Notes:
+    Note:
         See :cite:`Hay_Hill_Schürmann_Markram_Segev_2011` for more information.
     """
     return {'tVec': tVec(cell), 'vList': [vmSoma(cell)]}
@@ -163,10 +163,10 @@ def get_Simulator(fixed_params, step=False):
         step (bool): Whether to include the step currents in the setup.
         
     Returns:
-        :class:~`biophysics_fitting.simulator.Simulator`: The simulator object, set up for the Hay stimulus protocol for a specific L5PT.
+        :class:`~biophysics_fitting.simulator.Simulator`: The simulator object, set up for the Hay stimulus protocol for a specific L5PT.
         
     
-    Notes:
+    Note:
         Other morphologies will require different fixed parameters, stimuli, and measurement functions, and thus a different setup for a Simulator.
         See :cite:`Hay_Hill_Schürmann_Markram_Segev_2011` for more information.
     """
@@ -303,7 +303,7 @@ def get_Evaluator(step=False, interpolate_voltage_trace=False):
         interpolate_voltage_trace (bool): Whether to interpolate the voltage traces.
         
     Returns:
-        :class:~`biophysics_fitting.evaluator.Evaluator`: The evaluator object, set up for the Hay stimulus protocol.
+        :class:`~biophysics_fitting.evaluator.Evaluator`: The evaluator object, set up for the Hay stimulus protocol.
     """
     e = Evaluator()
 
@@ -348,7 +348,7 @@ def get_Combiner(step=False, include_DI3=False):
         include_DI3 (bool): Whether to include the DI3 measurement in the setup.
         
     Returns:
-        :class:~`biophysics_fitting.combiner.Combiner`: The combiner object, set up for the Hay stimulus protocol.
+        :class:`~biophysics_fitting.combiner.Combiner`: The combiner object, set up for the Hay stimulus protocol.
     """
     #up to 20220325, DI3 has not been included and was not in the fit_features file.
     c = Combiner()

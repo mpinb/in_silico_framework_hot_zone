@@ -48,7 +48,7 @@ def get_pdf_selected(
     Filters the dataframe such that all models are within 
     desired range of the objective, and sorts it by its
     deviation from the empirical mean.
-    See :py:mod:~`biophysics_fitting.evaluator.Evaluator` for more information
+    See :py:mod:`~biophysics_fitting.evaluator.Evaluator` for more information
     on evaluation voltage traces..
     
     Args:

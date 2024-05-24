@@ -1,7 +1,7 @@
 """
 This module provides method to set up the parameters for a Layer 5 Pyramidal Tract neuron (L5PT/L5tt)
 
-These parameters and templates are used to set up the biophysical constraints for the L5PT cell in e.g. :py:mod:~`biophysics_fitting.simulator`.
+These parameters and templates are used to set up the biophysical constraints for the L5PT cell in e.g. :py:mod:`~biophysics_fitting.simulator`.
 """
 
 
@@ -41,7 +41,7 @@ def get_L5tt_template():
     
     This method returns a nested dictionary-like object that can be used to set up a L5PT cell for simulations.
     The values of each key are set to None or default values, and need to be filled in with the actual values.
-    This dictionary-like parameter structure is used by e.g. the :class:~`biophysics_fitting.simulator.Simulator` object.
+    This dictionary-like parameter structure is used by e.g. the :class:`~biophysics_fitting.simulator.Simulator` object.
     It provides information on::
     
         - For each section label (for an L5PT: Soma, AIS, ApicalDendrite, Dendrite, Myelin):
@@ -366,7 +366,7 @@ def set_ephys(cell_param, params=None):
     
     Parameter names reflect the Hay naming convention.
     
-    Notes:
+    Note:
         See :cite:`Hay_Hill_Schürmann_Markram_Segev_2011` for more information.
     """
     for k, v in six.iteritems(params):
@@ -453,7 +453,7 @@ def set_hot_zone(cell_param, min_=None, max_=None, outsidescale_sections=None):
     Returns:
         sumatra.parameters.NTParameterSet | dict: The updated cell_param.
         
-    Notes:
+    Note:
         This method is specific for a L5PT.
         For more information about the hot zone, refer to :cite:`Guest_Bast_Narayanan_Oberlaender`
     """

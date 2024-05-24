@@ -1,6 +1,6 @@
 """
 This module provides code to analyze the results of a random walk exploration through biophysical parameter space.
-See :py:mod:~`biophysics_fitting.exploration_from_seedpoint.RW` for more information.
+See :py:mod:`~biophysics_fitting.exploration_from_seedpoint.RW` for more information.
 """
 
 import Interface as I
@@ -17,8 +17,8 @@ def read_parameters(
     ):
     """
     Read the biophysical parameters that were explored during a RW exploration.
-    To read the full results, use :py:meth:~`biophysics_fitting.exploration_from_seedpoint.RW_analysis.read_pickle` instead.
-    See: :py:class:~`biophysics_fitting.exploration_from_seedpoint.RW.RW` for more info.
+    To read the full results, use :py:meth:`~biophysics_fitting.exploration_from_seedpoint.RW_analysis.read_pickle` instead.
+    See: :py:class:`~biophysics_fitting.exploration_from_seedpoint.RW.RW` for more info.
     
     Args:
         seed_folder (str): path to the folder that contains the RW exploration result for a particular seed.

@@ -1,5 +1,5 @@
 """
-This module provides methods to set up stimuli by adding recording/injection pipettes to :class:~`single_cell_parser.cell.Cell` objects.
+This module provides methods to set up stimuli by adding recording/injection pipettes to :class:`~single_cell_parser.cell.Cell` objects.
 
 Stimulus types included in this module are::
 
@@ -19,7 +19,7 @@ h = neuron.h
 
 
 def _append(cell, name, item):
-    """Append an item to a :class:~`single_cell_parser.Cell.cell` object.
+    """Append an item to a :class:`~single_cell_parser.Cell.cell` object.
     
     This is used to add e.g. injection/recording pipettes to the cell.
     
@@ -41,7 +41,7 @@ def setup_soma_step(cell, amplitude=None, delay=None, duration=None, dist=0):
     """Setup up a step current at the soma for a given cell.
     
     Args:
-        cell (:class:~`single_cell_parser.cell.Cell`): The cell object.
+        cell (:class:`~single_cell_parser.cell.Cell`): The cell object.
         amplitude (float): The amplitude of the step current.
         delay (float): The delay of the step current.
         duration (float): The duration of the step current.
@@ -74,10 +74,10 @@ def setup_apical_epsp_injection(
     
     This method assumes the :py:param:`cell` has a soma and an apical dendrite.
     It checks so by means of section label: it must contain a section 
-    labeled "ApicalDendrite". See :py:meth:~`biophysics_fitting.utils.get_inner_section_at_distance` for more information.
+    labeled "ApicalDendrite". See :py:meth:`~biophysics_fitting.utils.get_inner_section_at_distance` for more information.
     
     Args:
-        cell (:class:~`single_cell_parser.cell.Cell`): The cell object.
+        cell (:class:`~single_cell_parser.cell.Cell`): The cell object.
         dist (float): The distance from the soma to the injection site (um).
         amplitude (float): The amplitude of the EPSP (nA).
         delay (float): The delay of the EPSP (ms).
@@ -99,7 +99,7 @@ def setup_bAP(cell, delay=295):
     """Setup a bAP stimulus for the cell.
     
     Args:
-        cell (:class:~`single_cell_parser.cell.Cell`): The cell object.
+        cell (:class:`~single_cell_parser.cell.Cell`): The cell object.
         delay (float): The delay of the bAP stimulus (ms).
         
     Returns:
@@ -112,7 +112,7 @@ def setup_BAC(cell, dist=970, delay=295):
     """Setup a BAC stimulus for the cell.
     
     Args:
-        cell (:class:~`single_cell_parser.cell.Cell`): The cell object.
+        cell (:class:`~single_cell_parser.cell.Cell`): The cell object.
         dist (float): The distance from the soma to the recording site (um).
         delay (float): The delay of the BAC stimulus (ms).
         
@@ -138,7 +138,7 @@ def setup_StepOne(cell, delay=700):
     """Setup a step current stimulus at the soma with an amplitude of 0.619 nA.
     
     Args:
-        cell (:class:~`single_cell_parser.cell.Cell`): The cell object.
+        cell (:class:`~single_cell_parser.cell.Cell`): The cell object.
         delay (float): The delay of the step current stimulus (ms).
     
     Returns:
@@ -152,7 +152,7 @@ def setup_StepTwo(cell, delay=700):
     
     
     Args:
-        cell (:class:~`single_cell_parser.cell.Cell`): The cell object.
+        cell (:class:`~single_cell_parser.cell.Cell`): The cell object.
         delay (float): The delay of the step current stimulus (ms).
         
     Returns:
@@ -165,7 +165,7 @@ def setup_StepThree(cell, delay=700):
     """Setup a step current stimulus at the soma with an amplitude of 1.507 nA.
     
     Args:
-        cell (:class:~`single_cell_parser.cell.Cell`): The cell object.
+        cell (:class:`~single_cell_parser.cell.Cell`): The cell object.
         delay (float): The delay of the step current stimulus (ms).
         
     Returns:

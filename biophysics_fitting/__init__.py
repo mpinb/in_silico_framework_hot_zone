@@ -114,7 +114,7 @@ def get_branching_depth_series(
     z_offset=706
     ):
     """
-    Find the branching depth of the inner sections of a :class:~`single_cell_parser.cell.Cell`
+    Find the branching depth of the inner sections of a :class:`~single_cell_parser.cell.Cell`
     Careful: z-depth only accurate for D2-registered cells!
     
     Args:
@@ -146,7 +146,7 @@ def get_main_bifurcation_section(
     This is True for e.g. pyramidal cells with an apical dendrite.
     
     Args:
-        cell (:class:~`single_cell_parser.cell.Cell`): The Cell object for which to find the main bifurcation section.
+        cell (:class:`~single_cell_parser.cell.Cell`): The Cell object for which to find the main bifurcation section.
         assert_unique (bool, optional): whether or not to check if this section is unique in the morphology.
             Default: True
             
@@ -169,7 +169,7 @@ def get_first_order_bifurcation_sections(
     Find all sections that are both inner sections, and are of branching order 1.
     
     Args:
-        cell (:class:~`single_cell_parser.cell.Cell`): The Cell object for which to find the main bifurcation section.
+        cell (:class:`~single_cell_parser.cell.Cell`): The Cell object for which to find the main bifurcation section.
 
     Returns:
         (list): A list of sections that are both inner sections, and are of branching order 1. 

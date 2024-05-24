@@ -54,7 +54,7 @@ class Combiner:
     Combining features should be done by taking the maximum.
     
     How can this be set up?
-    An example, how the Combiner object can be set up can be found in :py:mod:~`biophysics_fitting.hay_complete_default_setup`
+    An example, how the Combiner object can be set up can be found in :py:mod:`~biophysics_fitting.hay_complete_default_setup`
     
         c = Combiner()
         c.setup.append('combination1', ['feature1', 'feature2'])
