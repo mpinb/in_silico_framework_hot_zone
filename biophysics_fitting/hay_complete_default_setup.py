@@ -143,20 +143,20 @@ def get_Simulator(fixed_params, step=False):
     """Set up a Simulator object for the Hay stimulus protocol on a Layer 5 Pyramidal Tract (L5PT) neuron.
     
     This method sets up a simulator object for the Hay stimulus protocol.
-    It sets:: 
+    It sets: 
     
-        - The cell-specific :paramref:`fixed_params`
-        - The cell morphology (see :py:meth:`biophysics_fitting.L5tt_parameter_setup.set_morphology`)
-        - Electrophysiolgoical parameter naming conventions (see :py:meth:`biophysics_fitting.L5tt_parameter_setup.set_ephys`)
-        - Cell parameter naming convention (see :py:meth:`biophysics_fitting.L5tt_parameter_setup.set_param` and :py:meth:`biophysics_fitting.L5tt_parameter_setup.set_many_param`)
-        - The location of the hot zone, where there is a high density of HVA and LVA CA channels (see :py:meth:`biophysics_fitting.L5tt_parameter_setup.set_hot_zone`)
-        - The cell generator method (see :py:meth:`single_cell_parser.create_cell`)
-        - The stimulus setup functions for the bAP and BAC stimuli (see :py:meth:`biophysics_fitting.setup_stim.setup_bAP` and :py:meth:`biophysics_fitting.setup_stim.setup_BAC`)
-        - (optional) The stimulus setup functions for the step currents (see :py:meth:`biophysics_fitting.setup_stim.setup_StepOne`, :py:meth:`biophysics_fitting.setup_stim.setup_StepTwo`, and :py:meth:`biophysics_fitting.setup_stim.setup_StepThree`)
-        - The stimulus run functions for the bAP and BAC stimuli (see :py:meth:`biophysics_fitting.run_fun`)
-        - (optional) The stimulus run functions for the step currents (see :py:meth:`biophysics_fitting.run_fun`)
-        - The stimulus response measurement functions for the bAP and BAC stimuli (see :py:meth:`biophysics_fitting.record_bAP` and :py:meth:`biophysics_fitting.record_BAC`)
-        - (optional) The stimulus response measurement functions for the step currents (see :py:meth:`biophysics_fitting.record_Step`)
+    - The cell-specific :paramref:`fixed_params`
+    - The cell morphology (see :py:meth:`biophysics_fitting.L5tt_parameter_setup.set_morphology`)
+    - Electrophysiolgoical parameter naming conventions (see :py:meth:`biophysics_fitting.L5tt_parameter_setup.set_ephys`)
+    - Cell parameter naming convention (see :py:meth:`biophysics_fitting.L5tt_parameter_setup.set_param` and :py:meth:`biophysics_fitting.L5tt_parameter_setup.set_many_param`)
+    - The location of the hot zone, where there is a high density of HVA and LVA CA channels (see :py:meth:`biophysics_fitting.L5tt_parameter_setup.set_hot_zone`)
+    - The cell generator method (see :py:meth:`single_cell_parser.create_cell`)
+    - The stimulus setup functions for the bAP and BAC stimuli (see :py:meth:`biophysics_fitting.setup_stim.setup_bAP` and :py:meth:`biophysics_fitting.setup_stim.setup_BAC`)
+    - (optional) The stimulus setup functions for the step currents (see :py:meth:`biophysics_fitting.setup_stim.setup_StepOne`, :py:meth:`biophysics_fitting.setup_stim.setup_StepTwo`, and :py:meth:`biophysics_fitting.setup_stim.setup_StepThree`)
+    - The stimulus run functions for the bAP and BAC stimuli (see :py:meth:`biophysics_fitting.run_fun`)
+    - (optional) The stimulus run functions for the step currents (see :py:meth:`biophysics_fitting.run_fun`)
+    - The stimulus response measurement functions for the bAP and BAC stimuli (see :py:meth:`biophysics_fitting.record_bAP` and :py:meth:`biophysics_fitting.record_BAC`)
+    - (optional) The stimulus response measurement functions for the step currents (see :py:meth:`biophysics_fitting.record_Step`)
         
     Args:
         fixed_params (dict): The fixed parameters for the cell and stimulus protocol.
