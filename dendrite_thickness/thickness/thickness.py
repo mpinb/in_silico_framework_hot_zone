@@ -487,7 +487,7 @@ def _get_intersection(line1, line2):
 
 
 def _circle_filter(x, y, r):
-    """Check if a point is within a circle of radius :py:param: r and center (0,0)
+    """Check if a point is within a circle of radius :paramref: r and center (0,0)
 
     Args:
         x (int/float)
@@ -510,9 +510,9 @@ def _pad_image(image, radius):
 
 
 def _crop_image(image_array, center, radius, circle=False):
-    """Given an image as a 2D array, this method crops it around :py:param:center.
-    The crop is either a square of size 2x:py:param:radius by 2x:py:param:radius and center :py:param:center,
-    or, in case :py:param:circle equals True, a circle with radius :py:param:radius.
+    """Given an image as a 2D array, this method crops it around :paramref:center.
+    The crop is either a square of size 2x:paramref:radius by 2x:paramref:radius and center :paramref:center,
+    or, in case :paramref:circle equals True, a circle with radius :paramref:radius.
 
     Args:
         image_array (array): The 2D image array

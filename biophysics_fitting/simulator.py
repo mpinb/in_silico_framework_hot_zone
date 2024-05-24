@@ -312,7 +312,7 @@ class Simulator:
     Example:
     
         >>> def stim_setup_function(cell, recSite = None):
-        >>>    # I dont need the :py:param:`params` argument, but I ask recSite directly
+        >>>    # I dont need the :paramref:`params` argument, but I ask recSite directly
         >>>    # set up current injection at soma distance recSite
         >>>    return cell
             

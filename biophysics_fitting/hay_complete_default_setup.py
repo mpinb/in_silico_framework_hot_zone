@@ -145,7 +145,7 @@ def get_Simulator(fixed_params, step=False):
     This method sets up a simulator object for the Hay stimulus protocol.
     It sets:: 
     
-        - The cell-specific :py:param:`fixed_params`
+        - The cell-specific :paramref:`fixed_params`
         - The cell morphology (see :py:meth:`biophysics_fitting.L5tt_parameter_setup.set_morphology`)
         - Electrophysiolgoical parameter naming conventions (see :py:meth:`biophysics_fitting.L5tt_parameter_setup.set_ephys`)
         - Cell parameter naming convention (see :py:meth:`biophysics_fitting.L5tt_parameter_setup.set_param` and :py:meth:`biophysics_fitting.L5tt_parameter_setup.set_many_param`)
