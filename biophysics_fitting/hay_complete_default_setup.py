@@ -153,10 +153,10 @@ def get_Simulator(fixed_params, step=False):
     - The cell generator method (see :py:meth:`~single_cell_parser.create_cell`)
     - The stimulus setup functions for the bAP and BAC stimuli (see :py:meth:`~biophysics_fitting.setup_stim.setup_bAP` and :py:meth:`~biophysics_fitting.setup_stim.setup_BAC`)
     - (optional) The stimulus setup functions for the step currents (see :py:meth:`~biophysics_fitting.setup_stim.setup_StepOne`, :py:meth:`~biophysics_fitting.setup_stim.setup_StepTwo`, and :py:meth:`~biophysics_fitting.setup_stim.setup_StepThree`)
-    - The stimulus run functions for the bAP and BAC stimuli (see :py:meth:`~biophysics_fitting.run_fun`)
-    - (optional) The stimulus run functions for the step currents (see :py:meth:`~biophysics_fitting.run_fun`)
-    - The stimulus response measurement functions for the bAP and BAC stimuli (see :py:meth:`~biophysics_fitting.record_bAP` and :py:meth:`~biophysics_fitting.record_BAC`)
-    - (optional) The stimulus response measurement functions for the step currents (see :py:meth:`~biophysics_fitting.record_Step`)
+    - The stimulus run functions for the bAP and BAC stimuli (see :py:meth:`~biophysics_fitting.simulator.run_fun`)
+    - (optional) The stimulus run functions for the step currents (see :py:meth:`~biophysics_fitting.simulator.run_fun`)
+    - The stimulus response measurement functions for the bAP and BAC stimuli (see :py:meth:`~record_bAP` and :py:meth:`~record_BAC`)
+    - (optional) The stimulus response measurement functions for the step currents (see :py:meth:`~record_Step`)
         
     Args:
         fixed_params (dict): The fixed parameters for the cell and stimulus protocol.
