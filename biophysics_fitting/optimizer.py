@@ -510,16 +510,18 @@ def start_run(
     Start an optimization run as specified in db_setup.
 
     Args:
-        db_setup (data_base.DataBase): 
-            a DataBase containing the setup of the optimization. It must include:
+        db_setup (data_base.DataBase): a DataBase containing the setup of the optimization. It must include::
+        
                 - params ... this is a pandas.DataFrame with the parameternames as index and the columns min_ and max_
                 - get_Simulator ... function, that returns a biophysics_fitting.simulator.Simulator object
                 - get_Evaluator ... function, that returns a biophysics_fitting.evaluator.Evaluator object.
                 - get_Combiner ... function, that returns a biophysics_fitting.combiner.Combiner object
+                
             get_Simulator, get_Evaluator, get_Combiner accept the db_setup data_base as argument. 
             This allows, that e.g. the Simular can depend on the data_base. Therefore it is e.g. possible, 
             that the path to the morphology is not saved as absolute path. Instead, fixed parameters can be
             updated accordingly.
+            
         n (int): a seedpoint for the optimization randomization.
         pop (list of deap.Individuals | None): The previous population if the optimization is continued. None if a new optimization is started.
         client (distributed.Client | None): A distributed client. If None, the optimization is run on the local machine.

@@ -28,10 +28,12 @@ def param_selector(params, s):
     params is a series with an index that contains strings seperated by "."
     Therefore, params can reflect a hierarchy, e.g.::
     
+    ``` 
         a.a   1
         a.b   2
         c.x   1
         c.a.b 7
+    ```
     
     This method allows to select from that Series using a string.
     

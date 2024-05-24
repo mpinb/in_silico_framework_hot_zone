@@ -281,8 +281,8 @@ class Simulator:
         
     The usual application is to specify biophysical parameters in a parameter vector and simulate
     current injection responses depending on these parameters.
-            
-    Example::
+    
+    Example:
     
         >>> def stim_setup_fun(cell, params):
         >>>     # set up some stimulus
@@ -321,7 +321,7 @@ class Simulator:
                 params_to_kwargs(stim_setup_function)
             ])
     
-    Notable methods:
+    Notable methods::
     
         >>> s.run(params): returns a dictionary with the specified voltage traces for all stimuli
         {'stim_1': {'tVec': ..., 'vList': [[...], ...]}, 'stim_2': ...}
