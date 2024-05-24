@@ -7,8 +7,8 @@ Afterwards the data is accessible using the pandas data analysis library and das
 
 It contains two important subpackages:
 
-    1. :py:mod:`model_data_base`: A legacy format, only used by the Oberlaender lab at In-Silico Brain Sciences, MPINB Bonn. This should never be used by anyone else.`
-    2. :py:mod:`isf_data_base`: An updated data_base package, using JSON as metadata format, and the newest file formats, such as parquet.`
+    1. :py:mod:`model_data_base`: A legacy format, only used by the Oberlaender lab at In-Silico Brain Sciences, MPINB Bonn. This should never be used by anyone else.
+    2. :py:mod:`isf_data_base`: An updated data_base package, using JSON as metadata format, and the newest file formats, such as parquet.
 
 This package has "dynamic" IO and db_initializers subpackages, meaning that these can change in the future, and will be adapted here. 
 As of now, data_base.isf_data_base provides an IO subpackage, that registers itself under the name data_base.IO as well.

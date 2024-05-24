@@ -179,7 +179,7 @@ class Simulator_Setup:
         '''Get the cell parameters as an NTParameterSet from the parameter vector.
         
         This can be used with :py:meth:`~biophysics_fitting.single_cell_parser.create_cell` to
-        create a :class:`single_cell_parser.cell.Cell` object.
+        create a :class:`~single_cell_parser.cell.Cell` object.
         This is helpful for inspecting what parameters have effectively been used for the simulation.
         
         Args:
