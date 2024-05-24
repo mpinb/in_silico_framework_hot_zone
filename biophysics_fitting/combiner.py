@@ -32,7 +32,7 @@ class Combiner_Setup:
 
 class Combiner:
     '''
-    This  class can be used to combine features (usually) computed by an :class:`Evaluator` object.
+    This  class can be used to combine features (usually) computed by an :class:`biophysics_fitting.evaluator.Evaluator` object.
     
     For a :class:`Simulator` object `s`, an :class:`~biophysics_fitting.evaluator.Evaluator` object `e`, and a :class:`~biophysics_fitting.combiner.Combiner` object `c`, the typical usecase is:
     
