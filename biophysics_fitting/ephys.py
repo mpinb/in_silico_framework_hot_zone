@@ -95,7 +95,7 @@ def trace_check_max_prestim_dendrite_depo(
             If some dendrite section exceeds this value, it is considered a spike.
             
     Returns:
-        (bool): Whether or not a spike is detected before stimulus onset.
+        bool: Whether or not a spike is detected before stimulus onset.
     '''
     select = t < stim_onset
     return max(vmax[select]) <= max_prestim_dendrite_depo

@@ -3,7 +3,7 @@ This package contains code to generate and analyze biophysically detailed multi-
 
 It provides two ways to generate mutli-compartmental models:
 
-    1. [BluePyOpt](https://github.com/BlueBrain/BluePyOpt) :cite:`Van_Geit_Gevaert_Chindemi_Rössert_Courcol_Muller_Schürmann_Segev_Markram_2016`, a Multi-Objective Evolutionary Algorithm (MOEA): :py:mod:`biophysics_fitting.MOEA_EH_minimal`.
+    1. BluePyOpt :cite:`Van_Geit_Gevaert_Chindemi_Rössert_Courcol_Muller_Schürmann_Segev_Markram_2016`, a Multi-Objective Evolutionary Algorithm (MOEA): :py:mod:`~biophysics_fitting.MOEA_EH_minimal`.
     2. An exploration algorithm: :py:mod:`~biophysics_fitting.exploration_from_seedpoint`.
 
 The MOEA does not require any a priori assumptions on biophysical parameters to find a MCM, but fails to explore the full diversity of possible MCMs. 
@@ -76,7 +76,7 @@ def get_inner_sec_dist_list(
         z_offset (int|float, optional): Offset for z-value. Defaults to 706 μm (the average pia distance of a rat barrel cortex).
 
     Returns:
-        dict: Dictionary mapping the z-coordinate of each section point to the section object, including only sections that pass the filter.
+        {float: :class:`~single_cell_parser.cell.PySection`}: Dictionary mapping the z-coordinate of each section point to the section object, including only sections that pass the filter.
     """
     #    sec_dist_dict = {cell.distance_to_soma(sec, 1.0): sec
     sec_dist_dict = {
@@ -100,7 +100,7 @@ def get_branching_depth(cell, sec, beyond_dist=1000):
         sec (int): The section number
 
     Returns:
-        int: Amount of sections between :paramref:`sec` and soma that have at least 2 children that are further from the soma than ``beyond_dist``
+        int: Amount of sections between :paramref:`sec` and soma that have at least 2 children that are further from the soma than :paramref:`beyond_dist`
     """
     depth = connected_to_dend_beyond(cell, sec, beyond_dist)
     if sec.parent.label.lower() == 'soma':
@@ -114,16 +114,18 @@ def get_branching_depth_series(
     z_offset=706
     ):
     """
-    Find the branching depth of the inner sections of a :class:`~single_cell_parser.cell.Cell`
-    Careful: z-depth only accurate for D2-registered cells!
-    
+    Find the branching depth of the inner sections of a :class:`~single_cell_parser.cell.Cell`.
+        
     Args:
         cell (:class:`~single_cell_parser.cell.Cell`): The Cell object
-        z_offset (int|float, optional): Z coordinate offset for :py:meth:`get_inner_sec_dist_list`.
+        z_offset (int | float, optional): Z coordinate offset for :py:meth:`get_inner_sec_dist_list`.
             Defaults to 706 um.
 
     Returns:
-        pd.Series: contains the distance to :paramref:z_offset as index and a tuple (brnaching depth, section) as value
+        pd.Series: contains the distance to :paramref:z_offset as index and a tuple (branching depth, section) as value
+        
+    Note:
+        Careful: z-depth only accurate for D2-registered cells!
     """
 
     inner_sections = get_inner_sec_dist_list(cell, z_offset=z_offset)
@@ -154,7 +156,7 @@ def get_main_bifurcation_section(
         AssertionError: If there are multiple sections who are both inner, and have branching depth 1. This means that there is no "main" bifurcation in the morphology.
     
     Returns:
-        The unique section that contains the main bifurcation.
+        :class:`~single_cell_parser.cell.PySection`: The unique section that contains the main bifurcation.
     
     """
     sec_dist_list_filtered = get_first_order_bifurcation_sections(cell)
@@ -172,7 +174,7 @@ def get_first_order_bifurcation_sections(
         cell (:class:`~single_cell_parser.cell.Cell`): The Cell object for which to find the main bifurcation section.
 
     Returns:
-        (list): A list of sections that are both inner sections, and are of branching order 1. 
+        [class:`~single_cell_parser.cell.PySection`]: A list of sections that are both inner sections, and are of branching order 1. 
     """
     sec_dist_list = get_branching_depth_series(cell)
     sec_dist_list_filtered = [depth_sec_tuple[1] for depth_sec_tuple in sec_dist_list if depth_sec_tuple[0] == 1]

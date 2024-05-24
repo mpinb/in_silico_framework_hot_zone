@@ -75,10 +75,10 @@ def synapse_group_function_HZpaper(celltype):
     Groups celltypes in the same fashion as :cite:`Guest_Bast_Narayanan_Oberlaender`
     This means grouping the following:
     
-    - All inhibitory celltypes
-    - L4ss, L4py and L4sp --> L4ss
-    - L2 and L34 --> L23
-    - L6ct and L6ccinv --> inactive
+        - All inhibitory celltypes
+        - L4ss, L4py and L4sp --> L4ss
+        - L2 and L34 --> L23
+        - L6ct and L6ccinv --> inactive
     
     Args:
         celltype (str): celltype
@@ -349,7 +349,7 @@ def transform_point(p, x, y, z, coordinate_system=None):
     Transforms a point by adding the given x, y, z values, scaled by the coordinate system.
 
     Args:
-        p (array-like): Original point.
+        p (array): Original point.
         x, y, z (float): Values to add to the point.
         coordinate_system (str, optional): Coordinate system to use for scaling x, y, z. If None, no scaling is applied.
 
@@ -542,14 +542,22 @@ def correct_hoc_depth(
     ''' 
     
     Args:
-        - reference_depth_or_hoc (str): depth in which to put morphology, either specified through float or 
+        reference_depth_or_hoc (str): depth in which to put morphology, either specified through float or 
             a path to a hoc morphology from which the soma centroid position will be extracted and used as depth
-        - coordinate_system_z_move (str): which z axis to choose to move the morphology. 
+        coordinate_system_z_move (str): which z axis to choose to move the morphology. 
             Must be one of the barrels ('C1', 'Alpha', ...)
-        - measure_fun (callable): function that receives a point and returns a depth. 
-            Typical choices:
-            partial(get_distance_below_L45_barrel_surface, barrel = 'C2')
-            get_distance_below_L45_surface
+        measure_fun (callable): function that receives a point and returns a depth. 
+                
+    Example:
+    
+        >>> measure_fun = partial(get_distance_below_L45_barrel_surface, barrel='C2')
+        >>> correct_hoc_depth('path/to/morphology.hoc', 'C2', measure_fun=measure_fun)
+        
+        >>> measure_fun = get_distance_below_L45_surface
+        >>> correct_hoc_depth('path/to/morphology.hoc', 'path/to/reference_morphology.hoc', measure_fun=measure_fun)
+        
+    Returns:
+        None
     '''
     if measure_fun is None:
         measure_fun = partial(get_distance_below_L45_barrel_surface,barrel='C2')
