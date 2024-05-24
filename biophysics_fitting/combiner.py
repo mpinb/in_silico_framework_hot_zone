@@ -34,7 +34,7 @@ class Combiner:
     '''
     This  class can be used to combine features (usually) computed by an :class:`Evaluator` object.
     
-    For a :class:`Simulator` object s, an :class:`~bipohysics_fitting.evaluator.Evaluator` object e, and a :class:`biophysics_fitting.combiner.Combiner` object c, the typical usecase is:
+    For a :class:`Simulator` object `s`, an :class:`~biophysics_fitting.evaluator.Evaluator` object `e`, and a :class:`~biophysics_fitting.combiner.Combiner` object `c`, the typical usecase is:
     
         >>> voltage_traces_dict = s.run(params)
         >>> features = e.evaluate(voltage_traces_dict)
