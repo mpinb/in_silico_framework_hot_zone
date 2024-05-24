@@ -197,7 +197,7 @@ def get_Evaluator(
         (:class:`~biophysics_fitting.evaluator.Evaluator`): An evaluator object.
         
     Raises:
-        NotImplementedError: If :py:param:step or :py:param:vInit are set to True.
+        NotImplementedError: If :param:step or :param:vInit are set to True.
         
     Note:
         See :cite:`Hay_Hill_Schürmann_Markram_Segev_2011` for more information.
