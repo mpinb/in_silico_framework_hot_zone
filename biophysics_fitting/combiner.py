@@ -34,7 +34,7 @@ class Combiner:
     '''
     This  class can be used to combine features (usually) computed by an :class:`Evaluator` object.
     
-    For a :class:`Simulator` object s, an :class:`E`valuator object e, and a :class:`Combiner` object c, the typical usecase is:
+    For a :class:`Simulator` object s, an :class:`~bipohysics_fitting.evaluator.Evaluator` object e, and a :class:`biophysics_fitting.combiner.Combiner` object c, the typical usecase is:
     
         >>> voltage_traces_dict = s.run(params)
         >>> features = e.evaluate(voltage_traces_dict)
@@ -45,25 +45,26 @@ class Combiner:
     but also a list of names of the features that go into that combination. 
     Each list of features is then combined by calling combinefun with that list.
     
-    Example: Assume, the evaluator returns a dictionary like::
+    Example: Assume, the evaluator returns a dictionary like:
     
-        features = {'feature1': 1, 'feature2': 2, 'feature3': 3, 'feature4': 4}
+        >>> features = {'feature1': 1, 'feature2': 2, 'feature3': 3, 'feature4': 4}
         
-    We want to combine feature1 and 2. 
-    We also want to combine features2, 3 and 4. 
+    We want to combine feature 1 and 2. 
+    We also want to combine features 2, 3 and 4. 
     Combining features should be done by taking the maximum.
     
     How can this be set up?
     An example, how the Combiner object can be set up can be found in :py:mod:`~biophysics_fitting.hay_complete_default_setup`
     
-        c = Combiner()
-        c.setup.append('combination1', ['feature1', 'feature2'])
-        c.setup.append('combination2', ['feature2', 'feature3', 'feature4'])
-        c.setup.combinefun = max
-        
-        combined_features = c.combine(features)
-        combined_features
-        > {'combination1': 2, 'combination2': 4}
+    Example:
+    
+        >>> c = Combiner()
+        >>> c.setup.append('combination1', ['feature1', 'feature2'])
+        >>> c.setup.append('combination2', ['feature2', 'feature3', 'feature4'])
+        >>> c.setup.combinefun = max
+        >>> combined_features = c.combine(features)
+        >>> combined_features
+        {'combination1': 2, 'combination2': 4}
     '''
 
     def __init__(self):
@@ -77,6 +78,9 @@ class Combiner:
         
         Args:
             features (list): A list of features to be combined.
+            
+        Returns:
+            dict: A dictionary with the combined features.
         '''
         out = {}
         for n, c in zip(self.setup.names, self.setup.combinations):
