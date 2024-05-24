@@ -10,7 +10,12 @@ Created on Nov 08, 2018
 
 
 class Evaluator_Setup:
-
+    '''Setup for an :class:`~Evaluator` object
+    
+    This class is an attribute of the :class:`~Evaluator` class, and should only veer be accessed via the :class:`~Evaluator` object.
+    It takes care of applying evaluation functions to voltage traces, and finalizing the results.
+    '''
+    
     def __init__(self):
         self.pre_funs = []
         self.evaluate_funs = []
@@ -18,55 +23,53 @@ class Evaluator_Setup:
 
 
 class Evaluator:
-
-    def __init__(self):
-        '''Extract features from voltage traces.
-        
-        This  class can be used to extract features from (usually) voltage traces
-        of different stimuli. The voltage traces are (usually) computed with a Simulator 
-        object by calling its run method.
-        
-        In an optimization the features returned by Evaluator.evaluate are saved together
-        with to corresponding parameter values.
-        
-        For a Simulator object s and a Evaluator object e, the typical usecase is::
-        
-            voltage_traces_dict = s.run(params)
-            features = e.evaluate(voltage_traces_dict)
-                
-        The "program flow" in the Evaluator can be split in two parts::
-        
-            1. for each key in the voltage_traces_dict: 
-                apply `evaluate_fun`, that is registered with a name that matches the key.
-                Extracts features from the voltage trace.
-            2. perform arbitrary operations on the resulting dictionary 
-                (e.g. merge it from a nested to a flat dictionary or compute more complex features
-                by combineing features from different stimuli)
-                
-        How can the Evaluator be set up?
-        An example set up can be found in :mod:`~bipohysics_fitting.hay_complete_default_setup`.
-        
-        Example usage::     
+    '''Extract features from voltage traces.
+    
+    This  class can be used to extract features from (usually) voltage traces
+    of different stimuli. The voltage traces are (usually) computed with a Simulator 
+    object by calling its run method.
+    
+    In an optimization the features returned by Evaluator.evaluate are saved together
+    with to corresponding parameter values.
+    
+    For a Simulator object s and a Evaluator object e, the typical usecase is::
+    
+        voltage_traces_dict = s.run(params)
+        features = e.evaluate(voltage_traces_dict)
             
-            def examplary_evaluate_fun(**kwargs):
-                # kwargs are keys and values of voltage_traces_dict[in_name]
-                # extract features from kwargs
-                return out_dict # keys are names of features, values are features
+    The workflow in the Evaluator can be split in two parts:
+    
+        1. for each key in the :paramref:`voltage_traces_dict`:
+            apply `evaluate_fun`, that is registered with a name that matches the key.
+            Extracts features from the voltage trace.
+        2. perform arbitrary operations on the resulting dictionary 
+            (e.g. merge it from a nested to a flat dictionary or compute more complex features
+            by combineing features from different stimuli)
+            
+    An example set up can be found in :mod:`~bipohysics_fitting.hay_complete_default_setup`.
+    
+    Example: 
+        
+        >>> def examplary_evaluate_fun(**kwargs):
+        >>>    # kwargs are keys and values of voltage_traces_dict[in_name]
+        >>>    # extract features from kwargs
+        >>>    return out_dict # keys are names of features, values are features
 
-            def finalize_fun(dict_):
-                # dict_ is a dictionary with out_name of the evaluate_funs as keys.
-                # and the returned dictionary out_dict as values, 
-                # i.e. out_dict is a nested dictionary.
-                # dict_ can now be arbitrarily modified, e.g. flattened.
-                return modified_dict
+        >>> def finalize_fun(dict_):
+        >>>   # dict_ is a dictionary with out_name of the evaluate_funs as keys.
+        >>>    # and the returned dictionary out_dict as values, 
+        >>>    # i.e. out_dict is a nested dictionary.
+        >>>    # dict_ can now be arbitrarily modified, e.g. flattened.
+        >>>    return modified_dict
 
-            e = Evaluator()
-            e.setup.evaluate_funs.append([in_name, evaluate_fun, out_name])  # corresponds to step (1)
-            e.setup.finalize_funs.append(finalize_fun)  # corresponds to step (2)
+        >>> e = Evaluator()
+        >>> e.setup.evaluate_funs.append([in_name, evaluate_fun, out_name])  # corresponds to step (1)
+        >>> e.setup.finalize_funs.append(finalize_fun)  # corresponds to step (2)
 
-        Note: 
-            Combining features to reduce the number of objectives should be done with the Combiner object.        
-        '''
+    Note: 
+        Combining features to reduce the number of objectives should be done with the Combiner object.        
+    '''
+    def __init__(self):
         #self.objectives = objectives
         self.setup = Evaluator_Setup()
 
