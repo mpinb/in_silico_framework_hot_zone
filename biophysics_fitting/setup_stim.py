@@ -96,7 +96,14 @@ def setup_apical_epsp_injection(
 
 
 def setup_bAP(cell, delay=295):
-    """Setup a bAP stimulus for the cell.
+    """Setup a bAP (backpropagating action potential) stimulus for the cell.
+    
+    Soma:
+    
+        - shape = step
+        - amplitude = 1.9 nA
+        - delay = 295 ms
+        - duration = 5 ms
     
     Args:
         cell (:class:`~single_cell_parser.cell.Cell`): The cell object.
@@ -109,7 +116,21 @@ def setup_bAP(cell, delay=295):
 
 
 def setup_BAC(cell, dist=970, delay=295):
-    """Setup a BAC stimulus for the cell.
+    """Setup a BAC (bAP-activated Ca2+-spike) stimulus for the cell.
+    
+    Soma:
+
+        - shape = step    
+        - amplitude = 1.9 nA
+        - delay = 295 ms
+        - duration = 5 ms
+        
+    Apical dendrite:
+
+        - shape = epsp
+        - amplitude = 0.5 nA
+        - distance = 970 um (default)
+        - delay = 300 ms
     
     Args:
         cell (:class:`~single_cell_parser.cell.Cell`): The cell object.
@@ -125,17 +146,22 @@ def setup_BAC(cell, dist=970, delay=295):
         )  # check if delay is iterable ... alternative checks were even more complex
     except TypeError:
         setup_soma_step(cell, amplitude=1.9, delay=delay, duration=5)
-        setup_apical_epsp_injection(cell,
-                                    dist=dist,
-                                    amplitude=.5,
-                                    delay=delay + 5)
+        setup_apical_epsp_injection(
+            cell,
+            dist=dist,
+            amplitude=.5,
+            delay=delay + 5)
     else:
         for d in delay:
             setup_BAC(cell, dist=dist, delay=d)
 
 
 def setup_StepOne(cell, delay=700):
-    """Setup a step current stimulus at the soma with an amplitude of 0.619 nA.
+    """Setup a step current stimulus at the soma:
+         
+        - amplitude = 0.619 nA
+        - delay = 700 ms
+        - duration = 2000 ms   
     
     Args:
         cell (:class:`~single_cell_parser.cell.Cell`): The cell object.
@@ -148,8 +174,11 @@ def setup_StepOne(cell, delay=700):
 
 
 def setup_StepTwo(cell, delay=700):
-    """Setup a step current stimulus at the soma with an amplitude of 0.793 nA.
-    
+    """Setup a step current stimulus at the soma:
+          
+        - amplitude = 0.793 nA
+        - delay = 700 ms
+        - duration = 2000 ms      
     
     Args:
         cell (:class:`~single_cell_parser.cell.Cell`): The cell object.
@@ -162,8 +191,12 @@ def setup_StepTwo(cell, delay=700):
 
 
 def setup_StepThree(cell, delay=700):
-    """Setup a step current stimulus at the soma with an amplitude of 1.507 nA.
-    
+    """Setup a step current stimulus at the soma:
+          
+        - amplitude = 1.507 nA
+        - delay = 700 ms
+        - duration = 2000 ms   
+           
     Args:
         cell (:class:`~single_cell_parser.cell.Cell`): The cell object.
         delay (float): The delay of the step current stimulus (ms).
