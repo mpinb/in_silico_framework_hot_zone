@@ -105,7 +105,7 @@ class CMVDataParser:
         """Time interval for visualisation. Does not have to equal the simulation time interval.
         By default, the simulation is chopped to the specified t_begin and t_stop, and evenly divided in 10 timesteps."""
         self.times_to_show = None
-        """An array of time points to visualize. Gets calculated from :param:self.t_start, :param:self.t_stop and :param:self.t_step"""
+        """An array of time points to visualize. Gets calculated from :paramref:self.t_start, :paramref:self.t_stop and :paramref:self.t_step"""
         self.possible_scalars = {
             'K_Pst.ik', 'K_Pst.m', 'K_Pst.h', 
             'Ca_LVAst.ica', 'Ca_LVAst.h', 'Ca_LVAst.m', 
@@ -740,7 +740,7 @@ class CellMorphologyVisualizer(CMVDataParser):
         highlight_x=None):
         '''
         Creates a python plot of the cell morphology in 3D,
-        You can pass various arguments to adapt the plot, e.g. showing an ovelray of the membrane voltage, or synaptic locations.
+        You can pass various arguments to adapt the plot, e.g. showing an overlay of the membrane voltage, or synaptic locations.
 
         Args:
             - color (str | [[float]]): If you want some other color overlayed on the cell morphology. 
@@ -802,7 +802,7 @@ class CellMorphologyVisualizer(CMVDataParser):
         Creates a set of images where a neuron morphology color-coded with voltage together with synapse activations are
         shown for a set of time points. In each image the neuron rotates a bit (3 degrees) over its axis.
         These images are then put together into a gif.
-        The parameters :param:t_start, :param:t_stop and :param:t_step will define the :param:self.time attribute
+        The parameters :paramref:t_start, :paramref:t_stop and :paramref:t_step will define the :paramref:self.time attribute
 
         Args:
             - images_path: dir where the images for the gif will be generated
@@ -849,7 +849,7 @@ class CellMorphologyVisualizer(CMVDataParser):
         Creates a set of images where a neuron morphology color-coded with voltage together with synapse activations are
         shown for a set of time points. In each image the neuron rotates a bit (3 degrees) over its axis.
         These images are then put together into a video.
-        The parameters :param:t_start, :param:t_stop and :param:t_step will define the :param:time attribute
+        The parameters :paramref:t_start, :paramref:t_stop and :paramref:t_step will define the :paramref:time attribute
 
         Args:
             - images_path: dir where the images for the video will be generated
@@ -899,7 +899,7 @@ class CellMorphologyVisualizer(CMVDataParser):
         Creates a set of images where a neuron morphology color-coded with voltage together with synapse activations are
         shown for a set of time points. In each image the neuron rotates a bit (3 degrees) over its axis.
         These images are then put together into a python animation.
-        The parameters :param:t_start, :param:t_stop and :param:t_step will define the :param:self.time attribute
+        The parameters :paramref:t_start, :paramref:t_stop and :paramref:t_step will define the :paramref:self.time attribute
 
         Args:
             - images_path: path where the images for the gif will be generated
@@ -1210,7 +1210,7 @@ class CellMorphologyInteractiveVisualizer(CMVDataParser):
         time_point=None,
         show=True):
         """This method shows a plot with an interactive cell, overlayed with scalar data (if provided with the data argument).
-        The parameters :param:t_start, :param:t_stop and :param:t_step will define the :param:self.time attribute
+        The parameters :paramref:t_start, :paramref:t_stop and :paramref:t_step will define the :paramref:self.time attribute
 
         Args:
         - color (str | [[float]]): If you want some other color overlayed on the cell morphology. 
@@ -1265,7 +1265,8 @@ def get_3d_plot_morphology(
     plot=False,
     synapse_legend=True,
     legend=None,
-    return_figax = True
+    return_figax = True,
+    proj_type="ortho"
     ):
     """
     Main method to construct a 3d matplotlib plto of a cell morphology, overlayed with some scalar data.
@@ -1283,7 +1284,7 @@ def get_3d_plot_morphology(
         figsize=(15, 15), 
         dpi=dpi,
         num=str(time_point))
-    ax = plt.axes(projection='3d', proj_type='ortho')
+    ax = plt.axes(projection='3d', proj_type=proj_type)
     ax.set_xticks([])
     ax.set_yticks([])
     ax.set_zticks([])

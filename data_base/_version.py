@@ -13,6 +13,7 @@ import os
 import re
 import subprocess
 import sys
+import functools
 
 
 def get_keywords():
@@ -55,7 +56,7 @@ HANDLERS = {}
 
 def register_vcs_handler(vcs, method):  # decorator
     """Decorator to mark a method as the handler for a particular VCS."""
-
+    @functools.wraps(method)
     def decorate(f):
         """Store f in HANDLERS[vcs][method]."""
         if vcs not in HANDLERS:
