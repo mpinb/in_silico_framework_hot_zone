@@ -20,7 +20,7 @@ from data_base import utils
 def get_EPSP_measurement():
     """
     Unitary post-synaptic potential distributions of L5PTs for synaptic input from each presynaptic excitatory cell type, and the respectively fitted synaptic
-    conductance values (Table S4 in :cite:`Egger_Narayanan_Guest_Bast_Udvary_Messore_Das_de_Kock_Oberlaender_2020`)
+    conductance values (Table S4 in :cite:t:`Egger_Narayanan_Guest_Bast_Udvary_Messore_Das_de_Kock_Oberlaender_2020`)
 
     Returns:
         pd.DataFrame: EPSP mean, median and max for different cell types
@@ -52,7 +52,7 @@ color_cellTypeColorMap_L6paper_with_INH = {'L2': '#119fe4', 'L34': '#0037fe', 'L
 
 def synapse_group_function_L6paper(celltype):
     """
-    Groups celltypes in the same fashion as :cite:`Egger_Narayanan_Guest_Bast_Udvary_Messore_Das_de_Kock_Oberlaender_2020`
+    Groups celltypes in the same fashion as :cite:t:`Egger_Narayanan_Guest_Bast_Udvary_Messore_Das_de_Kock_Oberlaender_2020`
     """
     celltype = celltype.split('_')[0]
     if celltype in inhibitory:
@@ -72,7 +72,7 @@ color_cellTypeColorMapHotZone = {
 
 def synapse_group_function_HZpaper(celltype):
     """
-    Groups celltypes in the same fashion as :cite:`Guest_Bast_Narayanan_Oberlaender`
+    Groups celltypes in the same fashion as :cite:t:`Guest_Bast_Narayanan_Oberlaender`
     This means grouping the following:
     
         - All inhibitory celltypes
@@ -201,7 +201,7 @@ def norm(x):
 def read_barrelfield():
     """
     Reads the barrel field data from a file and processes it. This function is cached for performance.
-    The barrel field data is a reference barrel cortex calculated as described in :cite:`Egger_Narayanan_Helmstaedter_Kock_Oberlaender_2012`.
+    The barrel field data is a reference barrel cortex calculated as described in :cite:t:`Egger_Narayanan_Helmstaedter_Kock_Oberlaender_2012`.
 
     The function uses a mapping between labels and IDs to process the data. It reads the data from the file 'average_barrel_field_L45_border.am' located in the same directory as this script.
 

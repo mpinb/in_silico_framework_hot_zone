@@ -1,5 +1,5 @@
 '''
-A Python translation of the evaluation functions used in :cite:`Hay_Hill_Schürmann_Markram_Segev_2011`.
+A Python translation of the evaluation functions used in :cite:t:`Hay_Hill_Schürmann_Markram_Segev_2011`.
 This module provides methods to run Hay's stimulus protocols, and evaluate the resulting voltage traces.
 
 Created on Nov 08, 2018
@@ -65,7 +65,7 @@ class BAC:
     to assess the accuracy of some simulation based on the voltage trace
     it produced. These metrics were introduced by Idan Segev, and illustrated in
     "Ion channel distributions in cortical neurons are optimized for energy-efficient
-    active dendritic computations" by Arco Bast and Marcel Oberlaender (:cite:`Guest_Bast_Narayanan_Oberlaender`).
+    active dendritic computations" by Arco Bast and Marcel Oberlaender :cite:`Guest_Bast_Narayanan_Oberlaender`.
     """
 
     def __init__(

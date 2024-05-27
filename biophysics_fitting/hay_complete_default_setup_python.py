@@ -1,5 +1,5 @@
 '''
-A Python translation of the setup for in-silico curernt injection experiments as described in :cite:`Hay_Hill_Schürmann_Markram_Segev_2011`.
+A Python translation of the setup for in-silico curernt injection experiments as described in :cite:t:`Hay_Hill_Schürmann_Markram_Segev_2011`.
 
 Created on Nov 08, 2018
 
@@ -49,7 +49,7 @@ def record_bAP(cell, recSite1=None, recSite2=None):
         recSite2 (float): The distance (um) from the soma to the second recording site.
         
     Note:
-        See :cite:`Hay_Hill_Schürmann_Markram_Segev_2011` for more information.
+        See :cite:t:`Hay_Hill_Schürmann_Markram_Segev_2011` for more information.
     """
     assert recSite1 is not None
     assert recSite2 is not None
@@ -72,7 +72,7 @@ def record_BAC(cell, recSite=None):
         recSite (float): The distance (um) from the soma to the apical recording site.
         
     Note:
-        See :cite:`Hay_Hill_Schürmann_Markram_Segev_2011` for more information.
+        See :cite:t:`Hay_Hill_Schürmann_Markram_Segev_2011` for more information.
     """
     return {
         'tVec': tVec(cell),
@@ -87,7 +87,7 @@ def record_Step(cell):
     This is used to quantify the response of the cell to step currents.
     
     Note:
-        See :cite:`Hay_Hill_Schürmann_Markram_Segev_2011` for more information.
+        See :cite:t:`Hay_Hill_Schürmann_Markram_Segev_2011` for more information.
     """
     return {
         'tVec': tVec(cell), 
@@ -110,7 +110,7 @@ def get_Simulator(fixed_params, step=False, vInit=False):
         (:class:`~biophysics_fitting.simulator.Simulator`): A simulator object.
         
     Note:
-        See :cite:`Hay_Hill_Schürmann_Markram_Segev_2011` for more information.    
+        See :cite:t:`Hay_Hill_Schürmann_Markram_Segev_2011` for more information.    
     """
     s = hay_complete_default_setup.get_Simulator(fixed_params, step=step)
     s.setup.stim_response_measure_funs = []
@@ -200,7 +200,7 @@ def get_Evaluator(
         NotImplementedError: If :paramref:step or :paramref:vInit are set to True.
         
     Note:
-        See :cite:`Hay_Hill_Schürmann_Markram_Segev_2011` for more information.
+        See :cite:t:`Hay_Hill_Schürmann_Markram_Segev_2011` for more information.
     """
     e = Evaluator()
     bap = hay_evaluation_python.bAP(**bAP_kwargs)
@@ -240,7 +240,7 @@ def get_Combiner(step=False):
         (:class:`~biophysics_fitting.combiner.Combiner`): A combiner object.
         
     Note:
-        See :cite:`Hay_Hill_Schürmann_Markram_Segev_2011` for more information.
+        See :cite:t:`Hay_Hill_Schürmann_Markram_Segev_2011` for more information.
     """
     return hay_complete_default_setup.get_Combiner(step=step)
 

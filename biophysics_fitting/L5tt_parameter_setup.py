@@ -21,7 +21,7 @@ def hay_param_to_scp_neuron_param(p):
         str: The SCP neuron parameter name.
         
     Note:
-        See :cite:`Hay_Hill_Schürmann_Markram_Segev_2011` for more information.
+        See :cite:t:`Hay_Hill_Schürmann_Markram_Segev_2011` for more information.
     """
     p = p.split('.')
     if p[1] == 'axon':
@@ -330,7 +330,7 @@ def get_L5tt_template_v2():
     This method is identical to :py:meth:`get_L5tt_template`, but adds the following specifications::
     
         - The CaDynamics_E2 mechanism is replaced with CaDynamics_E2_v2 (see :py:mod:`mechanisms`).
-        - The SKv3_1 mechanism is set to have a linear spatial distribution with intercept (see :cite:`Schaefer_Helmstaedter_Schmitt_Bar_Yehuda_Almog_Ben_Porat_Sakmann_Korngreen_2007`).
+        - The SKv3_1 mechanism is set to have a linear spatial distribution with intercept (see :cite:t:`Schaefer_Helmstaedter_Schmitt_Bar_Yehuda_Almog_Ben_Porat_Sakmann_Korngreen_2007`).
         
     Returns:
         sumatra.NTParameterSet (dict-like): The template cell parameters.
@@ -386,7 +386,7 @@ def set_ephys(cell_param, params=None):
     Parameter names reflect the Hay naming convention.
     
     Note:
-        See :cite:`Hay_Hill_Schürmann_Markram_Segev_2011` for more information.
+        See :cite:t:`Hay_Hill_Schürmann_Markram_Segev_2011` for more information.
     """
     for k, v in six.iteritems(params):
         cell_param[hay_param_to_scp_neuron_param(k)] = float(v)
@@ -474,7 +474,7 @@ def set_hot_zone(cell_param, min_=None, max_=None, outsidescale_sections=None):
         
     Note:
         This method is specific for a L5PT.
-        For more information about the hot zone, refer to :cite:`Guest_Bast_Narayanan_Oberlaender`
+        For more information about the hot zone, refer to :cite:t:`Guest_Bast_Narayanan_Oberlaender`
     """
     cell_param['ApicalDendrite'].mechanisms.range['Ca_LVAst']['begin'] = min_
     cell_param['ApicalDendrite'].mechanisms.range['Ca_LVAst']['end'] = max_

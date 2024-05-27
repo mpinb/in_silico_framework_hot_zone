@@ -1,5 +1,5 @@
 """
-This module provides convenience methods for Hay's model specification (see :cite:`Hay_Hill_Schürmann_Markram_Segev_2011`).
+This module provides convenience methods for Hay's model specification (see :cite:t:`Hay_Hill_Schürmann_Markram_Segev_2011`).
 """
 import pandas as pd
 
@@ -9,7 +9,7 @@ import pandas as pd
 
 
 def get_hay_objective_names():
-    """Get the names of the objectives used in :cite:`Hay_Hill_Schürmann_Markram_Segev_2011`.
+    """Get the names of the objectives used in :cite:t:`Hay_Hill_Schürmann_Markram_Segev_2011`.
     
     Returns:
         list: The names of the objectives.
@@ -26,7 +26,7 @@ def get_hay_objective_names():
 
 
 def get_hay_param_names():
-    """Get the names of the parameters used in :cite:`Hay_Hill_Schürmann_Markram_Segev_2011`.
+    """Get the names of the parameters used in :cite:t:`Hay_Hill_Schürmann_Markram_Segev_2011`.
     
     Returns:
         list: The names of the parameters."""
@@ -50,7 +50,7 @@ def get_hay_param_names():
 
 
 def get_hay_params_pdf():
-    """Get the parameter boundaries used in :cite:`Hay_Hill_Schürmann_Markram_Segev_2011`.
+    """Get the parameter boundaries used in :cite:t:`Hay_Hill_Schürmann_Markram_Segev_2011`.
     
     Returns:
         pd.DataFrame: The parameter boundaries."""
@@ -71,7 +71,7 @@ def get_hay_params_pdf():
 
 
 def get_hay_problem_description():
-    """Get the problem description used in :cite:`Hay_Hill_Schürmann_Markram_Segev_2011`.
+    """Get the problem description used in :cite:t:`Hay_Hill_Schürmann_Markram_Segev_2011`.
     
     The resulting pd.DataFrame contains the following columns:
         
@@ -135,7 +135,7 @@ def get_hay_problem_description():
     Note:
         These features are unique to Layer 5 Pyramidal Neurons in the Rat Barrel Cortex.
         Other celltypes will have different values for these features, and may not even
-        have these features at all. See :cite:`Hay_Hill_Schürmann_Markram_Segev_2011` for more information.
+        have these features at all. See :cite:t:`Hay_Hill_Schürmann_Markram_Segev_2011` for more information.
     """
     d = {
         'feature': {
