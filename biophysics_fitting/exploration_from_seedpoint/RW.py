@@ -25,8 +25,7 @@ class RW:
             n_iterations = 60000,
             mode = None
         ):
-        '''Class to perform RW exploration from a seedpoint.
-        
+        '''        
         Args:
             df_seeds (pd.DataFrame): 
                 The individual seed points as rows and the parameters as columns
@@ -37,10 +36,8 @@ class RW:
                 Default: None
             evaluation_function: 
                 Must take a parameter vector and return (inside, evaluation). 
-                inside (bool): whether or not the parameter vector is within experimental constraits
-                    (i.e. results in acceptable physiology) or not. 
-                evaluation: dictionary that will be saved alongside the parameters.
-                E.g.: ephys parameters.
+                    - inside (bool): whether or not the parameter vector is within experimental constraits (i.e. results in acceptable physiology) or not. 
+                    - evaluation: dictionary that will be saved alongside the parameters. E.g.: ephys parameters.
             mode (None | str): 
                 None: default random walk. 
                 'expand': only propose new points that move further away from seedpoint
