@@ -77,6 +77,8 @@ autodoc_default_options = {
     'members': True,
     'show-inheritance': True,
 }
+
+autoclass_content = 'both'  # document both the class docstring, as well as __init__
 ## Generate autodoc stubs with summaries from code
 autosummary_generate = ['modules.rst']
 autosummary_imported_members = False  # do not show all imported modules per module, this is too bloated
