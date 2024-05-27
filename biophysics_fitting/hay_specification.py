@@ -88,45 +88,45 @@ def get_hay_problem_description():
         :header-rows: 1
 
         * - Objective
-            - Meaning
+          - Meaning
         * - spikecount
-            - Amount of spikes
+          - Amount of spikes
         * - APheight
-            - AP height
+          - AP height
         * - APwidth
-            - AP width
+          - AP width
         * - att2
-            - Attenuation of the bAP between soma and recSite 1
+          - Attenuation of the bAP between soma and recSite 1
         * - att3
-            - Attenuation of the bAP between soma and recSite 2
+          - Attenuation of the bAP between soma and recSite 2
         * - ahpdepth
-            - After-hyperpolarization depth
+          - After-hyperpolarization depth
         * - ISI
-            - Interspike interval
+          - Interspike interval
         * - caSpike_height
-            - height of the Ca2+-spike
+          - height of the Ca2+-spike
         * - caSpike_width
-            - Width of the Ca2+-spike
+          - Width of the Ca2+-spike
         * - mf1
-            - Spike frequency
+          - Spike frequency
         * - AI1
-            - Adaptation index
+          - Adaptation index
         * - ISIcv1
-            - Interspike interval: coefficient of variation
+          - Interspike interval: coefficient of variation
         * - DI1
-            - Initial burst interspike interval (time between first and second AP)
+          - Initial burst interspike interval (time between first and second AP)
         * - TTFS1
-            - First spike latency
+          - First spike latency
         * - APh1
-            - AP height
+          - AP height
         * - fAHPd1
-            - Fast AP depth
+          - Fast AP depth
         * - sAHPd1
-            - Slow after-hyperpolarization depth
+          - Slow after-hyperpolarization depth
         * - sAHPt1
-            - Slow after-hyperpolarization time
+          - Slow after-hyperpolarization time
         * - APw1
-            - Ap half-width
+          - Ap half-width
     
     Returns:
         pd.DataFrame: The problem description, containing the objectives, objective names, stimulus type, mean and std for each objective.
