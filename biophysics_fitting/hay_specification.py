@@ -84,7 +84,6 @@ def get_hay_problem_description():
         
     The names of the objectives are prefixed with the stimulus name. The suffix
     acronyms mean the following:
-    
     .. list-table:: 
         :header-rows: 1
 
