@@ -85,52 +85,50 @@ def get_hay_problem_description():
     The names of the objectives are prefixed with the stimulus name. The suffix
     acronyms mean the following:
     
-+-------------------+-----------------------------------------------+
-| Objective         | Meaning                                       |
-+===================+===============================================+
-| spikecount        | Amount of spikes                              |
-+-------------------+-----------------------------------------------+
-| APheight          | AP height                                     |
-+-------------------+-----------------------------------------------+
-| APwidth           | AP width                                      |
-+-------------------+-----------------------------------------------+
-| att2              | Attenuation of the bAP between soma and recSite 1 |
-+-------------------+-----------------------------------------------+
-| att3              | Attenuation of the bAP between soma and recSite 2 |
-+-------------------+-----------------------------------------------+
-| ahpdepth          | After-hyperpolarization depth                 |
-+-------------------+-----------------------------------------------+
-| APheight          | Average height of the APs                     |
-+-------------------+-----------------------------------------------+
-| ISI               | Interspike interval                           |
-+-------------------+-----------------------------------------------+
-| caSpike_height    | height of the Ca2+-spike                      |
-+-------------------+-----------------------------------------------+
-| caSpike_width     | Width of the Ca2+-spike                       |
-+-------------------+-----------------------------------------------+
-| spikecount        | Amount of somatic APs                         |
-+-------------------+-----------------------------------------------+
-| mf1               | Spike frequency                               |
-+-------------------+-----------------------------------------------+
-| AI1               | Adaptation index                              |
-+-------------------+-----------------------------------------------+
-| ISIcv1            | Interspike interval: coefficient of variation |
-+-------------------+-----------------------------------------------+
-| DI1               | Initial burst interspike interval (time between first and second AP) |
-+-------------------+-----------------------------------------------+
-| TTFS1             | First spike latency                           |
-+-------------------+-----------------------------------------------+
-| APh1              | AP height                                     |
-+-------------------+-----------------------------------------------+
-| fAHPd1            | Fast AP depth                                 |
-+-------------------+-----------------------------------------------+
-| sAHPd1            | Slow after-hyperpolarization depth            |
-+-------------------+-----------------------------------------------+
-| sAHPt1            | Slow after-hyperpolarization time             |
-+-------------------+-----------------------------------------------+
-| APw1              | Ap half-width                                 |
-+-------------------+-----------------------------------------------+
-            
+    .. list-table:: 
+        :header-rows: 1
+
+        * - Objective
+            - Meaning
+        * - spikecount
+            - Amount of spikes
+        * - APheight
+            - AP height
+        * - APwidth
+            - AP width
+        * - att2
+            - Attenuation of the bAP between soma and recSite 1
+        * - att3
+            - Attenuation of the bAP between soma and recSite 2
+        * - ahpdepth
+            - After-hyperpolarization depth
+        * - ISI
+            - Interspike interval
+        * - caSpike_height
+            - height of the Ca2+-spike
+        * - caSpike_width
+            - Width of the Ca2+-spike
+        * - mf1
+            - Spike frequency
+        * - AI1
+            - Adaptation index
+        * - ISIcv1
+            - Interspike interval: coefficient of variation
+        * - DI1
+            - Initial burst interspike interval (time between first and second AP)
+        * - TTFS1
+            - First spike latency
+        * - APh1
+            - AP height
+        * - fAHPd1
+            - Fast AP depth
+        * - sAHPd1
+            - Slow after-hyperpolarization depth
+        * - sAHPt1
+            - Slow after-hyperpolarization time
+        * - APw1
+            - Ap half-width
+    
     Returns:
         pd.DataFrame: The problem description, containing the objectives, objective names, stimulus type, mean and std for each objective.
     
