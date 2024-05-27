@@ -11,25 +11,7 @@ import sys
 
 class RW:
     '''Class to perform RW exploration from a seedpoint.
-    
-    df_seeds: pandas dataframe which contains the individual seed points as rows and 
-        the parameters as columns
-        
-    param_ranges: pandas dataframe, which contains the parameters as rows and has a 
-        "min_" and "max_" column denoting range of values this parameter may take
-        
-    params_to_explore: list of parameters that should be explored. If None, all parameters are explored.
-        
-    evaluation_function: takes one argument (a new parameter vector), returns 
-        inside, evaluation. 
-            inside: boolean that indicates if the parameter vector is within experimental constraits
-                (i.e. results in acceptable physiology) or not. 
-            evaluation: dictionary that will be saved alongside the parameters. For example, this should contain
-                ephys features.
-    
-    mode: None: default random walk. 'expand': only propose new points that move further away from seedpoint
-                
-    MAIN_DIRECTORY: output directory in which results are stored.'''   
+   '''   
     def __init__(
             self, 
             df_seeds = None, 
