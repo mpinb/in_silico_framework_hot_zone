@@ -39,14 +39,14 @@ class Evaluator:
             
     The workflow in the Evaluator can be split in two parts:
     
-        1. for each key in the :paramref:`voltage_traces_dict`:
-            apply `evaluate_fun`, that is registered with a name that matches the key.
-            Extracts features from the voltage trace.
-        2. perform arbitrary operations on the resulting dictionary 
+        1. Apply an `evaluate_fun` on each matching key in :paramref:`voltage_traces_dict` 
+            These extract features from the voltage trace. 
+            These functions are registered under :py:attr:`Evaluator.setup.evaluate_funs`.
+        2. Perform arbitrary operations on the resulting dictionary 
             (e.g. merge it from a nested to a flat dictionary or compute more complex features
             by combineing features from different stimuli)
             
-    An example set up can be found in :mod:`~bipohysics_fitting.hay_complete_default_setup`.
+    An example set up can be found in :py:meth:`~biophysics_fitting.hay_complete_default_setup.get_Evaluator`.
     
     Example: 
         
@@ -56,7 +56,7 @@ class Evaluator:
         >>>    return out_dict # keys are names of features, values are features
 
         >>> def finalize_fun(dict_):
-        >>>   # dict_ is a dictionary with out_name of the evaluate_funs as keys.
+        >>>    # dict_ is a dictionary with out_name of the evaluate_funs as keys.
         >>>    # and the returned dictionary out_dict as values, 
         >>>    # i.e. out_dict is a nested dictionary.
         >>>    # dict_ can now be arbitrarily modified, e.g. flattened.
