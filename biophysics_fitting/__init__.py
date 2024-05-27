@@ -76,7 +76,7 @@ def get_inner_sec_dist_list(
         z_offset (int|float, optional): Offset for z-value. Defaults to 706 μm (the average pia distance of a rat barrel cortex).
 
     Returns:
-        {float: :class:`~single_cell_parser.cell.PySection`}: Dictionary mapping the z-coordinate of each section point to the section object, including only sections that pass the filter.
+        dict: Dictionary mapping the z-coordinate (float) of each section point to the section (:class:`~single_cell_parser.cell.PySection`) object, including only sections that pass the filter.
     """
     #    sec_dist_dict = {cell.distance_to_soma(sec, 1.0): sec
     sec_dist_dict = {
@@ -174,7 +174,7 @@ def get_first_order_bifurcation_sections(
         cell (:class:`~single_cell_parser.cell.Cell`): The Cell object for which to find the main bifurcation section.
 
     Returns:
-        [class:`~single_cell_parser.cell.PySection`]: A list of sections that are both inner sections, and are of branching order 1. 
+        list: A list of :class:`~single_cell_parser.cell.PySection` sections that are both inner sections, and are of branching order 1. 
     """
     sec_dist_list = get_branching_depth_series(cell)
     sec_dist_list_filtered = [depth_sec_tuple[1] for depth_sec_tuple in sec_dist_list if depth_sec_tuple[0] == 1]
