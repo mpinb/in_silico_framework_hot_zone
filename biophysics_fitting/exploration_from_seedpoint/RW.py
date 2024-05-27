@@ -10,6 +10,26 @@ import time
 import sys
 
 class RW:
+    '''Class to perform RW exploration from a seedpoint.
+    
+    df_seeds: pandas dataframe which contains the individual seed points as rows and 
+        the parameters as columns
+        
+    param_ranges: pandas dataframe, which contains the parameters as rows and has a 
+        "min_" and "max_" column denoting range of values this parameter may take
+        
+    params_to_explore: list of parameters that should be explored. If None, all parameters are explored.
+        
+    evaluation_function: takes one argument (a new parameter vector), returns 
+        inside, evaluation. 
+            inside: boolean that indicates if the parameter vector is within experimental constraits
+                (i.e. results in acceptable physiology) or not. 
+            evaluation: dictionary that will be saved alongside the parameters. For example, this should contain
+                ephys features.
+    
+    mode: None: default random walk. 'expand': only propose new points that move further away from seedpoint
+                
+    MAIN_DIRECTORY: output directory in which results are stored.'''   
     def __init__(
             self, 
             df_seeds = None, 
@@ -22,27 +42,32 @@ class RW:
             checkpoint_every = 100, 
             n_iterations = 60000,
             mode = None
-            ):
+        ):
         '''Class to perform RW exploration from a seedpoint.
         
-        df_seeds: pandas dataframe which contains the individual seed points as rows and 
-            the parameters as columns
-            
-        param_ranges: pandas dataframe, which contains the parameters as rows and has a 
-            "min_" and "max_" column denoting range of values this parameter may take
-            
-        params_to_explore: list of parameters that should be explored. If None, all parameters are explored.
-            
-        evaluation_function: takes one argument (a new parameter vector), returns 
-            inside, evaluation. 
-                inside: boolean that indicates if the parameter vector is within experimental constraits
+        Args:
+            df_seeds (pd.DataFrame): 
+                The individual seed points as rows and the parameters as columns
+            param_ranges (pd.DataFrame): 
+                The parameters as rows and has a "min_" and "max_" column denoting range of values this parameter may take
+            params_to_explore (list): Parameters that should be explored. 
+                If None, all parameters are explored.
+                Default: None
+            evaluation_function: 
+                Must take a parameter vector and return (inside, evaluation). 
+                inside (bool): whether or not the parameter vector is within experimental constraits
                     (i.e. results in acceptable physiology) or not. 
-                evaluation: dictionary that will be saved alongside the parameters. For example, this should contain
-                    ephys features.
-        
-        mode: None: default random walk. 'expand': only propose new points that move further away from seedpoint
-                    
-        MAIN_DIRECTORY: output directory in which results are stored.'''
+                evaluation: dictionary that will be saved alongside the parameters.
+                E.g.: ephys parameters.
+            mode (None | str): 
+                None: default random walk. 
+                'expand': only propose new points that move further away from seedpoint
+            MAIN_DIRECTORY (str): output directory in which results are stored.
+            min_step_size (float): minimum step size for random walk.
+            max_step_size (float): maximum step size for random walk.
+            checkpoint_every (int): save every n-th iteration.
+            n_iterations (int): maximum number of iterations.
+        '''
         self.df_seeds = df_seeds
         self.param_ranges = param_ranges
         self.MAIN_DIRECTORY = MAIN_DIRECTORY
@@ -59,6 +84,13 @@ class RW:
             self.params_to_explore = params_to_explore
     
     def _normalize_params(self,p):
+        """Normalize parameters to be between 0 and 1.
+        
+        Args:
+            p (pd.Series): parameter vector
+            
+        Returns:
+            pd.Series: normalized parameter vector"""
         assert(isinstance(p,pd.Series))
         assert(len(p) == len(self.all_param_names))
         min_ = self.param_ranges['min']
@@ -66,6 +98,13 @@ class RW:
         return (p-min_)/(max_-min_)
     
     def _unnormalize_params(self, p):
+        """Unnormalize parameters to be between min and max.
+        
+        Args:
+            p (pd.Series): normalized parameter vector
+            
+        Returns:
+            pd.Series: unnormalized parameter vector"""
         assert(isinstance(p,pd.Series))
         assert(len(p) == len(self.all_param_names))
         min_ = self.param_ranges['min']
@@ -73,6 +112,16 @@ class RW:
         return p*(max_-min_)+min_
         
     def run_RW(self, selected_seedpoint, particle_id, seed = None):
+        """Run random walk exploration from a seed point.
+        
+        Args:
+            selected_seedpoint (int): index of the seed point in df_seeds
+            particle_id (int): id of the particle
+            seed (int): random seed for the random number generator
+            
+        Returns:
+            None. Saves the results to :paramref:`MAIN_DIRECTORY`/:paramref:`selected_seedpoint`/:paramref:`particle_id`
+        """
         try: # to not cause an error in pickles created before mode was added
             self.mode
         except AttributeError as e:
