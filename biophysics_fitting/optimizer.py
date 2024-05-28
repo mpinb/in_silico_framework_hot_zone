@@ -1,6 +1,6 @@
 """Multi-objective optimization algorithm.
 
-This code has been adapted from [BluePyOpt](https://github.com/BlueBrain/BluePyOpt) :cite:`Van_Geit_Gevaert_Chindemi_Rössert_Courcol_Muller_Schürmann_Segev_Markram_2016`
+This code has been adapted from [BluePyOpt](https://github.com/BlueBrain/BluePyOpt) :cite:`Van_Geit_Gevaert_Chindemi_Roessert_Courcol_Muller_Schuermann_Segev_Markram_2016`
 
 It has been adapted, such that::
 

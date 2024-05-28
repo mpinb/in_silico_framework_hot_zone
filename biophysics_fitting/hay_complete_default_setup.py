@@ -1,6 +1,6 @@
 '''
 This module provides a complete setup for the Hay stimulus protocol on a Layer 5 Pyramidal Tract (L5PT) neuron.
-While :py:mod:`~biophysics_fitting.hay_evaluation` is a direct Python translation of :cite:t:`Hay_Hill_Schürmann_Markram_Segev_2011`,
+While :py:mod:`~biophysics_fitting.hay_evaluation` is a direct Python translation of :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011`,
 this module has been adapted to allow for more flexibility and integration with ISF.
 
 Created on Nov 08, 2018
@@ -83,7 +83,7 @@ def record_bAP(cell, recSite1=None, recSite2=None):
         dict: A dictionary with the voltage traces.
         
     Note:
-        See :cite:t:`Hay_Hill_Schürmann_Markram_Segev_2011` for more information.
+        See :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011` for more information.
     """
     assert recSite1 is not None
     assert recSite2 is not None
@@ -112,7 +112,7 @@ def record_BAC(cell, recSite=None):
         dict: A dictionary with the voltage traces.
         
     Note:
-        See :cite:t:`Hay_Hill_Schürmann_Markram_Segev_2011` for more information.
+        See :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011` for more information.
     """
     return {
         'tVec': tVec(cell),
@@ -134,7 +134,7 @@ def record_Step(cell):
         dict: A dictionary with the voltage traces.
         
     Note:
-        See :cite:t:`Hay_Hill_Schürmann_Markram_Segev_2011` for more information.
+        See :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011` for more information.
     """
     return {'tVec': tVec(cell), 'vList': [vmSoma(cell)]}
 
@@ -168,7 +168,7 @@ def get_Simulator(fixed_params, step=False):
     
     Note:
         Other morphologies will require different fixed parameters, stimuli, and measurement functions, and thus a different setup for a Simulator.
-        See :cite:t:`Hay_Hill_Schürmann_Markram_Segev_2011` for more information.
+        See :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011` for more information.
     """
     s = Simulator()
     s.setup.cell_param_generator = get_L5tt_template
@@ -390,7 +390,7 @@ def get_hay_objective_names():
         
     Note:
         The objectives are specific to the L5PT and the Hay stimulus protocol.
-        See :cite:t:`Hay_Hill_Schürmann_Markram_Segev_2011` for more information.
+        See :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011` for more information.
     """
     return [
         'bAP_APwidth', 'bAP_APheight', 'bAP_spikecount', 'bAP_att2', 'bAP_att3',
@@ -413,7 +413,7 @@ def get_hay_param_names():
         
     Note:
         The parameters are specific to the L5PT and the Hay stimulus protocol.
-        See :cite:t:`Hay_Hill_Schürmann_Markram_Segev_2011` for more information.
+        See :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011` for more information.
     """
     return [
         'NaTa_t.soma.gNaTa_tbar', 'Nap_Et2.soma.gNap_Et2bar',
@@ -446,7 +446,7 @@ def get_hay_params_pdf():
         
     Note:
         The parameters are specific to the L5PT and the Hay stimulus protocol.
-        See :cite:t:`Hay_Hill_Schürmann_Markram_Segev_2011`."""
+        See :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011`."""
     d = {
         'max': [
             4.0, 0.01, 1.0, 0.1, 0.1, 2.0, 0.001, 0.01, 0.05, 1000.0, 4.0, 0.01,
@@ -476,7 +476,7 @@ def get_hay_problem_description():
         
     Note:
         The objectives are specific to the L5PT and the Hay stimulus protocol.
-        See :cite:t:`Hay_Hill_Schürmann_Markram_Segev_2011`.
+        See :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011`.
     """
     d = {
         'feature': {
@@ -788,7 +788,7 @@ def get_feasible_model_params():
         
     Note:
         The parameters are specific to the L5PT and the Hay stimulus protocol.
-        See :cite:t:`Hay_Hill_Schürmann_Markram_Segev_2011`.
+        See :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011`.
     """
     pdf = get_hay_params_pdf()
     x = [

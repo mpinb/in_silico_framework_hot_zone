@@ -42,9 +42,9 @@ def evaluation_function_incremental_helper(
         cutoffs (dict): Dictionary with keys that are in :paramref:`stim_order`. Values are floats that define a maximum allowed error for any objective corresponding to that stimulus.
             Note that each stimulus evokes a voltage trace that is parametrized by multiple objectives, each with their own error.
             This method checks if the largest error exceeds some value.
-            Default: {'bAP':3.2, 'BAC': 3.2, 'StepOne':4.5, 'StepTwo': 4.5, 'StepThree': 4.5}, as used in :cite:t:`Hay_Hill_Schürmann_Markram_Segev_2011`
+            Default: {'bAP':3.2, 'BAC': 3.2, 'StepOne':4.5, 'StepTwo': 4.5, 'StepThree': 4.5}, as used in :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011`
         stim_order (array-like): Order in which stimuli are simulated.
-            Default: ['bAP', 'BAC', 'StepOne', 'StepTwo', 'StepThree'], which is the order of stimuli used in :cite:t:`Hay_Hill_Schürmann_Markram_Segev_2011`
+            Default: ['bAP', 'BAC', 'StepOne', 'StepTwo', 'StepThree'], which is the order of stimuli used in :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011`
         verbose (bool): If True, print intermediate results.
         evaluators_by_stimulus (dict): Dictionary with keys that are in :paramref:`stim_order`. Values are evaluators that are used to evaluate the voltage traces.
         additional_evaluation_functions (list): List of functions that are called after the voltage traces are evaluated. The results are added to the evaluation dict, and returned.
@@ -56,7 +56,7 @@ def evaluation_function_incremental_helper(
     '''
     
     if stim_order is None:
-        # Default value: :cite:`Hay_Hill_Schürmann_Markram_Segev_2011`
+        # Default value: :cite:`Hay_Hill_Schuermann_Markram_Segev_2011`
         stim_order = ['bAP', 'BAC', 'StepOne', 'StepTwo', 'StepThree']
 
     cutoffs = cutoffs or {

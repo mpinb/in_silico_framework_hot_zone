@@ -3,7 +3,7 @@ This package contains code to generate and analyze biophysically detailed multi-
 
 It provides two ways to generate mutli-compartmental models:
 
-    1. BluePyOpt :cite:`Van_Geit_Gevaert_Chindemi_Rössert_Courcol_Muller_Schürmann_Segev_Markram_2016`, a Multi-Objective Evolutionary Algorithm (MOEA): :py:mod:`~biophysics_fitting.MOEA_EH_minimal`.
+    1. BluePyOpt :cite:`Van_Geit_Gevaert_Chindemi_Roessert_Courcol_Muller_Schuermann_Segev_Markram_2016`, a Multi-Objective Evolutionary Algorithm (MOEA): :py:mod:`~biophysics_fitting.MOEA_EH_minimal`.
     2. An exploration algorithm: :py:mod:`~biophysics_fitting.exploration_from_seedpoint`.
 
 The MOEA does not require any a priori assumptions on biophysical parameters to find a MCM, but fails to explore the full diversity of possible MCMs. 
