@@ -72,8 +72,8 @@ def get_inner_sec_dist_list(
     Args:
         cell (:class:`~single_cell_parser.cell.Cell`): The Cell object
         select (list, optional): Selection of sections to consider, based on their label. Defaults to ['ApicalDendrite', 'Dendrite'].
-        connected_to_dend_beyond_distance (int, optional): Distance threshold (in μm). Defaults to 1000 μm.
-        z_offset (int|float, optional): Offset for z-value. Defaults to 706 μm (the average pia distance of a rat barrel cortex).
+        connected_to_dend_beyond_distance (int, optional): Distance threshold (in um). Defaults to 1000 um.
+        z_offset (int|float, optional): Offset for z-value. Defaults to 706 um (the average pia distance of a rat barrel cortex).
 
     Returns:
         dict: Dictionary mapping the z-coordinate (float) of each section point to the section (:class:`~single_cell_parser.cell.PySection`) object, including only sections that pass the filter.
