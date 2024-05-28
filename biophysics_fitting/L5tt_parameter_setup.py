@@ -21,7 +21,7 @@ def hay_param_to_scp_neuron_param(p):
         str: The SCP neuron parameter name.
         
     Note:
-        See :cite:t:`Hay_Hill_Schürmann_Markram_Segev_2011` for more information.
+        See :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011` for more information.
     """
     p = p.split('.')
     if p[1] == 'axon':
@@ -386,7 +386,7 @@ def set_ephys(cell_param, params=None):
     Parameter names reflect the Hay naming convention.
     
     Note:
-        See :cite:t:`Hay_Hill_Schürmann_Markram_Segev_2011` for more information.
+        See :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011` for more information.
     """
     for k, v in six.iteritems(params):
         cell_param[hay_param_to_scp_neuron_param(k)] = float(v)

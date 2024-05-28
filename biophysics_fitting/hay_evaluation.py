@@ -49,7 +49,7 @@ def setup_hay_evaluator(testing=False):
         it is therefore necessary to initialize the evaluator.
         
     Note:
-        See :cite:t:`Hay_Hill_Schürmann_Markram_Segev_2011` for more information.
+        See :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011` for more information.
         
     '''
     # todo: this also creates a cell which is simulated in neuron
@@ -94,7 +94,7 @@ def is_setup():
     """Check if the NEURON environment is set up for the Hay evaluator.
     
     Note:
-        See :cite:t:`Hay_Hill_Schürmann_Markram_Segev_2011` for more information."""
+        See :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011` for more information."""
     import neuron
     h = neuron.h
     try:
@@ -221,7 +221,7 @@ def get_cur_stim(stim):
 
 
 def hay_evaluate(cur_stim, tvec, vList):
-    '''Evaluate a stimulus as described by :cite:t:`Hay_Hill_Schürmann_Markram_Segev_2011`.
+    '''Evaluate a stimulus as described by :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011`.
     
     Args:
         cur_stim (int): The stimulus to evaluate.
@@ -329,7 +329,7 @@ def hay_evaluate_bAP(tVec=None, vList=None):
         vList (list): The voltage list.
         
     Note:
-        See :cite:t:`Hay_Hill_Schürmann_Markram_Segev_2011` for more information."""
+        See :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011` for more information."""
     cur_stim = get_cur_stim('bAP')
     return hay_evaluate(cur_stim, tVec, vList)
 
@@ -344,7 +344,7 @@ def hay_evaluate_BAC(tVec=None, vList=None):
         vList (list): The voltage list.
         
     Note:
-        See :cite:t:`Hay_Hill_Schürmann_Markram_Segev_2011` for more information."""
+        See :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011` for more information."""
     cur_stim = get_cur_stim('BAC')
     return hay_evaluate(cur_stim, tVec, vList)
 
@@ -359,7 +359,7 @@ def hay_evaluate_StepOne(tVec=None, vList=None):
         vList (list): The voltage list.
         
     Note:
-        See :cite:t:`Hay_Hill_Schürmann_Markram_Segev_2011` for more information.
+        See :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011` for more information.
     """
     cur_stim = get_cur_stim('StepOne')
     return hay_evaluate(cur_stim, tVec, vList)
@@ -375,7 +375,7 @@ def hay_evaluate_StepTwo(tVec=None, vList=None):
         vList (list): The voltage list.
         
     Note:
-        See :cite:t:`Hay_Hill_Schürmann_Markram_Segev_2011` for more information.
+        See :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011` for more information.
     """ 
     cur_stim = get_cur_stim('StepTwo')
     return hay_evaluate(cur_stim, tVec, vList)
@@ -391,7 +391,7 @@ def hay_evaluate_StepThree(tVec=None, vList=None):
         vList (list): The voltage list.
         
     Note:
-        See :cite:t:`Hay_Hill_Schürmann_Markram_Segev_2011` for more information.
+        See :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011` for more information.
     """
     cur_stim = get_cur_stim('StepThree')
     return hay_evaluate(cur_stim, tVec, vList)

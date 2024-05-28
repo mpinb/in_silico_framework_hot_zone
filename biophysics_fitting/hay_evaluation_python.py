@@ -1,5 +1,5 @@
 '''
-A Python translation of the evaluation functions used in :cite:t:`Hay_Hill_Schürmann_Markram_Segev_2011`.
+A Python translation of the evaluation functions used in :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011`.
 This module provides methods to run Hay's stimulus protocols, and evaluate the resulting voltage traces.
 
 Created on Nov 08, 2018
