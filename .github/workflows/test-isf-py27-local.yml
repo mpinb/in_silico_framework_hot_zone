@@ -5,7 +5,7 @@ name: Py 2.7
 
 on:
   push:
-    branches: [ 'master' , 'testing' , 'mdbv2_compatibility']
+    branches: [ 'master' , 'testing' , 'develop']
     paths-ignore:
       - README.md  # don't run workflow when README changes
       - CHANGELOG.md # Should never be edited anyway
