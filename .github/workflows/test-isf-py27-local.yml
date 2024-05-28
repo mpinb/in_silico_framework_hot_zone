@@ -1,7 +1,8 @@
 name: Py 2.7
 on:
-  push:
-    branches: [ 'master' , 'testing' , 'develop']
+  pull_request:  # run on the PR base to check if the changes work before merging.
+    # Note that this will also run upon any activity in the PR
+    branches: [ 'master', 'develop' , 'testing' , 'mdbv2_compatibility']
     paths-ignore:
       - README.md  # don't run workflow when README changes
       - CHANGELOG.md # Should never be edited anyway
