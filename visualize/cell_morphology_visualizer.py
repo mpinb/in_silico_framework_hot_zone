@@ -169,7 +169,9 @@ class CMVDataParser:
         self.t_start = self.simulation_times[0] if self.t_start is None else self.t_start
         self.dt = self.simulation_times[1] - self.simulation_times[0]
         # TODO: add support for variable timestep
-        self.t_step = (len(self.simulation_times) // 10) * self.dt if self.t_step is None else self.t_step
+        if self.t_step is None:
+            self.t_step = (len(self.simulation_times) // 10) * self.dt if self.t_step is None else self.t_step
+            logger.warning("No t_step provided. Setting t_step to default 1/10th of the total simulation time ~= {}".format(self.t_step))
         self.t_stop = self.simulation_times[-1] - self.simulation_times[-1] % self.t_step if self.t_stop is None else self.t_stop
         self.times_to_show = np.empty(0)
         # initialise time range to visualise
@@ -1307,8 +1309,12 @@ def get_3d_plot_morphology(
         linewidths = points['diameter'][:-1].values + points['diameter'][1:].values / 2 #* 1.5 + 0.2 
         points = points[['x', 'y', 'z']].values.reshape(-1, 1, 3)
         segments = np.concatenate([points[:-1], points[1:]], axis=1)
-        lc = Line3DCollection(segments, linewidths=linewidths, color=colors[sec_n])
-        lc.set_joinstyle("round")
+        lc = Line3DCollection(
+            segments, 
+            linewidths=linewidths, 
+            color=colors[sec_n],
+            joinstyle="round",
+            capstyle="round")
         ax.add_collection(lc)
 
     ax.auto_scale_xyz(lookup_table['x'], lookup_table['y'], lookup_table['z'])
