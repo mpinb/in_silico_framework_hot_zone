@@ -257,8 +257,14 @@ class NetworkMapper:
         and sorts them based on presynaptic column and cell type
         '''
         synapseDensities = {}
-        synapseDensityComputation = SynapseDensity(self.postCell, self.postCellType, self.connectionsSpreadsheet,\
-                                                   self.exCellTypes, self.inhCellTypes, self.exPST, self.inhPST)
+        synapseDensityComputation = SynapseDensity(
+            self.postCell, 
+            self.postCellType, 
+            self.connectionsSpreadsheet,
+            self.exCellTypes, 
+            self.inhCellTypes, 
+            self.exPST, 
+            self.inhPST)
         columns = list(boutonDensities.keys())
         preCellTypes = boutonDensities[columns[0]]
         for col in columns:
