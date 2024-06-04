@@ -71,7 +71,42 @@ inhTypes = ('SymLocal1','SymLocal2','SymLocal3','SymLocal4','SymLocal5','SymLoca
             'L1','L23Trans','L45Sym','L45Peak','L56Trans')
 
 
-def map_singlecell_inputs(cellName, cellTypeName, nrOfSamples=50):
+def map_singlecell_inputs(
+    cellName, 
+    cellTypeName, 
+    nrOfSamples=50,
+    numberOfCellsSpreadsheetName=numberOfCellsSpreadsheetName,
+    connectionsSpreadsheetName=connectionsSpreadsheetName,
+    ExPSTDensityName=ExPSTDensityName,
+    InhPSTDensityName=InhPSTDensityName,
+    boutonDensityFolderName=boutonDensityFolderName):
+    """Map inputs to a single cell morphology.
+    
+    These inputs need to be organized per neuropil structure. Neuropil structures
+    can be arbitrary spatial regions of the brain tissue, or anatomically well-defined
+    areas, e.g. barrels in a barrel cortex, cortical layers.
+    
+    The naming of each neuropil structure needs to be consistent for the input files.
+    
+    Args:
+        cellName (str): 
+            path to a .hoc file containing the morphology of the cell.
+        cellTypeName (str): 
+            name of the postsynaptic cell type.
+        nrOfSamples (int): 
+            number of samples to use for the network embedding.
+        numberOfCellsSpreadsheetName (str): 
+            Path to the a spreadsheet, containing each neuropil structures as columns, and celltypes row indices.
+            Values indicate how much of each celltype was found in each neuropil structure.
+        connectionsSpreadsheetName (str):
+            Path to a spreadsheet, containing the connection probabilities between each presynaptic and postsynaptic cell type.
+        ExPSTDensityName: 3D histogram containing 
+        InhPSTDensityName
+        boutonDensityFolderName: 
+            A directory containing the following subdirectory structure:
+            neuropil_group/presynaptic_cell_type/*.am
+        
+    """
     if not (cellTypeName in exTypes) and not (cellTypeName in inhTypes):
         errstr = 'Unknown cell type %s!'
         raise TypeError(errstr)
@@ -99,15 +134,15 @@ def map_singlecell_inputs(cellName, cellTypeName, nrOfSamples=50):
     InhPSTDensity = sim.read_scalar_field(InhPSTDensityName)
     InhPSTDensity.resize_mesh()
     boutonDensities = {}
-    columns = list(numberOfCellsSpreadsheet.keys())
-    preCellTypes = numberOfCellsSpreadsheet[columns[0]]
+    neuropil_groups = list(numberOfCellsSpreadsheet.keys())
+    preCellTypes = numberOfCellsSpreadsheet[neuropil_groups[0]]
 
-    for col in columns:
-        boutonDensities[col] = {}
+    for neuropil_group in neuropil_groups:
+        boutonDensities[neuropil_group] = {}
         for preCellType in preCellTypes:
-            boutonDensities[col][preCellType] = []
+            boutonDensities[neuropil_group][preCellType] = []
             boutonDensityFolder = os.path.join(prefix, boutonDensityFolderName,
-                                               col, preCellType)
+                                               neuropil_group, preCellType)
             boutonDensityNames = glob.glob(
                 os.path.join(boutonDensityFolder, '*'))
             print('    Loading {:d} bouton densities from {:s}'.format(
@@ -115,10 +150,15 @@ def map_singlecell_inputs(cellName, cellTypeName, nrOfSamples=50):
             for densityName in boutonDensityNames:
                 boutonDensity = sim.read_scalar_field(densityName)
                 boutonDensity.resize_mesh()
-                boutonDensities[col][preCellType].append(boutonDensity)
+                boutonDensities[neuropil_group][preCellType].append(boutonDensity)
 
-    inputMapper = sim.NetworkMapper(singleCell, cellTypeName, numberOfCellsSpreadsheet, connectionsSpreadsheet,\
-                                    ExPSTDensity, InhPSTDensity)
+    inputMapper = sim.NetworkMapper(
+        singleCell, 
+        cellTypeName, 
+        numberOfCellsSpreadsheet, 
+        connectionsSpreadsheet,
+        ExPSTDensity, 
+        InhPSTDensity)
     inputMapper.exCellTypes = exTypes
     inputMapper.inhCellTypes = inhTypes
     inputMapper.create_network_embedding(cellName,
