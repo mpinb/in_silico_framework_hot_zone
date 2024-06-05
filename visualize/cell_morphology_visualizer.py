@@ -106,20 +106,8 @@ class CMVDataParser:
         By default, the simulation is chopped to the specified t_begin and t_stop, and evenly divided in 10 timesteps."""
         self.times_to_show = None
         """An array of time points to visualize. Gets calculated from :paramref:self.t_start, :paramref:self.t_stop and :paramref:self.t_step"""
-        self.possible_scalars = {
-            'K_Pst.ik', 'K_Pst.m', 'K_Pst.h', 
-            'Ca_LVAst.ica', 'Ca_LVAst.h', 'Ca_LVAst.m', 
-            'Nap_Et2.ina', 'Nap_Et2.m', 'Nap_Et2.h', 
-            'SK_E2.ik', 'SK_E2.z',
-            'Ih.ihcn', 
-            'K_Tst.ik', 'K_Tst.h', 'K_Tst.m',
-            'Im.ik', 'Ih.m', 
-            'NaTa_t.ina', 'NaTa_t.m', 'NaTa_t.h', 
-            'SKv3_1.ik', 'SKv3_1.m', 
-            'Ca_HVA.ica', 'Ca_HVA.m', 'Ca_HVA.h', 
-            'CaDynamics_E2.cai', 
-            'cai'
-        }
+        recordvars_all_sections = [list(sec.recordVars.keys()) for sec in cell.sections]
+        self.possible_scalars = set([e for recordvars_this_section in recordvars_all_sections for e in recordvars_this_section])
         """Accepted keywords for scalar data other than membrane voltage."""
 
         self.voltage_timeseries = None
