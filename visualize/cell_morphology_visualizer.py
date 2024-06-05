@@ -78,10 +78,10 @@ class CMVDataParser:
         # -------------------------------
         # colors and color scales. default colorscale is for membrane voltage
         self.background_color = (1, 1, 1, 1)  # white
-        self.vmin, self.vmax = -70, 20  # legend bounds - intialized for membrane voltage by default
-        self.norm = mpl.colors.Normalize(vmin=self.vmin, vmax=self.vmax)
-        self.cmap = plt.get_cmap("jet")
-        self.scalar_mappable = mpl.cm.ScalarMappable(norm=self.norm, cmap=self.cmap)
+        self.vmin, self.vmax = None, None  # legend bounds
+        self.norm = None
+        self.cmap = plt.get_cmap("jet")  # default
+        self.scalar_mappable = None
 
         # ---------------------------------------------------------------
         # Simulation-related parameters
@@ -157,10 +157,6 @@ class CMVDataParser:
         """
         Initializes the variables associated with simulation data. Does not fill these variables until they actually need to be calculated.
         """
-        # Max and min voltages colorcoded in the cell morphology
-        self.vmin = -80  # mV
-        self.vmax = 20  # mV
-        """Time"""
         # Time points of the simulation
         self.simulation_times = np.array(self.cell.tVec)
         # Time offset w.r.t. simulation start. useful if '0 ms' is supposed to refer to stimulus time
@@ -359,10 +355,12 @@ class CMVDataParser:
             self.voltage_timeseries.append(voltage)
         t2 = time.time()
         logger.info('Voltage retrieval runtime (s): ' + str(np.around(t2 - t1, 2)))
+        
+        # Update cmap if necessary
         self.set_cmap(
             self.cmap, 
-            vmin=min(min([min(e) for e in self.voltage_timeseries])), 
-            vmax=max(max([max(e) for e in self.voltage_timeseries])))
+            vmin=min(min([min(e) for e in self.voltage_timeseries])) if self.vmin is None else self.vmin, 
+            vmax=max(max([max(e) for e in self.voltage_timeseries])) if self.vmax is None else self.vmax)
 
     def _calc_ion_dynamics_timeseries(self, ion_keyword):
         '''
@@ -393,10 +391,12 @@ class CMVDataParser:
         t2 = time.time()
         logger.info('Ion dynamics retrieval runtime (s): ' +
               str(np.around(t2 - t1, 2)))
+        
+        # Update cmap if necessary
         self.set_cmap(
             self.cmap, 
-            vmin=min(min([min(e) for e in self.ion_dynamics_timeseries[ion_keyword]])), 
-            vmax=max(max([max(e) for e in self.ion_dynamics_timeseries[ion_keyword]])))
+            vmin=min(min([min(e) for e in self.ion_dynamics_timeseries[ion_keyword]])) if self.vmin is None else self.vmin, 
+            vmax=max(max([max(e) for e in self.ion_dynamics_timeseries[ion_keyword]])) if self.vmax is None else self.vmax)
 
     def _get_synapses_at_timepoint(self, time_point):
         '''
@@ -461,9 +461,6 @@ class CMVDataParser:
     def _update_times_to_show(self, t_start=None, t_stop=None, t_step=None):
         """Checks if the specified time range equals the previously defined one. If not, updates the time range.
         If all arguments are None, does nothing. Useful for defining default time range
-
-        Todo:
-            what if a newly defined t_step does not match the simulation dt?
 
         Args:
             t_start (float): start time
@@ -537,7 +534,7 @@ class CMVDataParser:
             return return_data
         
         elif keyword in list(mcolors.BASE_COLORS) + list(mcolors.TABLEAU_COLORS) + list(mcolors.CSS4_COLORS) + list(mcolors.XKCD_COLORS):
-            return_data = [[keyword]]  # soma, just one point
+            return_data = [[keyword]]
             for sec in self.cell.sections:
                 if not sec.label in ("AIS", "Myelin", "Soma"):
                     return_data.append([keyword for _ in sec.pts])
@@ -593,10 +590,10 @@ class CMVDataParser:
         cmap=None, 
         vmin=None, 
         vmax=None):
-        self.vmin = vmin or self.vmin
-        self.vmax = vmax or self.vmax
+        self.vmin = vmin if vmin is not None else self.vmin
+        self.vmax = vmax if vmin is not None else self.vmax
         self.norm = mpl.colors.Normalize(self.vmin, self.vmax)
-        self.cmap = cmap or self.cmap
+        self.cmap = cmap if cmap is not None else self.cmap
         self.scalar_mappable = mpl.cm.ScalarMappable(norm=self.norm, cmap=self.cmap)
 
 
