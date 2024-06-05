@@ -292,8 +292,9 @@ class Simulator:
         >>>     # run the simulation
         >>>     return cell
  
-        >>> def stim_response_measure_funs(cell, params)
+        >>> def stim_response_measure_fun(cell, params)
         >>>     # extract voltage traces from the cell
+        >>>     # Extract ionic currents from the cell?
         >>>     return result
     
         >>> params = pd.Series({"param1": 1, "param2": 2})
