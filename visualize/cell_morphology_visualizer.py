@@ -163,11 +163,10 @@ class CMVDataParser:
         self.time_offset = 0
         # Time points we want to visualize (values by default)
         self.t_start = self.simulation_times[0] if self.t_start is None else self.t_start
-        self.dt = self.simulation_times[1] - self.simulation_times[0]
-        # TODO: add support for variable timestep
+        self.dt = np.median(np.diff(self.simulation_times))  # median time interval
         if self.t_step is None:
-            self.t_step = (len(self.simulation_times) // 10) * self.dt if self.t_step is None else self.t_step
-            logger.warning("No t_step provided. Setting t_step to default 1/10th of the total simulation time ~= {}".format(self.t_step))
+            self.t_step = .1*(self.simulation_times[-1] - self.simulation_times[0]) if self.t_step is None else self.t_step
+            logger.warning("No t_step provided. Setting t_step to default 1/10th of the total simulation time ~= {:.2f}".format(self.t_step))
         self.t_stop = self.simulation_times[-1] - self.simulation_times[-1] % self.t_step if self.t_stop is None else self.t_stop
         self.times_to_show = np.empty(0)
         # initialise time range to visualise
@@ -534,6 +533,7 @@ class CMVDataParser:
             return return_data
         
         elif keyword in list(mcolors.BASE_COLORS) + list(mcolors.TABLEAU_COLORS) + list(mcolors.CSS4_COLORS) + list(mcolors.XKCD_COLORS):
+            # These colors are defined per section, not per segment.
             return_data = [[keyword]]
             for sec in self.cell.sections:
                 if not sec.label in ("AIS", "Myelin", "Soma"):
@@ -542,11 +542,11 @@ class CMVDataParser:
 
         # -------------- Keyword colors       
         elif keyword.lower() in ("voltage", "vm"):
-            self._calc_voltage_timeseries()
+            self._calc_voltage_timeseries()  # Only happens if necessary
             data_per_section = self._get_voltages_at_timepoint(time_point)
         
         elif keyword in self.possible_scalars:
-            self._calc_ion_dynamics_timeseries(keyword)
+            self._calc_ion_dynamics_timeseries(keyword)  # Only happens if necessary
             data_per_section = self._get_ion_dynamics_at_timepoint(time_point, keyword)
 
         else:
@@ -752,7 +752,8 @@ class CellMorphologyVisualizer(CMVDataParser):
             - highlight_x (float): x coordinate of the section that should be highlighted
 
         '''
-        assert time_point is None or time_point < self.times_to_show[-1], "Time point exceeds simulation time"
+        assert not (self._keyword_is_scalar_data(color) and time_point is None), "Please provide a timepoint at which to plot {}".format(color)
+        assert time_point < self.times_to_show[-1], "Time point exceeds simulation time"
         logger.info("updating_times_to_show")
         self._update_times_to_show()
         if show_synapses:
