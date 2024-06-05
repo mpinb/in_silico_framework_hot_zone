@@ -61,3 +61,7 @@ if [ "$INSTALL_NODEJS" == "yes" ]; then
 else
     bash "${SCRIPT_DIR}/py${PYTHON_VERSION}/install.sh" -p "${INSTALL_DIR}" || exit 1;
 fi
+
+echo ""
+echo "You are now ready to use ISF. Start by activating the ISF conda environment: \"source ${INSTALL_DIR}/bin/activate\""
+echo "For a general introduction to ISF, please refer to $(realpath $(dirname $SCRIPT_DIR))/getting_started/Introduction_to_ISF.ipynb"
