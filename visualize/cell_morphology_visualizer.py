@@ -741,6 +741,9 @@ class CellMorphologyVisualizer(CMVDataParser):
 
         '''
         assert not (self._keyword_is_scalar_data(color) and time_point is None), "Please provide a timepoint at which to plot {}".format(color)
+        if time_point is None:
+            logger.info("No timepoint provided. Plotting at earliest timepoint...")
+            time_point = self.times_to_show[0]
         assert time_point < self.times_to_show[-1], "Time point exceeds simulation time"
         logger.info("updating_times_to_show")
         self._update_times_to_show()
