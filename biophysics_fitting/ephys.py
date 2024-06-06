@@ -1,6 +1,6 @@
 '''
 The content of this module is mostly a reimplementation of the Hay et.al. 2011 methods used for extracting features.
-See :cite:t:`Hay_Hill_Schürmann_Markram_Segev_2011` for more information.
+See :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011` for more information.
 '''
 import numpy as np
 

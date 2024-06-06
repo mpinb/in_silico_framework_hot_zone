@@ -5,7 +5,7 @@ Stimulus types included in this module are::
 
     * Step current injection at the soma
     * EPSP injection on an "ApicalDendrite" section at a given distance from the soma
-    * The stimuli used by :cite:t:`Hay_Hill_Schürmann_Markram_Segev_2011`:
+    * The stimuli used by :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011`:
         - a bAP (backpropagating AP) stimulus.
         - a BAC (bAP-Activated Ca2+) stimulus.
         - Three step current stimuli with amplitudes [0.619, 0.793, 1.507] nA.
