@@ -11,6 +11,7 @@ from data_base.dbopen import dbopen
 
 def compute_synapse_distances_times(fname, cell, t=None, synTypes=None):
     """Save a :class:`single_cell_parser.cell.Cell` object's synapse distances and activation times to a .csv file.
+    
     The following information is saved:
     
     - synapse type: to which presynaptic cell type this synapse belongs to.
