@@ -42,8 +42,8 @@ class SynapseMapper(object):
         self.synDist = synDist
         self.isDensity = isDensity
         self.voxelEdgeMap = {}
-#        seed = 1234567890
-#        self.ranGen = np.random.RandomState(seed)
+        # seed = 1234567890
+        # self.ranGen = np.random.RandomState(seed)
 
     def map_synapse_realization(self):
         '''

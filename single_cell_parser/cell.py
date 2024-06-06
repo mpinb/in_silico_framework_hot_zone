@@ -162,12 +162,16 @@ class Cell(object):
                             maxDist = dist
         return maxDist
 
-    def add_synapse(self,
-                    secID,
-                    ptID,
-                    ptx,
-                    preType='Generic',
-                    postType='Generic'):
+    def add_synapse(
+        self,
+        secID,
+        ptID,
+        ptx,
+        preType='Generic',
+        postType='Generic'):
+        """Add a :class:`~single_cell_parser.synapse.Synapse` to the cell object.
+        
+        """
         if preType not in self.synapses:
             self.synapses[preType] = []
         newSyn = synapse.Synapse(secID, ptID, ptx, preType, postType)

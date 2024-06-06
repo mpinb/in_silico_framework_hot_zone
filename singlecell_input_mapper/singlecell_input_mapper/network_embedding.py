@@ -37,6 +37,9 @@ class NetworkMapper:
         
         postsynaptic cell type
         self.postCellType = postCellType
+        
+        Args:
+            postCell (:class:`~singlecell_input_mapper.singlecell_input_mapper.cell.Cell`): The cell object to map synapses onto.
         '''
         self.cells = {}
         self.connected_cells = {}
@@ -52,10 +55,11 @@ class NetworkMapper:
 #        seed = int(time.time())
 #        self.ranGen = np.random.RandomState(seed)
 
-    def create_network_embedding(self,
-                                 postCellName,
-                                 boutonDensities,
-                                 nrOfSamples=50):
+    def create_network_embedding(
+        self,
+        postCellName,
+        boutonDensities,
+        nrOfSamples=50):
         '''
         Public interface:
         used for creating fixed network connectivity.
@@ -65,6 +69,9 @@ class NetworkMapper:
         IMPORTANT: assumes path names to anatomical realization files
         work from the working directory! so should be correct relative, or
         preferably absolute paths.
+        
+        Returns:
+            None. Writes output files to disk.
         '''
 
         self._create_presyn_cells()
@@ -96,12 +103,14 @@ class NetworkMapper:
             cellTypeSpecificPopulation, populationDistribution)
         connectivityMap, synapseLocations, cellSynapseLocations, cellTypeSummaryTable, columnSummaryTable = sampleConnectivityData[
             representativeIndex]
-        self._write_population_output_files(postCellName,
-                                            populationDistribution,
-                                            connectivityMap, synapseLocations,
-                                            cellSynapseLocations,
-                                            cellTypeSummaryTable,
-                                            columnSummaryTable)
+        self._write_population_output_files(
+            postCellName,
+            populationDistribution,
+            connectivityMap, 
+            synapseLocations,
+            cellSynapseLocations,
+            cellTypeSummaryTable,
+            columnSummaryTable)
 
         #        for testing convergence:
         #        self._test_population_convergence(nrOfSamples, sampleConnectivityData, postCellName)

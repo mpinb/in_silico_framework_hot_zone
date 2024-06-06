@@ -100,11 +100,14 @@ def map_singlecell_inputs(
             Values indicate how much of each celltype was found in each neuropil structure.
         connectionsSpreadsheetName (str):
             Path to a spreadsheet, containing the connection probabilities between each presynaptic and postsynaptic cell type.
-        ExPSTDensityName: 3D histogram containing 
+        ExPSTDensityName: 
         InhPSTDensityName
         boutonDensityFolderName: 
             A directory containing the following subdirectory structure:
             neuropil_group/presynaptic_cell_type/*.am
+            
+    Returns:
+        None. Writes the results to disk.
         
     """
     if not (cellTypeName in exTypes) and not (cellTypeName in inhTypes):
@@ -116,7 +119,7 @@ def map_singlecell_inputs(
     print('Loading cell morphology...')
     parser = sim.CellParser(cellName)
     parser.spatialgraph_to_cell()
-    singleCell = parser.get_cell()
+    singleCell = parser.get_cell()  # This is a sim.Cell, not scp.cell
 
     print('Loading spreadsheets and bouton/PST densities...')
     print('    Loading numberOfCells spreadsheet {:s}'.format(

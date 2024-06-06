@@ -20,12 +20,13 @@ import logging
 logger = logging.getLogger("ISF").getChild(__name__)
 
 
-def _evoked_activity(cellParamName,
-                     evokedUpParamName,
-                     dirPrefix='',
-                     seed=None,
-                     nSweeps=1000,
-                     tStop=345):
+def _evoked_activity(
+    cellParamName,
+    evokedUpParamName,
+    dirPrefix='',
+    seed=None,
+    nSweeps=1000,
+    tStop=345):
     '''
     pre-stimulus ongoing activity
     and evoked activity
@@ -33,6 +34,7 @@ def _evoked_activity(cellParamName,
     sim name: str, describing the simulation
     cellParamName: str, Path to cell parameter file, containing information about:
         - info: autor, date, name
+        - sim: simulation parameters (Vinit, tStart, tStop, dt, T, recordingSites)
         - NMODL_mechanisms: path to NEURON mechanisms
         - neuron: 
             -path to hoc-file
@@ -50,23 +52,29 @@ def _evoked_activity(cellParamName,
     assert seed is not None
     np.random.seed(seed)
     logger.info("seed: %i" % seed)
+    # Read in files with Sumatra
     neuronParameters = scp.build_parameters(cellParamName)
-    evokedUpNWParameters = scp.build_parameters(
-        evokedUpParamName)  ##sumatra function for reading in parameter file
+    evokedUpNWParameters = scp.build_parameters(evokedUpParamName)
+    # load NMODL mechanisms to NEURON
     scp.load_NMODL_parameters(neuronParameters)
     scp.load_NMODL_parameters(evokedUpNWParameters)
     cellParam = neuronParameters.neuron
     paramEvokedUp = evokedUpNWParameters.network
 
-    cell = scp.create_cell(cellParam)
+    cell = scp.create_cell(cellParam)  # create scp cell object from params
 
     uniqueID = 'seed' + str(seed) + '_pid' + str(os.getpid())
-    dirName = os.path.join(dirPrefix, 'results', \
-                           time.strftime('%Y%m%d-%H%M') + '_' + str(uniqueID))
+    dirName = os.path.join(
+        dirPrefix, 
+        'results',
+        time.strftime('%Y%m%d-%H%M') + '_' + str(uniqueID))
     if not os.path.exists(dirName):
         os.makedirs(dirName)
-    with open(os.path.join(dirName, 'hostname_' + socket.gethostname()),
-              'w') as f:
+    with open(
+        os.path.join(
+            dirName, 
+            'hostname_' + socket.gethostname()),
+        'w') as f:
         pass
 
     #tOffset = 0.0 # avoid numerical transients
@@ -74,14 +82,20 @@ def _evoked_activity(cellParamName,
     neuronParameters.sim.tStop = tStop
     #dt = neuronParameters.sim.dt
 
-    nRun = 0
-    out = []
+    nRun = 0  # number of sweeps
+    out = []  # output *_synapses.csv names
     while nRun < nSweeps:
         synParametersEvoked = paramEvokedUp
 
         startTime = time.time()
-        evokedNW = scp.NetworkMapper(cell, synParametersEvoked,
-                                     neuronParameters.sim)
+        
+        # Create network. 
+        evokedNW = scp.NetworkMapper(
+            cell, 
+            synParametersEvoked,
+            neuronParameters.sim
+            )
+        # Add synapses
         evokedNW.create_saved_network2()
         stopTime = time.time()
         setupdt = stopTime - startTime
@@ -114,8 +128,14 @@ def _evoked_activity(cellParamName,
     evokedUpNWParameters.save(os.path.join(dirName, 'network_model.param'))
     return out
 
-def generate_synapse_activations(cellParamName, evokedUpParamName, dirPrefix = '', \
-                                 nSweeps = 1000, nprocs = 40, tStop = 345, silent = True):
+def generate_synapse_activations(
+    cellParamName,
+    evokedUpParamName,
+    dirPrefix = '',
+    nSweeps = 1000, 
+    nprocs = 40, 
+    tStop = 345, 
+    silent = True):
     '''Generates nSweeps*nprocs synapse activation files and puts them in
     the folder dirPrefix/results/simName. Returns delayed object, which can
     be computed with an arbitrary dask scheduler. For each process, a new
@@ -141,6 +161,9 @@ def generate_synapse_activations(cellParamName, evokedUpParamName, dirPrefix = '
         nSweeps: number of synapse activations per process
         nprocs: number of independent processes
         tStop: time in ms at which the synaptic input should stop.
+        
+    Args:
+        cellParamName (str): Path to cell parameter file. 
         
     Returns: Delayed object. Can be computed with arbitrary scheduler.
     Computing delayed object returns: List of lists. Each child list contains the paths

@@ -10,6 +10,25 @@ from data_base.dbopen import dbopen
 
 
 def compute_synapse_distances_times(fname, cell, t=None, synTypes=None):
+    """Calculate synapse information and save to .csv
+    The following information is saved:
+   
+        - synapse type (associated to cell type)
+        - synapse unique ID  
+        - distance of synapse to soma
+        - section ID of the post-synaptic neuron
+        - section point ID of the post-synaptic neuron
+        - dendrite label of the post-synaptic neuron
+        - time of synapse activation
+        
+    Args:
+        fname (str): The output file name as a ful path, including the file extension. Preferably unique (see e.g. :py:meth:`~simrun.generate_synapse_activations._evoked_activity` for the generation of unique syapse activation filenames)
+        cell (:class:`single_cell_parser.cell.Cell`): Cell object
+        synTypes (list): list of synapse types. Default: the keys of the `cell.synapses` dictionary
+        
+    Returns:
+        None. Writes out the synapse .csv file to :paramref:`fname`.
+    """
     synDistances = {}
     synTimes = {}
     activeSyns = {}
@@ -31,8 +50,9 @@ def compute_synapse_distances_times(fname, cell, t=None, synTypes=None):
                 synTimes[synType].append(tmpSynTimes)
             synCnt += 1
 
-    scp.write_synapse_activation_file(fname, cell, synTypes, synDistances,
-                                      synTimes, activeSyns)
+    scp.write_synapse_activation_file(
+        fname, cell, synTypes, synDistances, synTimes, activeSyns
+        )
 
 
 def synapse_activation_times(tVec, cntVec):
