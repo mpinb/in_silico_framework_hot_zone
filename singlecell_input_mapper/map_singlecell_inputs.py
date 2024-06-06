@@ -82,9 +82,9 @@ def map_singlecell_inputs(
     boutonDensityFolderName=boutonDensityFolderName):
     """Map inputs to a single cell morphology.
     
-    These inputs need to be organized per neuropil structure. Neuropil structures
+    These inputs need to be organized per anatomical structure. Anatomical structures
     can be arbitrary spatial regions of the brain tissue, or anatomically well-defined
-    areas, e.g. barrels in a barrel cortex, cortical layers.
+    areas, e.g. barrels in a barrel cortex.
     
     The naming of each neuropil structure needs to be consistent for the input files.
     

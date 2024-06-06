@@ -32,41 +32,26 @@ def _evoked_activity(
     Synapse activation files are generated with :py:meth:`single_cell_parser.analyze.compute_synapse_distances_times`.
     Spike time files are generated with :py:meth:`single_cell_parser.analyze.write_presynaptic_spike_times`.
     
-    pre-stimulus ongoing activity
-    and evoked activity
-    
     Args:
         cellParamName (str): 
-            Path to cell parameter file (e.g. getting_started/example_data/biophysical_constraints/*.param), 
-            containing information about:
-        
-            - info: autor, date, name
-            - NMODL_mechanisms: path to NEURON mechanisms
-            - neuron: 
-                -path to hoc-file
-                - per subcellular compartment (e.g. Soma, AIS, ...):
-                    - electrical properties
-                    - mechanisms
-                    
+            Path to a cell parameter file (e.g. getting_started/example_data/biophysical_constraints/*.param), 
+            containing information about the neuron morphology (link to a .hoc file) and biophysical properties.
+            See :py:meth:`~single_cell_parser.create_cell` for more information on the structure and contents of this filetype
         evokedUpParamName (str): 
-            Path to network parameter file (e.g. getting_started/example_data/functional_constraints/network.param), 
-            containing information about:
-        
-            - info: autor, name, date
-            - for each cell-type: 
-                - synapse: release probability, path to distribution file, receptor and associated parameters
-                - connectionFile: path to connection file
-                - cell number
-                - celltype: pointcell, spiketrain
-                
-        dirPrefix (str): Prefix for the directory where the results are stored.
-        seed (int): Seed for the random number generator.
-        nSweeps (int): Amount of times to run the simulation with the same parameter configuration.
-        tStop (float): Time in ms at which the simulation should stop.
+            Path to network parameter file (e.g. getting_started/example_data/functional_constraints/network.param),
+            containing information on synapse and network parameters per cell type. See :py:meth:`~singlecell_input_mapper.evoked_network_param_from_template.create_network_parameter`
+            for more information on the structure and contents of this filetype
+        dirPrefix (str): 
+            Prefix for the directory where the results are stored.
+        seed (int): 
+            Seed for the random number generator.
+        nSweeps (int): 
+            Amount of times to run the simulation with the same parameter configuration.
+        tStop (float): 
+            Time in ms at which the simulation should stop.
         
     Returns:
         list: List of paths to the synapse activation files.
-    
     '''
     assert seed is not None
     np.random.seed(seed)
