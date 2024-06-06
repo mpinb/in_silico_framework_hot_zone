@@ -27,35 +27,55 @@ def _evoked_activity(
     seed=None,
     nSweeps=1000,
     tStop=345):
-    '''
+    '''Calculate and write synapse activations and presynaptic spike times for pre-stimulus ongoing activity and evoked activity.
+    
+    Synapse activation files are generated with :py:meth:`single_cell_parser.analyze.compute_synapse_distances_times`.
+    Spike time files are generated with :py:meth:`single_cell_parser.analyze.write_presynaptic_spike_times`.
+    
     pre-stimulus ongoing activity
     and evoked activity
     
-    sim name: str, describing the simulation
-    cellParamName: str, Path to cell parameter file, containing information about:
-        - info: autor, date, name
-        - sim: simulation parameters (Vinit, tStart, tStop, dt, T, recordingSites)
-        - NMODL_mechanisms: path to NEURON mechanisms
-        - neuron: 
-            -path to hoc-file
-            - per subcellular compartment (Soma, AIS, ...):
-                - electrical properties
-                - mechanisms
-    evokedUpParamName: str, Path to network parameter file, containing information about:
-                            - autor, name, date
-                            - for each cell-type: 
-                                synapse: release probability, path to distribution file, receptor and associated parameters
-                                connectionFile: path to connection file
-                                cell number
-                                celltype: pointcell, spiketrain
+    Args:
+        cellParamName (str): 
+            Path to cell parameter file (e.g. getting_started/example_data/biophysical_constraints/*.param), 
+            containing information about:
+        
+            - info: autor, date, name
+            - NMODL_mechanisms: path to NEURON mechanisms
+            - neuron: 
+                -path to hoc-file
+                - per subcellular compartment (e.g. Soma, AIS, ...):
+                    - electrical properties
+                    - mechanisms
+                    
+        evokedUpParamName (str): 
+            Path to network parameter file (e.g. getting_started/example_data/functional_constraints/network.param), 
+            containing information about:
+        
+            - info: autor, name, date
+            - for each cell-type: 
+                - synapse: release probability, path to distribution file, receptor and associated parameters
+                - connectionFile: path to connection file
+                - cell number
+                - celltype: pointcell, spiketrain
+                
+        dirPrefix (str): Prefix for the directory where the results are stored.
+        seed (int): Seed for the random number generator.
+        nSweeps (int): Amount of times to run the simulation with the same parameter configuration.
+        tStop (float): Time in ms at which the simulation should stop.
+        
+    Returns:
+        list: List of paths to the synapse activation files.
+    
     '''
     assert seed is not None
     np.random.seed(seed)
     logger.info("seed: %i" % seed)
-    # Read in files with Sumatra
+    
+    # Read parameter files.
     neuronParameters = scp.build_parameters(cellParamName)
-    evokedUpNWParameters = scp.build_parameters(evokedUpParamName)
-    # load NMODL mechanisms to NEURON
+    evokedUpNWParameters = scp.build_parameters(
+        evokedUpParamName)  # sumatra function for reading in parameter file
     scp.load_NMODL_parameters(neuronParameters)
     scp.load_NMODL_parameters(evokedUpNWParameters)
     cellParam = neuronParameters.neuron
@@ -109,10 +129,14 @@ def _evoked_activity(
         fname += '_run%04d' % nRun
 
         t = None
+        
+        # synapse type - synapse ID - soma distance -section ID - section pt ID - dendrite label - activation times
         synName = dirName + '/' + fname + '_synapses.csv'
         out.append(synName)
         logger.info('computing active synapse properties')
         sca.compute_synapse_distances_times(synName, cell, t, synTypes)
+        
+        # presynaptic cell type - cell ID - spike times
         preSynCellsName = dirName + '/' + fname + '_presynaptic_cells.csv'
         scp.write_presynaptic_spike_times(preSynCellsName, evokedNW.cells)
 

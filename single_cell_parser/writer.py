@@ -226,12 +226,13 @@ def write_functional_realization_map(fname=None,
             outputFile.write(line)
 
 
-def write_synapse_activation_file(fname=None,
-                                  cell=None,
-                                  synTypes=None,
-                                  synDistances=None,
-                                  synTimes=None,
-                                  activeSyns=None):
+def write_synapse_activation_file(
+    fname=None,
+    cell=None,
+    synTypes=None,
+    synDistances=None,
+    synTimes=None,
+    activeSyns=None):
     if fname is None or cell is None or synTypes is None or synDistances is None or synTimes is None or activeSyns is None:
         err_str = 'Incomplete data! Cannot write functional realization file'
         raise RuntimeError(err_str)
