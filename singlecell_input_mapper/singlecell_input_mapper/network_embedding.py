@@ -15,31 +15,27 @@ from data_base.dbopen import dbopen
 
 
 class NetworkMapper:
-    '''
-    Handles connectivity of presynaptic populations
-    to multi-compartmental neuron model.
+    '''Connect presynaptic cells to a postsynaptic cell model.
+
+    This class is used to create fixed network embeddings.
+    Given a scalar field of boutons, it computes all possible synapse densities that have non-zero overlap with this bouton field.
+    These synapse density fields depends on the neuron morphology and location in the bouton field.
+    The synapse density fields are further used to sample possible synaptic connections between presynaptic cells and the postsynaptic cell model.
     '''
 
     def __init__(self, postCell, postCellType, cellTypeNumbersSpreadsheet,
                  connectionsSpreadsheet, exPST, inhPST):
-        '''
-        dictionary holding all presynaptic cells
-        ordered by cell type
-        self.cells = {}
-        
-        dictionary holding indices of
-        all active presynaptic cells
-        ordered by cell type
-        self.connected_cells = {}
-        
-        reference to postsynaptic (multi-compartment) cell model
-        self.postCell = postCell
-        
-        postsynaptic cell type
-        self.postCellType = postCellType
+        '''Initialize NetworkMapper object.
+        Attributes:
+            cells (dict): Presynaptic cells, ordered by cell type.
+            connected_cells (dict): Indices of all active presynaptic cells, ordered by cell type.
+            postCell (:class:`~singlecell_input_mapper.singlecell_input_mapper.cell.Cell`): Reference to postsynaptic (multi-compartment) cell model.
+            postCellType (str): Postsynaptic cell type.
         
         Args:
             postCell (:class:`~singlecell_input_mapper.singlecell_input_mapper.cell.Cell`): The cell object to map synapses onto.
+            postCellType (str): The type of the postsynaptic cell.
+            cellTypeNumbersSpreadsheet (dict): Number of presynaptic cells per cell type and column.
         '''
         self.cells = {}
         self.connected_cells = {}
@@ -52,8 +48,8 @@ class NetworkMapper:
         self.exPST = exPST
         self.inhPST = inhPST
         self.mapper = SynapseMapper(postCell)
-#        seed = int(time.time())
-#        self.ranGen = np.random.RandomState(seed)
+        # seed = int(time.time())
+        # self.ranGen = np.random.RandomState(seed)
 
     def create_network_embedding(
         self,
@@ -73,7 +69,6 @@ class NetworkMapper:
         Returns:
             None. Writes output files to disk.
         '''
-
         self._create_presyn_cells()
         columns = list(self.cells.keys())
         preCellTypes = self.cells[columns[0]]
@@ -323,11 +318,12 @@ class NetworkMapper:
         print('---------------------------')
 
     def _create_anatomical_realization(self, cellTypeSynapseDensities):
-        '''
-        
-        Create one anatomical realization.
-        Main method for computing synapse/connectivity
-        realization from precomputed synapse densities.
+        '''Create a single anatomical realization of synapses.
+
+        This is the main method for computing synapse/connectivity realization.
+        Given a pre-computed density field of synapses (see e.g. :py:meth:`~_precompute_column_celltype_synapse_densities`),
+        this method samples this density field to create a realization of synapses.
+
         Returns anatomical connectivity map.
         '''
         columns = list(self.cells.keys())
