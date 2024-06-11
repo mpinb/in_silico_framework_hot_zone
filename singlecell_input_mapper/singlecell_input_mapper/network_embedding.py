@@ -208,8 +208,10 @@ class NetworkMapper:
 #        summaryName = outNamePrefix + '_synapses_%d_realizations_summary' % nrOfRealizations
 #        writer.write_population_connectivity_summary(summaryName, populationDistribution)
 
-    def create_network_embedding_from_synapse_densities(self, postCellName,
-                                                        synapseDensities):
+    def create_network_embedding_from_synapse_densities(
+        self, 
+        postCellName,
+        synapseDensities):
         '''
         Public interface:
         used for creating fixed network connectivity from pre-computed
@@ -253,17 +255,21 @@ class NetworkMapper:
                         newSyn.preCell = preCell
                 print('')
 
-        connectivityMap, connectedCells, connectedCellsPerStructure = self._create_anatomical_connectivity_map(
-        )
-        self._generate_output_files(postCellName, connectivityMap,
-                                    connectedCells, connectedCellsPerStructure)
+        connectivityMap, connectedCells, connectedCellsPerStructure = \
+            self._create_anatomical_connectivity_map()
+        
+        self._generate_output_files(
+            postCellName, 
+            connectivityMap,
+            connectedCells, 
+            connectedCellsPerStructure)
         print('---------------------------')
 
     def _precompute_column_celltype_synapse_densities(self, boutonDensities):
-        '''
-        Pre-computes all possible synapse densities that have
-        non-zero overlap with the current postynaptic neuron
-        and sorts them based on presynaptic column and cell type
+        '''Compute synapse densities of all presynaptic cell types in all columns
+        
+        Computes all possible synapse densities that have non-zero overlap
+        with the current postynaptic neuron, and sorts them based on presynaptic column and cell type
         '''
         synapseDensities = {}
         synapseDensityComputation = SynapseDensity(
@@ -318,6 +324,8 @@ class NetworkMapper:
 
     def _create_anatomical_realization(self, cellTypeSynapseDensities):
         '''
+        
+        Create one anatomical realization.
         Main method for computing synapse/connectivity
         realization from precomputed synapse densities.
         Returns anatomical connectivity map.
@@ -334,12 +342,12 @@ class NetworkMapper:
                 #=======================================================================
 
 
-#                for structure in self.postCell.structures.keys():
-#                    for i in range(nrOfDensities):
-#                        outDensity = cellTypeSynapseDensities[col][preCellType][i][structure]
-#                        outNamePrefix = postCellName[:-4]
-#                        synapseDensityName = '_'.join((outNamePrefix,'synapse_density',structure,col,preCellType,str(i)))
-#                        writer.write_scalar_field(synapseDensityName, outDensity)
+                # for structure in self.postCell.structures.keys():
+                #     for i in range(nrOfDensities):
+                #         outDensity = cellTypeSynapseDensities[col][preCellType][i][structure]
+                #         outNamePrefix = postCellName[:-4]
+                #         synapseDensityName = '_'.join((outNamePrefix,'synapse_density',structure,col,preCellType,str(i)))
+                #         writer.write_scalar_field(synapseDensityName, outDensity)
 
                 print('---------------------------')
                 print(

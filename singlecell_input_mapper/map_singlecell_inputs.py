@@ -86,7 +86,7 @@ def map_singlecell_inputs(
     can be arbitrary spatial regions of the brain tissue, or anatomically well-defined
     areas, e.g. barrels in a barrel cortex.
     
-    The naming of each neuropil structure needs to be consistent for the input files.
+    The naming of each anatomical area needs to be consistent for the input files.
     
     Args:
         cellName (str): 
@@ -104,11 +104,10 @@ def map_singlecell_inputs(
         InhPSTDensityName
         boutonDensityFolderName: 
             A directory containing the following subdirectory structure:
-            neuropil_group/presynaptic_cell_type/*.am
+            anatomical_area/presynaptic_cell_type/*.am
             
     Returns:
         None. Writes the results to disk.
-        
     """
     if not (cellTypeName in exTypes) and not (cellTypeName in inhTypes):
         errstr = 'Unknown cell type %s!'
@@ -137,15 +136,15 @@ def map_singlecell_inputs(
     InhPSTDensity = sim.read_scalar_field(InhPSTDensityName)
     InhPSTDensity.resize_mesh()
     boutonDensities = {}
-    neuropil_groups = list(numberOfCellsSpreadsheet.keys())
-    preCellTypes = numberOfCellsSpreadsheet[neuropil_groups[0]]
+    anatomical_areas = list(numberOfCellsSpreadsheet.keys())
+    preCellTypes = numberOfCellsSpreadsheet[anatomical_areas[0]]
 
-    for neuropil_group in neuropil_groups:
-        boutonDensities[neuropil_group] = {}
+    for anatomical_area in anatomical_areas:
+        boutonDensities[anatomical_area] = {}
         for preCellType in preCellTypes:
-            boutonDensities[neuropil_group][preCellType] = []
+            boutonDensities[anatomical_area][preCellType] = []
             boutonDensityFolder = os.path.join(prefix, boutonDensityFolderName,
-                                               neuropil_group, preCellType)
+                                               anatomical_area, preCellType)
             boutonDensityNames = glob.glob(
                 os.path.join(boutonDensityFolder, '*'))
             print('    Loading {:d} bouton densities from {:s}'.format(
@@ -153,7 +152,7 @@ def map_singlecell_inputs(
             for densityName in boutonDensityNames:
                 boutonDensity = sim.read_scalar_field(densityName)
                 boutonDensity.resize_mesh()
-                boutonDensities[neuropil_group][preCellType].append(boutonDensity)
+                boutonDensities[anatomical_area][preCellType].append(boutonDensity)
 
     inputMapper = sim.NetworkMapper(
         singleCell, 
@@ -164,9 +163,10 @@ def map_singlecell_inputs(
         InhPSTDensity)
     inputMapper.exCellTypes = exTypes
     inputMapper.inhCellTypes = inhTypes
-    inputMapper.create_network_embedding(cellName,
-                                         boutonDensities,
-                                         nrOfSamples=nrOfSamples)
+    inputMapper.create_network_embedding(
+        cellName,
+        boutonDensities,
+        nrOfSamples=nrOfSamples)
 
     endTime = time.time()
     duration = (endTime - startTime) / 60.0
