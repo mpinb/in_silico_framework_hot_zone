@@ -30,6 +30,7 @@ shutil.copytree(os.path.join(project_root, 'getting_started', 'tutorials'),
 shutil.copy(os.path.join(project_root, 'getting_started', 'Introduction_to_ISF.ipynb'),
                 os.path.join(project_root, 'docs', 'Introduction_to_ISF.ipynb'))
 # Figures need to be in the _autosummary directory
+shutil.rmtree(os.path.join(project_root, 'docs', '_autosummary', '_images'))
 shutil.copytree(os.path.join(project_root, 'docs', '_static', '_images'),
                 os.path.join(project_root, 'docs', '_autosummary', '_images'))
 
