@@ -122,9 +122,13 @@ class ScalarField(object):
         return i, j, k
 
     def get_voxel_bounds(self, ijk):
-        '''
-        returns bounding box of voxel given by indices
-        i,j,k. Does NOT perform bounds checking!
+        '''Gets the bounding box of voxel given by indices i,j,k. 
+        
+        Args:   
+            ijk (tuple): tuple of 3 integers: the indices of voxel in mesh.
+        
+        Warning:
+            Does not perform bounds checking
         '''
         i, j, k = ijk
         xMin = self.origin[0] + i * self.spacing[0]

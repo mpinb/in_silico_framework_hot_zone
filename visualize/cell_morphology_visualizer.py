@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 from mpl_toolkits.mplot3d.art3d import Line3DCollection
 import numpy as np
+import shutil
 from visualize.vtk import write_vtk_skeleton_file
 import os, dask, time, six, socket, barrel_cortex, warnings
 from .utils import write_video_from_images, write_gif_from_images, display_animation_from_images, draw_arrow
@@ -660,6 +661,7 @@ class CellMorphologyVisualizer(CMVDataParser):
     def _write_png_timeseries(
             self, 
             path,
+            overwrite_frames=False,
             color="grey",
             show_synapses=False,
             show_legend=False,
@@ -682,15 +684,15 @@ class CellMorphologyVisualizer(CMVDataParser):
             - client: dask client for parallelization
         '''
         if os.path.exists(path):
-            if os.listdir(path):
+            if os.listdir(path) and not overwrite_frames:
                 logger.info(
-                    'Images already generated, they will not be generated again. Please, change the path name or delete the current one.'
+                    'Images already generated, they will not be generated again. Please, change the path name, delete the current one, or set overwrite_frames to True.'
                 )
                 return
-            else:
-                logger.warning("Path exists but is empty. Writing frames to {}".format(path))
+            elif overwrite_frames:
+                shutil.rmtree(path)
+                os.mkdir(path)
         else:
-            logger.info("Creating path for image generation: {}".format(path))
             os.mkdir(path)
 
         # Gathers the voltage and synapse activations time series.
@@ -847,13 +849,15 @@ class CellMorphologyVisualizer(CMVDataParser):
             show_legend=show_legend,
             client=client,
             highlight_section=highlight_section,
-            highlight_x=highlight_x)
+            highlight_x=highlight_x,
+            overwrite_frames=overwrite_frames)
         write_gif_from_images(images_path, out_name, interval=tpf)
 
     def write_video(
         self,
         images_path,
         out_path,
+        overwrite_frames=False,
         color='grey',
         show_synapses=False,
         show_legend=False,
@@ -893,7 +897,8 @@ class CellMorphologyVisualizer(CMVDataParser):
             show_legend=show_legend,
             client=client,
             highlight_section=highlight_section,
-            highlight_x=highlight_x)
+            highlight_x=highlight_x,
+            overwrite_frames=overwrite_frames)
         write_video_from_images(images_path,
                                 out_path,
                                 fps=1/tpf,
@@ -903,6 +908,7 @@ class CellMorphologyVisualizer(CMVDataParser):
     def animation(
         self,
         images_path,
+        overwrite_frames=False,
         color='grey',
         show_synapses=False,
         show_legend=False,
@@ -942,7 +948,8 @@ class CellMorphologyVisualizer(CMVDataParser):
             show_legend=show_legend,
             client=client,
             highlight_section=highlight_section,
-            highlight_x=highlight_x)
+            highlight_x=highlight_x,
+            overwrite_frames=overwrite_frames)
         if display:
             display_animation_from_images(images_path, tpf, embedded=True)
 
@@ -1366,7 +1373,7 @@ def get_3d_plot_morphology(
             segments, 
             linewidths=linewidths, 
             color=colors[sec_n],
-            joinstyle="round",
+            joinstyle="bevel",
             capstyle="round")
         ax.add_collection(lc)
 
