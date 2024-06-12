@@ -11,16 +11,20 @@ import sys
 class SynapseMapper(object):
     '''Assign synapses to neuron morphology
     
-    self.cell is neuron SpatialGraph
-    self.synDist is average synapse distribution (3D scalar field)
-    self.isDensity: True - synapse distribution interpreted as avg
-        density; actual number of synapses assigned is drawn from a 
-        Poisson distribution
-        False - synapse distribution interpreted as actual number of
-        synapses per voxel and directly assigned
-    self.voxelEdgeMap: dictionary mapping synapse distribution mesh
-        coordinates on list with pairs of indices that correspond
-        to the edge and edgePt ID of all morphology points inside that voxel
+    Attributes:
+        cell (:class:`~singlecell_input_mapper.singlecell_input_mapper.cell.Cell`):
+            The postsynaptic neuron.
+        synDist (:class:`~singlecell_input_mapper.singlecell_input_mapper.scalar_field.ScalarField`):
+            Synapse distribution mesh. Can be either a density or a realization 
+            (i.e. whole number values per voxel).
+        isDensity (bool):
+            Set to True if synapse distribution is interpreted as an average density.
+            Set to False if synapse distribution is interpreted as an actual realization, 
+            and values are whole numbers.
+        voxelEdgeMap (dict):
+            Dictionary mapping synapse distribution mesh coordinates on list with 
+            pairs of indices that correspond to the edge and edgePt ID of all morphology 
+            points inside that voxel.
     '''
 
     def __init__(self, cell=None, synDist=None, isDensity=True):
@@ -33,9 +37,6 @@ class SynapseMapper(object):
             isDensity (bool): 
                 If True, synapse distribution is interpreted as an average density. 
                 If False, synapse distribution is interpreted as an actual realization, and values are taken as is.
-        
-        Attributes:
-            voxelEdgeMap (dict): stores edge/voxel correspondence for mapping
         '''
         self.cell = cell
         self.synDist = synDist
@@ -47,9 +48,18 @@ class SynapseMapper(object):
         # self.ranGen = np.random.RandomState(seed)
 
     def create_synapses(self, preType='Generic'):
-        '''
-        main function; creates instantiation of synapses
-        on cell from synapse distribution
+        '''Creates instantiation of synapses on cell from synapse distribution.
+        
+        Iterates the cell structures (e.g. "Soma", "Dendrite", "ApicalDendrite").
+        For each structure, creates a list of synapses per voxel by poisson sampling the synapse distribution mesh.
+        Randomly assignes these synapses to any point on the morphology that lies within the same voxel.
+        
+        Args:
+            preType (str): Type of presynaptic cell. Default is 'Generic'.
+        
+        Returns:
+            list: list of :class:`~singlecell_input_mapper.singlecell_input_mapper.cell.Synapse` objects.
+            Also updates the :paramref:`cell` attribute to contain synapses.
         '''
         newSynapses = []
         if not self.voxelEdgeMap:
@@ -61,17 +71,21 @@ class SynapseMapper(object):
                 vxIndex = tuple(vxIndex)
                 if self.voxelEdgeMap[structure][vxIndex]:
                     nrOfSyn = mesh[vxIndex]
+                    
+                    # ------- random 1: poisson sample the synapse density distribution
                     nrOfSyn = np.random.poisson(nrOfSyn)
                     if not nrOfSyn:
                         continue
-                    '''choose points at random by shuffling
-                    all points within the current voxel'''
+                    
+                    # ------- random 2: choose random synapse target within the same voxel.
                     candEdges = self.voxelEdgeMap[structure][vxIndex]
                     candidatePts = list(np.random.permutation(candEdges))
-                    #                fix for situation where nrOfSyn > len(candidatePts):
+                    # fix for situation where nrOfSyn > len(candidatePts):
                     while len(candidatePts) < nrOfSyn:
-                        candidatePts.append(candEdges[np.random.randint(
-                            len(candEdges))])
+                        candidatePts.append(
+                            candEdges[np.random.randint(len(candEdges))])
+                        
+                    # Save synapses
                     for n in range(nrOfSyn):
                         edgeID = candidatePts[n][0]
                         edgePtID = candidatePts[n][1]
@@ -79,15 +93,17 @@ class SynapseMapper(object):
                         if edgex < 0.0 or edgex > 1.0:
                             raise RuntimeError('Edge x out of range')
                         newSynapses.append(
-                            self.cell.add_synapse(edgeID, edgePtID, edgex,
-                                                  preType))
+                            self.cell.add_synapse(
+                                edgeID, 
+                                edgePtID, 
+                                edgex,
+                                preType))
         return newSynapses
 
     def _create_voxel_edge_map(self):
-        '''
-        fills dictionary voxelEdgeMap with indices of voxels
-        and list of pts within that voxel
-        Only needs to be called once at the beginning
+        '''Fills :paramref:`voxelEdgeMap` with voxel indices, and the section and point indices that the voxel contains.
+        
+        Only needs to be called once at the beginning.
         '''
         voxelEdgeMap = self.voxelEdgeMap
         for structure in list(self.cell.structures.keys()):
@@ -103,33 +119,39 @@ class SynapseMapper(object):
                         ijk = i, j, k
                         voxelEdgeMap[structure][ijk] = []
                         voxelBBox = synDist.get_voxel_bounds(ijk)
-                        for l in range(len(sections)):
+                        for section_index in range(len(sections)):
                             '''only check section points if section bounding box
                             overlaps with voxel bounding box'''
-                            sec = sections[l]
+                            sec = sections[section_index]
                             if sec.label != structure:
                                 continue
                             if self._intersect_bboxes(voxelBBox, sec.bounds):
-                                for n in range(sec.nrOfPts):
-                                    pt = sec.pts[n]
+                                for section_point_index in range(sec.nrOfPts):
+                                    pt = sec.pts[section_point_index]
                                     if self._pt_in_box(pt, voxelBBox):
                                         voxelEdgeMap[structure][ijk].append(
-                                            (l, n))
+                                            (section_index, section_point_index))
 
     def _intersect_bboxes(self, bbox1, bbox2):
-        '''
-        check if two bounding boxes overlap
+        '''Check if two bounding boxes overlap
+        
+        Args:   
+            bbox1 (tuple): Bounding box of format (minx, maxx, miny, maxy, minz, maxz)
+            bbox2 (tuple): Bounding box of format (minx, maxx, miny, maxy, minz, maxz)
+            
+        Returns:    
+            bool: True if bounding boxes overlap, False otherwise.
         '''
         for i in range(3):
             intersect = False
-            if bbox1[2 * i] >= bbox2[2 * i] and bbox1[2 * i] <= bbox2[2 * i +
-                                                                      1]:
+            if (
+                bbox1[2 * i] >= bbox2[2 * i] and 
+                bbox1[2 * i] <= bbox2[2 * i +1]
+                ):
                 intersect = True
-            elif bbox2[2 * i] >= bbox1[2 * i] and bbox2[2 * i] <= bbox1[2 * i +
-                                                                        1]:
+            elif bbox2[2 * i] >= bbox1[2 * i] and bbox2[2 * i] <= bbox1[2 * i +1]:
                 intersect = True
-            if bbox1[2 * i + 1] <= bbox2[2 * i + 1] and bbox1[2 * i +
-                                                              1] >= bbox2[2 *
+            if bbox1[2 * i + 1] <= bbox2[2 * i + 1] and bbox1[2 * i +1] >= bbox2[2 *
                                                                           i]:
                 intersect = True
             elif bbox2[2 * i + 1] <= bbox1[2 * i + 1] and bbox2[2 * i +
@@ -142,11 +164,26 @@ class SynapseMapper(object):
         return True
 
     def _pt_in_box(self, pt, box):
-        return box[0] <= pt[0] <= box[1] and box[2] <= pt[1] <= box[3] and box[
-            4] <= pt[2] <= box[5]
+        """Check if a point is inside a bounding box.
+        
+        Args:
+            pt (array): Point to check.
+            box (array): Bounding box to check against. Box is a length-6 array of format (xmin, xmax, ymin, ymax, zmin, zmax).
+            
+        Returns:
+            bool: True if point is inside bounding box, False otherwise."""
+        return box[0] <= pt[0] <= box[1] and box[2] <= pt[1] <= box[3] and box[4] <= pt[2] <= box[5]
 
     def _compute_path_length(self, sec, x):
-        '''path length to soma from location x on section sec'''
+        '''Calculate the path length betwen the soma and location :paramref:`x` on section :paramref:`sec`
+        
+        Args:
+            sec (:class:`~singlecell_input_mapper.singlecell_input_mapper.cell.Section`): Section to calculate path length on.
+            x (float): Location on section to calculate path length to.
+            
+        Returns:
+            float: Path length between soma and location :paramref:`x` on section :paramref:`
+        '''
         currentSec = sec
         parentSec = currentSec.parent
         dist = x * currentSec.L
@@ -160,9 +197,9 @@ class SynapseMapper(object):
 
 
 class SynapseDensity(object):
-    '''Compute synapse density mesh for a single postsynaptic neuron.
+    '''Compute synapse density mehs from a PST density mesh.
     
-    Create a 3D mesh of synapse densities for a single postsynaptic neuron.
+    Given a PST density mesh, create a 3D mesh of synapse densities for a single postsynaptic neuron using :py:meth:`compute_synapse_density`.
     The mesh has the same bounding box and voxel size as :py:attr:`~singlecell_input_mapper.singlecell_input_mapper.synapse_maper.SynapseMapper.exPST`.
     It is assumed that :py:attr:`~singlecell_input_mapper.singlecell_input_mapper.synapse_maper.SynapseMapper.exPST` and :py:attr:`~singlecell_input_mapper.singlecell_input_mapper.synapse_maper.SynapseMapper.inhPST` have the same bounding box and voxel size.
     This density mesh is used in :class:`~singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseMapper` to assign synapses to the postsynaptic neuron.

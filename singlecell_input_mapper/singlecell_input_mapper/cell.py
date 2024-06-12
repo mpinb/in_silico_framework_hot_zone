@@ -92,7 +92,18 @@ class Cell(object):
         ptx,
         preType='Generic',
         postType='Generic'):
-        "Add a :class:`~singlecell_input_mapper.singlecell_input_mapper.cell.Synapse` to the cell."
+        """Add a :class:`~singlecell_input_mapper.singlecell_input_mapper.cell.Synapse` to the cell.
+        
+        Args:
+            secID (int): Section ID.
+            ptID (int): Point ID on that section.
+            ptx (float): Relative position along the section (0-1).
+            preType (str): Presynaptic cell type. Default: "Generic".
+            postType (str): Postsynaptic cell type. Default: "Generic".
+            
+        Returns:
+            :class:`~singlecell_input_mapper.singlecell_input_mapper.cell.Synapse`: The newly created synapse.   
+        """
         if preType not in self.synapses:
             self.synapses[preType] = []
         newSyn = Synapse(secID, ptID, ptx, preType, postType)
