@@ -32,7 +32,7 @@ shutil.copy(os.path.join(project_root, 'getting_started', 'Introduction_to_ISF.i
 # Figures need to be in the _autosummary directory
 shutil.rmtree(os.path.join(project_root, 'docs', '_autosummary', '_images'))
 shutil.copytree(os.path.join(project_root, 'docs', '_static', '_images'),
-                os.path.join(project_root, 'docs', '_autosummary', '_images'))
+                os.path.join(project_root, 'docs', '_images'))
 
 
 # -- General configuration ------------------------------------------------
