@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 from mpl_toolkits.mplot3d.art3d import Line3DCollection
 import numpy as np
+import shutil
 from visualize.vtk import write_vtk_skeleton_file
 import os, dask, time, six, socket, barrel_cortex, warnings
 from .utils import write_video_from_images, write_gif_from_images, display_animation_from_images, draw_arrow
@@ -605,39 +606,69 @@ class CellMorphologyVisualizer(CMVDataParser):
         align_trunk=True, 
         t_start=None, t_stop=None, t_step=None):
         """
-        Given a Cell object, this class initializes an object that is easier to work with
+        Given a Cell object, this class initializes an object that is easier to work with.
+        
+        Args:
+            cell (:class:`~single_cell_parser.cell.Cell`): Cell object
+            align_trunk (bool): Whether or not to align the cell trunk with the z-axis.
+            t_start (float): start time point of our time series visualization
+            t_stop (float): last time point of our time series visualization
+            t_step (float): time between the different time points of our visualization
+            
+        Attributes:
+            camera_position (dict): 
+                Camera angles and distance for matplotlib 3D visualizations.
+                Possible keys: 'azim', 'dist', 'elev', 'roll'
+                See also: https://matplotlib.org/stable/api/toolkits/mplot3d/view_angles.html
+            neuron_rotation (float): 
+                Amount of degrees the azimuth increases per frame in a timeseries visualization.
+            dpi (int): 
+                Image quality
+                Default: 72
+            show_synapses (bool): 
+                Whether or not to visualize the location of synapses onto the cell.
+            synapse_legend (bool): 
+                whether the synapse activations legend should appear in the plot
+            highlight_arrow_kwargs (dict): 
+                Additional arguments for the arrow. 
+                See available kwargs on https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.patches.Arrow.html#matplotlib.patches.Arrow
+            synapse_group_function (callable): 
+                Method to group synapse types. 
+                Must accept a name (str) as argument, and return a group name (str) as output.
+                Default: `lambda x: x`
+            population_to_color_dict (dict)
+                Dictionary to map synapse group names (str) to colors
+                Must contain the same keys as self.cell.synapses.keys() after being passed through self.synapse_group_function
+                default: {}
+            
+        Note:
+            :paramref:`align_trunk` assumes the cell has a trunk, which is defined as the dendrite between the soma
+            and the main bifurcation section: :meth:`~biophysics_fitting.get_main_bifurcation_section`.
         """
         super().__init__(cell, align_trunk, t_start, t_stop, t_step)
         # ---------------------------------------------------------------
         # Visualization attributes
         self.camera_position = {'azim': 0, 'dist': 10, 'elev': 30, 'roll': 0}
-        """Camera angles and distance for matplotlib 3D visualizations"""
         self.neuron_rotation = 0.5
-        """Rotation degrees of the neuron at each frame during timeseries visualization (in azimuth)"""
         self.dpi = 72
-        """Image quality"""
         self.show_synapses = True
-        """Whether or not to show the synapses on the plots that support this. Can be turned off manually here for e.g. testing purposes."""
         self.synapse_legend = True
-        """whether the synapse activations legend should appear in the plot"""
         self.legend = True
-        """whether the voltage legend should appear in the plot"""
-        self.highlight_arrow_args = None
-        """Additional arguments for the arrow. See available kwargs on https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.patches.Arrow.html#matplotlib.patches.Arrow"""
-        
-        self.synapse_group_function = barrel_cortex.synapse_group_function_HZpaper
-        
-        self.population_to_color_dict = barrel_cortex.color_cellTypeColorMapHotZone    
+        self.highlight_arrow_kwargs = None        
+        self.synapse_group_function = lambda x: x # barrel_cortex.synapse_group_function_HZpaper
+        self.population_to_color_dict = {}  # barrel_cortex.color_cellTypeColorMapHotZone    
 
     def _write_png_timeseries(
             self, 
             path,
+            overwrite_frames=False,
             color="grey",
             show_synapses=False,
             show_legend=False,
             client=None, 
             highlight_section=None, 
-            highlight_x=None):
+            highlight_x=None
+        ):
         '''
         Creates a list of images where a neuron morphology color-coded with voltage together with synapse activations are
         shown for a set of time points. These images will then be used for a time-series visualization (video/gif/animation)
@@ -653,11 +684,14 @@ class CellMorphologyVisualizer(CMVDataParser):
             - client: dask client for parallelization
         '''
         if os.path.exists(path):
-            if os.listdir(path):
+            if os.listdir(path) and not overwrite_frames:
                 logger.info(
-                    'Images already generated, they will not be generated again. Please, change the path name or delete the current one.'
+                    'Images already generated, they will not be generated again. Please, change the path name, delete the current one, or set overwrite_frames to True.'
                 )
                 return
+            elif overwrite_frames:
+                shutil.rmtree(path)
+                os.mkdir(path)
         else:
             os.mkdir(path)
 
@@ -676,7 +710,7 @@ class CellMorphologyVisualizer(CMVDataParser):
         highlight_section_kwargs={
             'sec_n': highlight_section,
             'highlight_x': highlight_x,
-            'arrow_args': self.highlight_arrow_args}
+            'arrow_args': self.highlight_arrow_kwargs}
 
         delayeds = []
         azim_ = self.camera_position['azim']
@@ -765,7 +799,7 @@ class CellMorphologyVisualizer(CMVDataParser):
             highlight_section_kwargs={
                 'sec_n': highlight_section,
                 'highlight_x': highlight_x,
-                'arrow_args': self.highlight_arrow_args},
+                'arrow_args': self.highlight_arrow_kwargs},
             legend=legend,
             synapse_legend=self.synapse_legend and show_synapses,
             dpi=self.dpi,
@@ -820,13 +854,15 @@ class CellMorphologyVisualizer(CMVDataParser):
             show_legend=show_legend,
             client=client,
             highlight_section=highlight_section,
-            highlight_x=highlight_x)
+            highlight_x=highlight_x,
+            overwrite_frames=overwrite_frames)
         write_gif_from_images(images_path, out_name, interval=tpf)
 
     def write_video(
         self,
         images_path,
         out_path,
+        overwrite_frames=False,
         color='grey',
         show_synapses=False,
         show_legend=False,
@@ -865,7 +901,8 @@ class CellMorphologyVisualizer(CMVDataParser):
             show_legend=show_legend,
             client=client,
             highlight_section=highlight_section,
-            highlight_x=highlight_x)
+            highlight_x=highlight_x,
+            overwrite_frames=overwrite_frames)
         write_video_from_images(images_path,
                                 out_path,
                                 fps=1/tpf,
@@ -875,6 +912,7 @@ class CellMorphologyVisualizer(CMVDataParser):
     def animation(
         self,
         images_path,
+        overwrite_frames=False,
         color='grey',
         show_synapses=False,
         show_legend=False,
@@ -913,7 +951,8 @@ class CellMorphologyVisualizer(CMVDataParser):
             show_legend=show_legend,
             client=client,
             highlight_section=highlight_section,
-            highlight_x=highlight_x)
+            highlight_x=highlight_x,
+            overwrite_frames=overwrite_frames)
         if display:
             display_animation_from_images(images_path, tpf, embedded=True)
 
@@ -1303,7 +1342,7 @@ def get_3d_plot_morphology(
             segments, 
             linewidths=linewidths, 
             color=colors[sec_n],
-            joinstyle="round",
+            joinstyle="bevel",
             capstyle="round")
         ax.add_collection(lc)
 
@@ -1315,7 +1354,7 @@ def get_3d_plot_morphology(
                     ax,
                     highlight_section=highlight_section_kwargs['sec_n'],
                     highlight_x=highlight_section_kwargs['highlight_x'],
-                    highlight_arrow_args=highlight_section_kwargs['arrow_args'])
+                    highlight_arrow_kwargs=highlight_section_kwargs['arrow_args'])
     ax.set_box_aspect([
         ub - lb
         for lb, ub in (getattr(ax, 'get_{}lim'.format(a))() for a in 'xyz')

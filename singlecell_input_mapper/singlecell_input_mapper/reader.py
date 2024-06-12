@@ -235,6 +235,24 @@ def read_scalar_field(fname=''):
 
 
 def read_connections_spreadsheet(fname):
+    """Reads a spreadsheet with connection probabilities between cell types
+    
+    Returns:
+        dict: A dictionary with the following structure: {EXC: {celltype: {norm: value, ...}, ...}, INH: {...}}
+        
+    Example:
+        
+        >>> connectionsSpreadsheet = read_connections_spreadsheet('connections.txt')
+        >>> connectionsSpreadsheet
+        {'EXC': {
+            celltype_1: {
+                'SOMA_LENGTH': 0.1, 'SOMA_AREA': 0.2, ...
+                },
+            celltype_2: {...},
+            },
+        'INH': {...}
+        }    
+    """
     connectionSpreadsheet = {}
     connectionSpreadsheet['EXC'] = {}
     connectionSpreadsheet['INH'] = {}

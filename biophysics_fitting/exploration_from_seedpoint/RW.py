@@ -30,7 +30,7 @@ class RW:
             df_seeds (pd.DataFrame): 
                 The individual seed points as rows and the parameters as columns
             param_ranges (pd.DataFrame): 
-                The parameters as rows and has a "min_" and "max_" column denoting range of values this parameter may take
+                The parameters as rows and has a `min_` and `max_` column denoting range of values this parameter may take
             params_to_explore (list): Parameters that should be explored. 
                 If None, all parameters are explored.
                 Default: None
