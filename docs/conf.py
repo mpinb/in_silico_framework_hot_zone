@@ -80,7 +80,7 @@ napoleon_attr_annotations = True
 ## Default flags used by autodoc directives
 autodoc_default_options = {
     'members': True,
-    'show-inheritance': True,
+    'show-inheritance': False,
 }
 
 autoclass_content = 'both'  # document both the class docstring, as well as __init__

@@ -171,7 +171,8 @@ class SynapseDensity(object):
     to compute synapse densities per presynaptic cell type for a given postsynaptic cell type and morphology.
     
     :paramref:`exPST` and :paramref:`inhPST` are density meshes for normalizing post-synaptic targets.
-    E.g.: shown below are the (25000, 50000, 75000, 100000) isosurfaces of the excitatory PST density field for a rat somatosensory cortex.
+    Shown below is an example for such density field: the (25000, 50000, 75000, 100000) isosurfaces of the excitatory 
+    PST density field for a rat somatosensory cortex (pia and white matter shown in grey at the top and bottom).
     
     .. figure:: ./_images/exPST_solid_bg.png
     '''
