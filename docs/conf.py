@@ -30,8 +30,8 @@ shutil.copytree(os.path.join(project_root, 'getting_started', 'tutorials'),
 shutil.copy(os.path.join(project_root, 'getting_started', 'Introduction_to_ISF.ipynb'),
                 os.path.join(project_root, 'docs', 'Introduction_to_ISF.ipynb'))
 # Figures need to be in the _autosummary directory
-shutil.copytree(os.path.join(project_root, 'docs', '_static', '_figures'),
-                os.path.join(project_root, 'docs', '_autosummary', '_figures'))
+shutil.copytree(os.path.join(project_root, 'docs', '_static', '_images'),
+                os.path.join(project_root, 'docs', '_autosummary', '_images'))
 
 
 # -- General configuration ------------------------------------------------
@@ -143,8 +143,8 @@ html_theme = "furo"
 # further.  For a list of options available for each theme, see the
 # documentation.
 html_theme_options = {
-    "light_logo": "_figures/isf-logo-black.png",
-    "dark_logo": "_figures/isf-logo-white.png",
+    "light_logo": "_images/isf-logo-black.png",
+    "dark_logo": "_images/isf-logo-white.png",
 }
 
 # Add any paths that contain custom themes here, relative to this directory.
