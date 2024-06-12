@@ -72,12 +72,15 @@ class SynapseMapper(object):
                 if self.voxelEdgeMap[structure][vxIndex]:
                     nrOfSyn = mesh[vxIndex]
                     
-                    # ------- random 1: poisson sample the synapse density distribution
+                    # ------- random 1: 
+                    # poisson sample the synapse density distribution
                     nrOfSyn = np.random.poisson(nrOfSyn)
                     if not nrOfSyn:
                         continue
                     
-                    # ------- random 2: choose random synapse target within the same voxel.
+                    # ------- random 2: 
+                    # choose random synapse target onto the dendrite
+                    # within the same voxel.
                     candEdges = self.voxelEdgeMap[structure][vxIndex]
                     candidatePts = list(np.random.permutation(candEdges))
                     # fix for situation where nrOfSyn > len(candidatePts):
@@ -144,23 +147,20 @@ class SynapseMapper(object):
         '''
         for i in range(3):
             intersect = False
-            if (
-                bbox1[2 * i] >= bbox2[2 * i] and 
-                bbox1[2 * i] <= bbox2[2 * i +1]
-                ):
+            if bbox1[2 * i] >= bbox2[2 * i] and \
+                bbox1[2 * i] <= bbox2[2 * i +1]:
                 intersect = True
-            elif bbox2[2 * i] >= bbox1[2 * i] and bbox2[2 * i] <= bbox1[2 * i +1]:
+            elif bbox2[2 * i] >= bbox1[2 * i] and \
+                bbox2[2 * i] <= bbox1[2 * i +1]:
                 intersect = True
-            if bbox1[2 * i + 1] <= bbox2[2 * i + 1] and bbox1[2 * i +1] >= bbox2[2 *
-                                                                          i]:
+            if bbox1[2 * i + 1] <= bbox2[2 * i + 1] and \
+                bbox1[2 * i +1] >= bbox2[2 * i]:
                 intersect = True
-            elif bbox2[2 * i + 1] <= bbox1[2 * i + 1] and bbox2[2 * i +
-                                                                1] >= bbox1[2 *
-                                                                            i]:
+            elif bbox2[2 * i + 1] <= bbox1[2 * i + 1] and \
+                bbox2[2 * i +1] >= bbox1[2 * i]:
                 intersect = True
             if not intersect:
                 return False
-
         return True
 
     def _pt_in_box(self, pt, box):
