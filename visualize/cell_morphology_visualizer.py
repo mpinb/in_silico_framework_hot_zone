@@ -700,18 +700,15 @@ class CellMorphologyVisualizer(CMVDataParser):
                     'Images already generated, they will not be generated again. Please, change the path name or delete the current one.'
                 )
                 return
+            else:
+                logger.warning("Path exists but is empty. Writing frames to {}".format(path))
         else:
+            logger.info("Creating path for image generation: {}".format(path))
             os.mkdir(path)
 
         # Gathers the voltage and synapse activations time series.
         # Then images are generated for each specified time step.
         self._update_times_to_show()
-        self._calc_voltage_timeseries()
-        if color in self.possible_scalars:
-            self._calc_ion_dynamics_timeseries(color)
-            # update colormap
-            mn, mx = self._get_timeseries_minmax(self.ion_dynamics_timeseries[color])
-            self.set_cmap(self.scalar_mappable.cmap.name, vmin=mn, vmax=mx)
         if show_synapses:
             self._calc_synapses_timeseries()
 
@@ -734,7 +731,7 @@ class CellMorphologyVisualizer(CMVDataParser):
         for time_point in self.times_to_show:
             color_per_section = self._calc_scalar_data_from_keyword(color, time_point, return_as_color=True)
             count += 1
-            filename = path + '/{0:0=5d}.png'.format(count)
+            filename = os.path.join(path, '{0:0=5d}.png'.format(count))
             delayeds.append(
                 dask.delayed(get_3d_plot_morphology)(
                     lookup_table=maybe_scattered_df,
@@ -851,6 +848,7 @@ class CellMorphologyVisualizer(CMVDataParser):
         if not out_name.endswith(".gif"):
             logger.warning(".gif extension not found in out_name. Adding it...")
             out_name = out_name + ".gif"
+        images_path = os.path.realpath(images_path)
         self._write_png_timeseries(
             images_path,
             color=color,
@@ -896,6 +894,7 @@ class CellMorphologyVisualizer(CMVDataParser):
             - codec
         '''
         assert self._has_simulation_data()
+        images_path = os.path.realpath(images_path)
         self._write_png_timeseries(
             images_path,
             color=color,
@@ -944,6 +943,7 @@ class CellMorphologyVisualizer(CMVDataParser):
         '''
         assert self._has_simulation_data()
         self._update_times_to_show(t_start, t_stop, t_step)
+        images_path = os.path.realpath(images_path)
         self._write_png_timeseries(
             images_path,
             color=color,
@@ -969,12 +969,12 @@ class CellMorphologyVisualizer(CMVDataParser):
         Format in which a cell morphology timeseries (color-coded with voltage) is saved to be visualized in paraview
 
         Args:
-            - scalar_data: keyword for scalar data to be saved. Defaults to only diameter.
-            - t_start: start time point of our time series visualization
-            - t_stop: last time point of our time series visualization
-            - t_step: time between the different time points of our visualization
-            - out_name: name of the file (not path, the file will be generated in out_dir)
-            - out_dir: path where the images for the gif will be generated
+            out_name (str): name of the file (not path, the file will be generated in out_dir)
+            out_dir (str): path where the images for the gif will be generated
+            t_start (float): Update the start time of the visualization class-wide.
+            t_stop (float): Update the stop time of the visualization class-wide.
+            t_step (float): Update the time step of the visualization class-wide.
+            color (str): If you want some other color overlayed on the cell morphology.
         '''
         scalar_data = {}
 
@@ -1013,8 +1013,7 @@ class CellMorphologyVisualizer(CMVDataParser):
 
 
 class CellMorphologyInteractiveVisualizer(CMVDataParser):
-    """
-    This class initializes from a cell object and extracts relevant Cell data to a format that lends itself easier to plotting.
+    """Initialize a visualization class from a cell object, and extract relevant Cell data to a format that lends itself easier to plotting.
     It contains useful methods for interactively visualizing a cell morphology, the voltage along its body, or ion channel dynamics.
     It relies on Dash and Plotly to do so.
     """
@@ -1027,6 +1026,17 @@ class CellMorphologyInteractiveVisualizer(CMVDataParser):
         show=True,
         renderer="notebook_connected",
         t_start=None, t_stop=None, t_step=None):
+        """
+        Args:
+            cell (:class:`~single_cell_parser.cell.Cell`): Cell object
+            align_trunk (bool): Whether or not to align the cell trunk with the z-axis.
+            dash_ip (str): IP address to run dash server on.
+            show (bool): set to False for testing
+            renderer (str): Type of backend renderer to use for rendering the javascript/HTML VBox. Defaults to "notebook_connected"
+            t_start (float): start time point of our time series visualization
+            t_stop (float): last time point of our time series visualization
+            t_step (float): time between the different time points of our visualization
+        """
         super().__init__(cell, align_trunk, t_start, t_stop, t_step)
         if dash_ip is None:
             dash_ip = socket.gethostbyname(socket.gethostname())
@@ -1046,10 +1056,10 @@ class CellMorphologyInteractiveVisualizer(CMVDataParser):
         Shows an interactive 3D render of the Cell with NO data overlayed.
 
         Args:
-            - color (str | [[float]]): If you want some other color overlayed on the cell morphology. 
+            color (str | list): If you want some other color overlayed on the cell morphology. 
                 Options: "voltage", "vm", "synapses", "synapse", or a color string, or a nested list of colors for each section
-            - time_point (float | int): time_point at which to plot some scalar data. Ignored when color does not refer to scalar data.
-            - diameter: If the actual diameter is poorly visible, set this value to a fixed diameter.
+            time_point (float | int): time_point at which to plot some scalar data. Ignored when color does not refer to scalar data.
+            diameter: If the actual diameter is poorly visible, set this value to a fixed diameter.
 
         Returns:
             plotly.graph_objs._figure.Figure: an interactive figure. Usually added to a ipywidgets.VBox object
@@ -1242,10 +1252,11 @@ class CellMorphologyInteractiveVisualizer(CMVDataParser):
         The parameters :paramref:t_start, :paramref:t_stop and :paramref:t_step will define the :paramref:self.time attribute
 
         Args:
-        - color (str | [[float]]): If you want some other color overlayed on the cell morphology. 
-            Options: "voltage", "vm", "synapses", "synapse", or a color string, or a nested list of colors for each section
-        - time_point (float | int): time_point at which to plot some scalar data. Ignored when color does not refer to scalar data.
-        - diameter: If the actual diameter is poorly visible, set this value to a fixed diameter.
+            color (str | list): 
+                If you want some other color overlayed on the cell morphology. 
+                Options: "voltage", "vm", "synapses", "synapse", or a color string, or a nested list of colors for each section
+            time_point (float | int): time_point at which to plot some scalar data. Ignored when color does not refer to scalar data.
+            diameter: If the actual diameter is poorly visible, set this value to a fixed diameter.
         
         """
         if self._keyword_is_scalar_data(color) and time_point is None:
@@ -1264,13 +1275,17 @@ class CellMorphologyInteractiveVisualizer(CMVDataParser):
         t_start=None, t_stop=None, t_step=None):
         """
         Args:
-        - color (str | [[float]]): If you want some other color overlayed on the cell morphology. 
-            Options: "voltage", "vm", "synapses", "synapse", or a color string, or a nested list of colors for each section
-        - renderer (str): Available renderers:
-            ['plotly_mimetype', 'jupyterlab', 'nteract', 'vscode', 'notebook', 'notebook_connected', 'kaggle', 'azure', 'colab',
-            'cocalc', 'databricks', 'json', 'png', 'jpeg', 'jpg', 'svg', 'pdf', 'browser', 'firefox', 'chrome', 'chromium', 
-            'iframe', 'iframe_connected', 'sphinx_gallery', 'sphinx_gallery_png']
-        - t_start, t_stop, t_step (float|int): time interval
+            color (str | list): 
+                If you want some other color overlayed on the cell morphology. 
+                Options: "voltage", "vm", "synapses", "synapse", or a color string, or a nested list of colors for each section
+            renderer (str): 
+                Available renderers:
+                ['plotly_mimetype', 'jupyterlab', 'nteract', 'vscode', 'notebook', 'notebook_connected', 'kaggle', 'azure', 'colab',
+                'cocalc', 'databricks', 'json', 'png', 'jpeg', 'jpg', 'svg', 'pdf', 'browser', 'firefox', 'chrome', 'chromium', 
+                'iframe', 'iframe_connected', 'sphinx_gallery', 'sphinx_gallery_png']
+            t_start (float): start time point of our time series visualization
+            t_stop (float): last time point of our time series visualization
+            t_step (float): time interval
         """
         # f is a dash app
         f = self._get_interactive_dash_app(color, t_start, t_stop, t_step,)
@@ -1297,16 +1312,35 @@ def get_3d_plot_morphology(
     return_figax = True,
     proj_type="ortho"
     ):
-    """
-    Main method to construct a 3d matplotlib plto of a cell morphology, overlayed with some scalar data.
-    This method Uses LineCollections to plot the morphology. It uses a little trick, where each segment is extended by a copy of the next segment in line.
-    This way, the "elbow" between segments is sllightly cleaner, and does not look like a zigzag.
+    """Constructs a 3d matplotlib plto of a cell morphology, overlayed with some scalar data.
+    This method Uses LineCollections to plot the morphology, with a round joinstyle. 
+    This method is usually not called directly. Rather, :class:`~CellMorphologyVisualizer` calls this method to generate a plot,
+    depending on parameters such as parallellization client, scalar data overlay, viewing angles etc...
+    It is recommended to use the high-level method :class:`~CellMorphologyVisualizer.plot` instead of trying to use this one directly.
     
-    Note that this introduces a minor visual interpolation error for transitions from large to small diameter. 
-    Since the voltage gradient in space is continuous and relatively smooth compared to the average segment distane, this is not visually obvious.
-    There are also still line edges for transitions from large to small diameter.
-
-    If you want proper tubes instead of this hacky thing, you should just use VTK.
+    Note:
+        See also: https://matplotlib.org/stable/gallery/lines_bars_and_markers/joinstyle.html
+        
+    Args:
+        lookup_table (pd.DataFrame): 
+            pandas DataFrame with the morphology of the cell, where the initial point of each section is duplicated: once for the same section, and once as the last point of the previous section.
+        colors (str | array): Color for the voltage. Either a single color for all sections, or a list of colors for each section.
+        color_keyword (str): Keyword for the scalar data to be saved. Defaults to only diameter.
+        synapses (dict): Dictionary with synapse activations. Keys are the population names, values are lists of synapse locations.
+        time_point (float): Time point at which to plot the scalar data.
+        highlight_section_kwargs (dict): Additional arguments for the arrow. See available kwargs on https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.patches.Arrow.html#matplotlib.patches.Arrow
+        camera_position (dict): Camera angles and distance for matplotlib 3D visualizations. Possible keys: 'azim', 'dist', 'elev', 'roll'
+        dpi (int): Image quality. Default: 72
+        population_to_color_dict (dict): Dictionary to map synapse group names (str) to colors. Must contain the same keys as synapses.keys()
+        save (str): Path where the plot will be saved. If it's empty it will not be saved (Default)
+        plot (bool): whether to show the plot. Default: False
+        synapse_legend (bool): Whether the synapse activations legend should appear in the plot
+        legend (bool): Whether the legend for scalar data (e.g. membrane voltage) should appear in the plot
+        return_figax (bool): Whether to return the figure and axis objects. Default: True
+        proj_type (str): Projection type for the 3D plot. Default: "ortho"
+    
+    Returns:
+        tuple|None: fig and ax object if :paramref:`return_figax` is True. None otherwise.
     """
     #----------------- Generic axes setup
     fig = plt.figure(
