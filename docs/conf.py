@@ -147,6 +147,7 @@ html_theme = "furo"
 html_theme_options = {
     "light_logo": "_images/isf-logo-black.png",
     "dark_logo": "_images/isf-logo-white.png",
+    "sidebar_hide_name": True,
 }
 
 # Add any paths that contain custom themes here, relative to this directory.
