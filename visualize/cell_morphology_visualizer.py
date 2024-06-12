@@ -78,10 +78,10 @@ class CMVDataParser:
         # -------------------------------
         # colors and color scales. default colorscale is for membrane voltage
         self.background_color = (1, 1, 1, 1)  # white
-        self.vmin, self.vmax = -70, 20  # legend bounds - intialized for membrane voltage by default
-        self.norm = mpl.colors.Normalize(vmin=self.vmin, vmax=self.vmax)
-        self.cmap = plt.get_cmap("jet")
-        self.scalar_mappable = mpl.cm.ScalarMappable(norm=self.norm, cmap=self.cmap)
+        self.vmin, self.vmax = None, None  # legend bounds
+        self.norm = None
+        self.cmap = plt.get_cmap("jet")  # default
+        self.scalar_mappable = None
 
         # ---------------------------------------------------------------
         # Simulation-related parameters
@@ -106,20 +106,8 @@ class CMVDataParser:
         By default, the simulation is chopped to the specified t_begin and t_stop, and evenly divided in 10 timesteps."""
         self.times_to_show = None
         """An array of time points to visualize. Gets calculated from :paramref:self.t_start, :paramref:self.t_stop and :paramref:self.t_step"""
-        self.possible_scalars = {
-            'K_Pst.ik', 'K_Pst.m', 'K_Pst.h', 
-            'Ca_LVAst.ica', 'Ca_LVAst.h', 'Ca_LVAst.m', 
-            'Nap_Et2.ina', 'Nap_Et2.m', 'Nap_Et2.h', 
-            'SK_E2.ik', 'SK_E2.z',
-            'Ih.ihcn', 
-            'K_Tst.ik', 'K_Tst.h', 'K_Tst.m',
-            'Im.ik', 'Ih.m', 
-            'NaTa_t.ina', 'NaTa_t.m', 'NaTa_t.h', 
-            'SKv3_1.ik', 'SKv3_1.m', 
-            'Ca_HVA.ica', 'Ca_HVA.m', 'Ca_HVA.h', 
-            'CaDynamics_E2.cai', 
-            'cai'
-        }
+        recordvars_all_sections = [list(sec.recordVars.keys()) for sec in cell.sections]
+        self.possible_scalars = set([e for recordvars_this_section in recordvars_all_sections for e in recordvars_this_section])
         """Accepted keywords for scalar data other than membrane voltage."""
 
         self.voltage_timeseries = None
@@ -157,21 +145,16 @@ class CMVDataParser:
         """
         Initializes the variables associated with simulation data. Does not fill these variables until they actually need to be calculated.
         """
-        # Max and min voltages colorcoded in the cell morphology
-        self.vmin = -80  # mV
-        self.vmax = 20  # mV
-        """Time"""
         # Time points of the simulation
         self.simulation_times = np.array(self.cell.tVec)
         # Time offset w.r.t. simulation start. useful if '0 ms' is supposed to refer to stimulus time
         self.time_offset = 0
         # Time points we want to visualize (values by default)
         self.t_start = self.simulation_times[0] if self.t_start is None else self.t_start
-        self.dt = self.simulation_times[1] - self.simulation_times[0]
-        # TODO: add support for variable timestep
+        self.dt = np.median(np.diff(self.simulation_times))  # median time interval
         if self.t_step is None:
-            self.t_step = (len(self.simulation_times) // 10) * self.dt if self.t_step is None else self.t_step
-            logger.warning("No t_step provided. Setting t_step to default 1/10th of the total simulation time ~= {}".format(self.t_step))
+            self.t_step = .1*(self.simulation_times[-1] - self.simulation_times[0]) if self.t_step is None else self.t_step
+            logger.warning("No t_step provided. Setting t_step to default 1/10th of the total simulation time ~= {:.2f}".format(self.t_step))
         self.t_stop = self.simulation_times[-1] - self.simulation_times[-1] % self.t_step if self.t_stop is None else self.t_stop
         self.times_to_show = np.empty(0)
         # initialise time range to visualise
@@ -359,10 +342,12 @@ class CMVDataParser:
             self.voltage_timeseries.append(voltage)
         t2 = time.time()
         logger.info('Voltage retrieval runtime (s): ' + str(np.around(t2 - t1, 2)))
+        
+        # Update cmap if necessary
         self.set_cmap(
             self.cmap, 
-            vmin=min(min([min(e) for e in self.voltage_timeseries])), 
-            vmax=max(max([max(e) for e in self.voltage_timeseries])))
+            vmin=min(min([min(e) for e in self.voltage_timeseries])) if self.vmin is None else self.vmin, 
+            vmax=max(max([max(e) for e in self.voltage_timeseries])) if self.vmax is None else self.vmax)
 
     def _calc_ion_dynamics_timeseries(self, ion_keyword):
         '''
@@ -393,10 +378,12 @@ class CMVDataParser:
         t2 = time.time()
         logger.info('Ion dynamics retrieval runtime (s): ' +
               str(np.around(t2 - t1, 2)))
+        
+        # Update cmap if necessary
         self.set_cmap(
             self.cmap, 
-            vmin=min(min([min(e) for e in self.ion_dynamics_timeseries[ion_keyword]])), 
-            vmax=max(max([max(e) for e in self.ion_dynamics_timeseries[ion_keyword]])))
+            vmin=min(min([min(e) for e in self.ion_dynamics_timeseries[ion_keyword]])) if self.vmin is None else self.vmin, 
+            vmax=max(max([max(e) for e in self.ion_dynamics_timeseries[ion_keyword]])) if self.vmax is None else self.vmax)
 
     def _get_synapses_at_timepoint(self, time_point):
         '''
@@ -461,9 +448,6 @@ class CMVDataParser:
     def _update_times_to_show(self, t_start=None, t_stop=None, t_step=None):
         """Checks if the specified time range equals the previously defined one. If not, updates the time range.
         If all arguments are None, does nothing. Useful for defining default time range
-
-        Todo:
-            what if a newly defined t_step does not match the simulation dt?
 
         Args:
             t_start (float): start time
@@ -537,7 +521,8 @@ class CMVDataParser:
             return return_data
         
         elif keyword in list(mcolors.BASE_COLORS) + list(mcolors.TABLEAU_COLORS) + list(mcolors.CSS4_COLORS) + list(mcolors.XKCD_COLORS):
-            return_data = [[keyword]]  # soma, just one point
+            # These colors are defined per section, not per segment.
+            return_data = [[keyword]]
             for sec in self.cell.sections:
                 if not sec.label in ("AIS", "Myelin", "Soma"):
                     return_data.append([keyword for _ in sec.pts])
@@ -545,11 +530,11 @@ class CMVDataParser:
 
         # -------------- Keyword colors       
         elif keyword.lower() in ("voltage", "vm"):
-            self._calc_voltage_timeseries()
+            self._calc_voltage_timeseries()  # Only happens if necessary
             data_per_section = self._get_voltages_at_timepoint(time_point)
         
         elif keyword in self.possible_scalars:
-            self._calc_ion_dynamics_timeseries(keyword)
+            self._calc_ion_dynamics_timeseries(keyword)  # Only happens if necessary
             data_per_section = self._get_ion_dynamics_at_timepoint(time_point, keyword)
 
         else:
@@ -593,10 +578,10 @@ class CMVDataParser:
         cmap=None, 
         vmin=None, 
         vmax=None):
-        self.vmin = vmin or self.vmin
-        self.vmax = vmax or self.vmax
+        self.vmin = vmin if vmin is not None else self.vmin
+        self.vmax = vmax if vmin is not None else self.vmax
         self.norm = mpl.colors.Normalize(self.vmin, self.vmax)
-        self.cmap = cmap or self.cmap
+        self.cmap = cmap if cmap is not None else self.cmap
         self.scalar_mappable = mpl.cm.ScalarMappable(norm=self.norm, cmap=self.cmap)
 
 
@@ -781,7 +766,11 @@ class CellMorphologyVisualizer(CMVDataParser):
             - highlight_x (float): x coordinate of the section that should be highlighted
 
         '''
-        assert time_point is None or time_point < self.times_to_show[-1], "Time point exceeds simulation time"
+        assert not (self._keyword_is_scalar_data(color) and time_point is None), "Please provide a timepoint at which to plot {}".format(color)
+        if time_point is None:
+            logger.info("No timepoint provided. Plotting at earliest timepoint...")
+            time_point = self.times_to_show[0]
+        assert time_point < self.times_to_show[-1], "Time point exceeds simulation time"
         logger.info("updating_times_to_show")
         self._update_times_to_show()
         if show_synapses:
