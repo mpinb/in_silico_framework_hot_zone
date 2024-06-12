@@ -15,28 +15,33 @@ from data_base.dbopen import dbopen
 
 
 class NetworkMapper:
-    '''
-    Handles connectivity of presynaptic populations
-    to multi-compartmental neuron model.
+    '''Connect presynaptic cells to a postsynaptic cell model.
+
+    This class is used to create fixed network embeddings.
+    Given a scalar field of boutons, it computes all possible synapse densities that have non-zero overlap with this bouton field.
+    These synapse density fields depends on the neuron morphology and location in the bouton field.
+    The synapse density fields are further used to sample possible synaptic connections between presynaptic cells and the postsynaptic cell model.
     '''
 
-    def __init__(self, postCell, postCellType, cellTypeNumbersSpreadsheet,
-                 connectionsSpreadsheet, exPST, inhPST):
-        '''
-        dictionary holding all presynaptic cells
-        ordered by cell type
-        self.cells = {}
+    def __init__(
+        self, 
+        postCell, 
+        postCellType, 
+        cellTypeNumbersSpreadsheet,
+        connectionsSpreadsheet, 
+        exPST, 
+        inhPST):
+        '''Initialize NetworkMapper object.
+        Attributes:
+            cells (dict): Presynaptic cells, ordered by cell type.
+            connected_cells (dict): Indices of all active presynaptic cells, ordered by cell type.
+            postCell (:class:`~singlecell_input_mapper.singlecell_input_mapper.cell.Cell`): Reference to postsynaptic (multi-compartment) cell model.
+            postCellType (str): Postsynaptic cell type.
         
-        dictionary holding indices of
-        all active presynaptic cells
-        ordered by cell type
-        self.connected_cells = {}
-        
-        reference to postsynaptic (multi-compartment) cell model
-        self.postCell = postCell
-        
-        postsynaptic cell type
-        self.postCellType = postCellType
+        Args:
+            postCell (:class:`~singlecell_input_mapper.singlecell_input_mapper.cell.Cell`): The cell object to map synapses onto.
+            postCellType (str): The type of the postsynaptic cell.
+            cellTypeNumbersSpreadsheet (dict): Number of presynaptic cells per cell type and column.
         '''
         self.cells = {}
         self.connected_cells = {}
@@ -49,13 +54,14 @@ class NetworkMapper:
         self.exPST = exPST
         self.inhPST = inhPST
         self.mapper = SynapseMapper(postCell)
-#        seed = int(time.time())
-#        self.ranGen = np.random.RandomState(seed)
+        # seed = int(time.time())
+        # self.ranGen = np.random.RandomState(seed)
 
-    def create_network_embedding(self,
-                                 postCellName,
-                                 boutonDensities,
-                                 nrOfSamples=50):
+    def create_network_embedding(
+        self,
+        postCellName,
+        boutonDensities,
+        nrOfSamples=50):
         '''
         Public interface:
         used for creating fixed network connectivity.
@@ -65,8 +71,10 @@ class NetworkMapper:
         IMPORTANT: assumes path names to anatomical realization files
         work from the working directory! so should be correct relative, or
         preferably absolute paths.
+        
+        Returns:
+            None. Writes output files to disk.
         '''
-
         self._create_presyn_cells()
         columns = list(self.cells.keys())
         preCellTypes = self.cells[columns[0]]
@@ -81,11 +89,16 @@ class NetworkMapper:
                 for preCellType in preCellTypes:
                     for preCell in self.cells[col][preCellType]:
                         preCell.synapseList = None
-            connectivityMap, connectedCells, connectedCellsPerStructure = self._create_anatomical_realization(
-                cellTypeSynapseDensities)
-            synapseLocations, cellSynapseLocations, cellTypeSummaryTable, columnSummaryTable = self._compute_summary_tables(
-                connectedCells, connectedCellsPerStructure)
-            connectivityData = connectivityMap, synapseLocations, cellSynapseLocations, cellTypeSummaryTable, columnSummaryTable
+            connectivityMap, connectedCells, connectedCellsPerStructure = \
+                self._create_anatomical_realization(cellTypeSynapseDensities)
+            synapseLocations, cellSynapseLocations, cellTypeSummaryTable, columnSummaryTable = \
+                self._compute_summary_tables(
+                connectedCells, 
+                connectedCellsPerStructure
+                )
+            connectivityData = connectivityMap, synapseLocations, \
+                                cellSynapseLocations, cellTypeSummaryTable,\
+                                columnSummaryTable
             sampleConnectivityData.append(connectivityData)
             cellTypeSpecificPopulation.append(cellTypeSummaryTable)
             print('---------------------------')
@@ -94,14 +107,20 @@ class NetworkMapper:
             cellTypeSpecificPopulation)
         representativeIndex = self._get_representative_sample(
             cellTypeSpecificPopulation, populationDistribution)
-        connectivityMap, synapseLocations, cellSynapseLocations, cellTypeSummaryTable, columnSummaryTable = sampleConnectivityData[
-            representativeIndex]
-        self._write_population_output_files(postCellName,
-                                            populationDistribution,
-                                            connectivityMap, synapseLocations,
-                                            cellSynapseLocations,
-                                            cellTypeSummaryTable,
-                                            columnSummaryTable)
+        (connectivityMap, 
+         synapseLocations, 
+         cellSynapseLocations, 
+         cellTypeSummaryTable, 
+         columnSummaryTable
+            ) = sampleConnectivityData[representativeIndex]
+        self._write_population_output_files(
+            postCellName,
+            populationDistribution,
+            connectivityMap, 
+            synapseLocations,
+            cellSynapseLocations,
+            cellTypeSummaryTable,
+            columnSummaryTable)
 
         #        for testing convergence:
         #        self._test_population_convergence(nrOfSamples, sampleConnectivityData, postCellName)
@@ -113,9 +132,11 @@ class NetworkMapper:
         print('Done generating network embedding!')
         print('---------------------------')
 
-    def create_network_embedding_for_simulations(self, postCellName,
-                                                 boutonDensities,
-                                                 nrOfRealizations):
+    def create_network_embedding_for_simulations(
+        self, 
+        postCellName,
+        boutonDensities,
+        nrOfRealizations):
         '''
         Public interface:
         used for creating fixed network connectivity for use in Monte Carlo simulations.
@@ -130,8 +151,9 @@ class NetworkMapper:
         self._create_presyn_cells()
         columns = list(self.cells.keys())
         preCellTypes = self.cells[columns[0]]
-        cellTypeSynapseDensities = self._precompute_column_celltype_synapse_densities(
-            boutonDensities)
+        cellTypeSynapseDensities = \
+            self._precompute_column_celltype_synapse_densities(
+                boutonDensities)
 
         cellTypeSpecificPopulation = []
         for i in range(nrOfRealizations):
@@ -183,24 +205,32 @@ class NetworkMapper:
 #                    print '    Skipped %d empty synapse densities...' % skipCount
 #
 #            connectivityMap, connectedCells, connectedCellsPerStructure = self._create_anatomical_connectivity_map()
-            connectivityMap, connectedCells, connectedCellsPerStructure = self._create_anatomical_realization(
-                cellTypeSynapseDensities)
-            self._generate_output_files(postCellName, connectivityMap,
-                                        connectedCells,
-                                        connectedCellsPerStructure)
-            synapseLocations, cellSynapseLocations, cellTypeSummaryTable, columnSummaryTable = self._compute_summary_tables(
+            connectivityMap, connectedCells, connectedCellsPerStructure = \
+                self._create_anatomical_realization(cellTypeSynapseDensities)
+            self._generate_output_files(
+                postCellName, 
+                connectivityMap,
+                connectedCells,
+                connectedCellsPerStructure)
+            (synapseLocations,  # unused 
+             cellSynapseLocations,  # unused
+             cellTypeSummaryTable, 
+             columnSummaryTable  # unused
+             ) = self._compute_summary_tables(
                 connectedCells, connectedCellsPerStructure)
             cellTypeSpecificPopulation.append(cellTypeSummaryTable)
             print('---------------------------')
 
-#        print '    Writing output files...'
-#        populationDistribution = self._compute_parameter_distribution(cellTypeSpecificPopulation)
-#        outNamePrefix = postCellName[:-4]
-#        summaryName = outNamePrefix + '_synapses_%d_realizations_summary' % nrOfRealizations
-#        writer.write_population_connectivity_summary(summaryName, populationDistribution)
+        # print '    Writing output files...'
+        # populationDistribution = self._compute_parameter_distribution(cellTypeSpecificPopulation)
+        # outNamePrefix = postCellName[:-4]
+        # summaryName = outNamePrefix + '_synapses_%d_realizations_summary' % nrOfRealizations
+        # writer.write_population_connectivity_summary(summaryName, populationDistribution)
 
-    def create_network_embedding_from_synapse_densities(self, postCellName,
-                                                        synapseDensities):
+    def create_network_embedding_from_synapse_densities(
+        self, 
+        postCellName,
+        synapseDensities):
         '''
         Public interface:
         used for creating fixed network connectivity from pre-computed
@@ -244,21 +274,31 @@ class NetworkMapper:
                         newSyn.preCell = preCell
                 print('')
 
-        connectivityMap, connectedCells, connectedCellsPerStructure = self._create_anatomical_connectivity_map(
-        )
-        self._generate_output_files(postCellName, connectivityMap,
-                                    connectedCells, connectedCellsPerStructure)
+        connectivityMap, connectedCells, connectedCellsPerStructure = \
+            self._create_anatomical_connectivity_map()
+        
+        self._generate_output_files(
+            postCellName, 
+            connectivityMap,
+            connectedCells, 
+            connectedCellsPerStructure)
         print('---------------------------')
 
     def _precompute_column_celltype_synapse_densities(self, boutonDensities):
-        '''
-        Pre-computes all possible synapse densities that have
-        non-zero overlap with the current postynaptic neuron
-        and sorts them based on presynaptic column and cell type
+        '''Compute synapse densities of all presynaptic cell types in all columns
+        
+        Computes all possible synapse densities that have non-zero overlap
+        with the current postynaptic neuron, and sorts them based on presynaptic column and cell type
         '''
         synapseDensities = {}
-        synapseDensityComputation = SynapseDensity(self.postCell, self.postCellType, self.connectionsSpreadsheet,\
-                                                   self.exCellTypes, self.inhCellTypes, self.exPST, self.inhPST)
+        synapseDensityComputation = SynapseDensity(
+            self.postCell, 
+            self.postCellType, 
+            self.connectionsSpreadsheet,
+            self.exCellTypes, 
+            self.inhCellTypes, 
+            self.exPST, 
+            self.inhPST)
         columns = list(boutonDensities.keys())
         preCellTypes = boutonDensities[columns[0]]
         for col in columns:
@@ -302,9 +342,12 @@ class NetworkMapper:
         print('---------------------------')
 
     def _create_anatomical_realization(self, cellTypeSynapseDensities):
-        '''
-        Main method for computing synapse/connectivity
-        realization from precomputed synapse densities.
+        '''Create a single anatomical realization of synapses.
+
+        This is the main method for computing synapse/connectivity realization.
+        Given a pre-computed density field of synapses (see e.g. :py:meth:`~_precompute_column_celltype_synapse_densities`),
+        this method samples this density field to create a realization of synapses.
+
         Returns anatomical connectivity map.
         '''
         columns = list(self.cells.keys())
@@ -319,12 +362,12 @@ class NetworkMapper:
                 #=======================================================================
 
 
-#                for structure in self.postCell.structures.keys():
-#                    for i in range(nrOfDensities):
-#                        outDensity = cellTypeSynapseDensities[col][preCellType][i][structure]
-#                        outNamePrefix = postCellName[:-4]
-#                        synapseDensityName = '_'.join((outNamePrefix,'synapse_density',structure,col,preCellType,str(i)))
-#                        writer.write_scalar_field(synapseDensityName, outDensity)
+                # for structure in self.postCell.structures.keys():
+                #     for i in range(nrOfDensities):
+                #         outDensity = cellTypeSynapseDensities[col][preCellType][i][structure]
+                #         outNamePrefix = postCellName[:-4]
+                #         synapseDensityName = '_'.join((outNamePrefix,'synapse_density',structure,col,preCellType,str(i)))
+                #         writer.write_scalar_field(synapseDensityName, outDensity)
 
                 print('---------------------------')
                 print(
@@ -419,8 +462,10 @@ class NetworkMapper:
 
         return anatomicalMap, connectedCells, connectedCellsPerStructure
 
-    def _get_representative_sample(self, realizationPopulation,
-                                   populationDistribution):
+    def _get_representative_sample(
+        self, 
+        realizationPopulation,
+        populationDistribution):
         '''
         Determine which sample of a population of anatomical realizations
         is most representative based on the distribution of anatomical
@@ -580,8 +625,11 @@ class NetworkMapper:
 
         return distanceVec
 
-    def _test_population_convergence(self, nrOfSamples, sampleConnectivityData,
-                                     postCellName):
+    def _test_population_convergence(
+        self, 
+        nrOfSamples, 
+        sampleConnectivityData,
+        postCellName):
         '''
         Testing convergence: How many samples do I need to generate to
         get a reasonable estimate of the variability of connectivity
@@ -1016,8 +1064,15 @@ class NetworkMapper:
                                                  columnSummaryTable)
         print('---------------------------')
 
-    def _write_population_output_files(self, postCellName, populationDistribution, connectivityMap, synapseLocations, \
-                                       cellSynapseLocations, cellTypeSummaryTable, columnSummaryTable):
+    def _write_population_output_files(
+        self, 
+        postCellName, 
+        populationDistribution, 
+        connectivityMap, 
+        synapseLocations, 
+        cellSynapseLocations,
+        cellTypeSummaryTable, 
+        columnSummaryTable):
         '''
         writes output files for precomputed summary files
         '''

@@ -79,12 +79,13 @@ class Evaluator:
         Details on how to set up the Evaluator are in the docstring of the Evaluator class.
 
         Args:
-            features_dict (dict): a dictionary of stimulus names as keys, and corresponding voltage traces as values.
+            features_dict (dict): 
+                a dictionary of stimulus names as keys, and corresponding voltage traces as values.
             raise_ (bool): Whether or not to raise an error if the required voltage trace is not in `features_dict.keys()`. 
                 If False, will not raise an error, and evaluate all features that can be evaluated given the provided `features_dict`. 
 
         Raises:
-            KeyError: if the Evaluator tries to evaluate a trace with a name that is not present in `features_dict.keys()` and raise_ is set to True
+            KeyError: if the Evaluator tries to evaluate a trace with a name that is not present in `features_dict.keys()` and :paramref:`raise_` is set to True
 
         Returns:
             obj: Whatever the return value is of :py:attr:`Evaluator.setup.finalize_funs`. 
