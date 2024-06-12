@@ -169,6 +169,11 @@ class SynapseDensity(object):
     
     This class is used in :class:`~singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper`
     to compute synapse densities per presynaptic cell type for a given postsynaptic cell type and morphology.
+    
+    :paramref:`exPST` and :paramref:`inhPST` are density meshes for normalizing post-synaptic targets.
+    An example for the barrel cortex looks like:
+    
+    .. figure:: docs/_static/_figures/exPST.png
     '''
     def __init__(
         self, 
