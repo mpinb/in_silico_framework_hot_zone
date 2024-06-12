@@ -173,7 +173,7 @@ class SynapseDensity(object):
     :paramref:`exPST` and :paramref:`inhPST` are density meshes for normalizing post-synaptic targets.
     E.g.: shown below are the (25000, 50000, 75000, 100000) isosurfaces of the excitatory PST density field for a rat somatosensory cortex.
     
-    .. figure:: _images/exPST_solid_bg.png
+    .. figure:: ./_images/exPST_solid_bg.png
     '''
     def __init__(
         self, 
