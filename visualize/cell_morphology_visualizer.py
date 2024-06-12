@@ -660,6 +660,7 @@ class CellMorphologyVisualizer(CMVDataParser):
     def _write_png_timeseries(
             self, 
             path,
+            overwrite_frames=False,
             color="grey",
             show_synapses=False,
             show_legend=False,
@@ -682,11 +683,14 @@ class CellMorphologyVisualizer(CMVDataParser):
             - client: dask client for parallelization
         '''
         if os.path.exists(path):
-            if os.listdir(path):
+            if os.listdir(path) and not overwrite_frames:
                 logger.info(
-                    'Images already generated, they will not be generated again. Please, change the path name or delete the current one.'
+                    'Images already generated, they will not be generated again. Please, change the path name, delete the current one, or set overwrite_frames to True.'
                 )
                 return
+            elif overwrite_frames:
+                shutil.rmtree(path)
+                os.mkdir(path)
         else:
             os.mkdir(path)
 
@@ -849,13 +853,15 @@ class CellMorphologyVisualizer(CMVDataParser):
             show_legend=show_legend,
             client=client,
             highlight_section=highlight_section,
-            highlight_x=highlight_x)
+            highlight_x=highlight_x,
+            overwrite_frames=overwrite_frames)
         write_gif_from_images(images_path, out_name, interval=tpf)
 
     def write_video(
         self,
         images_path,
         out_path,
+        overwrite_frames=False,
         color='grey',
         show_synapses=False,
         show_legend=False,
@@ -894,7 +900,8 @@ class CellMorphologyVisualizer(CMVDataParser):
             show_legend=show_legend,
             client=client,
             highlight_section=highlight_section,
-            highlight_x=highlight_x)
+            highlight_x=highlight_x,
+            overwrite_frames=overwrite_frames)
         write_video_from_images(images_path,
                                 out_path,
                                 fps=1/tpf,
@@ -904,6 +911,7 @@ class CellMorphologyVisualizer(CMVDataParser):
     def animation(
         self,
         images_path,
+        overwrite_frames=False,
         color='grey',
         show_synapses=False,
         show_legend=False,
@@ -942,7 +950,8 @@ class CellMorphologyVisualizer(CMVDataParser):
             show_legend=show_legend,
             client=client,
             highlight_section=highlight_section,
-            highlight_x=highlight_x)
+            highlight_x=highlight_x,
+            overwrite_frames=overwrite_frames)
         if display:
             display_animation_from_images(images_path, tpf, embedded=True)
 
