@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 from mpl_toolkits.mplot3d.art3d import Line3DCollection
 import numpy as np
+import shutil
 from visualize.vtk import write_vtk_skeleton_file
 import os, dask, time, six, socket, barrel_cortex, warnings
 from .utils import write_video_from_images, write_gif_from_images, display_animation_from_images, draw_arrow
