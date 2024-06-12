@@ -86,7 +86,30 @@ def map_singlecell_inputs(
     can be arbitrary spatial regions of the brain tissue, or anatomically well-defined
     areas, e.g. barrels in a barrel cortex.
     
-    The naming of each anatomical area needs to be consistent for the input files.
+    Steps:
+    
+    1. Load in the data:
+    
+        - Cell morphology
+        - Number of cells per cell type
+        - Connection probabilities between cell types
+        - PST densities for normalization of innervation calculations
+        
+    2. Load in the bouton densities:
+    
+        - For each anatomical area
+        - For each presynaptic cell type
+        
+    3. Create a scalar field (:class:`~singlecell_input_mapper.cinglecell_input_mapper.scalar_field.ScalarField`)
+    for each bouton density.
+    4. Create a :class:`~singlecell_input_mapper.singlecell_input_mapper.NetworkMapper` object.
+    5. Create a network embedding for the cell using 
+    :py:meth:`~singlecell_input_mapper.singlecell_input_mapper.NetworkMapper.create_network_embedding`.
+    
+    The naming of each anatomical area needs to be consistent between:
+    
+    - The number of cells per cell type spreadsheet
+    - The bouton folders containing axon traces
     
     Args:
         cellName (str): 
@@ -120,6 +143,7 @@ def map_singlecell_inputs(
     parser.spatialgraph_to_cell()
     singleCell = parser.get_cell()  # This is a sim.Cell, not scp.cell
 
+    # --------------------- Read in data ---------------------
     print('Loading spreadsheets and bouton/PST densities...')
     print('    Loading numberOfCells spreadsheet {:s}'.format(
         numberOfCellsSpreadsheetName))
@@ -139,12 +163,19 @@ def map_singlecell_inputs(
     anatomical_areas = list(numberOfCellsSpreadsheet.keys())
     preCellTypes = numberOfCellsSpreadsheet[anatomical_areas[0]]
 
+    # --------------------- Load bouton densities ---------------------
     for anatomical_area in anatomical_areas:
+        # boutonDensities is a dictionary with anatomical areas as keys
+        # and as value another dictionary mapping the presyn celltype to 
+        # scalar fields of boutons
         boutonDensities[anatomical_area] = {}
         for preCellType in preCellTypes:
             boutonDensities[anatomical_area][preCellType] = []
-            boutonDensityFolder = os.path.join(prefix, boutonDensityFolderName,
-                                               anatomical_area, preCellType)
+            boutonDensityFolder = os.path.join(
+                prefix, 
+                boutonDensityFolderName,
+                anatomical_area, 
+                preCellType)
             boutonDensityNames = glob.glob(
                 os.path.join(boutonDensityFolder, '*'))
             print('    Loading {:d} bouton densities from {:s}'.format(
