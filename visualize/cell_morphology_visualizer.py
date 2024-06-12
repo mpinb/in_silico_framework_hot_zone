@@ -1332,7 +1332,7 @@ def get_3d_plot_morphology(
             segments, 
             linewidths=linewidths, 
             color=colors[sec_n],
-            joinstyle="round",
+            joinstyle="bevel",
             capstyle="round")
         ax.add_collection(lc)
 
