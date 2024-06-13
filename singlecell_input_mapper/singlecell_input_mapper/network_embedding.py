@@ -1059,9 +1059,10 @@ class NetworkMapper:
         writer.write_anatomical_realization_map(synapseName, connectivityMap,
                                                 anatomicalID)
         summaryName = dirName + '_'.join((cellName, 'summary', id1, id2))
-        writer.write_sample_connectivity_summary(summaryName,
-                                                 cellTypeSummaryTable,
-                                                 columnSummaryTable)
+        writer.write_sample_connectivity_summary(
+            summaryName,
+            cellTypeSummaryTable,
+            columnSummaryTable)
         print('---------------------------')
 
     def _write_population_output_files(

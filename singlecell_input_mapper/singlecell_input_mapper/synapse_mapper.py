@@ -9,7 +9,10 @@ import sys
 
 
 class SynapseMapper(object):
-    '''Assign synapses to neuron morphology
+    '''Assign synapses to neuron morphology from density meshes.
+
+    Poisson sample the synapse distribution mesh and assigns them to a random 
+    point on the morphology that lies within the same voxel.
     
     Attributes:
         cell (:class:`~singlecell_input_mapper.singlecell_input_mapper.cell.Cell`):
@@ -197,7 +200,7 @@ class SynapseMapper(object):
 
 
 class SynapseDensity(object):
-    '''Compute synapse density mehs from a PST density mesh.
+    '''Compute synapse density mesh from a PST density mesh.
     
     Given a PST density mesh, create a 3D mesh of synapse densities for a single postsynaptic neuron using :py:meth:`compute_synapse_density`.
     The mesh has the same bounding box and voxel size as :py:attr:`~singlecell_input_mapper.singlecell_input_mapper.synapse_maper.SynapseMapper.exPST`.
