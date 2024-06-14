@@ -586,7 +586,7 @@ class SynapseDensity(object):
         print('---------------------------')
 
     def _clip_u(self, pq, u1u2):
-        '''Liang-Barsky clipping algorithm for line segments in 3D.
+        '''Liang-Barsky clipping algorithm :cite:`liang1984new` for line segments in 3D.
         
         Used in :py:meth:`~SynapseDensity._compute_length_surface_area_density` to clip line segments to scalar field meshes.
         '''

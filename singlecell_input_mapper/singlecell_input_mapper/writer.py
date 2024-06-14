@@ -178,10 +178,24 @@ def write_anatomical_realization_map(
         fname=None,
         functionalMap=None,
         anatomicalID=None):
-    '''
-    writes list of all functional connections
-    coded by tuples (cell type, presynaptic cell index, synapse index).
-    Only valid for anatomical synapse realization given by anatomicalID
+    '''Writes a .con file containing a list of all functional connections.
+     
+    Connections are tuples of the form: (cell type, presynaptic cell index, synapse index).
+    Only valid for an anatomical synapse realization with ID :paramref:`anatomicalID`.
+    Uses :py:meth:`~singlecell_input_mapper.singlecell_input_mapper.generate_nr_of_cells_spreadsheet.con_file_to_NumberOfConnectedCells_sheet` 
+    to generate the number of connected cells spreadsheet.
+
+    Args:
+        fname (str): Name of the output file
+        functionalMap (list): List of tuples, each containing the cell type, presynaptic cell index and synapse index
+        anatomicalID (str): ID of the anatomical realization
+
+    Warning:
+        A .con file is only valid with a corresponding .syn file.
+        See :py:meth:`~write_cell_synapse_locations`
+
+    Returns:
+        None. Writes results to disk.
     '''
     if fname is None or functionalMap is None or anatomicalID is None:
         err_str = 'Incomplete data! Cannot write functional realization file'
