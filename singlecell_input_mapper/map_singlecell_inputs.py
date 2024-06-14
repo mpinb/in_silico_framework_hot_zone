@@ -5,14 +5,16 @@ based on methods and data presented in :cite:t:`Egger_Dercksen_Udvary_Hege_Oberl
 An anatomical realization refers to a set of synapses sampled from a probability distribution.
 
 Inputs:
-- single neuron morphology
-- 3D PST densities for normalization of innervation calculations
-- number of cells per cell type spreadsheets
-- connections spreadsheet containing PST length/area constants
-- presynaptic bouton densities of individual axon morphologies
-sorted by presynaptic column and cell type
 
-This module uses :class:`~singlecell_input_mapper.singlecell_input_mapper.NetworkMapper`
+- Morphology of the post-synaptic neuron
+- 3D PST densities for normalization of innervation calculations
+- Number of cells per cell type in the brain area of interest.
+- Connections spreadsheet containing PST length/area constants of 
+  the post-synaptic cell for normalization.
+- Presynaptic bouton densities of individual axon morphologies,
+  sorted by anatomical area and cell type
+
+This module uses :class:`~singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper`
 to assign synapses to a single cell morphology, based on the inputs mentioned above.
 This happens according to the following pipeline:
 
@@ -31,16 +33,18 @@ This happens according to the following pipeline:
    These collections can be investigated for variability in synapse number and location.
    Alternatively, the realization that is closest to the average is further used in modules like :py:mod:`simrun`.
 
-Density meshes are accessed using :class:`scalar_field.ScalarField`.
-:class:`synapse_mapper.SynapseMapper` makes use of :class:`synapse_mapper.SynapseDensity` for steps 2, 3 and 4,
+Density meshes are accessed using :class:`~singlecell_input_mapper.singlecell_input_mapper.scalar_field.ScalarField`.
+:class:`~singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseMapper` makes use of 
+:class:`~singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseDensity` for steps 2, 3 and 4,
 and finalizes step 5 by itself.
 
 Outputs:
- - summary file containing information about number and presynaptic type
-   and column of anatomical synapses
- - AmiraMesh landmark file containing 3D synapse locations of anatomical
-   synapses of each presynaptic type and column
- - Synapse location and connectivity file compatible with :py:mod:`simrun`.
+
+- summary file containing information about number and presynaptic type
+  and column of anatomical synapses
+- AmiraMesh landmark file containing 3D synapse locations of anatomical
+  synapses of each presynaptic type and column
+- Synapse location and connectivity file compatible with :py:mod:`simrun`.
 
 Author: 
     Robert Egger
