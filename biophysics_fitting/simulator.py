@@ -62,7 +62,7 @@ class Simulator_Setup:
         >>>     return cell_params
             
         >>> def cell_generator(cell_params):
-        >>>     return scp.create_cell(cell_params)
+        >>>     return single_cell_parser.create_cell(cell_params)
             
         >>> def cell_modify_functions(cell):
         >>>     # alter cell
