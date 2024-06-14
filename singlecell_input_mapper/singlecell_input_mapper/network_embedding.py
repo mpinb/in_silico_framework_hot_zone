@@ -22,9 +22,10 @@ class NetworkMapper:
     This class is used to create anatomical realizations of connectivity.
     Given a :class:`~singlecell_input_mapper.singlecell_input_mapper.scalar_field.ScalarField` of boutons, 
     it computes all possible synapse densities that have non-zero overlap with every voxel this bouton field.
-    These synapse density fields depends on the neuron morphology and location in the bouton field.
-    The synapse density fields are further used to sample possible synaptic connections between 
-    presynaptic cells and the postsynaptic cell model.
+    These synapse density fields depend on the presence of post-synaptic dendrites in the bouton field,
+    which in turn depends on the location and morphology of the post-syanptic neuron.
+    The synapse density fields are further used as probability distributions to Poisson sample 
+    mutiple realizations of synaptic connections between pre-synaptic cells, and the post-synaptic cell.
     
     Attributes:
         cells (dict): 
