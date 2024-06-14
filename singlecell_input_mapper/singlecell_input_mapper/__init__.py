@@ -42,8 +42,8 @@ Warning:
           - :class:`~single_cell_parser.scalar_field.ScalarField`
         * - :py:class:`~singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper`
           - :py:class:`~single_cell_parser.network.NetworkMapper`
-        * - :py:meth:`~singlecell_input_mapper.singlecell_input_mapper.cell.Synapse`
-          - :py:meth:`~single_cell_parser.synapse.Synapse`
+        * - :py:class:`~singlecell_input_mapper.singlecell_input_mapper.cell.Synapse`
+          - :py:class:`~single_cell_parser.synapse.Synapse`
         * - :py:meth:`~singlecell_input_mapper.singlecell_input_mapper.reader.read_hoc_file`
           - :py:meth:`~single_cell_parser.reader.read_hoc_file`
         * - :py:meth:`~singlecell_input_mapper.singlecell_input_mapper.reader.read_scalar_field`
