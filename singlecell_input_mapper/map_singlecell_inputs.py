@@ -2,8 +2,7 @@
 
 Tool for creating anatomical realizations of the connectivity of individual neuron morphologies,
 based on methods and data presented in :cite:t:`Egger_Dercksen_Udvary_Hege_Oberlaender_2014`.
-Creating a synapse density field, sampling synapses from this field, and assigning them to a single cell morphology
-is referred to as a "realization" of the anatomical connectivity.
+An anatomical realization refers to a set of synapses sampled from a probability distribution.
 
 Inputs:
 - single neuron morphology
@@ -20,12 +19,17 @@ This happens according to the following pipeline:
 1. The bouton density field is a scalar field with defined voxel resolution. This voxel resolution
    can reflect e.g. biological variability form animal to animal 
    (as is the case for which this package was developed), or measurement error.
-2. Calculates the overlap between these voxels and the dendrites of the postsynaptic neuron morphology 
+2. Calculate the overlap between these voxels and the dendrites of the postsynaptic neuron morphology 
    using Liang-Barsky clipping :cite:`liang1984new`.
-3. Calculates a synapse density field by multiplying the bouton density field with PST density field at these voxels.
-4. Normalizes the density field using cell-type specific PST length/area constraints and the number of 
+3. Calculate a synapse density field by multiplying the bouton density field with the PST density field
+   at these voxels.
+4. Normalize the synapse density field using cell-type specific PST length/area constraints and the number of 
    cells per cell type.
-5. Poisson samples synapses from this density field and randomly assign them to the dendritic branch in that voxel.
+5. Poisson samples synapses from this density field and randomly assign them to the dendritic branch 
+   that is contained within that voxel. This sample is called an "anatomical realization".
+6. (optional) Repeat steps 4 and 5 to create a collection of anatomical realizations. 
+   These collections can be investigated for variability in synapse number and location.
+   Alternatively, the realization that is closest to the average is further used in modules like :py:mod:`simrun`.
 
 Density meshes are accessed using :class:`scalar_field.ScalarField`.
 :class:`synapse_mapper.SynapseMapper` makes use of :class:`synapse_mapper.SynapseDensity` for steps 2, 3 and 4,

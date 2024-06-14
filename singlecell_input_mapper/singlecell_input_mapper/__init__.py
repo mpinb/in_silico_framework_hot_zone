@@ -2,9 +2,9 @@
 Tool for calculating the connectivity of individual neuron morphologies.
 Based on methods and data presented in :cite:t:`Egger_Dercksen_Udvary_Hege_Oberlaender_2014`.
 
-This package contains methods to create mutliple anatomical realizations for the connectivity of single neurons.
-Generating synapses from density fields yields an anatomical connectivity model is referred to as
-a "realization" of the anatomical connectivity. 
+This package contains methods to create anatomical realizations for the connectivity of single neurons.
+To create anatomical realizations, it is recommended to use the high-level
+method :py:meth:`~singlecell_input_mapper.map_singlecell_inputs.map_singlecell_inputs`.
 
 Inputs:
 
@@ -13,10 +13,6 @@ Inputs:
 - number of cells per cell type, per anatomical area.
 - PST length/area constants of the postsynaptic neuron.
 - presynaptic bouton densities of individual axon morphologies, sorted by presynaptic column and cell type
-
-To create anatomical realizations, it is recommended to use the high-level
-method :py:meth:`~singlecell_input_mapper.map_singlecell_inputs.map_singlecell_inputs`.
-
 
 Warning:
     This package has similar, but not identical functionality as :py:mod:`single_cell_parser`. 
