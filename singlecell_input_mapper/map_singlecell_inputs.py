@@ -127,11 +127,11 @@ def map_singlecell_inputs(
         - For each anatomical area
         - For each presynaptic cell type
         
-    3. Create a scalar field (:class:`~singlecell_input_mapper.cinglecell_input_mapper.scalar_field.ScalarField`)
-    for each bouton density.
-    4. Create a :class:`~singlecell_input_mapper.singlecell_input_mapper.NetworkMapper` object.
+    3. Create a scalar field (:class:`~singlecell_input_mapper.singlecell_input_mapper.scalar_field.ScalarField`)
+       for each bouton density.
+    4. Create a :class:`~singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper` object.
     5. Create a network embedding for the cell using 
-    :py:meth:`~singlecell_input_mapper.singlecell_input_mapper.NetworkMapper.create_network_embedding`.
+       :py:meth:`~singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper.create_network_embedding`.
     
     The naming of each anatomical area needs to be consistent between:
     
@@ -150,8 +150,10 @@ def map_singlecell_inputs(
             Values indicate how much of each celltype was found in each neuropil structure.
         connectionsSpreadsheetName (str):
             Path to a spreadsheet, containing the connection probabilities between each presynaptic and postsynaptic cell type.
-        ExPSTDensityName: 
-        InhPSTDensityName
+        ExPSTDensityName (str):
+            Path to the PST density file for excitatory synapses.
+        InhPSTDensityName (str):
+            Path to the PST density file for inhibitory synapses.
         boutonDensityFolderName: 
             A directory containing the following subdirectory structure:
             anatomical_area/presynaptic_cell_type/*.am
