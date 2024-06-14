@@ -30,9 +30,10 @@ class Simulator_Setup:
     
     Usually, a simulation contains fixed parameters, specific to the cell (e.g. the filename of the morphology)
     and/or stimulus protocol (e.g. recording sites). Such fixed parameters can be defined by adding
-    :py:meth:`~biophysics_fitting.parameters.set_fixed_params` to param_modify_funs. 
-    A typical usecase is to use the fixed parameters to specify to soma distance for a voltage trace of the apical dendrite
-    Make sure that the :class:`Simulator` stim_run_fun reads the parameter 'recSite' and sets up the stimulus accordingly (see :class:`Simulator`).
+    :py:meth:`~biophysics_fitting.parameters.set_fixed_params` to :paramref:`param_modify_funs`. 
+    A typical usecase is to use the fixed parameters to specify to soma distance for a voltage trace 
+    of the apical dendrite. Make sure that the :class:`Simulator` :paramref:`stim_run_fun` reads the 
+    parameter :paramref:`recSite` and sets up the stimulus accordingly (see :class:`Simulator`).
     
     Example::
 
@@ -73,7 +74,7 @@ class Simulator_Setup:
         >>> s.setup.get(params)
         cell, params
     
-    Each function that receives the parameter vector (i.e. cell_param_modify_funs and cell_modify_funs)
+    Each function that receives the parameter vector (i.e. :paramref:`cell_param_modify_funs` and :paramref:`cell_modify_funs`)
     only sees a subset of the parameter vector that is provided by the user. This subset is determined 
     by the name of the function.
     
@@ -163,7 +164,7 @@ class Simulator_Setup:
 
     def get_params(self, params):
         '''Get the modified biophysical parameters.
-        Applies each method in self.params_modify_funs to the parameter vector.
+        Applies each method in :paramref:`params_modify_funs` to the parameter vector.
         
         Args:
             params (pd.Series): The parameter vector.
@@ -178,7 +179,7 @@ class Simulator_Setup:
     def get_cell_params(self, params):
         '''Get the cell parameters as an NTParameterSet from the parameter vector.
         
-        This can be used with :py:meth:`~biophysics_fitting.single_cell_parser.create_cell` to
+        This can be used with :py:meth:`single_cell_parser.create_cell` to
         create a :class:`~single_cell_parser.cell.Cell` object.
         This is helpful for inspecting what parameters have effectively been used for the simulation.
         
@@ -384,7 +385,7 @@ class Simulator:
             stims (str | [str]): which sitmuli to run. Either a str (for one stimulus) or a list of str.
             
         Returns: 
-            Dictionary where stim_response_measure_funs names are keys, 
+            dict: Dictionary where stim_response_measure_funs names are keys, 
             return values of the stim_response_measure_funs (usually voltage traces) are values.
             
         '''
@@ -428,7 +429,7 @@ def run_fun(
         silent (bool): Whether to suppress output.
         
     Returns:
-        (:class:`~single_cell_parser.cell.Cell`): The cell object, containing simulation data.
+        :class:`~single_cell_parser.cell.Cell`: The cell object, containing simulation data.
     '''
     from sumatra.parameters import NTParameterSet
     sim = {
