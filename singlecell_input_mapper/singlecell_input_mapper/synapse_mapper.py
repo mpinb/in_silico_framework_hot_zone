@@ -185,7 +185,7 @@ class SynapseMapper(object):
             x (float): Location on section to calculate path length to.
             
         Returns:
-            float: Path length between soma and location :paramref:`x` on section :paramref:`
+            float: Path length between soma and location :paramref:`x` on section :paramref:`sec`.
         '''
         currentSec = sec
         parentSec = currentSec.parent
