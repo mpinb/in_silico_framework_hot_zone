@@ -1,30 +1,49 @@
-#===============================================================================
-# SingleCellInputMapper
-# Tool for estimating connectivity (inputs) of individual neuron morphologies
-# registered into standard barrel cortex model.
-# Based on methods and data presented in:
-# Egger, Dercksen et al., Frontiers Neuroanatomy 2014
-#
-# Inputs:
-# - single neuron morphology
-# - 3D PST densities for normalization of innervation calculations
-# - number of cells per cell type spreadsheets
-# - connections spreadsheet containing PST length/area constants
-# - presynaptic bouton densities of individual axon morphologies
-#   sorted by presynaptic column and cell type
-# Outputs:
-# - summary file containing information about number and presynaptic type
-#   and column of anatomical synapses
-# - AmiraMesh landmark file containing 3D synapse locations of anatomical
-#   synapses of each presynaptic type and column
-# - Synapse location and connectivity file compatible with NeuroSim
-#
-# Author: Robert Egger
-#         Computational Neuroanatomy
-#         Max Planck Institute for Biological Cybernetics
-#         Tuebingen, Germany
-#         Email: robert.egger@tuebingen.mpg.de
-#===============================================================================
+"""Map synapses onto a postsynaptic cell.
+
+Tool for creating anatomical realizations of the connectivity of individual neuron morphologies,
+based on methods and data presented in :cite:t:`Egger_Dercksen_Udvary_Hege_Oberlaender_2014`.
+Creating a synapse density field, sampling synapses from this field, and assigning them to a single cell morphology
+is referred to as a "realization" of the anatomical connectivity.
+
+Inputs:
+- single neuron morphology
+- 3D PST densities for normalization of innervation calculations
+- number of cells per cell type spreadsheets
+- connections spreadsheet containing PST length/area constants
+- presynaptic bouton densities of individual axon morphologies
+sorted by presynaptic column and cell type
+
+This module uses :class:`~singlecell_input_mapper.singlecell_input_mapper.NetworkMapper`
+to assign synapses to a single cell morphology, based on the inputs mentioned above.
+This happens according to the following pipeline:
+
+1. The bouton density field is a scalar field with defined voxel resolution. This voxel resolution
+   can reflect e.g. biological variability form animal to animal 
+   (as is the case for which this package was developed), or measurement error.
+2. Calculates the overlap between these voxels and the dendrites of the postsynaptic neuron morphology 
+   using Liang-Barsky clipping :cite:`liang1984new`.
+3. Calculates a synapse density field by multiplying the bouton density field with PST density field at these voxels.
+4. Normalizes the density field using cell-type specific PST length/area constraints and the number of 
+   cells per cell type.
+5. Poisson samples synapses from this density field and randomly assign them to the dendritic branch in that voxel.
+
+Density meshes are accessed using :class:`scalar_field.ScalarField`.
+:class:`synapse_mapper.SynapseMapper` makes use of :class:`synapse_mapper.SynapseDensity` for steps 2, 3 and 4,
+and finalizes step 5 by itself.
+
+Outputs:
+ - summary file containing information about number and presynaptic type
+   and column of anatomical synapses
+ - AmiraMesh landmark file containing 3D synapse locations of anatomical
+   synapses of each presynaptic type and column
+ - Synapse location and connectivity file compatible with :py:mod:`simrun`.
+
+Author: 
+    Robert Egger
+    Computational Neuroanatomy
+    Max Planck Institute for Biological Cybernetics
+    Tuebingen, Germany
+"""
 
 #===============================================================================
 # Python standard library imports

@@ -1,8 +1,10 @@
 """
 Tool for calculating the connectivity of individual neuron morphologies.
-Based on methods and data presented in :cite:`Egger_Dercksen_Udvary_Hege_Oberlaender_2014`.
+Based on methods and data presented in :cite:t:`Egger_Dercksen_Udvary_Hege_Oberlaender_2014`.
 
 This package contains methods to create mutliple anatomical realizations for the connectivity of single neurons.
+Generating synapses from density fields yields an anatomical connectivity model is referred to as
+a "realization" of the anatomical connectivity. 
 
 Inputs:
 
@@ -12,29 +14,9 @@ Inputs:
 - PST length/area constants of the postsynaptic neuron.
 - presynaptic bouton densities of individual axon morphologies, sorted by presynaptic column and cell type
 
-Pipeline:
+To create anatomical realizations, it is recommended to use the high-level
+method :py:meth:`~singlecell_input_mapper.map_singlecell_inputs.map_singlecell_inputs`.
 
-1. The bouton density field is a scalar field with defined voxel resolution. This voxel resolution
-   can reflect e.g. biological variability form animal to animal 
-   (as is the case for which this package was developed), or measurement error.
-2. Calculate the overlap between these voxels and the dendrites of the postsynaptic neuron morphology 
-   using Liang-Barsky clipping :cite:`liang1984new`.
-3. Calculate a synapse density field by multiplying the bouton density field with PST density field at these voxels.
-4. Normalize the density field using cell-type specific PST length/area constraints and the number of 
-   cells per cell type.
-5. Poisson sample synapses from this density field and randomly assign them to the dendritic branch in that voxel.
-
-Generating synapses from density fields yields an anatomical connectivity model, which is referred to as
-a "realization" of the anatomical connectivity. 
-Density meshes are accessed using :class:`scalar_field.ScalarField`.
-:class:`synapse_mapper.SynapseMapper` makes use of :class:`synapse_mapper.SynapseDensity` for steps 2 to 4,
-and finalizes step 5 by itself.
-
-Outputs:
-
-- Summary files containing information about number and presynaptic type and column of anatomical synapses
-- AmiraMesh landmark file containing 3D synapse locations of anatomical synapses of each presynaptic type and column
-- Synapse location and connectivity file compatible with :py:mod:`simrun`.
 
 Warning:
     This package has similar, but not identical functionality as :py:mod:`single_cell_parser`. 
@@ -70,8 +52,6 @@ Warning:
           - :py:meth:`~single_cell_parser.reader.read_hoc_file`
         * - :py:meth:`~singlecell_input_mapper.singlecell_input_mapper.reader.read_scalar_field`
           - :py:meth:`~single_cell_parser.reader.read_scalar_field`
-
-
 
 Author: 
     Robert Egger
