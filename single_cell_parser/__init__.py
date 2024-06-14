@@ -20,28 +20,29 @@ Warning:
     Nonetheless, beware of the following classes and methods that are duplicates only in name:
     
     .. list-table:: 
-    :header-rows: 1
+        :header-rows: 1
 
-    * - :py:mod:`singlecell_input_mapper.singlecell_input_mapper`
-      - :py:mod:`single_cell_parser`
-    * - :class:`~singlecell_input_mapper.singlecell_input_mapper.cell.Cell`
-      - :class:`~single_cell_parser.cell.Cell`
-    * - :class:`~singlecell_input_mapper.singlecell_input_mapper.cell.CellParser`
-      - :class:`~single_cell_parser.cell_parser.CellParser`
-    * - :class:`~singlecell_input_mapper.singlecell_input_mapper.reader.Edge`
-      - :class:`~single_cell_parser.reader.Edge`
-    * - :class:`~singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseMapper`
-      - :class:`~single_cell_parser.synapse_mapper.SynapseMapper`
-    * - :class:`~singlecell_input_mapper.singlecell_input_mapper.scalar_field.ScalarField`
-      - :class:`~single_cell_parser.scalar_field.ScalarField`
-    * - :py:class:`~singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper`
-      - :py:class:`~single_cell_parser.network.NetworkMapper`
-    * - :py:meth:`~singlecell_input_mapper.singlecell_input_mapper.cell.Synapse`
-      - :py:meth:`~single_cell_parser.synapse.Synapse`
-    * - :py:meth:`~singlecell_input_mapper.singlecell_input_mapper.reader.read_hoc_file`
-      - :py:meth:`~single_cell_parser.reader.read_hoc_file`
-    * - :py:meth:`~singlecell_input_mapper.singlecell_input_mapper.reader.read_scalar_field`
-      - :py:meth:`~single_cell_parser.reader.read_scalar_field`
+        * - :py:mod:`singlecell_input_mapper.singlecell_input_mapper`
+          - :py:mod:`single_cell_parser`
+        * - :class:`~singlecell_input_mapper.singlecell_input_mapper.cell.Cell`
+          - :class:`~single_cell_parser.cell.Cell`
+        * - :class:`~singlecell_input_mapper.singlecell_input_mapper.cell.CellParser`
+          - :class:`~single_cell_parser.cell_parser.CellParser`
+        * - :class:`~singlecell_input_mapper.singlecell_input_mapper.reader.Edge`
+          - :class:`~single_cell_parser.reader.Edge`
+        * - :class:`~singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseMapper`
+          - :class:`~single_cell_parser.synapse_mapper.SynapseMapper`
+        * - :class:`~singlecell_input_mapper.singlecell_input_mapper.scalar_field.ScalarField`
+          - :class:`~single_cell_parser.scalar_field.ScalarField`
+        * - :py:class:`~singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper`
+          - :py:class:`~single_cell_parser.network.NetworkMapper`
+        * - :py:meth:`~singlecell_input_mapper.singlecell_input_mapper.cell.Synapse`
+          - :py:meth:`~single_cell_parser.synapse.Synapse`
+        * - :py:meth:`~singlecell_input_mapper.singlecell_input_mapper.reader.read_hoc_file`
+          - :py:meth:`~single_cell_parser.reader.read_hoc_file`
+        * - :py:meth:`~singlecell_input_mapper.singlecell_input_mapper.reader.read_scalar_field`
+          - :py:meth:`~single_cell_parser.reader.read_scalar_field`
+
 '''
 import logging
 
