@@ -35,6 +35,17 @@ class Simulator_Setup:
     of the apical dendrite. Make sure that the :class:`Simulator` :paramref:`stim_run_fun` reads the 
     parameter :paramref:`recSite` and sets up the stimulus accordingly (see :class:`Simulator`).
     
+    Attributes:
+        cell_param_generator (callable): A function that generates a :class:`NTParameterSet` cell parameter object.
+        cell_param_modify_funs (list): list of functions that modify the cell parameters.
+        cell_generator (callable): A function that generates a :class:`~single_cell_parser.cell.Cell` object.
+        cell_modify_funs (list): List of functions that modify the cell object.
+        stim_setup_funs (list): List of functions that set up the stimulus.
+        stim_run_funs (list): List of functions that each run a simulation.
+        stim_response_measure_funs (list): List of functions that extract voltage traces from the cell.
+        params_modify_funs (list): List of functions that modify the biophysical parameter vector.
+        check_funs (list): List of functions that check the setup. Useful for debugging.
+    
     Example::
 
         >>> def param_modify_function(params):
