@@ -15,11 +15,13 @@ Inputs:
 Pipeline:
 
 1. The bouton density field is a scalar field with defined voxel resolution. This voxel resolution
-can reflect e.g. biological variability form animal to animal (as is the case for which this package was developed),
-or measurement error.
-2. Calculate the overlap between these voxels and the dendrites of the postsynaptic neuron morphology using Liang-Barsky clipping :cite:`liang1984new`.
+   can reflect e.g. biological variability form animal to animal 
+   (as is the case for which this package was developed), or measurement error.
+2. Calculate the overlap between these voxels and the dendrites of the postsynaptic neuron morphology 
+   using Liang-Barsky clipping :cite:`liang1984new`.
 3. Calculate a synapse density field by multiplying the bouton density field with PST density field at these voxels.
-4. Normalize the density field using cell-type specific PST length/area constraints and the number of cells per cell type.
+4. Normalize the density field using cell-type specific PST length/area constraints and the number of 
+   cells per cell type.
 5. Poisson sample synapses from this density field and randomly assign them to the dendritic branch in that voxel.
 
 Generating synapses from density fields yields an anatomical connectivity model, which is referred to as
