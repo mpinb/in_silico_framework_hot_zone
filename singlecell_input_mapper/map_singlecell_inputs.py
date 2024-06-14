@@ -1,7 +1,8 @@
 """Map synapses onto a postsynaptic cell.
 
-Tool for creating anatomical realizations of the connectivity of individual neuron morphologies,
-based on methods and data presented in :cite:t:`Egger_Dercksen_Udvary_Hege_Oberlaender_2014`.
+This module provides a full pipeline for creating anatomical realizations of the connectivity 
+of individual neuron morphologies, based on methods and data presented in 
+:cite:t:`Egger_Dercksen_Udvary_Hege_Oberlaender_2014`.
 An anatomical realization refers to a set of synapses sampled from a probability distribution.
 
 Inputs:
@@ -14,8 +15,8 @@ Inputs:
 - Presynaptic bouton densities of individual axon morphologies,
   sorted by anatomical area and cell type
 
-This module uses :class:`~singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper`
-to assign synapses to a single cell morphology, based on the inputs mentioned above.
+This module then uses :class:`~singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper`
+to assign synapses to a single post-synaptic cell morphology, based on the inputs mentioned above.
 This happens according to the following pipeline:
 
 1. The bouton density field is a scalar field with defined voxel resolution. This voxel resolution

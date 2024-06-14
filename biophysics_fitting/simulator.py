@@ -272,10 +272,10 @@ class Simulator_Setup:
 class Simulator:
     '''This class can be used to transform a parameter vector into simulated voltage traces.
     
-    This is typically done in two steps::
+    This is typically done in two steps:
     
-        1. Set up a cell with biophysics from a parameter vector. See :class:`Simulator_Setup`
-        2. Apply a variety of stimuli to the cell and extract voltage traces.    
+    1. Set up a cell with biophysics from a parameter vector. See :class:`Simulator_Setup`
+    2. Apply a variety of stimuli to the cell and extract voltage traces.    
     
     An examplary specification of such a program flow can be found in the module :py:meth:`~biophysics_fitting.hay_complete_default_setup.get_Simulator`.
         
