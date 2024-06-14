@@ -156,7 +156,7 @@ def map_singlecell_inputs(
             Path to the PST density file for inhibitory synapses.
         boutonDensityFolderName: 
             A directory containing the following subdirectory structure:
-            anatomical_area/presynaptic_cell_type/*.am
+            anatomical_area/presynaptic_cell_type/\*.am
             
     Returns:
         None. Writes the results to disk.
