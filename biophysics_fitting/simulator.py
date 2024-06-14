@@ -85,9 +85,10 @@ class Simulator_Setup:
         >>> s.setup.get(params)
         cell, params
     
-    Each function that receives the parameter vector (i.e. :paramref:`cell_param_modify_funs` and :paramref:`cell_modify_funs`)
+    Each function that receives the biophysical parameter vector 
+    (i.e. :paramref:`cell_param_modify_funs` and :paramref:`cell_modify_funs`)
     only sees a subset of the parameter vector that is provided by the user. This subset is determined 
-    by the name of the function.
+    by the name by which the function is registered.
     
     Example::
 
@@ -104,8 +105,12 @@ class Simulator_Setup:
         >>>     cell.soma.gKv = kwargs['soma.gKv']
         >>>     cell.soma.gNav = kwargs['soma.Nav']
         
-        >>> s.setup.params_modify_funs.append(['apical_scaling', partial.scale_apical('scale' = 2)])
-        >>> s.setup.cell_modify_funs.append(['ephys', partial.ephys('soma.gKv'=1, 'soma.gNav'=2)])
+        >>> s.setup.params_modify_funs.append([
+            'apical_scaling',  # name must equal the prefix of the parameter, i.e. 'apical_scaling'
+            partial(scale_apical, 'scale' = 2)])
+        >>> s.setup.cell_modify_funs.append([
+            'ephys',  # name must equal the prefix of the parameter, i.e. 'ephys'
+            partial(ephys, 'soma.gKv'=1, 'soma.gNav'=2)])
     """
     def __init__(self):
         self.cell_param_generator = None
