@@ -5,7 +5,7 @@ This package provides functionality to parse :class:`~single_cell_parser.cell.Ce
 from NEURON hoc files, and to map synapse locations to these cells.
 It is specialized to handle biophysical models of neurons, and to run simulations with these models.
 
-Warning:
+Attention:
     This package has similar, but not identical functionality as 
     :py:mod:`singlecell_input_mapper.singlecell_input_mapper`. 
     This package is specialized to handle biophysical and electrical properties of neurons,

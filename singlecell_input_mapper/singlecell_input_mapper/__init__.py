@@ -14,7 +14,7 @@ Inputs:
 - PST length/area constants of the postsynaptic neuron.
 - presynaptic bouton densities of individual axon morphologies, sorted by presynaptic column and cell type
 
-Warning:
+Attention:
     This package has similar, but not identical functionality as :py:mod:`single_cell_parser`. 
     :py:mod:`single_cell_parser` is specialized to handle biophysical and electrical properties,
     while this package is specialized to handle morphological and connectivity attributes of single cells. 
