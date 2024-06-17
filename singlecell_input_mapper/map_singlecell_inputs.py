@@ -71,7 +71,67 @@ inhTypes = ('SymLocal1','SymLocal2','SymLocal3','SymLocal4','SymLocal5','SymLoca
             'L1','L23Trans','L45Sym','L45Peak','L56Trans')
 
 
-def map_singlecell_inputs(cellName, cellTypeName, nrOfSamples=50):
+def map_singlecell_inputs(
+    cellName, 
+    cellTypeName, 
+    nrOfSamples=50,
+    numberOfCellsSpreadsheetName=numberOfCellsSpreadsheetName,
+    connectionsSpreadsheetName=connectionsSpreadsheetName,
+    ExPSTDensityName=ExPSTDensityName,
+    InhPSTDensityName=InhPSTDensityName,
+    boutonDensityFolderName=boutonDensityFolderName):
+    """Map inputs to a single cell morphology.
+    
+    These inputs need to be organized per anatomical structure. Anatomical structures
+    can be arbitrary spatial regions of the brain tissue, or anatomically well-defined
+    areas, e.g. barrels in a barrel cortex.
+    
+    Steps:
+    
+    1. Load in the data:
+    
+        - Cell morphology
+        - Number of cells per cell type
+        - Connection probabilities between cell types
+        - PST densities for normalization of innervation calculations
+        
+    2. Load in the bouton densities:
+    
+        - For each anatomical area
+        - For each presynaptic cell type
+        
+    3. Create a scalar field (:class:`~singlecell_input_mapper.cinglecell_input_mapper.scalar_field.ScalarField`)
+    for each bouton density.
+    4. Create a :class:`~singlecell_input_mapper.singlecell_input_mapper.NetworkMapper` object.
+    5. Create a network embedding for the cell using 
+    :py:meth:`~singlecell_input_mapper.singlecell_input_mapper.NetworkMapper.create_network_embedding`.
+    
+    The naming of each anatomical area needs to be consistent between:
+    
+    - The number of cells per cell type spreadsheet
+    - The bouton folders containing axon traces
+    
+    Args:
+        cellName (str): 
+            path to a .hoc file containing the morphology of the cell.
+        cellTypeName (str): 
+            name of the postsynaptic cell type.
+        nrOfSamples (int): 
+            number of samples to use for the network embedding.
+        numberOfCellsSpreadsheetName (str): 
+            Path to the a spreadsheet, containing each neuropil structures as columns, and celltypes row indices.
+            Values indicate how much of each celltype was found in each neuropil structure.
+        connectionsSpreadsheetName (str):
+            Path to a spreadsheet, containing the connection probabilities between each presynaptic and postsynaptic cell type.
+        ExPSTDensityName: 
+        InhPSTDensityName
+        boutonDensityFolderName: 
+            A directory containing the following subdirectory structure:
+            anatomical_area/presynaptic_cell_type/*.am
+            
+    Returns:
+        None. Writes the results to disk.
+    """
     if not (cellTypeName in exTypes) and not (cellTypeName in inhTypes):
         errstr = 'Unknown cell type %s!'
         raise TypeError(errstr)
@@ -81,8 +141,9 @@ def map_singlecell_inputs(cellName, cellTypeName, nrOfSamples=50):
     print('Loading cell morphology...')
     parser = sim.CellParser(cellName)
     parser.spatialgraph_to_cell()
-    singleCell = parser.get_cell()
+    singleCell = parser.get_cell()  # This is a sim.Cell, not scp.cell
 
+    # --------------------- Read in data ---------------------
     print('Loading spreadsheets and bouton/PST densities...')
     print('    Loading numberOfCells spreadsheet {:s}'.format(
         numberOfCellsSpreadsheetName))
@@ -99,15 +160,22 @@ def map_singlecell_inputs(cellName, cellTypeName, nrOfSamples=50):
     InhPSTDensity = sim.read_scalar_field(InhPSTDensityName)
     InhPSTDensity.resize_mesh()
     boutonDensities = {}
-    columns = list(numberOfCellsSpreadsheet.keys())
-    preCellTypes = numberOfCellsSpreadsheet[columns[0]]
+    anatomical_areas = list(numberOfCellsSpreadsheet.keys())
+    preCellTypes = numberOfCellsSpreadsheet[anatomical_areas[0]]
 
-    for col in columns:
-        boutonDensities[col] = {}
+    # --------------------- Load bouton densities ---------------------
+    for anatomical_area in anatomical_areas:
+        # boutonDensities is a dictionary with anatomical areas as keys
+        # and as value another dictionary mapping the presyn celltype to 
+        # scalar fields of boutons
+        boutonDensities[anatomical_area] = {}
         for preCellType in preCellTypes:
-            boutonDensities[col][preCellType] = []
-            boutonDensityFolder = os.path.join(prefix, boutonDensityFolderName,
-                                               col, preCellType)
+            boutonDensities[anatomical_area][preCellType] = []
+            boutonDensityFolder = os.path.join(
+                prefix, 
+                boutonDensityFolderName,
+                anatomical_area, 
+                preCellType)
             boutonDensityNames = glob.glob(
                 os.path.join(boutonDensityFolder, '*'))
             print('    Loading {:d} bouton densities from {:s}'.format(
@@ -115,15 +183,21 @@ def map_singlecell_inputs(cellName, cellTypeName, nrOfSamples=50):
             for densityName in boutonDensityNames:
                 boutonDensity = sim.read_scalar_field(densityName)
                 boutonDensity.resize_mesh()
-                boutonDensities[col][preCellType].append(boutonDensity)
+                boutonDensities[anatomical_area][preCellType].append(boutonDensity)
 
-    inputMapper = sim.NetworkMapper(singleCell, cellTypeName, numberOfCellsSpreadsheet, connectionsSpreadsheet,\
-                                    ExPSTDensity, InhPSTDensity)
+    inputMapper = sim.NetworkMapper(
+        singleCell, 
+        cellTypeName, 
+        numberOfCellsSpreadsheet, 
+        connectionsSpreadsheet,
+        ExPSTDensity, 
+        InhPSTDensity)
     inputMapper.exCellTypes = exTypes
     inputMapper.inhCellTypes = inhTypes
-    inputMapper.create_network_embedding(cellName,
-                                         boutonDensities,
-                                         nrOfSamples=nrOfSamples)
+    inputMapper.create_network_embedding(
+        cellName,
+        boutonDensities,
+        nrOfSamples=nrOfSamples)
 
     endTime = time.time()
     duration = (endTime - startTime) / 60.0
