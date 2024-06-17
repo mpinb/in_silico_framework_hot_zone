@@ -320,7 +320,7 @@ def draw_arrow(morphology,
                ax,
                highlight_section=None,
                highlight_x=None,
-               highlight_arrow_args=None,
+               highlight_arrow_kwargs=None,
                arrow_size=50):
 
     assert type(
@@ -331,13 +331,13 @@ def draw_arrow(morphology,
         'sec_n'], "The given section id is not present in the cell morphology"
 
     setattr(Axes3D, 'arrow3D', _arrow3D)
-    if highlight_arrow_args is None:
-        highlight_arrow_args = {}
+    if highlight_arrow_kwargs is None:
+        highlight_arrow_kwargs = {}
 
     # overwrite defaults if they were set
     x = dict(mutation_scale=20, ec='black', fc='white')
-    x.update(highlight_arrow_args)
-    highlight_arrow_args = x
+    x.update(highlight_arrow_kwargs)
+    highlight_arrow_kwargs = x
 
     morphology = morphology.copy()
     morphology = morphology.fillna(0)  # soma section gets 0 as section ID
@@ -358,9 +358,9 @@ def draw_arrow(morphology,
     start_x, start_y, start_z = x, y, z
     dx, dy, dz = 0, 0, 0
     ddx = ddy = 0
-    if 'orientation' in highlight_arrow_args:
-        orientation = highlight_arrow_args['orientation']
-        del highlight_arrow_args['orientation']
+    if 'orientation' in highlight_arrow_kwargs:
+        orientation = highlight_arrow_kwargs['orientation']
+        del highlight_arrow_kwargs['orientation']
         if 'x' in orientation:
             start_x += arrow_size
             dx -= arrow_size
@@ -375,10 +375,10 @@ def draw_arrow(morphology,
         start_z += arrow_size
         dz -= arrow_size
 
-    if 'rotation' in highlight_arrow_args:
+    if 'rotation' in highlight_arrow_kwargs:
         print("rotating arrow")
-        alpha = highlight_arrow_args['rotation']
-        del highlight_arrow_args['rotation']
+        alpha = highlight_arrow_kwargs['rotation']
+        del highlight_arrow_kwargs['rotation']
         dx2, dz2 = np.dot(
             np.array([[np.cos(alpha), -np.sin(alpha)],
                       [np.sin(alpha), np.cos(alpha)]]), [dx, dz])
@@ -388,7 +388,7 @@ def draw_arrow(morphology,
         dz = dz2
 
     #print(start_x, start_y)
-    ax.arrow3D(start_x, start_y, start_z, dx, dy, dz, **highlight_arrow_args)
+    ax.arrow3D(start_x, start_y, start_z, dx, dy, dz, **highlight_arrow_kwargs)
 
 
 def segments_to_poly(segments, diameters, n_faces):
