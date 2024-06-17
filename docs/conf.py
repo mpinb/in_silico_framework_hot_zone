@@ -46,11 +46,28 @@ extensions = [
     'sphinx.ext.viewcode',
     'sphinx.ext.coverage',
     'sphinx.ext.intersphinx',
-    ## Include autosymmary
     'sphinx.ext.autosummary',
     'sphinx.ext.napoleon',
-    'nbsphinx'
+    'nbsphinx',  # for rendering tutorial notebooks
+    'sphinxcontrib.bibtex'  # for citations
 ]
+
+bibtex_bibfiles = ['bibliography.bib']
+
+# Napoleon settings
+napoleon_google_docstring = True
+napoleon_include_init_with_doc = False
+napoleon_include_private_with_doc = False
+napoleon_include_special_with_doc = True
+napoleon_use_admonition_for_examples = False
+napoleon_use_admonition_for_notes = False
+napoleon_use_admonition_for_references = False
+napoleon_use_ivar = False
+napoleon_use_param = True
+napoleon_use_rtype = True
+napoleon_preprocess_types = False  # otherwise custom argument types will not work
+napoleon_type_aliases = None
+napoleon_attr_annotations = True
 
 ## Include Python objects as they appear in source files
 ## Default: alphabetically ('alphabetical')
@@ -60,6 +77,8 @@ autodoc_default_options = {
     'members': True,
     'show-inheritance': True,
 }
+
+autoclass_content = 'both'  # document both the class docstring, as well as __init__
 ## Generate autodoc stubs with summaries from code
 autosummary_generate = ['modules.rst']
 autosummary_imported_members = False  # do not show all imported modules per module, this is too bloated

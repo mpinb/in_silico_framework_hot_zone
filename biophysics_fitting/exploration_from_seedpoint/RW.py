@@ -72,6 +72,13 @@ class RW:
         return normalized_params
     
     def _normalize_params(self,p):
+        """Normalize parameters to be between 0 and 1.
+        
+        Args:
+            p (pd.Series): parameter vector
+            
+        Returns:
+            pd.Series: normalized parameter vector"""
         assert(isinstance(p,pd.Series))
         assert(len(p) == len(self.all_param_names))
         min_ = self.param_ranges['min']
@@ -79,6 +86,13 @@ class RW:
         return (p-min_)/(max_-min_)
     
     def _unnormalize_params(self, p):
+        """Unnormalize parameters to be between min and max.
+        
+        Args:
+            p (pd.Series): normalized parameter vector
+            
+        Returns:
+            pd.Series: unnormalized parameter vector"""
         assert(isinstance(p,pd.Series))
         assert(len(p) == len(self.all_param_names))
         min_ = self.param_ranges['min']
@@ -93,6 +107,16 @@ class RW:
         return reached_aim_params
         
     def run_RW(self, selected_seedpoint, particle_id, seed = None):
+        """Run random walk exploration from a seed point.
+        
+        Args:
+            selected_seedpoint (int): index of the seed point in df_seeds
+            particle_id (int): id of the particle
+            seed (int): random seed for the random number generator
+            
+        Returns:
+            None. Saves the results to :paramref:`MAIN_DIRECTORY`/:paramref:`selected_seedpoint`/:paramref:`particle_id`
+        """
         try: # to not cause an error in pickles created before mode was added
             self.mode
         except AttributeError as e:

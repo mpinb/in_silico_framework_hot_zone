@@ -15,7 +15,7 @@ class Cell(object):
 
     This class is specialized for use with the single cell input mapper.
 
-    WARNING: while it contains similar methods, this is not the same class as :class single_cell_parser.cell.Cell:
+    WARNING: while it contains similar methods, this is not the same class as :class:`single_cell_parser.cell.Cell`:
 
     '''
 
@@ -85,12 +85,25 @@ class Cell(object):
             self.boundingBox = xMin, xMax, yMin, yMax, zMin, zMax
         return self.boundingBox
 
-    def add_synapse(self,
-                    secID,
-                    ptID,
-                    ptx,
-                    preType='Generic',
-                    postType='Generic'):
+    def add_synapse(
+        self,
+        secID,
+        ptID,
+        ptx,
+        preType='Generic',
+        postType='Generic'):
+        """Add a :class:`~singlecell_input_mapper.singlecell_input_mapper.cell.Synapse` to the cell.
+        
+        Args:
+            secID (int): Section ID.
+            ptID (int): Point ID on that section.
+            ptx (float): Relative position along the section (0-1).
+            preType (str): Presynaptic cell type. Default: "Generic".
+            postType (str): Postsynaptic cell type. Default: "Generic".
+            
+        Returns:
+            :class:`~singlecell_input_mapper.singlecell_input_mapper.cell.Synapse`: The newly created synapse.   
+        """
         if preType not in self.synapses:
             self.synapses[preType] = []
         newSyn = Synapse(secID, ptID, ptx, preType, postType)
@@ -101,7 +114,7 @@ class Cell(object):
     def remove_synapses(self, preType=None):
         if preType is None:
             return
-#        remove all
+        # remove all
         if preType == 'All' or preType == 'all':
             for synType in list(self.synapses.keys()):
                 synapses = self.synapses[synType]
@@ -109,8 +122,7 @@ class Cell(object):
                 del self.synapses[synType]
             return
 
-
-#        only one type
+        # only one type
         else:
             try:
                 synapses = self.synapses[preType]

@@ -45,6 +45,15 @@ from data_base.dbopen import dbopen
 # commonly used functions required for running single neuron simulations
 #------------------------------------------------------------------------------
 def build_parameters(filename, fast_but_security_risk=True):
+    """Read in a parameter file and return a NTParameterSet object.
+    
+    Args:
+        filename (str): path to the parameter file
+        fast_but_security_risk (bool): If True, the parameter file is read in using eval. This is faster, but can be a security risk if the file is not trusted.
+        
+    Returns:
+        NTParameterSet: The parameter file as a NTParameterSet object.
+    """
     from data_base.dbopen import resolve_db_path
     filename = resolve_db_path(filename)
 
@@ -83,20 +92,59 @@ def create_cell(
         setUpBiophysics = True,
         silent = False
         ):
-    '''
-    Default way of creating NEURON cell models;
-    includes spatial discretization and inserts
-    biophysical mechanisms according to parameter file
+    '''Creating NEURON cell models from cell parameters.
+    
+    Adds spatial discretization and inserts biophysical mechanisms according to parameter file
 
     Args:
-        - parameters (dict | dict-like):
+        parameters (dict | dict-like):
             A nested dictionary structure. Should include at least the keys 'filename' and one key per structure present in the `.hoc` file (e.g. "AIS", "Soma" ...). 
             Optional keys include: 'cell_modify_functions', 'discretization'
-        - scaleFunc (bool): 
-            DEPRECATED,  should be specified in the parameters, as described in :meth:`single_cell_parser.cell_modify_funs`
-        - allPoints (bool): Whether or not to use all the points in the `.hoc` file, or one point per segment (according to the distance-lambda rule). 
+        scaleFunc (bool): 
+            DEPRECATED,  should be specified in the parameters, as described in :meth:`~single_cell_parser.cell_modify_funs`
+        allPoints (bool): 
+            Whether or not to use all the points in the `.hoc` file, or one point per segment (according to the distance-lambda rule). 
             Will be passed to ``full``in :meth:`~single_cell_parser.cell_parser.CellParser.determine_nseg`
-        - setUpBiophysics (bool): whether or not to insert mechanisms corresponding to the biophysical parameters in ``parameters``
+        setUpBiophysics (bool): 
+            Whether or not to insert mechanisms corresponding to the biophysical parameters in ``parameters``
+        
+    Example:
+    
+        >>> parameters
+        {
+            'info': {...},
+            'neuron': {
+                'filename': 'getting_started/example_data/anatomical_constraints/*.hoc',
+                'Soma': {
+                    'properties': {
+                        'Ra': 100.0,
+                        'cm': 1.0,
+                        'ions': {'ek': -85.0, 'ena': 50.0}
+                        },
+                    'mechanisms': {
+                        'global': {},
+                        'range': {
+                            'pas': {
+                                'spatial': 'uniform',
+                                'g': 3.26e-05,
+                                'e': -90},
+                            'Ca_LVAst': {
+                                'spatial': 'uniform',
+                                'gCa_LVAstbar': 0.00462},
+                            'Ca_HVA': {...},
+                            ...,}}},
+                'Dendrite': {...},
+                'ApicalDendrite': {...},
+                'AIS': {...},
+                'Myelin': {...},
+            'sim': {
+                'Vinit': -75.0,
+                'tStart': 0.0,
+                'tStop': 250.0,
+                'dt': 0.025,
+                'T': 34.0,
+                'recordingSites': ['getting_started/example_data/apical_proximal_distal_rec_sites.landmarkAscii']}
+        }
     '''
     if scaleFunc is not None:
         warnings.warn(
