@@ -25,6 +25,7 @@ class Simulator_Setup:
         self.stim_run_funs = []
         self.stim_response_measure_funs = []
         self.params_modify_funs = []
+        self.params_modify_funs_after_cell_generation = []
         self.check_funs = []
 
     def check(self):
@@ -32,12 +33,10 @@ class Simulator_Setup:
             raise ValueError('cell_param_generator must be set')
         if self.cell_generator is None:
             raise ValueError('cell_generator must be set')
+        self._check_first_element_of_name_is_the_same(self.stim_setup_funs,
+                                                      self.stim_run_funs)
         self._check_first_element_of_name_is_the_same(
-            self.stim_setup_funs,
-            self.stim_run_funs)
-        self._check_first_element_of_name_is_the_same(
-            self.stim_setup_funs, 
-            self.stim_response_measure_funs)
+            self.stim_setup_funs, self.stim_response_measure_funs)
         for fun in self.check_funs:
             fun()
         #if not len(self.stim_setup_funs) == len(self.stim_result_extraction_fun):
@@ -60,7 +59,7 @@ class Simulator_Setup:
         prefix1 = list({x.split('.')[0] for x in names1})
         prefix2 = list({x.split('.')[0] for x in names2})
 
-        assert tuple(sorted(prefix1)) == tuple(sorted(prefix2)), "Setup functions: {}\nrun/response_functions: {}".format(prefix1, prefix2)
+        assert tuple(sorted(prefix1)) == tuple(sorted(prefix2))
 
     def get_stims(self):
         return [x[0].split('.')[0] for x in self.stim_run_funs]
@@ -83,43 +82,40 @@ class Simulator_Setup:
         return l  # [0]
 
     def get_params(self, params):
-        '''
-        returns cell parameters that have been modified by the params_modify_funs.
-        '''
+        '''returns cell parameters that have been modified by the params_modify_funs.'''
         for name, fun in self.params_modify_funs:
             params = fun(params)
         return params
 
+    def get_params_after_cell_generation(self, params,cell):
+        '''returns cell parameters that have been modified by the params_modify_funs.'''
+        for name, fun in self.params_modify_funs_after_cell_generation:
+            params = fun(params,cell)
+        return params
+
     def get_cell_params(self, params):
-        '''
-        returns cell NTParameterSet structure used for the single_cell_parser.create_cell. 
+        '''returns cell NTParameterSet structure used for the single_cell_parser.create_cell. 
         This is helpful for inspecting, what parameters have effectively been used for the simulation.
         
         Details, how to set up the Simulator are in the docstring of
-        the Simulator class.
-        '''
+        the Simulator class.'''
         params = self.get_params(params)
         cell_param = self.cell_param_generator()
         for name, fun in self.cell_param_modify_funs:
             #print name
             #print len(params), len(param_selector(params, name))
-            try:
-                cell_param = fun(cell_param, params=param_selector(params, name))
-            except Exception as e:
-                logger.error("Could not run the cell parameter modify function {} ({})".format(name, fun))
-                raise e
+            cell_param = fun(cell_param, params=param_selector(params, name))
             self._check_not_none(cell_param, 'cell_param', name)
         return cell_param
 
-    def get_cell_params_with_default_sim_prams(
-            self,
-            params,
-            recordingSites=[],
-            tStart=0.0,
-            tStop=295,
-            dt=0.025,
-            Vinit=-75.0,
-            T=34.0):
+    def get_cell_params_with_default_sim_prams(self,
+                                               params,
+                                               recordingSites=[],
+                                               tStart=0.0,
+                                               tStop=295,
+                                               dt=0.025,
+                                               Vinit=-75.0,
+                                               T=34.0):
         '''returns complete neuron parameter object that can be used for further simulations
         i.e. with the simrun module or with roberts scripts.
         
@@ -143,8 +139,7 @@ class Simulator_Setup:
         })
 
     def get(self, params):
-        '''
-        Returns a cell with set up biophysics and params. This is the main interface.
+        '''Returns a cell with set up biophysics and params. This is the main interface.
         
         Details, how to set up the Simulator are in the docstring of
         the Simulator class.'''
@@ -154,12 +149,9 @@ class Simulator_Setup:
         cell = self.cell_generator(cell_params)
         for name, fun in self.cell_modify_funs:
             #print len(param_selector(params, name))
-            try:
-                cell = fun(cell, params=param_selector(params, name))
-            except Exception as e:
-                logger.error("Could not run the cell modify function {} ({})\n{}".format(name, fun))
-                raise e
+            cell = fun(cell, params=param_selector(params, name))
             self._check_not_none(cell, 'cell', name)
+        params = self.get_params_after_cell_generation(params,cell)
         return cell, params
 
 
