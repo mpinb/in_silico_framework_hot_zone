@@ -1,20 +1,8 @@
 '''
 This module allows to compute synapse density fields from a Post-Synaptic Target (PST) density field and assign synapses to a neuron morphology based on this synapse density field.
-It works in conjunction with the :class:`~singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper` class.
+The :class:`~singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper` class uses these classes to create synapse realizations.
 While the classes in this module can be used in isolation, there are also full pipelines available that use the classes here to map synapses to a neuron morphology.
-Consult the module :py:mod:`~singlecell_input_mapper.map_singlecell_inputs` for such a pipeline.
-
-The PST density field is a density field of all possible targets for synapses across the entire brain area of interest. 
-Depending on the dendritic innervation of a post-synaptic neuron morphology, only a subset of this PST field can be valid possible synapses.
-
-The :class:`~singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper` class uses the classes here to assign synapses to a postsynaptic neuron like so::
-
-1. Discretize the PST density field into a 3D mesh.
-2. Place a post-synaptic morphology into the same 3D mesh.
-3. Fetch the PST densities of the post-synaptic morphology. These are the amount of PSTs per unit of length and area for the membrane of the post-synaptic neuron.
-4. Multiply the postsynaptic PST densities with the presynaptic bouton field. This yields an unnormalized density field of potential synapses. See :class:`~singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseDensity` for more info.
-5. Poisson sample synapses from this synapse density field and place them on the post-synaptic morphology. The exact synapse location is a random point on the membrane that lies within the same grid cell as the synapse density field voxel from which the synapse was sampled. See :class:`~singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseMapper` for more info.
-
+Consult the module :py:mod:`~singlecell_input_mapper.map_singlecell_inputs` for such a pipeline, or the documentation of :class:`~singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper` for more info on how to use these classes in a pipeline.
 
 Created on Mar 30, 2012
 
