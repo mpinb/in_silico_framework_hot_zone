@@ -1,4 +1,20 @@
 '''
+This module allows to compute synapse density fields from a Post-Synaptic Target (PST) density field and assign synapses to a neuron morphology based on this synapse density field.
+It works in conjunction with the :class:`~singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper` class.
+While the classes in this module can be used in isolation, there are also full pipelines available that use the classes here to map synapses to a neuron morphology.
+See :py:meth:`~singlecell_input_mapper.map_singlecell_inputs.map_singlecell_inputs` for such a pipeline.
+
+The PST density field is a density field of all possible targets for synapses across the entire brain area of interest. 
+Depending on the dendritic innervation of a post-synaptic neuron morphology, only a subset of this PST field can be valid possible synapses.
+
+The :class:`~singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper` class uses the classes here to assign synapses to a postsynaptic neuron like so:
+1. Discretize the PST density field into a 3D mesh.
+2. Place a post-synaptic morphology into the same 3D mesh.
+3. Fetch the PST densities of the post-synaptic morphology. These are the amount of PSTs per unit of length and area for the membrane of the post-synaptic neuron.
+4. Multiply the postsynaptic PST densities with the presynaptic bouton field. This yields an unnormalized density field of potential synapses. See :class:`~singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseDensity` for more info.
+5. Poisson sample synapses from this synapse density field and place them on the post-synaptic morphology. The exact synapse location is a random point on the membrane that lies within the same grid cell as the synapse density field voxel from which the synapse was sampled. See :class:`~singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseMapper` for more info.
+
+
 Created on Mar 30, 2012
 
 @author: regger
@@ -203,7 +219,6 @@ class SynapseDensity(object):
     '''Compute synapse density mesh from a PST density mesh.
     
     Given a PST density mesh, create a 3D mesh of synapse densities for a single postsynaptic neuron using :py:meth:`compute_synapse_density`.
-    The mesh has the same bounding box and voxel size as :py:attr:`~singlecell_input_mapper.singlecell_input_mapper.synapse_maper.SynapseMapper.exPST`.
     It is assumed that :py:attr:`~singlecell_input_mapper.singlecell_input_mapper.synapse_maper.SynapseMapper.exPST` and :py:attr:`~singlecell_input_mapper.singlecell_input_mapper.synapse_maper.SynapseMapper.inhPST` have the same bounding box and voxel size.
     This density mesh is used in :class:`~singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseMapper` to assign synapses to the postsynaptic neuron.
     
