@@ -260,8 +260,8 @@ class SynapseDensity(object):
         The density of synapses at each voxel in the density field is computed to be the 
         postsynaptic cell's PST density * presynaptic bouton density / normalization PST density.
         
-        This method is used in :class:`~singlecell_input_mapper.singlecell_input_mapper.NetworkMapper`'s 
-        :py:meth:`~singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper._precompute_column_celltype_synapse_densities`.
+        This method is used in :class:`~singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper`'s 
+        :py:meth:`~singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper._precompute_anatomical_area_celltype_synapse_densities`.
         
         Args:
             boutonDensity (:class:`~singlecell_input_mapper.singlecell_input_mapper.scalar_field.ScalarField`):
