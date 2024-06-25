@@ -7,7 +7,8 @@ Consult the module :py:mod:`~singlecell_input_mapper.map_singlecell_inputs` for 
 The PST density field is a density field of all possible targets for synapses across the entire brain area of interest. 
 Depending on the dendritic innervation of a post-synaptic neuron morphology, only a subset of this PST field can be valid possible synapses.
 
-The :class:`~singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper` class uses the classes here to assign synapses to a postsynaptic neuron like so:
+The :class:`~singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper` class uses the classes here to assign synapses to a postsynaptic neuron like so::
+
 1. Discretize the PST density field into a 3D mesh.
 2. Place a post-synaptic morphology into the same 3D mesh.
 3. Fetch the PST densities of the post-synaptic morphology. These are the amount of PSTs per unit of length and area for the membrane of the post-synaptic neuron.
