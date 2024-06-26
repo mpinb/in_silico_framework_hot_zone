@@ -251,13 +251,14 @@ def merge_network_parameters(netw1, netw2):
         netw1.NMODL_mechanisms, netw2.NMODL_mechanisms))
         
     for presyn_type in netw2.network.keys():
-        if presyn_type not in netw1.keys():
+        if presyn_type not in netw1.network.keys():
             logger.info("Adding presynaptic celltype {} to network parameters".format(presyn_type))
             netw1.network[presyn_type] = netw2.network[presyn_type]
         else:
             raise NotImplementedError(
-                "Merging two network parameter files that both define parameters for the same presynaptic cell-type is not supported."
-                "I don't know how to merge this."
-                "Which weight distribution and receptor types take precedence?")
+                "Merging two network parameter files that both define parameters for the same presynaptic cell-type is not supported. "
+                "Both network parameters contain the key {}. I don't know how to merge this. "
+                "Which weight distribution and receptor types take precedence?".format(presyn_type)
+            )
     return netw1
 
