@@ -153,14 +153,17 @@ class NetworkMapper:
         logger.info('creating saved network and')
         logger.info('activating synapses with saved times')
         logger.info('***************************')
+        
         weights = None
         locations = None
         if synWeightName:
             weights, locations = reader.read_synapse_weight_file(synWeightName)
+        
         if isinstance(synInfoName, str):
             synInfo = reader.read_synapse_activation_file(synInfoName)
         else:
             synInfo = synInfoName
+        
         synTypes = list(synInfo.keys())
         for synType in synTypes:
             logger.info(
@@ -179,7 +182,7 @@ class NetworkMapper:
                     logger.info(
                         '\tAttached {:s} receptor with weight distribution uniform'
                         .format(receptorType))
-#            for syn in synInfo[synType]:
+            # for syn in synInfo[synType]:
             for i in range(len(synInfo[synType])):
                 syn = synInfo[synType][i]
                 synID, secID, ptID, synTimes, somaDist = syn
@@ -206,11 +209,12 @@ class NetworkMapper:
                     for recepStr in list(synParameters.receptors.keys()):
                         receptor = synParameters.receptors[recepStr]
                         self._assign_synapse_weights(receptor, recepStr, newSyn)
-                activate_functional_synapse(newSyn,
-                                            self.postCell,
-                                            newCell,
-                                            synParameters,
-                                            forceSynapseActivation=True)
+                activate_functional_synapse(
+                    newSyn,
+                    self.postCell,
+                    newCell,
+                    synParameters,
+                    forceSynapseActivation=True)
         logger.info('***************************')
         logger.info('network complete!')
         logger.info('***************************')
@@ -537,6 +541,7 @@ class NetworkMapper:
                     spikeTimes[i] = 0.1
                 self.cells[preCellType][active[i]].append(
                     spikeTimes[i], spike_source='pointcell_normal')
+        
         elif dist == 'uniform':
             active, = np.where(
                 np.random.uniform(
@@ -549,6 +554,7 @@ class NetworkMapper:
                     spikeTimes[i] = 0.1
                 self.cells[preCellType][active[i]].append(
                     spikeTimes[i], spike_source='pointcell_uniform')
+        
         elif dist == 'lognormal':
             active, = np.where(
                 np.random.uniform(
@@ -562,6 +568,7 @@ class NetworkMapper:
                     spikeTimes[i] = 0.1
                 self.cells[preCellType][active[i]].append(
                     spikeTimes[i], spike_source='pointcell_lognormal')
+        
         elif dist == 'PSTH':
             bins = networkParameters.intervals
             probabilities = networkParameters.probabilities
@@ -581,14 +588,13 @@ class NetworkMapper:
                 for j in range(len(active)):
                     self.cells[preCellType][active[j]].append(
                         spikeTimes[j], spike_source='pointcell_PSTH')
+        
         elif dist == 'PSTH_absolute_number':
             bins = networkParameters.intervals
             number_active_synapses = networkParameters.number_active_synapses
             offset = networkParameters.offset
             if len(bins) != len(number_active_synapses):
-                errstr = 'Time bins and probabilities of PSTH for cell type %s have unequal length! ' % preCellType
-                errstr += 'len(bins) = %d - len(probabilities) = %d' % (
-                    len(bins), len(probabilities))
+                errstr = 'Time bins and probabilities of PSTH for cell type {} have unequal length! len(bins) = {} - len(probabilities) = {}'.format(preCellType, len(bins), len(probabilities))
                 raise RuntimeError(errstr)
             for i in range(len(bins)):  ##fill all cells bin after bin
                 tBegin, tEnd = bins[i]
@@ -604,9 +610,11 @@ class NetworkMapper:
                     logger.info(
                         'Switching from drawing without replacement to drawing with replacement.'
                     )
-                    active = np.random.choice(list(range(nrOfCells)),
-                                              nas,
-                                              replace=True)
+                    
+                    active = np.random.choice(
+                        list(range(nrOfCells)),
+                        nas,
+                        replace=True)
                 spikeTimes = offset + tBegin + (
                     tEnd - tBegin) * np.random.uniform(size=len(active))
                 for j in range(len(active)):
