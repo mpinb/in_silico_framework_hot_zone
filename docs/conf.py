@@ -29,6 +29,11 @@ shutil.copytree(os.path.join(project_root, 'getting_started', 'tutorials'),
                 os.path.join(project_root, 'docs', 'tutorials'))
 shutil.copy(os.path.join(project_root, 'getting_started', 'Introduction_to_ISF.ipynb'),
                 os.path.join(project_root, 'docs', 'Introduction_to_ISF.ipynb'))
+# Figures need to be in the _autosummary directory
+if os.path.exists(os.path.join(project_root, 'docs', '_autosummary', '_images')):
+    shutil.rmtree(os.path.join(project_root, 'docs', '_autosummary', '_images'))
+shutil.copytree(os.path.join(project_root, 'docs', '_static', '_images'),
+                os.path.join(project_root, 'docs', '_autosummary', '_images'))
 
 
 # -- General configuration ------------------------------------------------
@@ -57,7 +62,7 @@ bibtex_bibfiles = ['bibliography.bib']
 # Napoleon settings
 napoleon_google_docstring = True
 napoleon_include_init_with_doc = False
-napoleon_include_private_with_doc = False
+napoleon_include_private_with_doc = True
 napoleon_include_special_with_doc = True
 napoleon_use_admonition_for_examples = False
 napoleon_use_admonition_for_notes = False
@@ -75,7 +80,7 @@ napoleon_attr_annotations = True
 ## Default flags used by autodoc directives
 autodoc_default_options = {
     'members': True,
-    'show-inheritance': True,
+    'show-inheritance': False,
 }
 
 autoclass_content = 'both'  # document both the class docstring, as well as __init__
@@ -112,7 +117,7 @@ exclude_patterns = ['_build']
 
 # If true, the current module name will be prepended to all description
 # unit titles (such as .. function::).
-#add_module_names = True
+add_module_names = False  # less verbose for nested packages
 
 # If true, sectionauthor and moduleauthor directives will be shown in the
 # output. They are ignored by default.
@@ -140,8 +145,9 @@ html_theme = "furo"
 # further.  For a list of options available for each theme, see the
 # documentation.
 html_theme_options = {
-    "light_logo": "_figures/isf-logo-black.png",
-    "dark_logo": "_figures/isf-logo-white.png",
+    "light_logo": "_images/isf-logo-black.png",
+    "dark_logo": "_images/isf-logo-white.png",
+    "sidebar_hide_name": True,
 }
 
 # Add any paths that contain custom themes here, relative to this directory.

@@ -1122,14 +1122,15 @@ class NetworkMapper:
                 syn.weight[recepStr].append(receptor.weight)
 
 
-def activate_functional_synapse(syn,
-                                cell,
-                                preSynCell,
-                                synParameters,
-                                tChange=None,
-                                synParametersChange=None,
-                                forceSynapseActivation=False,
-                                releaseTimes=None):
+def activate_functional_synapse(
+        syn,
+        cell,
+        preSynCell,
+        synParameters,
+        tChange=None,
+        synParametersChange=None,
+        forceSynapseActivation=False,
+        releaseTimes=None):
     '''Default method to activate single synapse.
     Currently, this implementation expects all presynaptic spike
     times to be pre-computed; can thus not be used in recurrent

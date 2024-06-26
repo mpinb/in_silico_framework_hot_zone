@@ -35,6 +35,23 @@ class Edge(object):
 
 
 def read_hoc_file(fname=''):
+    """Reads a hoc file and returns a list of Edge objects.
+    
+    This list of sections is parsed to a :class:`~single_cell_parser.cell_parser.CellParser` object
+    using :py:meth:`~single_cell_parser.cell_parser.CellParser.spatialgraph_to_cell`.
+    
+    Warning:
+        The module :py:mod:`singlecell_input_mapper` also conains a 
+        :py:meth:`~singlecell_input_mapper.singlecell_input_mapper.reader.read_hoc_file` 
+        method with subtle differences. A notable difference is that this method reads in axon sections,
+        while the :py:mod:`singlecell_input_mapper` variant does.
+
+    Args:
+        fname (str): The name of the file to be read.
+
+    Returns:
+        list: A list of :class:`Edge` objects.
+    """
     if not fname.endswith('.hoc') and not fname.endswith('.HOC'):
         raise IOError('Input file is not a .hoc file!')
 

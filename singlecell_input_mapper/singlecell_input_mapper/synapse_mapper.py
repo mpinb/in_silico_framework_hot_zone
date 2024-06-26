@@ -1,4 +1,9 @@
 '''
+This module allows to compute synapse density fields from a Post-Synaptic Target (PST) density field and assign synapses to a neuron morphology based on this synapse density field.
+The :class:`~singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper` class uses these classes to create synapse realizations.
+While the classes in this module can be used in isolation, there are also full pipelines available that use the classes here to map synapses to a neuron morphology.
+Consult the module :py:mod:`~singlecell_input_mapper.map_singlecell_inputs` for such a pipeline, or the documentation of :class:`~singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper` for more info on how to use these classes in a pipeline.
+
 Created on Mar 30, 2012
 
 @author: regger
@@ -9,7 +14,10 @@ import sys
 
 
 class SynapseMapper(object):
-    '''Assign synapses to neuron morphology
+    '''Assign synapses to neuron morphology from density meshes.
+
+    Poisson sample the synapse distribution mesh and assigns them to a random 
+    point on the morphology that lies within the same voxel.
     
     Attributes:
         cell (:class:`~singlecell_input_mapper.singlecell_input_mapper.cell.Cell`):
@@ -72,12 +80,15 @@ class SynapseMapper(object):
                 if self.voxelEdgeMap[structure][vxIndex]:
                     nrOfSyn = mesh[vxIndex]
                     
-                    # ------- random 1: poisson sample the synapse density distribution
+                    # ------- random 1: 
+                    # poisson sample the synapse density distribution
                     nrOfSyn = np.random.poisson(nrOfSyn)
                     if not nrOfSyn:
                         continue
                     
-                    # ------- random 2: choose random synapse target within the same voxel.
+                    # ------- random 2: 
+                    # choose random synapse target onto the dendrite
+                    # within the same voxel.
                     candEdges = self.voxelEdgeMap[structure][vxIndex]
                     candidatePts = list(np.random.permutation(candEdges))
                     # fix for situation where nrOfSyn > len(candidatePts):
@@ -144,23 +155,20 @@ class SynapseMapper(object):
         '''
         for i in range(3):
             intersect = False
-            if (
-                bbox1[2 * i] >= bbox2[2 * i] and 
-                bbox1[2 * i] <= bbox2[2 * i +1]
-                ):
+            if bbox1[2 * i] >= bbox2[2 * i] and \
+                bbox1[2 * i] <= bbox2[2 * i +1]:
                 intersect = True
-            elif bbox2[2 * i] >= bbox1[2 * i] and bbox2[2 * i] <= bbox1[2 * i +1]:
+            elif bbox2[2 * i] >= bbox1[2 * i] and \
+                bbox2[2 * i] <= bbox1[2 * i +1]:
                 intersect = True
-            if bbox1[2 * i + 1] <= bbox2[2 * i + 1] and bbox1[2 * i +1] >= bbox2[2 *
-                                                                          i]:
+            if bbox1[2 * i + 1] <= bbox2[2 * i + 1] and \
+                bbox1[2 * i +1] >= bbox2[2 * i]:
                 intersect = True
-            elif bbox2[2 * i + 1] <= bbox1[2 * i + 1] and bbox2[2 * i +
-                                                                1] >= bbox1[2 *
-                                                                            i]:
+            elif bbox2[2 * i + 1] <= bbox1[2 * i + 1] and \
+                bbox2[2 * i +1] >= bbox1[2 * i]:
                 intersect = True
             if not intersect:
                 return False
-
         return True
 
     def _pt_in_box(self, pt, box):
@@ -182,7 +190,7 @@ class SynapseMapper(object):
             x (float): Location on section to calculate path length to.
             
         Returns:
-            float: Path length between soma and location :paramref:`x` on section :paramref:`
+            float: Path length between soma and location :paramref:`x` on section :paramref:`sec`.
         '''
         currentSec = sec
         parentSec = currentSec.parent
@@ -197,15 +205,20 @@ class SynapseMapper(object):
 
 
 class SynapseDensity(object):
-    '''Compute synapse density mehs from a PST density mesh.
+    '''Compute synapse density mesh from a PST density mesh.
     
     Given a PST density mesh, create a 3D mesh of synapse densities for a single postsynaptic neuron using :py:meth:`compute_synapse_density`.
-    The mesh has the same bounding box and voxel size as :py:attr:`~singlecell_input_mapper.singlecell_input_mapper.synapse_maper.SynapseMapper.exPST`.
     It is assumed that :py:attr:`~singlecell_input_mapper.singlecell_input_mapper.synapse_maper.SynapseMapper.exPST` and :py:attr:`~singlecell_input_mapper.singlecell_input_mapper.synapse_maper.SynapseMapper.inhPST` have the same bounding box and voxel size.
     This density mesh is used in :class:`~singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseMapper` to assign synapses to the postsynaptic neuron.
     
     This class is used in :class:`~singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper`
     to compute synapse densities per presynaptic cell type for a given postsynaptic cell type and morphology.
+    
+    :paramref:`exPST` and :paramref:`inhPST` are density meshes for normalizing post-synaptic targets.
+    Shown below is an example for such density field: the (25000, 50000, 75000, 100000) isosurfaces of the excitatory 
+    PST density field for a rat somatosensory cortex (pia and white matter shown in grey at the top and bottom).
+    
+    .. figure:: ./_images/exPST_solid_bg.png
     '''
     def __init__(
         self, 
@@ -247,8 +260,8 @@ class SynapseDensity(object):
         The density of synapses at each voxel in the density field is computed to be the 
         postsynaptic cell's PST density * presynaptic bouton density / normalization PST density.
         
-        This method is used in :class:`~singlecell_input_mapper.singlecell_input_mapper.NetworkMapper`'s 
-        :py:meth:`~singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper._precompute_column_celltype_synapse_densities`.
+        This method is used in :class:`~singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper`'s 
+        :py:meth:`~singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper._precompute_anatomical_area_celltype_synapse_densities`.
         
         Args:
             boutonDensity (:class:`~singlecell_input_mapper.singlecell_input_mapper.scalar_field.ScalarField`):
@@ -577,7 +590,7 @@ class SynapseDensity(object):
         print('---------------------------')
 
     def _clip_u(self, pq, u1u2):
-        '''Liang-Barsky clipping algorithm for line segments in 3D.
+        '''Liang-Barsky clipping algorithm :cite:`liang1984new` for line segments in 3D.
         
         Used in :py:meth:`~SynapseDensity._compute_length_surface_area_density` to clip line segments to scalar field meshes.
         '''
