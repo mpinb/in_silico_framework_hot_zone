@@ -131,16 +131,16 @@ load_initialized_cell_and_evokedNW_from_db = db_init_simrun_general.load_initial
 #for compatibility, deprecated!
 synapse_activation_binning_dask = db_init_synapse_activation_binning.synapse_activation_postprocess_dask
 db_init_crossing_over = db_init_roberts_simulations = db_init_simrun_general
-mdb_init_crossing_over = db_init_crossing_over
 
-#--------------- mdb
-from data_base.db_initializers import load_simrun_general as db_init_simrun_general
-from data_base.db_initializers import synapse_activation_binning as db_init_synapse_activation_binning
-load_param_files_from_mdb = db_init_simrun_general.load_param_files_from_db
-load_initialized_cell_and_evokedNW_from_mdb = db_init_simrun_general.load_initialized_cell_and_evokedNW_from_db
+#-------------- mdb: deprecated. Use db instead.
+mdb_init_crossing_over = db_init_crossing_over
+from data_base.model_data_base.mdb_initializers import load_simrun_general as mdb_init_simrun_general
+from data_base.model_data_base.mdb_initializers import synapse_activation_binning as mdb_init_synapse_activation_binning
+load_param_files_from_mdb = mdb_init_simrun_general.load_param_files_from_mdb
+load_initialized_cell_and_evokedNW_from_mdb = mdb_init_simrun_general.load_initialized_cell_and_evokedNW_from_mdb
 #for compatibility, deprecated!
 synapse_activation_binning_dask = db_init_synapse_activation_binning.synapse_activation_postprocess_dask
-db_init_crossing_over = db_init_roberts_simulations = db_init_simrun_general
+mdb_init_crossing_over = mdb_init_roberts_simulations = mdb_init_simrun_general
 
 from data_base.analyze import split_synapse_activation  #, color_cellTypeColorMap, excitatory, inhibitory
 from data_base.utils import silence_stdout
