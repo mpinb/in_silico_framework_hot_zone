@@ -103,7 +103,7 @@ class RW:
         reached_aim_params = []
         for key in self.aim_params.keys():
             idx = self.params_to_explore.index(key)
-            reached_aim_params.append(math.isclose(normalized_params[idx],self.normalized_aim_params[key],abs_tol=self.max_step_size))
+            reached_aim_params.append(math.isclose(normalized_params[idx],self.normalized_aim_params[key],abs_tol=1e-4))
         return reached_aim_params
         
     def run_RW(self, selected_seedpoint, particle_id, seed = None):
@@ -274,7 +274,7 @@ class RW:
             if inside:
                 for key in self.normalized_aim_params.keys():
                     idx = self.params_to_explore.index(key)
-                    print(key,' (normalized) - current: ', np.round(p_normalized_selected_np[idx],4),', proposed: ', np.round(p_normalized[key],4))
+                    print(key,' (normalized) - current: ', p_normalized_selected_np[idx], ', proposed: ', p_normalized[key])
                 print('Moving current position to proposed position')
                 p_normalized_selected_np = p_proposal
                 print('distance to initial seed point (normalized):', get_vector_norm(p_normalized_selected_np-seed_point_for_exploration_normalized_selected_np))
@@ -289,7 +289,7 @@ class RW:
                     else:
                         count = int(aim_params_inside_flag[0].split('_')[-1])
                         count+=1
-                        os.rename(aim_params_inside_flag[0], os.path.join(path,'aim_params_successful_model_{}'.format(count)))
+                        os.rename(aim_params_inside_flag[0], os.path.join(seedpoint_dir,'aim_params_successful_model_{}'.format(count)))
                     if count == self.stop_n_inside_with_aim_params:
                         print('Reached aim params {} times for successful models. Exit gracefully'.format(count))
                         break
