@@ -3,7 +3,7 @@ env: ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true
 on:
   pull_request:  # run on the PR base to check if the changes work before merging.
     # Note that this will also run upon any activity in the PR
-    types: [opened, synchronize]
+    branches: [ 'master', 'develop']
     paths-ignore:
       - README.md  # don't run workflow when README changes
       - CHANGELOG.md # Should never be edited anyway
