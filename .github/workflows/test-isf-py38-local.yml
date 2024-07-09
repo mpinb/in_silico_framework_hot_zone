@@ -9,14 +9,6 @@ on:
       - CHANGELOG.md # Should never be edited anyway
       - .gitignore
       - .github/**
-  pull_request_target:  # run on PR target after closing the PR
-    types:
-      - closed
-    paths-ignore:
-        - README.md  # don't run workflow when README changes
-        - CHANGELOG.md # Should never be edited anyway
-        - .gitignore
-        - .github/**
   workflow_dispatch:
 
 jobs:
