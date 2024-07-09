@@ -816,6 +816,7 @@ class CellMorphologyVisualizer(CMVDataParser):
         highlight_section=None,
         highlight_x=None,
         display=True,
+        overwrite_frames=False,
         tpf=20):
         '''
         Creates a set of images where a neuron morphology color-coded with voltage together with synapse activations are
