@@ -1,24 +1,16 @@
-# Installation of in-silico-framework followed by CI tests.
-# Builds ISF locally on the MPINB-hosted runner and runs all tests
 name: Py 2.7
-# Controls when the workflow will run
-
 on:
-  push:
-    branches: [ 'master' , 'testing' , 'mdbv2_compatibility']
+  pull_request:  # run on the PR base to check if the changes work before merging.
+    # Note that this will also run upon any activity in the PR
+    branches: [ 'master', 'develop']
     paths-ignore:
       - README.md  # don't run workflow when README changes
       - CHANGELOG.md # Should never be edited anyway
       - .gitignore
       - .github/**
-  pull_request_target:  # only run on PR if it is closed, not while open
-    types:
-      - closed
   workflow_dispatch:
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  
   build:
     uses: ./.github/workflows/build-isf.yml
     with:

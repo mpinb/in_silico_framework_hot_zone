@@ -1,20 +1,16 @@
 name: Py 3.8
 on:
-  push:
-    branches:
-      - "*"  # Pushes to any branch
+  pull_request:  # run on the PR base to check if the changes work before merging.
+    # Note that this will also run upon any activity in the PR
+    branches: [ 'master', 'develop']
     paths-ignore:
       - README.md  # don't run workflow when README changes
       - CHANGELOG.md # Should never be edited anyway
       - .gitignore
       - .github/**
-  pull_request_target:  # only run on PR if it is closed, not while open
-    types:
-      - closed
   workflow_dispatch:
 
 jobs:
-
   build:
     uses: ./.github/workflows/build-isf.yml
     with:
