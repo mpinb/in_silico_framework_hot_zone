@@ -99,11 +99,23 @@ class RW:
         max_ = self.param_ranges['max']
         return p*(max_-min_)+min_
         
-    def assess_aim_params_reached(self, normalized_params):
+    def assess_aim_params_reached(self, normalized_params, tolerance=1e-4):
+        """Check whether the aim parameters have been reached.
+        
+        For each parameter in the aim_params dictionary, check whether the parameter has been reached.
+        A parameter is reached if it lies within a certain tolerance of the aim parameter.
+        
+        Args:
+            normalized_params (np.array): normalized parameter vector
+            tolerance (float): tolerance for the aim parameters to be reached. Default: 1e-4
+            
+        Returns:
+            list: boolean values indicating whether each aim parameter has been reached or not.
+        """
         reached_aim_params = []
         for key in self.aim_params.keys():
             idx = self.params_to_explore.index(key)
-            reached_aim_params.append(math.isclose(normalized_params[idx],self.normalized_aim_params[key],abs_tol=1e-4))
+            reached_aim_params.append(math.isclose(normalized_params[idx],self.normalized_aim_params[key], tolerance=tolerance))
         return reached_aim_params
         
     def run_RW(self, selected_seedpoint, particle_id, seed = None):
