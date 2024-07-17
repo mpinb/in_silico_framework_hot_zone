@@ -90,14 +90,16 @@ def calculateFractionAbleToSpike(rawPSTH, refractory_period):
 
 
 def correct_PSTH_by_refractory_period(PSTH, refractory_period):
-    '''return_ = 'only_PSTH' or  'PSTH_and_abletospike' '''
+    '''
+    return_ = 'only_PSTH' or  'PSTH_and_abletospike' 
+    '''
     if not refractory_period:
         return np.ones(len(PSTH))
     able_to_spike = [1]
     n_deactivated = [0]
     for e in PSTH:
-        diff = able_to_spike[
-            -1] * e  # amount of trials that would spike right now
+        # amount of trails that would spike right now
+        diff = able_to_spike[-1] * e  
         if len(n_deactivated) >= refractory_period:
             activated = n_deactivated[-refractory_period]
         else:

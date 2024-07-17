@@ -1,8 +1,30 @@
 from __future__ import absolute_import
 import os
-from data_base.data_base import DataBase, get_db_by_unique_id
+from data_base.data_base import DataBase, get_db_by_unique_id, is_model_data_base
 from data_base.exceptions import DataBaseException
-from .utils import cache
+import cloudpickle
+from six.moves import cPickle
+
+def cache(function):
+    import hashlib
+    memo = {}
+    def get_key(*args, **kwargs):
+        try:
+            hash = hashlib.md5(cPickle.dumps([args, kwargs])).hexdigest()
+        except (TypeError, AttributeError):
+            hash = hashlib.md5(cloudpickle.dumps([args, kwargs])).hexdigest()
+        return hash
+    
+    def wrapper(*args, **kwargs):
+        key = get_key(*args, **kwargs)
+        if key in memo:
+            return memo[key]
+        else:
+            rv = function(*args, **kwargs)
+            memo[key] = rv
+            return rv
+    return wrapper
+
 
 
 def resolve_db_path(path):
@@ -34,9 +56,14 @@ def resolve_db_path(path):
 
 @cache
 def create_db_path(path):
+    """
+    Create a database path from a given path.
+    """
     db_path = path
     if path.startswith('db://'):
         return path
+    
+    # Find mother database
     while True:
         if (os.path.isdir(db_path)) and (
             'dbcore.pickle' in os.listdir(db_path) or 'db_state.json' in os.listdir(db_path)):
@@ -47,28 +74,24 @@ def create_db_path(path):
             raise DataBaseException(
                 "The path {} does not seem to be within a DataBase!".
                 format(path))
+    
+    # Instantiate mother database
     db = DataBase(db_path, nocreate=True)
 
     #print path
     path_minus_db_basedir = os.path.relpath(path, db._basedir)
 
+    # check to which key the given path belongs
     key = None
     for k in list(db.keys()):
-        v = db._sql_backend[k]
-        try:
-            if v.relpath == '':  #this means, we have a RegisteredFolder class
-                key = k
-                break
-            if v.relpath == path_minus_db_basedir.split('/')[0]:
-                key = k
-                break
-        except AttributeError:
-            pass
+        if k == path_minus_db_basedir.split('/')[0]:
+            key = k
+            break
 
     if key is None:
-        raise KeyError("Found a Database at {}. ".format(db._basedir)+\
-                       "However, there is no key pointing to the subfolder {} in it."\
-                       .format(path_minus_db_basedir.split('/')[0]))
+        raise KeyError(
+            "Found a Database at {}. However, there is no key pointing to the subfolder {} in it.".format(
+                db._basedir, path_minus_db_basedir.split('/')[0]))
     return os.path.join('db://', db.get_id(), key,
                         os.path.relpath(path, db[key]))
 

@@ -230,7 +230,7 @@ class ISFDataBase:
             key = self._convert_key_to_path(key_str)
             logger.info("Updating metadata for key {key}".format(key = key.name))
             try:
-                dumper = LoaderDumper.get_dumper_string_by_savedir(str(key))
+                dumper = get_dumper_string_by_savedir(str(key))
             except EnvironmentError as e:
                 dumper = "unknown"
             
@@ -375,7 +375,7 @@ class ISFDataBase:
         Can othervise be destructive!!!'''        
         if VC.get_git_version()['dirty']:
             logger.warning('The database source folder has uncommitted changes!')
-        dumper_string = LoaderDumper.get_dumper_string_by_dumper_module(dumper)
+        dumper_string = get_dumper_string_by_dumper_module(dumper)
 
         out = {'dumper': dumper_string,
                'time': tuple(datetime.datetime.utcnow().timetuple()), 
@@ -486,7 +486,7 @@ class ISFDataBase:
             if raise_:
                 raise db_exceptions.DataBaseException("Key %s is already set. Please use del db[%s] first" % (key, key))
         else:           
-            self.set(key, None, dumper = LoaderDumper.just_create_folder)
+            self.set(key, None, dumper = just_create_folder)
         return self[key]
 
     def create_shared_numpy_store(self, key, raise_ = True):
@@ -494,7 +494,7 @@ class ISFDataBase:
             if raise_:
                 raise db_exceptions.DataBaseException("Key %s is already set. Please use del db[%s] first" % (key, key))
         else:
-            self.set(key, None, dumper = LoaderDumper.shared_numpy_store)        
+            self.set(key, None, dumper = shared_numpy_store)        
         return self[key]
     
     def create_sub_db(self, key, register = 'as_parent', **kwargs):
@@ -537,7 +537,7 @@ class ISFDataBase:
         
         # If there are still unique keys remaining in the tuple, we have to create at least one sub_db
         for k in remaining_keys:
-            parent_db.set(k, None, dumper = LoaderDumper.just_create_isf_db, **kwargs)
+            parent_db.set(k, None, dumper = just_create_isf_db, **kwargs)
             # Note: registering this database happens upon initialization of the sub_db
             parent_db[k].parent_db = parent_db  # remember that it has a parent
             parent_db = parent_db[k]  # go down the tree of sub_dbs
@@ -798,14 +798,6 @@ class ISFDataBase:
         # start processes on one thread in background
         return threading.Thread(target = lambda : delete_and_deregister_once_deleted(dir_to_data_rename, self._unique_id)).start()
 
-class RegisteredFolder(ISFDataBase):
-    def __init__(self, path):
-        ISFDataBase.__init__(self, path, forcecreate = True)
-        self.set('self', None, dumper = LoaderDumper.just_create_folder)
-        dumper = LoaderDumper.just_create_folder
-        dumper.dump(None, path)
-        self._sql_backend['self'] = LoaderWrapper('')
-        self.set = None
 
 def get_isfdb_by_unique_id(unique_id):
     db_path = data_base_register._get_db_register().registry[unique_id]
@@ -815,7 +807,7 @@ def get_isfdb_by_unique_id(unique_id):
 
 
 from .IO import LoaderDumper
-from .IO.LoaderDumper import to_cloudpickle, just_create_folder, just_create_isf_db, shared_numpy_store
+from .IO.LoaderDumper import to_cloudpickle, just_create_folder, just_create_isf_db, shared_numpy_store, get_dumper_string_by_savedir, get_dumper_string_by_dumper_module
 from data_base.utils import calc_recursive_filetree, rename_for_deletion, delete_in_background, is_db, bcolors
 from compatibility import pandas_unpickle_fun
-DEFAULT_DUMPER = LoaderDumper.to_cloudpickle
+DEFAULT_DUMPER = to_cloudpickle

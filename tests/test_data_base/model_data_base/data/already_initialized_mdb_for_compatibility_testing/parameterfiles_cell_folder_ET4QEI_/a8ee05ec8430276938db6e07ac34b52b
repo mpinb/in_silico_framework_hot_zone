@@ -149,7 +149,7 @@
         "cm": 1.0,
       },
     },
-    "filename": "/nas1/Data_arco/project_src/in_silico_framework/getting_started/anatomical_constraints/86_L5_CDK20041214_nr3L5B_dend_PC_neuron_transform_registered_C2center.hoc",
+    "filename": "/nas1/Data_arco/project_src/in_silico_framework/getting_started/example_data/anatomical_constraints/86_L5_CDK20041214_nr3L5B_dend_PC_neuron_transform_registered_C2center.hoc",
     "Dendrite": {
       "mechanisms": {
         "range": {

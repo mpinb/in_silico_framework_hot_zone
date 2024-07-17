@@ -1,5 +1,5 @@
 '''
-This module deals with API changes in 3rd party modules.
+This module deals with API changes in 3rd party modules, and ensures backwards compatibility with older versions of ISF.
 The following 3rd party modules are used: pandas, dask, distributed
 '''
 
@@ -80,8 +80,9 @@ elif six.PY3:
         
 
 # --------------- compatibility with old versions of ISF (only used by the Oberlaender lab in Bonn)
-# For old pickled data. This is to ensure backwards compatibility with the Oberlaender lab in MPINB, Bonn. Last adapted on 25/04/2024
-# Since previous versions of this codebase used pickle as a data format, pickle now tries to import modules that don't exist anymore upon loading
+# For old pickled data. 
+# This is to ensure backwards compatibility with the Oberlaender lab in MPINB, Bonn. Last adapted on 25/04/2024
+# Previous versions of this codebase used pickle as a data format, pickle now tries to import modules that don't exist anymore upon loading
 # For this reason, we save the renamed packages/modules under an additional name (i.e. their old name)
 
 def init_simrun_compatibility():
@@ -104,21 +105,22 @@ def init_simrun_compatibility():
 def init_mdb_backwards_compatibility():
     """
     Registers model_data_base as a top-level package
-    Useful for old pickled data, that tries to import it as a top-level package. model_data_base has since been moved to data_base.model_data_base
+    Useful for old pickled data, that tries to import it as a top-level package. model_data_base has since been moved to :py:mod:`data_base.model_data_base`
     """
     from data_base import model_data_base
     sys.modules['model_data_base'] = model_data_base
 
 def init_db_compatibility():
     """
-    ISF has an update data_base_package, and imports it as "data_base" throughout the codebase.
+    ISF has an update data_base_package, and imports it as :py:mod:`data_base` throughout the codebase.
     This new package has updated API calls, and should be used in all new code.
     For this reason, the old API of model_data_base needs to be updated.
     """
     import sys
-    from data_base.isf_data_base import IO, db_initializers
+    from data_base.isf_data_base import IO, db_initializers, dbopen
     sys.modules['data_base.IO'] = IO
     sys.modules['data_base.db_initializers'] = db_initializers 
+    sys.modules['data_base.dbopen'] = dbopen
     
 def init_data_base_compatibility():
     init_mdb_backwards_compatibility()
