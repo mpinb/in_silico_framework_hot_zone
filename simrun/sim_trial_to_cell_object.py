@@ -76,7 +76,7 @@ def simtrial_to_cell_object(
 
     try:
         metadata = db['metadata']
-        if 'sim_trial_index' in metadata:
+        if 'sim_trail_index' in metadata:  # for compatibility
             metadata.sim_trial_index = metadata.sim_trail_index
         metadata = metadata[metadata.sim_trial_index == sim_trial_index]
         assert len(metadata) == 1
@@ -88,7 +88,7 @@ def simtrial_to_cell_object(
         networkName = os.path.join(db['parameterfiles_network_folder'],
                                    networkName)
         sa = db['synapse_activation'].loc[sim_trial_index].compute()
-        dummy =  trail_to_cell_object(cellName = cellName, \
+        dummy =  trial_to_cell_object(cellName = cellName, \
                                     networkName = networkName, \
                                     synapse_activation_file = sa, \
                                     range_vars = range_vars,
@@ -108,7 +108,7 @@ def simtrial_to_cell_object(
 
 
 import tempfile
-def trail_to_cell_object(name = None, cellName = None, networkName = None, synapse_activation_file = None, \
+def trial_to_cell_object(name = None, cellName = None, networkName = None, synapse_activation_file = None, \
                     range_vars = None, scale_apical = None, allPoints = False, compute = True, tStop = 345,
                     neuron_param_modify_functions = [],
                     network_param_modify_functions = [],

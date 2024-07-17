@@ -126,7 +126,7 @@ def test_position_of_morphology_does_not_matter_after_network_mapping(tmpdir, cl
 
 
 #@decorators.testlevel(2)
-def test_reproduce_simulation_trail_from_roberts_model_control(tmpdir, client):
+def test_reproduce_simulation_trial_from_roberts_model_control(tmpdir, client):
     try:
         dummy = simrun.run_existing_synapse_activations.run_existing_synapse_activations(
             cellParamName,
