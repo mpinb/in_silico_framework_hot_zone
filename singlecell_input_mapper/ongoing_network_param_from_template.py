@@ -5,12 +5,13 @@ import single_cell_parser as scp
 from data_base.dbopen import dbopen
 
 
-def create_network_parameter(templateParamName,
-                             cellNumberFileName,
-                             synFileName,
-                             conFileName,
-                             outFileName,
-                             write_all_celltypes=False):
+def create_network_parameter(
+    templateParamName,
+    cellNumberFileName,
+    synFileName,
+    conFileName,
+    outFileName,
+    write_all_celltypes=False):
     print('*************')
     print('creating network parameter file from template {:s}'.format(
         templateParamName))

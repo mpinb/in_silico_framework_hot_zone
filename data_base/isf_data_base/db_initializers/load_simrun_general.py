@@ -85,10 +85,11 @@ def read_voltage_traces_from_csv(prefix, fname):
         data = data.reshape(len(data), 1)
     t = data[0]
     data = data[1:]
+    # In case the simulation trial indices are not consecutive
+    INDICES = sorted([int(f.split('_')[1][3:]) for f in os.listdir(os.path.dirname(full_fname)) if 'synapses' in f])
     index = [
         str(os.path.join(os.path.dirname(fname),
-                         str(index).zfill(6))) for index in range(len(data))
-    ]  ##this will be the sim_trail_index
+                         str(index).zfill(6))) for index in INDICES]  ##this will be the sim_trail_indexndex = [
     #print index
     df = pd.DataFrame(data, columns=t)
     df['sim_trail_index'] = index
