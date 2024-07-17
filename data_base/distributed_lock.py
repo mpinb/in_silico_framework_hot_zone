@@ -83,9 +83,15 @@ def update_config(c):
     server, client = get_client()
 
 class InterProcessLockNoWritePermission:
-    '''if write permissions, locking necessary, if not, not. 
-    then lock aquire returns true without a lock'''
+    '''Check if the target file or directory has write access, and only lock it if so.
+    
+    If the user has write permissions to the path, then locking is necessary. If not, not.
+    Then, lock aquire returns true without a lock'''
     def __init__(self, path):
+        """
+        
+        Args:
+            path (str): path to check."""
         if os.access(path, os.W_OK):
             import fasteners
             self.lock = fasteners.InterProcessLock(path)
