@@ -276,9 +276,9 @@ class Simulator_Setup:
         Returns:
             cell, params: The cell object and the parameter vector.
         '''
-        # params = self.get_params(params) we do not want to apply this twice
+        params = self.get_params(params) # we need to modify the params before we get the cell params
         cell_params = self.get_cell_params(params)
-        params = self.get_params(params)
+        #params = self.get_params(params)
         cell = self.cell_generator(cell_params)
         for name, fun in self.cell_modify_funs:
             #print len(param_selector(params, name))
