@@ -40,9 +40,9 @@ def synapse_activation_df_to_roberts_synapse_activation(sa):
         synapses[values.synapse_type].append(tuple_)
     return synapses
 
-def simtrail_to_cell_object(
-    db, 
-    sim_trail_index, 
+def simtrial_to_cell_object(
+    db,
+    sim_trial_index,
     compute = True, 
     allPoints = False,
     scale_apical = None, 
@@ -54,8 +54,9 @@ def simtrail_to_cell_object(
     additional_network_params = [],
     tStop = 345
     ):
-    '''Resimulates simulation trail and returns cell object.
-    Expects Instance of DataBase and sim_trail index.
+    '''
+    Resimulates simulation trial and returns cell object.
+    Expects Instance of DataBase and sim_trial index.
     The db has to contain the paths to the parameterfiles at the following location: 
         ('parameterfiles', 'cellName')
         ('parameterfiles', 'networkName')
@@ -75,29 +76,30 @@ def simtrail_to_cell_object(
 
     try:
         metadata = db['metadata']
-        metadata = metadata[metadata.sim_trail_index == sim_trail_index]
+        if 'sim_trail_index' in metadata:  # for compatibility
+            metadata.sim_trial_index = metadata.sim_trail_index
+        metadata = metadata[metadata.sim_trial_index == sim_trial_index]
         assert len(metadata) == 1
         m = metadata.iloc[0]
         parameter_table = db['parameterfiles']
-        cellName = parameter_table.loc[sim_trail_index].hash_neuron
+        cellName = parameter_table.loc[sim_trial_index].hash_neuron
         cellName = os.path.join(db['parameterfiles_cell_folder'], cellName)
-        networkName = parameter_table.loc[sim_trail_index].hash_network
+        networkName = parameter_table.loc[sim_trial_index].hash_network
         networkName = os.path.join(db['parameterfiles_network_folder'],
                                    networkName)
-        sa = db['synapse_activation'].loc[sim_trail_index].compute()
-        dummy =  trail_to_cell_object(
-            cellName = cellName,
-            networkName = networkName,
-            synapse_activation_file = sa,
-            range_vars = range_vars,
-            scale_apical = scale_apical,
-            allPoints = allPoints,
-            compute = compute,
-            tStop = tStop,
-            neuron_param_modify_functions = neuron_param_modify_functions,
-            network_param_modify_functions = network_param_modify_functions,
-            synapse_activation_modify_functions = synapse_activation_modify_functions,
-            additional_network_params = additional_network_params)
+        sa = db['synapse_activation'].loc[sim_trial_index].compute()
+        dummy =  trial_to_cell_object(cellName = cellName, \
+                                    networkName = networkName, \
+                                    synapse_activation_file = sa, \
+                                    range_vars = range_vars,
+                                    scale_apical = scale_apical,
+                                    allPoints = allPoints,
+                                    compute = compute,
+                                    tStop = tStop,
+                                    neuron_param_modify_functions = neuron_param_modify_functions,
+                                    network_param_modify_functions = network_param_modify_functions,
+                                    synapse_activation_modify_functions = synapse_activation_modify_functions,
+                                    additional_network_params = additional_network_params)
     finally:
         if silent == True:
             sys.stdout = stdout_bak
@@ -106,26 +108,12 @@ def simtrail_to_cell_object(
 
 
 import tempfile
-def trail_to_cell_object(
-    name = None, 
-    cellName = None, 
-    networkName = None, 
-    synapse_activation_file = None,
-    range_vars = None, 
-    scale_apical = None, 
-    allPoints = False,
-    compute = True, 
-    tStop = 345,
-    neuron_param_modify_functions = [],
-    network_param_modify_functions = [],
-    synapse_activation_modify_functions = [],
-    additional_network_params = []
-    ):
-    """Re-simulates a simulation trail and returns a cell object.
-    
-    Args:
-    
-    """
+def trial_to_cell_object(name = None, cellName = None, networkName = None, synapse_activation_file = None, \
+                    range_vars = None, scale_apical = None, allPoints = False, compute = True, tStop = 345,
+                    neuron_param_modify_functions = [],
+                    network_param_modify_functions = [],
+                    synapse_activation_modify_functions = [],
+                    additional_network_params = []):
     tempdir = None
 
     try:
@@ -149,22 +137,13 @@ def trail_to_cell_object(
         neuronParameters = load_param_file_if_path_is_provided(cellName)
         evokedUpNWParameters = load_param_file_if_path_is_provided(
             evokedUpParamName)
-        
+        additional_network_params = [
+            scp.build_parameters(p) for p in additional_network_params
+        ]
         for fun in network_param_modify_functions:
             evokedUpNWParameters = fun(evokedUpNWParameters)
         for fun in neuron_param_modify_functions:
             neuronParameters = fun(neuronParameters)
-        
-        additional_network_params = [
-            scp.build_parameters(p) for p in additional_network_params
-        ]
-        
-        # merge additional network parameters
-        for additional_network_param in additional_network_params:
-            evokedUpNWParameters = merge_network_parameters(
-                evokedUpNWParameters, additional_network_param
-                )
-        
         scp.load_NMODL_parameters(neuronParameters)
         scp.load_NMODL_parameters(evokedUpNWParameters)
         cellParam = neuronParameters.neuron
@@ -173,10 +152,9 @@ def trail_to_cell_object(
         tTraces = []
 
         #    cell = scp.create_cell(cellParam, scaleFunc=scale_apical)
-        cell = scp.create_cell(
-            cellParam,
-            scaleFunc=scale_apical,
-            allPoints=allPoints)
+        cell = scp.create_cell(cellParam,
+                               scaleFunc=scale_apical,
+                               allPoints=allPoints)
         cell.re_init_cell()
 
         tOffset = 0.0  # avoid numerical transients
@@ -187,11 +165,8 @@ def trail_to_cell_object(
         nRun = 0
         synParametersEvoked = paramEvokedUp
         startTime = time.time()
-        evokedNW = scp.NetworkMapper(
-            cell, 
-            synParametersEvoked,
-            neuronParameters.sim
-            )
+        evokedNW = scp.NetworkMapper(cell, synParametersEvoked,
+                                     neuronParameters.sim)
         evokedNW.re_init_network()
         evokedNW.reconnect_saved_synapses(synfile)
 
@@ -220,45 +195,3 @@ def trail_to_cell_object(
         if tempdir is not None:
             shutil.rmtree(tempdir)
     return cell
-
-
-def merge_network_parameters(netw1, netw2):
-    """Merge two network parameter configurations if their keys are mutually exclusive.
-
-    If the second set of network parameters contains only configuration parameters of presynaptic cell types that do not exist in the first set of network parameters,
-    add them to the first set of network parameters.
-    
-    Usually, different network parameters belong to different networks entirely. However, there are cases in which you want to re-simulate from existing synaptic activations,
-    and you do not know from which network each synaptic activation originates. See e.g. :py:meth:`~simrun.sim_trail_to_cell_object.trail_to_cell_object`.
-    For this reason, it may be useful to merge network parameters, such that a :class:`~single_cell_parser.network.NetworkMapper` object can be instantiated, and such that
-    it knows what the weight distribution and receptor types are of synapses that correpsond to modified networks, including newly defined presynaptic cell types and synapses.
-
-    Args:
-        netw1 (dict): The first network parameters
-        netw2 (dict) The second network parameters
-
-    Raises:
-        NotImplementedError: If the second network parameters contains presynaptic celltypes that also exist in the first. In this case, it is unclear which one should take precedence.
-
-    Returns:
-        dict: The updated network parameters, now containing the presynaptic cell types that exist in :paramref:netw2
-    """
-    if netw1.info != netw2.info:
-        logger.warning("Network parameters do not have the same info.\nNetwork 1 info: {}\nNetwrok 2 info: {}".format(
-        netw1.info, netw2.info))
-    if netw1.NMODL_mechanisms != netw2.NMODL_mechanisms:
-        logger.warning("Network parameters do not have the same NMODL_mechanisms.\nNetwork 1 NMODL_mechanisms: {}\nNetwrok 2 NMODL_mechanisms: {}".format(
-        netw1.NMODL_mechanisms, netw2.NMODL_mechanisms))
-        
-    for presyn_type in netw2.network.keys():
-        if presyn_type not in netw1.network.keys():
-            logger.info("Adding presynaptic celltype {} to network parameters".format(presyn_type))
-            netw1.network[presyn_type] = netw2.network[presyn_type]
-        else:
-            raise NotImplementedError(
-                "Merging two network parameter files that both define parameters for the same presynaptic cell-type is not supported. "
-                "Both network parameters contain the key {}. I don't know how to merge this. "
-                "Which weight distribution and receptor types take precedence?".format(presyn_type)
-            )
-    return netw1
-

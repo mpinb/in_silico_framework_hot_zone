@@ -89,10 +89,23 @@ elif six.PY3:
 # Previous versions of this codebase used pickle as a data format, pickle now tries to import modules that don't exist anymore upon loading
 # For this reason, we save the renamed packages/modules under an additional name (i.e. their old name)
 
-# simrun2 and simrun3 have been merged to simrun
-import simrun
-sys.modules['simrun3'] = simrun
-sys.modules['simrun2'] = simrun
+def init_simrun_compatibility():
+    """
+    Registers simrun as a top-level package
+    Useful for old pickled data, that tries to import it as a top-level package. simrun has since been moved to simrun3
+    """
+    import simrun
+    # simrun used to be simrun2 and simrun3 (separate packages). 
+    # Pickle still wants a simrun3 to exist.
+    sys.modules['simrun3'] = simrun
+    sys.modules['simrun2'] = simrun
+    import simrun.sim_trial_to_cell_object
+    # the typo "simtrail" has been renamed to "simtrial"
+    # We still assign the old naming here, in case pickle tries to import it.
+    simrun.sim_trail_to_cell_object = simrun.sim_trial_to_cell_object
+    simrun.sim_trail_to_cell_object.trail_to_cell_object = simrun.sim_trial_to_cell_object.trial_to_cell_object
+    simrun.sim_trail_to_cell_object.simtrail_to_cell_object = simrun.sim_trial_to_cell_object.simtrial_to_cell_object
+
 
 def register_module_or_pkg_old_name(module, replace_name, replace_with):
     additional_module_name = module.__name__.replace(replace_name, replace_with)
