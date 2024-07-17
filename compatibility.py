@@ -97,7 +97,7 @@ def init_simrun_compatibility():
     # the typo "simtrail" has been renamed to "simtrial"
     # We still assign the old naming here, in case pickle tries to import it.
     simrun.sim_trail_to_cell_object = simrun.sim_trial_to_cell_object
-    simrun.sim_trail_to_cell_object.trail_to_cell_object = simrun.sim_trial_to_cell_object.trail_to_cell_object
+    simrun.sim_trail_to_cell_object.trail_to_cell_object = simrun.sim_trial_to_cell_object.trial_to_cell_object
     simrun.sim_trail_to_cell_object.simtrail_to_cell_object = simrun.sim_trial_to_cell_object.simtrial_to_cell_object
     
 
