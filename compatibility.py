@@ -4,6 +4,10 @@ The following 3rd party modules are used: pandas, dask, distributed
 '''
 
 import six, yaml, cloudpickle, sys
+import logging
+import pkgutil
+from importlib import import_module
+logger = logging.getLogger("ISF").getChild(__name__)
 
 # try: # new dask versions
 #     synchronous_scheduler = dask.get
@@ -94,21 +98,47 @@ def init_simrun_compatibility():
     # simrun used to be simrun2 and simrun3 (separate packages). 
     # Pickle still wants a simrun3 to exist.
     sys.modules['simrun3'] = simrun
+    sys.modules['simrun2'] = simrun
     import simrun.sim_trial_to_cell_object
     # the typo "simtrail" has been renamed to "simtrial"
     # We still assign the old naming here, in case pickle tries to import it.
     simrun.sim_trail_to_cell_object = simrun.sim_trial_to_cell_object
     simrun.sim_trail_to_cell_object.trail_to_cell_object = simrun.sim_trial_to_cell_object.trial_to_cell_object
     simrun.sim_trail_to_cell_object.simtrail_to_cell_object = simrun.sim_trial_to_cell_object.simtrial_to_cell_object
+
+
+def register_module_or_pkg_old_name(module, replace_name, replace_with):
+    additional_module_name = module.__name__.replace(replace_name, replace_with)
+    logger.debug("Registering module \"{}\" under the name \"{}\"".format(module.__name__, additional_module_name))
+    sys.modules[additional_module_name] = module
+
+
+def register_package_under_additional_name(parent_package_name, replace_name, replace_with):
+    parent_package = import_module(parent_package_name)
+    register_module_or_pkg_old_name(parent_package, replace_name=replace_name, replace_with=replace_with)
     
+    subpackages = []
+    for loader, module_or_pkg_name, is_pkg in pkgutil.iter_modules(parent_package.__path__, parent_package.__name__+'.'):
+        submodule = import_module(module_or_pkg_name)
+        register_module_or_pkg_old_name(submodule, replace_name=replace_name, replace_with=replace_with)
+        if is_pkg:
+            subpackages.append(module_or_pkg_name)
+    for pkg in subpackages:
+        register_package_under_additional_name(pkg, replace_name, replace_with)
 
 def init_mdb_backwards_compatibility():
     """
     Registers model_data_base as a top-level package
     Useful for old pickled data, that tries to import it as a top-level package. model_data_base has since been moved to :py:mod:`data_base.model_data_base`
     """
-    from data_base import model_data_base
-    sys.modules['model_data_base'] = model_data_base
+    register_package_under_additional_name(
+        parent_package_name = "data_base.model_data_base", 
+        replace_name="data_base.model_data_base", 
+        replace_with="model_data_base"
+    )
+    
+    import data_base, model_data_base.model_data_base
+    model_data_base.model_data_base.get_mdb_by_unique_id = data_base.data_base.get_db_by_unique_id
 
 def init_db_compatibility():
     """
@@ -123,5 +153,5 @@ def init_db_compatibility():
     sys.modules['data_base.dbopen'] = dbopen
     
 def init_data_base_compatibility():
-    init_mdb_backwards_compatibility()
     init_db_compatibility()
+    init_mdb_backwards_compatibility()
