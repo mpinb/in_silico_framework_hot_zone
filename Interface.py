@@ -131,16 +131,16 @@ load_initialized_cell_and_evokedNW_from_db = db_init_simrun_general.load_initial
 #for compatibility, deprecated!
 synapse_activation_binning_dask = db_init_synapse_activation_binning.synapse_activation_postprocess_dask
 db_init_crossing_over = db_init_roberts_simulations = db_init_simrun_general
-mdb_init_crossing_over = db_init_crossing_over
 
-#--------------- mdb
-from data_base.db_initializers import load_simrun_general as db_init_simrun_general
-from data_base.db_initializers import synapse_activation_binning as db_init_synapse_activation_binning
-load_param_files_from_mdb = db_init_simrun_general.load_param_files_from_db
-load_initialized_cell_and_evokedNW_from_mdb = db_init_simrun_general.load_initialized_cell_and_evokedNW_from_db
+#-------------- mdb: deprecated. Use db instead.
+mdb_init_crossing_over = db_init_crossing_over
+from data_base.model_data_base.mdb_initializers import load_simrun_general as mdb_init_simrun_general
+from data_base.model_data_base.mdb_initializers import synapse_activation_binning as mdb_init_synapse_activation_binning
+load_param_files_from_mdb = mdb_init_simrun_general.load_param_files_from_mdb
+load_initialized_cell_and_evokedNW_from_mdb = mdb_init_simrun_general.load_initialized_cell_and_evokedNW_from_mdb
 #for compatibility, deprecated!
 synapse_activation_binning_dask = db_init_synapse_activation_binning.synapse_activation_postprocess_dask
-db_init_crossing_over = db_init_roberts_simulations = db_init_simrun_general
+mdb_init_crossing_over = mdb_init_roberts_simulations = mdb_init_simrun_general
 
 from data_base.analyze import split_synapse_activation  #, color_cellTypeColorMap, excitatory, inhibitory
 from data_base.utils import silence_stdout
@@ -173,13 +173,16 @@ try:
         as simrun_generate_synapse_activations
     from simrun.run_new_simulations import run_new_simulations \
         as simrun_run_new_simulations
-    from simrun.sim_trail_to_cell_object import simtrail_to_cell_object \
-        as simrun_simtrail_to_cell_object
-    from simrun.sim_trail_to_cell_object import trail_to_cell_object \
-        as simrun_trail_to_cell_object
+    from simrun.sim_trial_to_cell_object import simtrial_to_cell_object \
+        as simrun_simtrial_to_cell_object
+    from simrun.sim_trial_to_cell_object import trial_to_cell_object \
+        as simrun_trial_to_cell_object
     from simrun.parameters_to_cell import parameters_to_cell as simrun_parameters_to_cell
     from simrun.rerun_db import rerun_db as simrun_rerun_db
+    # compatibility
     simrun_rerun_mdb = simrun_rerun_db
+    simrun_simtrail_to_cell_object = simrun_simtrial_to_cell_object
+    simrun_trial_to_cell_object = simrun_trial_to_cell_object
 
 except ImportError:
     logger.warning("Could not import full-compartmental-model simulator")
