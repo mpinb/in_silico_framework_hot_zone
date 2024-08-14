@@ -16,7 +16,8 @@ class RW:
                  params_to_explore = None, evaluation_function = None, 
                  MAIN_DIRECTORY = None, min_step_size = 0, max_step_size = 0.02, 
                  checkpoint_every = 100, n_iterations = 60000,
-                 mode = None, aim_params={}, stop_n_inside_with_aim_params = -1):
+                 mode = None, aim_params={}, stop_n_inside_with_aim_params = -1,
+                 max_iterations = 60000):
         '''Class to perform RW exploration from a seedpoint.
         
         df_seeds: pandas dataframe which contains the individual seed points as rows and 
@@ -62,6 +63,7 @@ class RW:
         self.aim_params = aim_params
         self.normalized_aim_params = self._normalize_aim_params(aim_params)
         self.stop_n_inside_with_aim_params = stop_n_inside_with_aim_params
+        self.max_iterations = max_iterations
     
     def _normalize_aim_params(self,aim_params):
         normalized_params = pd.Series(aim_params)
@@ -154,8 +156,8 @@ class RW:
         # check if we start from scratch or if we resume an exploration
         iterations = [int(f.split('.')[0]) for f in os.listdir(OPERATION_DIR) if f.endswith('.pickle')]
         iterations = sorted(iterations,reverse=True)
-        if iterations and max(iterations) > 60000:
-            print('more than 60000 iterations done. exit gracegfully')
+        if iterations and max(iterations) > self.max_iterations:
+            print('Max iterations reached. exit gracefully')
             return 
             #sys.exit(0)
         if len(iterations) == 0:
