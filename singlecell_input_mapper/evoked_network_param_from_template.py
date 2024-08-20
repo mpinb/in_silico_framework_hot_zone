@@ -3,7 +3,7 @@
 Runfile to create a network parameter file that captures the population activity of a rat barrel cortex during passive whisker touch in anasthesized animals.
 
 Reads in a template parameter file and sets the PSTHs for each celltype to the PSTHs of the evoked activity.
-Such PSTHs can be computed from spike time rrecordings using e.g. :py:mod:`singlecell_input_mapper.evoked_PSTH_from_spike_times`.
+Such PSTHs can be computed from spike time recordings using e.g. :py:mod:`singlecell_input_mapper.evoked_PSTH_from_spike_times`.
 
 Note:
     This module is specific to the model of the rat barrel cortex and the experimental conditions of the passive whisker touch experiment.
