@@ -1,6 +1,5 @@
-.. _file-formats:
 .. Overview of all file formats used in ISF, containing both proprietary and custom file formats.
-
+============
 File formats
 ============
 
@@ -71,6 +70,7 @@ Activity data
 The `.param` format is used to store activity data covering spike times and time bins for specific cell types in response to a stimulus, as seen in e.g. getting_started/example_data/functional_constraints/evoked_activity/
 
 Example::
+
     {
     "L4ss_B1": {
     "distribution": "PSTH",
@@ -125,4 +125,4 @@ Example::
         },
         "cell_type_2": {...},
         ...
-}
+    }
