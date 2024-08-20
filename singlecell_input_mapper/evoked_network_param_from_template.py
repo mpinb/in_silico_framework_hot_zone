@@ -93,6 +93,7 @@ SymLocal6EvokedName = evokedPrefix + 'SymLocal6_PSTH_active_timing_normalized_PW
 #===============================================================================
 # END Used for model run1
 #===============================================================================
+
 #===============================================================================
 # Used for model INH response control:
 #===============================================================================
@@ -364,7 +365,6 @@ deflectionOffset = 245.0  #ms; to allow same analysis as CDK JPhys 2007
 # write cluster parameter file yes/no
 clusterParameters = False
 
-
 def create_network_parameter(
     templateParamName,
     cellNumberFileName,
@@ -378,8 +378,8 @@ def create_network_parameter(
     This method reads in a template file for a network, where the possible parameters of each celltype are already defined.
     It then sets the PSTH (i.e. spike probability per temporal bin) for each cell, depending on the celltype, columnm, and which whisker was deflected.
     Spike probabilities only depend on the celltype, column, and deflected whisker.
-    Spike times are Poisson sampled from the PSTH.
-    A spike does not guarantee a synapse relase, but the probability of release is set for each celltype.
+    Spike times are then Poisson sampled from these PSTHs.
+    A spike does not guarantee a synapse relase, but rather the probability of release upon a spike is set for each celltype.
     
     The template file contains the key "network" with the following info for each celltype:
     
@@ -524,7 +524,25 @@ def create_network_parameter(
         nwParamCluster.save(clusterOutFileName)
 
 
-def whisker_evoked_PSTH(column, deflectedWhisker, cellType):
+def whisker_evoked_PSTH(
+        column, 
+        deflectedWhisker, 
+        cellType
+    ):
+    """
+    Fetch the PSTHs of each celltype in a barrel cortex :paramref:`column` for evoked activity reflecting 
+    a passive whisker touch scenario.
+    This method does not generate such data, but reads it in from existing files containing such empirical measurements, 
+    and parses it. These existing data files are set as global variables in this runfile. For other activity data, adapt these file names.
+
+    Args:
+        column (str): the column in the barrel cortex for which to parse the PSTHs.
+        deflectedWhisker (str): Which whisker was deflected.
+        cellType (str): Which cell type you want the PSTH for.
+
+    Returns:
+        
+    """
     columns = list(surroundColumns[deflectedWhisker].keys())
     evokedTypes = list(evokedTemplates.keys())
     if column not in columns or cellType not in evokedTypes:
