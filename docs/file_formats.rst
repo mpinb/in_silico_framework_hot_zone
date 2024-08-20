@@ -17,6 +17,12 @@ AMIRA proprietary file format for saving AMIRA projects.
 NEURON :cite:`hines2001neuron` file format for neuron morphologies. Documentation can be found `here <https://nrn.readthedocs.io/en/latest/guide/hoc_chapter_11_old_reference.html>`_.
 Used for 3D morphology reconstructions. Can be read with :py:mod:`single_cell_parser.cell_parser`.
 
+.mod
+====
+NEURON :cite:`hines2001neuron` file format for neuron mechanisms. Documentation can be found `here <https://neuron.yale.edu/neuron/docs/using-nmodl-files>`.
+Used to define channel and synapse dynamics in NEURON simulations.
+See the folder `mechanisms` in the project source.
+
 .con
 ====
 ISF custom file format to store neuron connection data. To be used in conjunction with an associated `.syn` file and morphology.
