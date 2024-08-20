@@ -1,7 +1,5 @@
 .. Overview of all file formats used in ISF, containing both proprietary and custom file formats.
-============
-File formats
-============
+.. header:: File formats
 
 .. sectnum::
 
