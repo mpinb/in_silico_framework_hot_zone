@@ -68,7 +68,7 @@ def record_BAC(cell, recSite=None):
     This is used to quantify the voltage trace of a bAP-Activated Ca2+ (BAC) stimulus
     
     Args:
-        cell (Cell): The cell object.
+        cell (:class:`~single_cell_parser.cell.Cell`): The cell object.
         recSite (float): The distance (um) from the soma to the apical recording site.
         
     Note:

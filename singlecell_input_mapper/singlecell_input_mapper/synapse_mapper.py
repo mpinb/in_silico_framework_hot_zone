@@ -1,4 +1,9 @@
 '''
+This module allows to compute synapse density fields from a Post-Synaptic Target (PST) density field and assign synapses to a neuron morphology based on this synapse density field.
+The :class:`~singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper` class uses these classes to create synapse realizations.
+While the classes in this module can be used in isolation, there are also full pipelines available that use the classes here to map synapses to a neuron morphology.
+Consult the module :py:mod:`~singlecell_input_mapper.map_singlecell_inputs` for such a pipeline, or the documentation of :class:`~singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper` for more info on how to use these classes in a pipeline.
+
 Created on Mar 30, 2012
 
 @author: regger
@@ -185,7 +190,7 @@ class SynapseMapper(object):
             x (float): Location on section to calculate path length to.
             
         Returns:
-            float: Path length between soma and location :paramref:`x` on section :paramref:`
+            float: Path length between soma and location :paramref:`x` on section :paramref:`sec`.
         '''
         currentSec = sec
         parentSec = currentSec.parent
@@ -203,7 +208,6 @@ class SynapseDensity(object):
     '''Compute synapse density mesh from a PST density mesh.
     
     Given a PST density mesh, create a 3D mesh of synapse densities for a single postsynaptic neuron using :py:meth:`compute_synapse_density`.
-    The mesh has the same bounding box and voxel size as :py:attr:`~singlecell_input_mapper.singlecell_input_mapper.synapse_maper.SynapseMapper.exPST`.
     It is assumed that :py:attr:`~singlecell_input_mapper.singlecell_input_mapper.synapse_maper.SynapseMapper.exPST` and :py:attr:`~singlecell_input_mapper.singlecell_input_mapper.synapse_maper.SynapseMapper.inhPST` have the same bounding box and voxel size.
     This density mesh is used in :class:`~singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseMapper` to assign synapses to the postsynaptic neuron.
     
@@ -267,8 +271,8 @@ class SynapseDensity(object):
         Cell type specific varation in synapses are only assigned during the network realization phase.
         (see :py:meth:`~singlecell_input_mapper.singlecell_input_mapper.network_embedding.create_network_embedding_from_synapse_densities`)
         
-        This method is used in :class:`~singlecell_input_mapper.singlecell_input_mapper.NetworkMapper`'s 
-        :py:class:`~singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper`.
+        This method is used in :class:`~singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper`'s 
+        :py:meth:`~singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper._precompute_anatomical_area_celltype_synapse_densities`.
         
         Args:
             boutonDensity (:class:`~singlecell_input_mapper.singlecell_input_mapper.scalar_field.ScalarField`):

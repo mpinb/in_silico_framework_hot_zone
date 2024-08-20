@@ -20,16 +20,19 @@ class NetworkMapper:
     '''Connect presynaptic cells to a postsynaptic cell model.
 
     This class is used to create anatomical realizations of connectivity.
-    Given a :class:`singecell_input_mapper.singlecell_input_mapper.scalar_field.ScalarField` of boutons, 
+    Given a :class:`~singlecell_input_mapper.singlecell_input_mapper.scalar_field.ScalarField` of boutons, 
     it computes all possible synapse densities that have non-zero overlap with every voxel this bouton field.
-    These synapse density fields depends on the neuron morphology and location in the bouton field.
-    The synapse density fields are further used to sample possible synaptic connections between 
-    presynaptic cells and the postsynaptic cell model.
+    These synapse density fields depend on the presence of post-synaptic dendrites in the bouton field,
+    which in turn depends on the location and morphology of the post-syanptic neuron.
+    The synapse density fields are further used as probability distributions to Poisson sample 
+    mutiple realizations of synaptic connections between pre-synaptic cells, and the post-synaptic cell
+    (see :py:meth:`~singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseMapper.create_synapses`).
     
     Attributes:
         cells (dict): 
             Presynaptic cells, ordered by anatomical area and cell type. 
-            This attribute is filled by :py:meth:`~_create_presyn_cells`.
+            This attribute is filled by 
+            :py:meth:`~singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper._create_presyn_cells`.
         connected_cells (dict): Indices of all active presynaptic cells, ordered by cell type.
         postCell (:class:`~singlecell_input_mapper.singlecell_input_mapper.cell.Cell`): Reference to postsynaptic (multi-compartment) cell model.
         postCellType (str): Postsynaptic cell type.
@@ -74,11 +77,11 @@ class NetworkMapper:
         It creates :paramref:`nrOfSamples` network realizations, and saves the most representative
         realization to disk. The most representative realization is determined by comparing
         the distribution of anatomical parameters across the population of realizations using
-        :py:meth:`~_get_representative_sample`.
+        :py:meth:`~singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper._get_representative_sample`.
 
         Args:
             postCellName (str):
-                Name of the postsynaptic cell model.
+                Path to the postsynaptic .hoc morphology file.
             boutonDensities (dict):
                 Dictionary of bouton densities, ordered by anatomical area and cell type.
             nrOfSamples (int):
@@ -175,6 +178,14 @@ class NetworkMapper:
         Warning:
             Assumes path names to anatomical realization files are relative to the working directory. 
             These paths should be correct relative, or preferably absolute paths.
+            
+        Args:
+            postCellName (str):
+                Path to the postsynaptic .hoc morphology file.
+            boutonDensities (dict):
+                Dictionary of bouton densities, ordered by anatomical area and cell type.
+            nrOfRealizations (int):
+                Number of network realizations to create.
 
         Returns:
             None. Writes output files to disk.
@@ -262,16 +273,23 @@ class NetworkMapper:
         self, 
         postCellName,
         synapseDensities):
-        '''
-        Public interface:
-        used for creating fixed network connectivity from pre-computed
-        synapse densities. Good for testing...
+        '''Create a single network realization from pre-computed synapse densities.
         
-        Give this network realization a (somewhat) unique name!!!!     
-        then save it at the same location as the anatomical realization
-        IMPORTANT: assumes path names to anatomical realization files
-        work from the working directory! so should be correct relative, or
-        preferably absolute paths.
+        Useful for testing purposes.
+        
+        Warning:
+            Give this network realization a (somewhat) unique name!     
+            Then save it at the same location as the anatomical realization
+        
+        Warning:
+            Assumes path names to anatomical realization files are relative to the working directory. 
+            These paths should be correct relative, or preferably absolute paths.
+        
+        Args:
+            postCellName (str):
+                Path to the postsynaptic .hoc morphology file.
+            synapseDensities (dict):
+                Dictionary of synapse densities, ordered by anatomical area and cell type.
         '''
 
         self._create_presyn_cells()
@@ -1084,7 +1102,7 @@ class NetworkMapper:
         :py:meth:`~create_network_embedding_from_synapse_densities` to write output files to disk.
 
         Args:
-            postCellName (str): Name of the post-synaptic cell.
+            postCellName (str): Path to the postsynaptic .hoc file.
             connectivityMap (list): 
                 Connections between presynaptic cells and postsynaptic cell of the form
                 (cell type, presynaptic cell index, synapse index). 
@@ -1182,7 +1200,7 @@ class NetworkMapper:
         Used by :py:meth:`_create_network_embedding` to write output files to disk.
 
         Args:
-            postCellName (str): Name of the post-synaptic cell.
+            postCellName (str): Path to the postsynaptic .hoc file.
             populationDistribution (dict): Population distribution of anatomical parameters.
             connectivityMap (list): 
                 Connections between presynaptic cells and postsynaptic cell of the form

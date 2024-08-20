@@ -1,30 +1,58 @@
-#===============================================================================
-# SingleCellInputMapper
-# Tool for estimating connectivity (inputs) of individual neuron morphologies
-# registered into standard barrel cortex model.
-# Based on methods and data presented in:
-# Egger, Dercksen et al., Frontiers Neuroanatomy 2014
-#
-# Inputs:
-# - single neuron morphology
-# - 3D PST densities for normalization of innervation calculations
-# - number of cells per cell type spreadsheets
-# - connections spreadsheet containing PST length/area constants
-# - presynaptic bouton densities of individual axon morphologies
-#   sorted by presynaptic column and cell type
-# Outputs:
-# - summary file containing information about number and presynaptic type
-#   and column of anatomical synapses
-# - AmiraMesh landmark file containing 3D synapse locations of anatomical
-#   synapses of each presynaptic type and column
-# - Synapse location and connectivity file compatible with NeuroSim
-#
-# Author: Robert Egger
-#         Computational Neuroanatomy
-#         Max Planck Institute for Biological Cybernetics
-#         Tuebingen, Germany
-#         Email: robert.egger@tuebingen.mpg.de
-#===============================================================================
+"""Map synapses onto a postsynaptic cell.
+
+This module provides a full pipeline for creating anatomical realizations of the connectivity 
+of individual neuron morphologies, based on methods and data presented in 
+:cite:t:`Egger_Dercksen_Udvary_Hege_Oberlaender_2014`.
+An anatomical realization refers to a set of synapses sampled from a probability distribution.
+
+Inputs:
+
+- Morphology of the post-synaptic neuron
+- 3D PST densities for normalization of innervation calculations
+- Number of cells per cell type in the brain area of interest.
+- Connections spreadsheet containing PST length/area constants of 
+  the post-synaptic cell for normalization.
+- Presynaptic bouton densities of individual axon morphologies,
+  sorted by anatomical area and cell type
+
+This module then uses :class:`~singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper`
+to assign synapses to a single post-synaptic cell morphology, based on the inputs mentioned above.
+This happens according to the following pipeline:
+
+1. The bouton density field is a scalar field with defined voxel resolution. This voxel resolution
+   can reflect e.g. biological variability form animal to animal 
+   (as is the case for which this package was developed), or measurement error.
+2. Calculate the overlap between these voxels and the dendrites of the postsynaptic neuron morphology 
+   using Liang-Barsky clipping :cite:`liang1984new`.
+3. Calculate a synapse density field by multiplying the bouton density field with the PST density field
+   at these voxels.
+4. Normalize the synapse density field using cell-type specific PST length/area constraints and the number of 
+   cells per cell type.
+5. Poisson samples synapses from this density field and randomly assign them to the dendritic branch 
+   that is contained within that voxel. This sample is called an "anatomical realization".
+6. (optional) Repeat steps 4 and 5 to create a collection of anatomical realizations. 
+   These collections can be investigated for variability in synapse number and location.
+   Alternatively, the realization that is closest to the average is further used in modules like :py:mod:`simrun`.
+
+Density meshes are accessed using :class:`~singlecell_input_mapper.singlecell_input_mapper.scalar_field.ScalarField`.
+:class:`~singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseMapper` makes use of 
+:class:`~singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseDensity` for steps 2, 3 and 4,
+and finalizes step 5 by itself.
+
+Outputs:
+
+- summary file containing information about number and presynaptic type
+  and column of anatomical synapses
+- AmiraMesh landmark file containing 3D synapse locations of anatomical
+  synapses of each presynaptic type and column
+- Synapse location and connectivity file compatible with :py:mod:`simrun`.
+
+Author: 
+    Robert Egger
+    Computational Neuroanatomy
+    Max Planck Institute for Biological Cybernetics
+    Tuebingen, Germany
+"""
 
 #===============================================================================
 # Python standard library imports
@@ -88,23 +116,23 @@ def map_singlecell_inputs(
     
     Steps:
     
-    1. Load in the data:
+    1. Loads in the data:
     
         - Cell morphology
         - Number of cells per cell type
         - Connection probabilities between cell types
         - PST densities for normalization of innervation calculations
         
-    2. Load in the bouton densities:
+    2. Loads in the bouton densities:
     
         - For each anatomical area
         - For each presynaptic cell type
         
-    3. Create a scalar field (:class:`~singlecell_input_mapper.cinglecell_input_mapper.scalar_field.ScalarField`)
-    for each bouton density.
-    4. Create a :class:`~singlecell_input_mapper.singlecell_input_mapper.NetworkMapper` object.
-    5. Create a network embedding for the cell using 
-    :py:meth:`~singlecell_input_mapper.singlecell_input_mapper.NetworkMapper.create_network_embedding`.
+    3. Creates a scalar field (:class:`~singlecell_input_mapper.singlecell_input_mapper.scalar_field.ScalarField`)
+       for each bouton density.
+    4. Creates a :class:`~singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper` object.
+    5. Creates a network embedding for the cell using 
+       :py:meth:`~singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper.create_network_embedding`.
     
     The naming of each anatomical area needs to be consistent between:
     
@@ -123,11 +151,13 @@ def map_singlecell_inputs(
             Values indicate how much of each celltype was found in each neuropil structure.
         connectionsSpreadsheetName (str):
             Path to a spreadsheet, containing the connection probabilities between each presynaptic and postsynaptic cell type.
-        ExPSTDensityName: 
-        InhPSTDensityName
+        ExPSTDensityName (str):
+            Path to the PST density file for excitatory synapses.
+        InhPSTDensityName (str):
+            Path to the PST density file for inhibitory synapses.
         boutonDensityFolderName: 
             A directory containing the following subdirectory structure:
-            anatomical_area/presynaptic_cell_type/*.am
+            anatomical_area/presynaptic_cell_type/\*.am
             
     Returns:
         None. Writes the results to disk.
