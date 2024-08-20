@@ -77,7 +77,7 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
-* :ref:`file-formats`
+* `file-formats`_
 
 Bibliography
 ===========
