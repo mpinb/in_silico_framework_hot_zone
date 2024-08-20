@@ -594,6 +594,22 @@ def whisker_evoked_PSTH(
     a passive whisker touch scenario.
     This method does not generate such data, but reads it in from existing files containing such empirical measurements, 
     and parses it. These existing data files are set as global variables in this runfile. For other activity data, adapt these file names.
+    
+    The data linked in this runfile are for experiments where the C2 whisker was deflected.
+    For situations where other :paramref:`deflectedwhisker`s are requested, activity data of equivalent
+    columns relative to the C2 is requested.
+    
+    Example:
+        >>> column = 'B2'  # I want activity from B2 column
+        >>> deflectedWhisker = 'C1'  # I want activity reflecting deflection of C1 whisker (not C2)
+        >>> cellType = 'L6ct'
+        >>> params = whisker_evoked_PSTH(column=column, deflectedWhisker=deflectedWhisker, cellType=cellType)
+        >>> print(params)  # This is activity data from the C3 column for C2 whisker deflection i.e. equivalent activity
+        {
+            'distribution': 'PSTH', 
+            'intervals': [(40.0, 41.0), (43.0, 44.0), (49.0, 50.0)], 
+            'probabilities': [0.0057, 0.0057, 0.0057]
+            }
 
     Args:
         column (str): the column in the barrel cortex for which to parse the PSTHs.
@@ -601,13 +617,18 @@ def whisker_evoked_PSTH(
         cellType (str): Which cell type you want the PSTH for.
 
     Returns:
-        
+        parameters.ParameterSet: 
+            The PSTH for the given cell type in a C2-relative equivalent column, reflecting the deflection of the given whisker.
     """
+    # The columns that surround the column of deflected whisker, plus the column of the deflected whisker itself
     columns = list(surroundColumns[deflectedWhisker].keys())
+    # Cell types in these columns for which we have evoked activity data
     evokedTypes = list(evokedTemplates.keys())
     if column not in columns or cellType not in evokedTypes:
         return None
+    # NTParameterset of PSTHs of these cell types
     evokedTemplate = evokedTemplates[cellType]
+    # Equivalent column relative to C2
     PSTHwhisker = surroundPSTHLookup[surroundColumns[deflectedWhisker][column]]
     PSTHstr = cellType + '_' + PSTHwhisker
     PSTH = evokedTemplate[PSTHstr]
@@ -615,6 +636,57 @@ def whisker_evoked_PSTH(
 
 
 def load_cell_number_file(cellNumberFileName):
+    """Load the cell number file.
+    
+    The cell number file must have the following format::
+    
+        Anatomical_area Presynaptic_cell_type   n_cells
+        A1	cell_type_1	8
+        A1	cell_type_2	14
+        ...
+
+    Args:
+        cellNumberFileName (str): Path to the cell number file.
+        
+    Returns:
+        dict: Dictionary of the form {celltype: {column: nr_of_cells}}
+        
+    Example:
+        >>> load_cell_number_file(
+        ...    'getting_started/example_data/anatomical_constraints/'
+        ...    '86_L5_CDK20041214_nr3L5B_dend_PC_neuron_transform_registered_C2center_synapses_20150504-1611_10389/'
+        ...    '86_L5_CDK20041214_nr3L5B_dend_PC_neuron_transform_registered_C2center_synapses_20150504-1611_10389/'
+        ...    'NumberOfConnectedCells.csv'
+        ...    )
+        {
+            'L4py': {
+                'A1': 8, 
+                'A2': 1, 
+                'A3': 7, 
+                'A4': 3, 
+                'Alpha': 9, 
+                'B1': 72, 
+                'B2': 30, 
+                'B3': 97, 
+                'B4': 30, 
+                'Beta': 0, 
+                'C1': 59, 
+                'C2': 374, 
+                'C3': 88, 
+                'C4': 3, 
+                'D1': 22, 
+                'D2': 89, 
+                'D3': 59, 
+                'D4': 0, 
+                'Delta': 0, 
+                'E1': 0, 
+                'E2': 0, 
+                'E3': 0, 
+                'E4': 0, 
+                'Gamma': 16}, 
+                'L6cc': {...}, 
+                ... 
+    """
     cellTypeColumnNumbers = {}
     with dbopen(cellNumberFileName, 'r') as cellNumberFile:
         lineCnt = 0
