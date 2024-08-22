@@ -1117,9 +1117,18 @@ class CellMorphologyVisualizer(CMVDataParser):
 
 
 class CellMorphologyInteractiveVisualizer(CMVDataParser):
-    """Initialize a visualization class from a cell object, and extract relevant Cell data to a format that lends itself easier to plotting.
-    It contains useful methods for interactively visualizing a cell morphology, the voltage along its body, or ion channel dynamics.
-    It relies on Dash and Plotly to do so.
+    """Plot an interactive 3D render of a cell morphology using Plotly and Dash.
+    
+    Attributes:
+        dash_ip (str): IP address to run dash server on.
+        show (bool): Whether to show the plot. Set to False for testing purposes. Default: True
+        renderer (str): 
+            Type of backend renderer to use for rendering the javascript/HTML VBox. Defaults to "notebook_connected"
+            Available renderers are: 
+            ['plotly_mimetype', 'jupyterlab', 'nteract', 'vscode', 'notebook', 'notebook_connected', 'kaggle', 'azure', 'colab',
+            'cocalc', 'databricks', 'json', 'png', 'jpeg', 'jpg', 'svg', 'pdf', 'browser', 'firefox', 'chrome', 'chromium', 
+            'iframe', 'iframe_connected', 'sphinx_gallery', 'sphinx_gallery_png']
+        background_color (str): Background color of the plot. Defaults to "#f0f0f0"
     """
 
     def __init__(
@@ -1130,7 +1139,7 @@ class CellMorphologyInteractiveVisualizer(CMVDataParser):
         show=True,
         renderer="notebook_connected",
         t_start=None, t_stop=None, t_step=None):
-        """
+        """Initializes the CellMorphologyInteractiveVisualizer object.
         Args:
             cell (:class:`~single_cell_parser.cell.Cell`): Cell object
             align_trunk (bool): Whether or not to align the cell trunk with the z-axis.
@@ -1148,15 +1157,13 @@ class CellMorphologyInteractiveVisualizer(CMVDataParser):
         self.show = show  # set to False for testing
         self.renderer = renderer
         self.background_color="#f0f0f0"
-        """IP address to run dash server on."""
 
     def _get_interactive_cell(
         self, 
         color=None,
         time_point=None,
         diameter=None):
-        ''' 
-        Setup plotly for rendering in notebooks.
+        ''' Setup plotly for rendering in notebooks.
         Shows an interactive 3D render of the Cell with NO data overlayed.
 
         Args:
@@ -1353,7 +1360,6 @@ class CellMorphologyInteractiveVisualizer(CMVDataParser):
         time_point=None,
         show=True):
         """This method shows a plot with an interactive cell, overlayed with scalar data (if provided with the data argument).
-        The parameters :paramref:t_start, :paramref:t_stop and :paramref:t_step will define the :paramref:self.time attribute
 
         Args:
             color (str | list): 
@@ -1375,18 +1381,12 @@ class CellMorphologyInteractiveVisualizer(CMVDataParser):
     def interactive_app(
         self,
         color="grey",
-        renderer="notebook_connected",
         t_start=None, t_stop=None, t_step=None):
         """
         Args:
             color (str | list): 
                 If you want some other color overlayed on the cell morphology. 
                 Options: "voltage", "vm", "synapses", "synapse", or a color string, or a nested list of colors for each section
-            renderer (str): 
-                Available renderers:
-                ['plotly_mimetype', 'jupyterlab', 'nteract', 'vscode', 'notebook', 'notebook_connected', 'kaggle', 'azure', 'colab',
-                'cocalc', 'databricks', 'json', 'png', 'jpeg', 'jpg', 'svg', 'pdf', 'browser', 'firefox', 'chrome', 'chromium', 
-                'iframe', 'iframe_connected', 'sphinx_gallery', 'sphinx_gallery_png']
             t_start (float): start time point of our time series visualization
             t_stop (float): last time point of our time series visualization
             t_step (float): time interval
@@ -1416,14 +1416,13 @@ def get_3d_plot_morphology(
     return_figax = True,
     proj_type="ortho"
     ):
-    """Constructs a 3d matplotlib plto of a cell morphology, overlayed with some scalar data.
+    """Constructs a 3d matplotlib plot of a cell morphology, overlayed with some scalar data.
+    
+    This is the main method called by :class:`~CellMorphologyVisualizer` to generate a 3D plot of the cell morphology.
     This method Uses LineCollections to plot the morphology, with a round joinstyle. 
     This method is usually not called directly. Rather, :class:`~CellMorphologyVisualizer` calls this method to generate a plot,
     depending on parameters such as parallellization client, scalar data overlay, viewing angles etc...
-    It is recommended to use the high-level method :class:`~CellMorphologyVisualizer.plot` instead of trying to use this one directly.
-    
-    Note:
-        See also: https://matplotlib.org/stable/gallery/lines_bars_and_markers/joinstyle.html
+    It is recommended to use the high-level method :class:`~visualize.cell_morphology_visualizer.CellMorphologyVisualizer.plot` instead of trying to use this one directly.
         
     Args:
         lookup_table (pd.DataFrame): 
@@ -1444,7 +1443,7 @@ def get_3d_plot_morphology(
         proj_type (str): Projection type for the 3D plot. Default: "ortho"
     
     Returns:
-        tuple|None: fig and ax object if :paramref:`return_figax` is True. None otherwise.
+        tuple | None: fig and ax object if :paramref:`return_figax` is True. None otherwise.
     """
     #----------------- Generic axes setup
     fig = plt.figure(
@@ -1479,8 +1478,9 @@ def get_3d_plot_morphology(
             segments, 
             linewidths=linewidths, 
             color=colors[sec_n],
-            joinstyle="bevel",
+            joinstyle="bevel",  # See: https://matplotlib.org/stable/gallery/lines_bars_and_markers/joinstyle.html
             capstyle="round")
+        
         ax.add_collection(lc)
 
     ax.auto_scale_xyz(lookup_table['x'], lookup_table['y'], lookup_table['z'])
