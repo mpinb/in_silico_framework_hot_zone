@@ -16,7 +16,8 @@ class RW:
                  params_to_explore = None, evaluation_function = None, 
                  MAIN_DIRECTORY = None, min_step_size = 0, max_step_size = 0.02, 
                  checkpoint_every = 100, n_iterations = 60000,
-                 mode = None, aim_params={}, stop_n_inside_with_aim_params = -1):
+                 mode = None, aim_params={}, stop_n_inside_with_aim_params = -1,
+                 max_iterations = 60000):
         '''Class to perform RW exploration from a seedpoint.
         
         df_seeds: pandas dataframe which contains the individual seed points as rows and 
@@ -62,6 +63,7 @@ class RW:
         self.aim_params = aim_params
         self.normalized_aim_params = self._normalize_aim_params(aim_params)
         self.stop_n_inside_with_aim_params = stop_n_inside_with_aim_params
+        self.max_iterations = max_iterations
     
     def _normalize_aim_params(self,aim_params):
         normalized_params = pd.Series(aim_params)
@@ -99,11 +101,23 @@ class RW:
         max_ = self.param_ranges['max']
         return p*(max_-min_)+min_
         
-    def assess_aim_params_reached(self, normalized_params):
+    def assess_aim_params_reached(self, normalized_params, tolerance=1e-4):
+        """Check whether the aim parameters have been reached.
+        
+        For each parameter in the aim_params dictionary, check whether the parameter has been reached.
+        A parameter is reached if it lies within a certain tolerance of the aim parameter.
+        
+        Args:
+            normalized_params (np.array): normalized parameter vector
+            tolerance (float): tolerance for the aim parameters to be reached. Default: 1e-4
+            
+        Returns:
+            list: boolean values indicating whether each aim parameter has been reached or not.
+        """
         reached_aim_params = []
         for key in self.aim_params.keys():
             idx = self.params_to_explore.index(key)
-            reached_aim_params.append(math.isclose(normalized_params[idx],self.normalized_aim_params[key],abs_tol=self.max_step_size))
+            reached_aim_params.append(math.isclose(normalized_params[idx],self.normalized_aim_params[key], tolerance=tolerance))
         return reached_aim_params
         
     def run_RW(self, selected_seedpoint, particle_id, seed = None):
@@ -142,8 +156,8 @@ class RW:
         # check if we start from scratch or if we resume an exploration
         iterations = [int(f.split('.')[0]) for f in os.listdir(OPERATION_DIR) if f.endswith('.pickle')]
         iterations = sorted(iterations,reverse=True)
-        if iterations and max(iterations) > 60000:
-            print('more than 60000 iterations done. exit gracegfully')
+        if iterations and max(iterations) > self.max_iterations:
+            print('Max iterations reached. exit gracefully')
             return 
             #sys.exit(0)
         if len(iterations) == 0:
@@ -274,7 +288,7 @@ class RW:
             if inside:
                 for key in self.normalized_aim_params.keys():
                     idx = self.params_to_explore.index(key)
-                    print(key,' (normalized) - current: ', np.round(p_normalized_selected_np[idx],4),', proposed: ', np.round(p_normalized[key],4))
+                    print(key,' (normalized) - current: ', p_normalized_selected_np[idx], ', proposed: ', p_normalized[key])
                 print('Moving current position to proposed position')
                 p_normalized_selected_np = p_proposal
                 print('distance to initial seed point (normalized):', get_vector_norm(p_normalized_selected_np-seed_point_for_exploration_normalized_selected_np))
@@ -289,7 +303,7 @@ class RW:
                     else:
                         count = int(aim_params_inside_flag[0].split('_')[-1])
                         count+=1
-                        os.rename(aim_params_inside_flag[0], os.path.join(path,'aim_params_successful_model_{}'.format(count)))
+                        os.rename(aim_params_inside_flag[0], os.path.join(seedpoint_dir,'aim_params_successful_model_{}'.format(count)))
                     if count == self.stop_n_inside_with_aim_params:
                         print('Reached aim params {} times for successful models. Exit gracefully'.format(count))
                         break

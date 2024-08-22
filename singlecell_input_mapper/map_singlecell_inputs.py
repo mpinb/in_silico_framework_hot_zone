@@ -20,7 +20,7 @@ to assign synapses to a single post-synaptic cell morphology, based on the input
 This happens according to the following pipeline:
 
 1. The bouton density field is a scalar field with defined voxel resolution. This voxel resolution
-   can reflect e.g. biological variability form animal to animal 
+   can reflect e.g. biological variability from animal to animal 
    (as is the case for which this package was developed), or measurement error.
 2. Calculate the overlap between these voxels and the dendrites of the postsynaptic neuron morphology 
    using Liang-Barsky clipping :cite:`liang1984new`.
