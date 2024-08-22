@@ -914,7 +914,7 @@ class CellMorphologyVisualizer(CMVDataParser):
         Creates a set of images where a neuron morphology color-coded with voltage together with synapse activations are
         shown for a set of time points. In each image the neuron rotates a bit (3 degrees) over its axis.
         These images are then put together into a gif.
-        The parameters :paramref:t_start, :paramref:t_stop and :paramref:t_step will define the :paramref:self.time attribute
+        The parameters :paramref:`t_start`, :paramref:`t_stop` and :paramref:`t_step` will define the :paramref:`times_to_show` attribute
 
         Args:
             images_path (str): dir where the images for the gif will be generated
@@ -968,7 +968,7 @@ class CellMorphologyVisualizer(CMVDataParser):
         '''Write the individual frames of a neuron during a simulation and merge them into a video.
         
         Creates a set of images of a neuron color-coded with voltage together with synapse activations.
-        The parameters :paramref:t_start, :paramref:t_stop and :paramref:t_step update the :paramref:self.time attribute.
+        The parameters :paramref:`t_start`, :paramref:`t_stop` and :paramref:`t_step` update the :paramref:`times_to_show` attribute.
 
         Args:
             images_path (str): dir where the images for the gif will be generated
@@ -1068,7 +1068,7 @@ class CellMorphologyVisualizer(CMVDataParser):
         color=None,
         n_decimals=2,
         client=None):
-        '''Format in which a cell morphology timeseries (color-coded with voltage) is saved to be visualized in paraview
+        '''Write the cell morphology to a series of VTK files.
 
         Args:
             out_name (str): name of the file (not path, the file will be generated in out_dir)
