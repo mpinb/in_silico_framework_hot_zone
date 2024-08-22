@@ -85,3 +85,14 @@ def evaluation_function_incremental_helper(
     for aef in additional_evaluation_functions:
         evaluation.update(aef(voltage_traces))
     return True, evaluation
+
+def convert_all_check_columns_bool_to_float(df): 
+    '''returns modified df'''
+    check_columns = [col for col in df.columns if 'check' in col]
+    for col in check_columns: 
+        #otherwise the 'True' strings cannot be converted to float and cannot map to bool bc NaN 
+        df[col] = df[col].replace(to_replace = 'True', value = 1.0)
+        df[col] = df[col].replace(to_replace = 'False', value = 0.0)
+        df[col] = df[col].replace({None:np.nan})
+        df[col] = df[col].map(float) 
+    return df
