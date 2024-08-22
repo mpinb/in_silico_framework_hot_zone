@@ -44,7 +44,7 @@ def read_hoc_file(fname=''):
         The module :py:mod:`singlecell_input_mapper` also conains a 
         :py:meth:`~singlecell_input_mapper.singlecell_input_mapper.reader.read_hoc_file` 
         method with subtle differences. A notable difference is that this method reads in axon sections,
-        while the :py:mod:`singlecell_input_mapper` variant does.
+        while the :py:mod:`singlecell_input_mapper` variant does not.
 
     Args:
         fname (str): The name of the file to be read.
