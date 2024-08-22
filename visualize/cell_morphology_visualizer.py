@@ -689,33 +689,33 @@ class CellMorphologyVisualizer(CMVDataParser):
     - Dendritic groups
 
     The relevant cell information can also be exported to .vtk format for further visualization or interaction.
-    No explicit VTK dependency is needed for this; it simply writes it out as a .txt file.
+    No explicit VTK dependency is needed for this; it simply writes it out as an ASCII .vtk file.
     
     Attributes:
-    camera_position (dict): 
-        Camera angles and distance for matplotlib 3D visualizations.
-        Possible keys: 'azim', 'dist', 'elev', 'roll'
-        See also: https://matplotlib.org/stable/api/toolkits/mplot3d/view_angles.html
-    neuron_rotation (float): 
-        Amount of degrees the azimuth increases per frame in a timeseries visualization.
-    dpi (int): 
-        Image quality
-        Default: 72
-    show_synapses (bool): 
-        Whether or not to visualize the location of synapses onto the cell.
-    synapse_legend (bool): 
-        whether the synapse activations legend should appear in the plot
-    highlight_arrow_kwargs (dict): 
-        Additional arguments for the arrow. 
-        See available kwargs on https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.patches.Arrow.html#matplotlib.patches.Arrow
-    synapse_group_function (callable): 
-        Method to group synapse types. 
-        Must accept a name (str) as argument, and return a group name (str) as output.
-        Default: `lambda x: x`
-    population_to_color_dict (dict)
-        Dictionary to map synapse group names (str) to colors
-        Must contain the same keys as self.cell.synapses.keys() after being passed through self.synapse_group_function
-        default: {}
+        camera_position (dict): 
+            Camera angles and distance for matplotlib 3D visualizations.
+            Possible keys: 'azim', 'dist', 'elev', 'roll'
+            See also: https://matplotlib.org/stable/api/toolkits/mplot3d/view_angles.html
+        neuron_rotation (float): 
+            Amount of degrees the azimuth increases per frame in a timeseries visualization.
+        dpi (int): 
+            Image quality
+            Default: 72
+        show_synapses (bool): 
+            Whether or not to visualize the location of synapses onto the cell.
+        synapse_legend (bool): 
+            whether the synapse activations legend should appear in the plot
+        highlight_arrow_kwargs (dict): 
+            Additional arguments for the arrow. 
+            See available kwargs on https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.patches.Arrow.html#matplotlib.patches.Arrow
+        synapse_group_function (callable): 
+            Method to group synapse types. 
+            Must accept a name (str) as argument, and return a group name (str) as output.
+            Default: `lambda x: x`
+        population_to_color_dict (dict)
+            Dictionary to map synapse group names (str) to colors
+            Must contain the same keys as self.cell.synapses.keys() after being passed through self.synapse_group_function
+            default: {}
     """
 
     def __init__(
