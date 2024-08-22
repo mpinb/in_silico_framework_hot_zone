@@ -80,7 +80,7 @@ Indices and tables
 * :ref:`search`
 
 Bibliography
-===========
+============
 
 .. bibliography:: bibliography.bib
    :style: unsrt
