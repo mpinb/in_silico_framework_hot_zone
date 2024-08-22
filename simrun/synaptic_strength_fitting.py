@@ -168,7 +168,8 @@ class PSPs:
             method, merged=True, merge_celltype_kwargs=merge_celltype_kwargs)
         return ePSP_summary_statistics(vt, **ePSP_summary_statistics_kwargs)
 
-    def get_optimal_g(self, measured_data, method='dynamic_baseline',merge_celltype_kwargs={}):
+    def get_optimal_g(self, measured_data, method='dynamic_baseline',merge_celltype_kwargs=None):
+        if merge_celltype_kwargs is None: merge_celltype_kwargs = {}
         pdf = self.get_summary_statistics(method=method, merge_celltype_kwargs=merge_celltype_kwargs)
         pdf = pdf.reset_index()
         pdf = pdf.groupby('celltype').apply(linear_fit_pdf)
