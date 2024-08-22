@@ -219,6 +219,12 @@ class SynapseDensity(object):
     PST density field for a rat somatosensory cortex (pia and white matter shown in grey at the top and bottom).
     
     .. figure:: ./_images/exPST_solid_bg.png
+
+    Note:
+        The only cell type specificity that is considered here is whether or not the postsynaptic cell is excitatory or inhibitory.
+        Cell type wiring specificity is only considered in the network realization phase, when the synapse density field is Poisson sampled and normalized.
+        Then the normalization values depend on the exact presynaptic cell type.
+        See: :py:class:`~singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper`
     '''
     def __init__(
         self, 
@@ -259,6 +265,11 @@ class SynapseDensity(object):
         Calculates the density field of PSTs of a given post-synaptic morphology using :py:meth:`~SynapseDensity.compute_cell_PST`.
         The density of synapses at each voxel in the density field is computed to be the 
         postsynaptic cell's PST density * presynaptic bouton density / normalization PST density.
+        These synapse density meshes are computed for excitatory and inhibitory cell types separately.
+        Within the excitatory or inhibitory class, there is no further distinction between cell types.
+        There thus exists one synapse density field that captures all excitatory cell types, and idem ditto for inhibitory.
+        Cell type specific varation in synapses are only assigned during the network realization phase.
+        (see :py:meth:`~singlecell_input_mapper.singlecell_input_mapper.network_embedding.create_network_embedding_from_synapse_densities`)
         
         This method is used in :class:`~singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper`'s 
         :py:meth:`~singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper._precompute_anatomical_area_celltype_synapse_densities`.
@@ -267,7 +278,8 @@ class SynapseDensity(object):
             boutonDensity (:class:`~singlecell_input_mapper.singlecell_input_mapper.scalar_field.ScalarField`):
                 Density of presynaptic boutons.
             preCellType (str):
-                Presynaptic cell type.
+                Presynaptic cell type. 
+                Used to check if it is an exitatory or inhibitory cell, as they have separate density meshes and normalization fields.
                 
         Returns:
             dict: Dictionary of synapse densities for each structure of the postsynaptic neuron.
@@ -288,12 +300,12 @@ class SynapseDensity(object):
             raise RuntimeError(errstr)
 
         synapseDensity = {}
-        for structure in list(cellPSTDensity.keys()):
-            cellMeshShape = cellPSTDensity[structure].mesh.shape
-            cellOrigin = cellPSTDensity[structure].origin
-            cellExtent = cellPSTDensity[structure].extent
-            cellSpacing = cellPSTDensity[structure].spacing
-            cellBoundingBox = cellPSTDensity[structure].boundingBox
+        for anatomical_area in list(cellPSTDensity.keys()):
+            cellMeshShape = cellPSTDensity[anatomical_area].mesh.shape
+            cellOrigin = cellPSTDensity[anatomical_area].origin
+            cellExtent = cellPSTDensity[anatomical_area].extent
+            cellSpacing = cellPSTDensity[anatomical_area].spacing
+            cellBoundingBox = cellPSTDensity[anatomical_area].boundingBox
 
             if not self._intersect_bboxes(
                 boutonDensity.boundingBox,
@@ -302,33 +314,33 @@ class SynapseDensity(object):
                 return None
 
             synapseMesh = np.zeros(shape=cellMeshShape)
-            synapseDensity[structure] = ScalarField(
+            synapseDensity[anatomical_area] = ScalarField(
                 synapseMesh, 
                 cellOrigin, 
                 cellExtent, 
                 cellSpacing,
                 cellBoundingBox)
             
-            x_start, x_end, y_start, y_end, z_start, z_end = synapseDensity[structure].extent
+            x_start, x_end, y_start, y_end, z_start, z_end = synapseDensity[anatomical_area].extent
             for i in range(x_start, x_end + 1):
                 for j in range(y_start, y_end + 1):
                     for k in range(z_start, z_end + 1):
                         ijk = i, j, k
-                        voxelCenter = synapseDensity[structure].get_voxel_center(ijk)
+                        voxelCenter = synapseDensity[anatomical_area].get_voxel_center(ijk)
                         boutons = boutonDensity.get_scalar(voxelCenter)
                         normPST = normPSTDensity.get_scalar(voxelCenter)
-                        cellPST = cellPSTDensity[structure].mesh[ijk]
+                        cellPST = cellPSTDensity[anatomical_area].mesh[ijk]
                         if (
                             boutons is not None and 
                             normPST is not None and 
                             normPST > 0.0
                             ):
-                            synapseDensity[structure].mesh[ijk] = \
+                            synapseDensity[anatomical_area].mesh[ijk] = \
                                 boutons * cellPST / normPST
 
-        for structure in list(synapseDensity.keys()):
+        for anatomical_area in list(synapseDensity.keys()):
             keep = False
-            if synapseDensity[structure].mesh.nonzero():
+            if synapseDensity[anatomical_area].mesh.nonzero():
                 keep = True
         if not keep:
             return None

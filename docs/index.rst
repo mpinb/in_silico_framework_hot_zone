@@ -74,6 +74,7 @@ Tutorials
 Indices and tables
 ==================
 
+* :doc:`./file_formats`
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`

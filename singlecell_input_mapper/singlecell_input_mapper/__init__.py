@@ -1,18 +1,18 @@
 """
-Tool for calculating the connectivity of individual neuron morphologies.
-Based on methods and data presented in :cite:t:`Egger_Dercksen_Udvary_Hege_Oberlaender_2014`.
+Calculate the connectivity of individual neuron morphologies.
+Based on methods and data presented in :cite:t:`Egger_Dercksen_Udvary_Hege_Oberlaender_2014` and :cite:t:`Udvary_Harth_Macke_Hege_De_Kock_Sakmann_Oberlaender_2022`.
 
 This package contains methods to create anatomical realizations for the connectivity of single neurons.
 To create anatomical realizations, it is recommended to use the high-level
-method :py:meth:`~singlecell_input_mapper.map_singlecell_inputs.map_singlecell_inputs`.
+pipeline :py:meth:`~singlecell_input_mapper.map_singlecell_inputs.map_singlecell_inputs`, which call supon various methods and classes presented in this package.
 
 Inputs:
 
-- single neuron morphology
-- 3D PST densities for normalization of innervation calculations
+- The morphology and location of the postsynaptic neuron
 - number of cells per cell type, per anatomical area.
-- PST length/area constants of the postsynaptic neuron.
-- presynaptic bouton densities of individual axon morphologies, sorted by presynaptic column and cell type
+- The 3D density of post-synaptic targets (PSTs) in the neuropil (cell type unspecific)
+- The 3D density of boutons in the neuropil (cell type specific)
+- The 1D and 2D densities of PSTs onto the postsynaptic neuron per length and area (cell type specific)
 
 Attention:
     This package has similar, but not identical functionality as :py:mod:`single_cell_parser`. 
@@ -49,7 +49,8 @@ Attention:
         * - :py:meth:`~singlecell_input_mapper.singlecell_input_mapper.reader.read_scalar_field`
           - :py:meth:`~single_cell_parser.reader.read_scalar_field`
 
-Author: 
+Author:
+ 
     Robert Egger
     Computational Neuroanatomy
     Max Planck Institute for Biological Cybernetics

@@ -116,22 +116,22 @@ def map_singlecell_inputs(
     
     Steps:
     
-    1. Load in the data:
+    1. Loads in the data:
     
         - Cell morphology
         - Number of cells per cell type
         - Connection probabilities between cell types
         - PST densities for normalization of innervation calculations
         
-    2. Load in the bouton densities:
+    2. Loads in the bouton densities:
     
         - For each anatomical area
         - For each presynaptic cell type
         
-    3. Create a scalar field (:class:`~singlecell_input_mapper.singlecell_input_mapper.scalar_field.ScalarField`)
+    3. Creates a scalar field (:class:`~singlecell_input_mapper.singlecell_input_mapper.scalar_field.ScalarField`)
        for each bouton density.
-    4. Create a :class:`~singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper` object.
-    5. Create a network embedding for the cell using 
+    4. Creates a :class:`~singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper` object.
+    5. Creates a network embedding for the cell using 
        :py:meth:`~singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper.create_network_embedding`.
     
     The naming of each anatomical area needs to be consistent between:
