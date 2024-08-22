@@ -4,20 +4,22 @@ import pandas as pd
 import numpy as np
 import cloudpickle
 import shutil
-from .utils import get_vector_norm
+from .utils import get_vector_norm, convert_all_check_columns_bool_to_float
+from .RW_analysis import read_pickle
 from data_base.utils import silence_stdout
 import time
 import sys
 import math
 import glob
 
+
 class RW:
     def __init__(self, df_seeds = None, param_ranges = None, 
-                 params_to_explore = None, evaluation_function = None, 
-                 MAIN_DIRECTORY = None, min_step_size = 0, max_step_size = 0.02, 
-                 checkpoint_every = 100, n_iterations = 60000,
-                 mode = None, aim_params={}, stop_n_inside_with_aim_params = -1,
-                 max_iterations = 60000):
+                params_to_explore = None, evaluation_function = None, 
+                MAIN_DIRECTORY = None, min_step_size = 0, max_step_size = 0.02, 
+                checkpoint_every = 100, checkpoint_by_time = None, 
+                concat_every_n_save = 60, n_iterations = 60000,
+                mode = None, aim_params={}, stop_n_inside_with_aim_params = -1):
         '''Class to perform RW exploration from a seedpoint.
         
         df_seeds: pandas dataframe which contains the individual seed points as rows and 
@@ -34,9 +36,16 @@ class RW:
                     (i.e. results in acceptable physiology) or not. 
                 evaluation: dictionary that will be saved alongside the parameters. For example, this should contain
                     ephys features.
+                    
+        checkpoint_every: save the results every n iterations
+        
+        check_point_by_time: time interval in minutes for checkpointing for using time-based checkpointing. If both
+            checkpoint_every and checkpoint_by_time are set, checkpointing will be done by time.
+
+        concat_every_n_save: number of checkpoints after which the pickle files are concatenated and cleaned
         
         mode: None: default random walk. 
-              'expand': only propose new points that move further away from seedpoint
+            'expand': only propose new points that move further away from seedpoint
                     
         aim_params: this param will make the exploration algorithm propose only new points such that a set of 
             parameters aims certain values during exploration.
@@ -53,6 +62,8 @@ class RW:
         self.min_step_size = min_step_size
         self.max_step_size = max_step_size
         self.checkpoint_every = checkpoint_every
+        self.checkpoint_by_time = checkpoint_by_time
+        self.concat_every_n_save = concat_every_n_save
         self.all_param_names = list(self.param_ranges.index)
         self.n_iterations = n_iterations
         self.mode = mode
@@ -63,7 +74,6 @@ class RW:
         self.aim_params = aim_params
         self.normalized_aim_params = self._normalize_aim_params(aim_params)
         self.stop_n_inside_with_aim_params = stop_n_inside_with_aim_params
-        self.max_iterations = max_iterations
     
     def _normalize_aim_params(self,aim_params):
         normalized_params = pd.Series(aim_params)
@@ -101,6 +111,44 @@ class RW:
         max_ = self.param_ranges['max']
         return p*(max_-min_)+min_
         
+    def _concatenate_and_clean(self,seed_folder, particle_id, iteration  = None): 
+        # check that we are doing this for the latest iteration
+        outdir = os.path.join(seed_folder, str(particle_id))
+        iterations = sorted(list(set([int(f.split('.')[0]) for f in os.listdir(outdir)
+                      if f.endswith('.pickle') or f.endswith('.parquet')])), reverse=True)
+        pickle_files = [f for f in os.listdir(outdir) if f.endswith('.pickle')]
+        iteration = iterations[0]
+        
+        df_parquet_path = os.path.join(outdir, f'{iteration}.parquet')
+        if os.path.isfile(df_parquet_path): 
+            print(f'Parquet file already exists {df_parquet_path}')
+            self._clean_the_pickles(outdir, pickle_files, iteration) 
+            return 
+
+        df = read_pickle(seed_folder, particle_id)
+        df = convert_all_check_columns_bool_to_float(df)
+        df.to_parquet(df_parquet_path + '.saving')
+        shutil.move(df_parquet_path + '.saving', df_parquet_path) 
+        self._clean_the_pickles(outdir, pickle_files, iteration) 
+
+    def _clean_the_pickles(self,outdir, files, iteration): 
+        paths = [os.path.join(outdir, file) for file in files]
+        print(f'Cleaning the pickle files in {outdir}')
+        for path in paths: 
+            os.remove(path)
+            if not path.endswith(f'{iteration}.pickle'): # do not remove the last rngn
+                os.remove(path + '.rngn')
+
+    def _load_pickle_or_parquet(self,outdir, iteration, mode: ['pickle_load', 'parquet_load']):
+        if mode == 'pickle_load': 
+            df_path = os.path.join(outdir, '{}.pickle'.format(iteration))
+            df = pd.read_pickle(df_path)   
+        if mode == 'parquet_load':
+            df_path = os.path.join(outdir, '{}.parquet'.format(iteration))
+            df = pd.read_parquet(df_path)
+        return df, df_path
+
+        
     def assess_aim_params_reached(self, normalized_params, tolerance=1e-4):
         """Check whether the aim parameters have been reached.
         
@@ -117,7 +165,7 @@ class RW:
         reached_aim_params = []
         for key in self.aim_params.keys():
             idx = self.params_to_explore.index(key)
-            reached_aim_params.append(math.isclose(normalized_params[idx],self.normalized_aim_params[key], tolerance=tolerance))
+            reached_aim_params.append(math.isclose(normalized_params[idx],self.normalized_aim_params[key], abs_tol=tolerance))
         return reached_aim_params
         
     def run_RW(self, selected_seedpoint, particle_id, seed = None):
@@ -148,15 +196,18 @@ class RW:
         
         # set up folder structure
         print('My random number generator seed is', seed)
-        OPERATION_DIR = os.path.join(self.MAIN_DIRECTORY, '{}/{}'.format(selected_seedpoint, particle_id))
+        SEED_DIR = os.path.join(self.MAIN_DIRECTORY, str(selected_seedpoint))
+        OPERATION_DIR = os.path.join(SEED_DIR, str(particle_id))
         if not os.path.exists(OPERATION_DIR):
             os.makedirs(OPERATION_DIR)
         print('I am particle', particle_id, 'and I write to', OPERATION_DIR)
         
         # check if we start from scratch or if we resume an exploration
-        iterations = [int(f.split('.')[0]) for f in os.listdir(OPERATION_DIR) if f.endswith('.pickle')]
+        file_list = os.listdir(OPERATION_DIR) #newnewnew
+        iterations = list(set([int(f.split('.')[0]) for f in file_list 
+                    if f.endswith('.pickle') or f.endswith('.parquet')])) #set to list to drop duplicates
         iterations = sorted(iterations,reverse=True)
-        if iterations and max(iterations) > self.max_iterations:
+        if iterations and max(iterations) > self.n_iterations:
             print('Max iterations reached. exit gracefully')
             return 
             #sys.exit(0)
@@ -168,21 +219,41 @@ class RW:
             assert(inside)
             initial_evaluation['inside'] = inside
             out = [initial_evaluation]  # out is what will be saved
+            save_count = 0 #newnewnew
         else:
-            # search for last model inside the space, starting from the previous saved iteration
-            for iteration in iterations:
-                df_path = os.path.join(OPERATION_DIR, '{}.pickle'.format(iteration))
+            # we resume the exploration. check how to load the saved files
+            save_count = len([f for f in file_list if f.endswith('.pickle')])  #count pickle files 
+            parquet_count =  len([f for f in file_list if f.endswith('.parquet')])
+            load_mode = None 
+            if parquet_count == 0: 
+                load_mode = 'pickle_load'
+            elif save_count == 0:
+                load_mode = 'parquet_load' 
+            else: #there are both pickle and parquet files
+                #check: last iteration is not saved in both a pickle and parquet file
+                if os.path.isfile(os.path.join(OPERATION_DIR, '{}.parquet'.format(iterations[0]))):
+                    self._concatenate_and_clean()
+                    save_count = 0
+                    load_mode = 'parquet_load' 
+                # first load the pickles, then the parquet
+                load_list = ['pickle_load']*save_count + ['parquet_load']*parquet_count
+
+            # search for last model inside the space, starting from the iteration saved the latest
+            for i, iteration in enumerate(iterations):
+                if not load_mode: 
+                    df, df_path = self._load_pickle_or_parquet(OPERATION_DIR,iteration,load_list[i])
+                else: 
+                    df, df_path = self._load_pickle_or_parquet(OPERATION_DIR,iteration,load_mode)
+
                 print('Found preexisting RW, continue from there. Iteration', iteration)
-                print('Loading file', df_path) 
-                df = pd.read_pickle(df_path)   
+                print('Loaded file', df_path) 
                 df = df[df.inside]
                 try:
                     p = df.iloc[-1][self.all_param_names] # p is pandas and the full vector and unnormalized
                     break
                 except IndexError:
                     print("didn't find a model inside the space, try previous iteration")
-            
-            out = []
+
             # set the random number generator to the latest state
             assert(max(iterations) == iterations[0])
             rngn_path = os.path.join(OPERATION_DIR, '{}.pickle.rngn'.format(iterations[0]))
@@ -201,10 +272,23 @@ class RW:
         
         # exploration loop
         print('exploration loop')
+        save_time = time.time()
+        save = False
         while True:
             print('New loop. Current iteration', iteration)
-            if iteration % self.checkpoint_every == 0 and iteration > 0:
-                print('--- Saving')
+            if self.checkpoint_by_time: 
+                current_time = time.time()
+                time_since_last_save = (current_time - save_time)/60 #in minutes
+                if time_since_last_save>self.checkpoint_by_time and len(out) > 0:
+                    print(f'It\'s been {time_since_last_save} minutes since last checkpoint. Saving!')
+                    save = True
+                    save_time = current_time
+            
+            elif iteration % self.checkpoint_every == 0 and iteration > 0:
+                print('Saving')
+                save = True 
+                
+            if save: 
                 df_path = os.path.join(OPERATION_DIR, '{}.pickle'.format(iteration))
                 df = pd.DataFrame(out)
                 df.to_pickle(df_path + '.saving')
@@ -213,8 +297,19 @@ class RW:
                 # deal with the case that exploration was interupted while saving the dataframe
                 shutil.move(df_path + '.saving', df_path) 
                 out = [] # reset output after saving
+                save = False
+                save_count += 1        
+
+            if save_count != 0 and save_count % self.concat_every_n_save == 0:
+                print(f'{save_count} saved pickle files. Concatenating and saving as parquet.')
+                self._concatenate_and_clean(SEED_DIR, particle_id, iteration)
+                save_count = 0
                 
             # this inner loop suggests new movements until the suggested step is within bounds
+            # Here we enforce the algorithm to run in the specified mode (once we make the suggested particle move
+            # according to the mode mode_fulfilled becomes true), and also the aim params are forced to move in 
+            # the right direction to reach the aim values (unidir_params_fulfilled becomes true).
+            # If we've enforced both things, the while stops, as we have the desired movement.
             print('Get new position')    
             n_suggestion = 0  
             dist = get_vector_norm(p_normalized_selected_np-seed_point_for_exploration_normalized_selected_np)
@@ -270,7 +365,7 @@ class RW:
                             unidir_params_fulfilled = True
                     
             print('Position within boundaries found, step size is', step_size, 
-                  'Tested ', n_suggestion, 'positions to find one inside the box.') 
+                'Tested ', n_suggestion, 'positions to find one inside the box.') 
             # homogenize parameter representation
             # note p_proposal is normalized and numpy
             # p is pandas and the full vector and unnormalized
