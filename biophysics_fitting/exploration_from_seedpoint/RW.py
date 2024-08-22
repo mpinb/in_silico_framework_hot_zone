@@ -19,7 +19,7 @@ class RW:
                 MAIN_DIRECTORY = None, min_step_size = 0, max_step_size = 0.02, 
                 checkpoint_every = 100, checkpoint_by_time = None, 
                 concat_every_n_save = 60, n_iterations = 60000,
-                mode = None, aim_params={}, stop_n_inside_with_aim_params = -1):
+                mode = None, aim_params=None, stop_n_inside_with_aim_params = -1):
         '''Class to perform RW exploration from a seedpoint.
         
         df_seeds: pandas dataframe which contains the individual seed points as rows and 
@@ -71,7 +71,8 @@ class RW:
             self.params_to_explore = self.all_param_names
         else:
             self.params_to_explore = params_to_explore
-        self.aim_params = aim_params
+        if aim_params is None: self.aim_params = {}
+        else: self.aim_params = aim_params
         self.normalized_aim_params = self._normalize_aim_params(aim_params)
         self.stop_n_inside_with_aim_params = stop_n_inside_with_aim_params
     
