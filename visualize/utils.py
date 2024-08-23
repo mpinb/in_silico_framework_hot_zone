@@ -24,13 +24,14 @@ from matplotlib.text import Annotation
 from mpl_toolkits.mplot3d.axes3d import Axes3D
 
 
-def write_video_from_images(images,
-                            out_path,
-                            fps=24,
-                            images_format='.png',
-                            quality=5,
-                            codec='mpeg4',
-                            auto_sort_paths=True):
+def write_video_from_images(
+    images,
+    out_path,
+    fps=24,
+    images_format='.png',
+    quality=5,
+    codec='mpeg4',
+    auto_sort_paths=True):
     '''
     Creates a video from a set of images. Images must be specified as a list of images, a directory with images or a list of directories with images.
     Uses glob pattern pmatching if a directory of images is specified (allows for using the "*" as a wildcard). Glob is not enabled by default on Windows machines.
@@ -187,11 +188,12 @@ def _load_base64(filename, extension='png'):
                                               b64encode(data).decode('ascii'))
 
 
-def display_animation_from_images(files,
-                                  interval=10,
-                                  style=False,
-                                  animID=None,
-                                  embedded=False):
+def display_animation_from_images(
+    files,
+    interval=10,
+    style=False,
+    animID=None,
+    embedded=False):
     '''
     Creates an IPython animation out of files specified in a globstring or a list of paths.
 
