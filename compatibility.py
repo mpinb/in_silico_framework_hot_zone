@@ -147,10 +147,9 @@ def init_db_compatibility():
     For this reason, the old API of model_data_base needs to be updated.
     """
     import sys
-    from data_base.isf_data_base import IO, db_initializers, dbopen
+    from data_base.isf_data_base import IO, db_initializers
     sys.modules['data_base.IO'] = IO
     sys.modules['data_base.db_initializers'] = db_initializers 
-    sys.modules['data_base.dbopen'] = dbopen
     
 def init_data_base_compatibility():
     init_db_compatibility()
