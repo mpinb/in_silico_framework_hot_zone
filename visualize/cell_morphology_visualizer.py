@@ -887,6 +887,7 @@ class CellMorphologyVisualizer(CMVDataParser):
                 'sec_n': highlight_section,
                 'highlight_x': highlight_x,
                 'arrow_args': self.highlight_arrow_kwargs},
+            population_to_color_dict=self.population_to_color_dict,
             legend=legend,
             synapse_legend=self.synapse_legend and show_synapses,
             dpi=self.dpi,
