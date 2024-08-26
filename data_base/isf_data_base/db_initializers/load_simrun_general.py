@@ -394,8 +394,7 @@ def generate_param_file_hashes(simresult_path, sim_trial_index):
 #####################################
 # step seven point one: replace paths in param files with relative dbpaths
 #####################################
-from ..dbopen import create_db_path
-
+from data_base.dbopen import create_db_path
 
 def create_db_path_print(path, replace_dict={}):
     ## replace_dict: todo
@@ -615,8 +614,9 @@ def _build_dendritic_voltage_traces(db, suffix_dict=None, repartition=None):
 
 def _build_param_files(db, client):
     logging.info('---moving parameter files---')
-    ds = generate_param_file_hashes(db['simresult_path'],
-                                    db['sim_trial_index'])
+    ds = generate_param_file_hashes(
+        db['simresult_path'],
+        db['sim_trial_index'])
     futures = client.compute(ds)
     result = client.gather(futures)
     df = pd.concat(result)
@@ -637,7 +637,7 @@ def _build_param_files(db, client):
         'path_network', 'hash_network', network_param_to_dbpath)
     client.gather(client.compute(ds))
 
-    db['parameterfiles'] = df
+    db.set('parameterfiles', df, dumper=pandas_to_parquet)
 
 def init(
         db, 
