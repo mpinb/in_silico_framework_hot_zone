@@ -394,8 +394,7 @@ def generate_param_file_hashes(simresult_path, sim_trial_index):
 #####################################
 # step seven point one: replace paths in param files with relative dbpaths
 #####################################
-from ...dbopen import create_db_path
-
+from data_base.dbopen import create_db_path
 
 def create_db_path_print(path, replace_dict={}):
     ## replace_dict: todo
