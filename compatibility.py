@@ -139,7 +139,7 @@ def init_mdb_backwards_compatibility():
     
     import model_data_base.model_data_base
     from data_base.data_base import get_db_by_unique_id
-    model_data_base.model_data_base.get_mdb_by_unique_id = data_base.data_base.get_db_by_unique_id
+    model_data_base.model_data_base.get_mdb_by_unique_id = get_db_by_unique_id
 
 def init_db_compatibility():
     """
