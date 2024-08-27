@@ -561,9 +561,7 @@ def _build_synapse_activation(db, repartition=False, n_chunks=5000):
 def _get_rec_site_managers(db):
     param_files = glob.glob(os.path.join(db['parameterfiles_cell_folder'],
                                          '*'))
-    param_files = [p for p in param_files if not p.endswith('Loader.pickle') \
-        and not p.endswith("Loader.json") \
-            and not p.endswith('metadata.json')]
+    param_files = [p for p in param_files if not p.endswith(('Loader.pickle', 'Loader.json', 'metadata.json'))]
     logging.info(len(param_files))
     rec_sites = []
     for param_file in param_files:
