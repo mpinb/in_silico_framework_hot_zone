@@ -112,8 +112,20 @@ def build_parameters(filename, fast_but_security_risk=True):
 
 
 def load_NMODL_parameters(parameters):
-    '''
-    automatically loads NMODL mechanisms from paths in parameter file
+    '''Load NMODL mechanisms from paths in parameter file.
+
+    Parameters are added to the NEURON namespace by executing string Hoc commands.
+
+    See also: https://www.neuron.yale.edu/neuron/static/new_doc/programming/neuronpython.html#important-names-and-sub-packages
+
+    Args:
+        parameters (NTParameterSet | dict):
+            The neuron parameters to load.
+            Must contain the key `NMODL_mechanisms`.
+            May contain the key `mech_globals`.
+
+    Returns:
+        None. Adds parameters to the NEURON namespace.    
     '''
     for mech in list(parameters.NMODL_mechanisms.values()):
         neuron.load_mechanisms(mech)
