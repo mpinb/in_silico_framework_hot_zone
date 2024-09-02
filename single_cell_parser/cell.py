@@ -726,14 +726,15 @@ class PointCell(object):
         self.playing = True
         self.spike_source[spikeT] = spike_source
 
-    def compute_spike_train_times(self,
-                                  interval,
-                                  noise,
-                                  start=0.0,
-                                  stop=-1.0,
-                                  nSpikes=None,
-                                  spike_source=None):
-        '''Activate point cell'''
+    def compute_spike_train_times(
+            self,
+            interval,
+            noise,
+            start=0.0,
+            stop=-1.0,
+            nSpikes=None,
+            spike_source=None):
+        '''Activate point cell.'''
         assert spike_source is not None
         self.rand = np.random.RandomState(np.random.randint(123456, 1234567))
         self.spikeInterval = interval

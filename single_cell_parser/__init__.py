@@ -231,15 +231,26 @@ def create_cell(
 
 
 def init_neuron_run(simparam, vardt=False, *events):
-    '''
-    Default NEURON run with inital parameters
-    according to parameter file.
-    Optional parameters: callable "events" that are
-    passed to Event objects holding a FInitializeHandler.
-    This can be used to implement changes of parameters during
-    the course of the simulation using h.cvode.event(t, "statement")
-    in the supplied callable, where "statement" is another
-    Python callable which may be used to change parameters.
+    '''Default NEURON run with inital parameters according to parameter file.
+
+    Used in :py:mod:`~simrun.run_new_simulations` to set up and run a simulation.
+
+    Args:
+        simparam (dict | dict-like):
+            A dictionary containing the simulation parameters. 
+            Must include the keys 'dt', 'tStop', 'Vinit', 'T'.
+        vardt (bool):
+            Whether or not to use variable time step integration.
+        events, optional (callable):
+            Optional parameters: callable "events" that are
+            passed to Event objects holding a FInitializeHandler.
+            This can be used to implement changes of parameters during
+            the course of the simulation using h.cvode.event(t, "statement")
+            in the supplied callable, where "statement" is another
+            Python callable which may be used to change parameters.
+
+    Returns:
+        None. Runs the NEURON simulation.
     '''
     #    use fixed time step for now
     neuron.h.load_file('stdrun.hoc')
@@ -290,14 +301,16 @@ def sec_distance_to_soma(currentSec):
 
 
 class Event():
-
+    """Class to handle events in NEURON simulations."""
     def __init__(self, func):
         self.callback = func
         self.fih = neuron.h.FInitializeHandler(1, self.callback)
 
 
-def spines_update_synapse_distribution_file(cell, synapse_distribution_file,
-                                            new_synapse_distribution_file):
+def spines_update_synapse_distribution_file(
+        cell, 
+        synapse_distribution_file,
+        new_synapse_distribution_file):
     '''Update the .syn file to correctly point to spine heads as excitatory synapse locations. Spines must already exist, so call after create_cell, using the same .syn file that was used to create the cell. new_synfile will be created if it does not already exist.'''
     ## update the .syn file
     spine_heads = []

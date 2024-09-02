@@ -50,8 +50,8 @@ def _evoked_activity(
     The workflow of this method is as follows:
 
     1. Initialize the simulation
-        1.1 Set a random seed. Used in the output directory name, and for generating network realizations and 
-        network activity with :py:class:`~single_cell_parser.network.NetworkMapper`.
+        1.1 Set a random seed. Used in the output directory name, and for generating network realizations 
+        with :py:class:`~single_cell_parser.network.NetworkMapper`.
         1.2 Build the cell with biophysical properties.
         1.3 Set up the simulation with recording sites from the neuron parameters
     2. Run :paramref:`nSweeps` simulations using :py:meth:`~single_cell_parser.init_neuron_run`, 
@@ -79,6 +79,14 @@ def _evoked_activity(
         tar (bool): If True, the output directory is compressed to a tarball after the simulation is finished.
 
     Attention:
+        While the random state is set for the network embedding, capturing animal-to-animal and cell-to-cell
+        anatomical variability, the random state is not used for the synaptic input patterns.
+        Stochasticity in activity is introduced each time the activity generation method is called 
+        (see e.g. :py:meth`~single_cell_parser.cell.PointCell.compute_spike_train_times`).
+        This means that the same seed will produce the same network embedding, but different synaptic input patterns.
+        For this reason, the exact synaptic activations for each simulation run are saved as output data.
+
+    Attention:
      
         :paramref:`scale_apical` assumes that the cell has an apical dendrite:
         
@@ -88,6 +96,7 @@ def _evoked_activity(
             
         See :py:meth:`~get_inner_section_at_distance` for more information about which arguments can be used
         to define an apical dendrite.
+
 
     Returns:
         str: Path to the output directory containing the simulation results.

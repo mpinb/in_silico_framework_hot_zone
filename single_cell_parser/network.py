@@ -489,10 +489,16 @@ class NetworkMapper:
                     pass
         logger.info('---------------------------')
 
-    def _create_spiketrain_activities(self, preCellType, networkParameters):
+    def _create_spiketrain_activities(
+            self, 
+            preCellType, 
+            networkParameters):
         '''
         Create spike train times with parameters
         given by networkParameters
+
+        Uses :py:meth:`single_cell_parser.cell.PointCell.compute_spike_train_times`
+        (not :py:meth:`single_cell_parser.cell.SpikeTrain.compute_spike_times`, that is deprecated)
         '''
         interval = networkParameters.interval
         noise = 1.0
@@ -503,10 +509,10 @@ class NetworkMapper:
             noise = networkParameters.noise
             start = networkParameters.start
         except AttributeError:
-            logger.info(
-                'WARNING: Could not find attributes \"noise\" or \"start\" for \"spiketrain\" of cell type {:s}.'
+            logger.error(
+                'ERROR: Could not find attributes \"noise\" or \"start\" for \"spiketrain\" of cell type {:s}.'
                 .format(preCellType))
-            logger.info(
+            logger.error(
                 '         Support of \"spiketrains\" without these attributes is deprecated.'
             )
         try:
@@ -519,12 +525,13 @@ class NetworkMapper:
             'initializing spike trains with mean rate {:.2f} Hz for cell type {:s}'
             .format(1000.0 / interval, preCellType))
         for cell in self.cells[preCellType]:
-            cell.compute_spike_train_times(interval,
-                                           noise,
-                                           start,
-                                           stop,
-                                           nSpikes,
-                                           spike_source='poissontrain')
+            cell.compute_spike_train_times(
+                interval,
+                noise,
+                start,
+                stop,
+                nSpikes,
+                spike_source='poissontrain')
 
     def _create_pointcell_activities(self, preCellType, networkParameters):
         '''
