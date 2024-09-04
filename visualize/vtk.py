@@ -1,4 +1,4 @@
-'''This module contains functions to save simulation data in vtk compatible formats'''
+'''Save simulation data in vtk compatible formats'''
 
 import os
 import numpy as np
@@ -192,7 +192,9 @@ def write_vtk_skeleton_file(
     out_dir, 
     point_scalar_data=None, 
     n_decimals=2):
-    """_summary_
+    """Write a .vtk file that represents a skeleton of a neuron.
+    
+    Supports overlaying scalar data on the skeleton, such as section diameters, membrane voltages, etc.
 
     Args:
         out_name (_type_): _description_
@@ -229,7 +231,6 @@ def write_vtk_skeleton_file(
     for dataname, data in point_scalar_data.items():
         assert len(data) == len(lookup_table), \
             "Length of point scalar data \"{}\" does not match number of points. Scalar data: {}. Amount of points: {}".format(dataname, len(data), len(lookup_table))
-
     
     # write out all data to .vtk file
     with open(
@@ -279,8 +280,7 @@ def convert_amira_lattice_to_vtk(
     surf_file,
     outname="lattice",
     outdir="."):
-    """
-    Convert an AMIRA lattice file to vtk structured points
+    """Convert an AMIRA lattice file to vtk structured points.
     """
     with open(surf_file) as f:
         lines = f.readlines()
@@ -293,8 +293,7 @@ def convert_amira_lattice_to_vtk(
         
         co_type_line = [l for l in header if "coordtype" in l.lower()][0]
         co_type = co_type_line.split()[1].strip('\"')
-        assert co_type == "uniform", "Only uniform lattice files are supported for this method."
-        "Coordinate type of given file is {co_type}."
+        assert co_type == "uniform", "Only uniform lattice files are supported for this method. Coordinate type of given file is {}.".format(co_type)
         
         lattice_line = [l for l in header if "define lattice" in l.lower()][0]
         nx, ny, nz = tuple(int(num) for num in lattice_line.split()[2:])
