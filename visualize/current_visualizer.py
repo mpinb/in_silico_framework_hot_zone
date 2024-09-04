@@ -16,14 +16,48 @@ CALCIUM_ORANGE = '#f9b233'
 
 
 class CurrentAnalysis:
+    """Plot the individual ion currents and the net current of a cell simulation.
+    
+    Inspect the individual ion currents and the net current of a single cell segment.
+    
+    Attributes:
+        mode (str): 'cell' or 'dict'.
+        cell (dict): The cell object, or a dictionary containing equivalent simulation data.
+        t (list): The time vector.
+        sec (Section): The section of the cell.
+        secID (int): The index of the section.
+        segID (int): The index of the segment.
+        seg (Segment): The segment of the cell.
+        rangeVars (list): The names of the ion currents to plot. Default is `None`, which plots all ion currents.
+        colormap (dict): The colormap for the ion currents.
+        depolarizing_currents (np.array): The depolarizing currents.
+        hyperpolarizing_currents (np.array): The hyperpolarizing currents.
+        depolarizing_currents_sum (np.array): The sum of the depolarizing currents.
+        hyperpolarizing_currents_sum (np.array): The sum of the hyperpolarizing currents.
+        net_current (np.array): The net current.
+        depolarizing_currents_normalized (np.array): The normalized depolarizing currents.
+        hyperpolarizing_currents_normalized (np.array): The normalized hyperpolarizing currents.
+        voltage_trace (np.array): The voltage trace.
+    """
 
-    def __init__(self,
-                 cell_or_dict=None,
-                 secID='bifurcation',
-                 segID=-1,
-                 rangeVars=None,
-                 colormap=None,
-                 tVec=None):
+    def __init__(
+        self,
+        cell_or_dict=None,
+        secID='bifurcation',
+        segID=-1,
+        rangeVars=None,
+        colormap=None,
+        tVec=None):
+        """Initialize the CurrentAnalysis object.
+        
+        Args:
+            cell_or_dict (dict or Cell): The cell object, or a dictionary containing equivalent simulation data.
+            secID (int): The index of the section. Default is 'bifurcation'.
+            segID (int): The index of the segment. Default is -1.
+            rangeVars (list): The names of the ion currents to plot. Default is `None`, which plots all ion currents.
+            colormap (dict): The colormap for the ion currents. Default is `None`.
+            tVec (list): The time vector. Default is `None`. Only necessary if :paramref:`cell_or_dict` is a dictionary.
+        """
         # set attributes
         if not isinstance(cell_or_dict, dict):
             self.mode = 'cell'
@@ -89,7 +123,21 @@ class CurrentAnalysis:
             plot_net=False,
             plot_voltage=False,
             t_stim=295,
-            select_window_relative_to_stim=(0, 55)):
+            select_window_relative_to_stim=(0, 55)
+        ):
+        """Plot the ion currents and the net current of a cell simulation.
+        
+        Args:
+            ax (Axes): The matplotlib axes object. Default is `None`.
+            normalized (bool): Whether to plot the normalized currents. Default is `False`.
+            plot_net (bool): Whether to plot the net current. Default is `False`.
+            plot_voltage (bool): Whether to plot the voltage trace. Default is `False`.
+            t_stim (int): The time of the stimulus. Default is 295.
+            select_window_relative_to_stim (tuple): The time window to select relative to the stimulus time. Default is (0, 55).
+            
+        Returns:
+            None
+        """
         t = np.array(self.t) - t_stim
         if ax is None:
             fig = plt.figure(figsize=(10, 4), dpi=200)
@@ -135,6 +183,15 @@ class CurrentAnalysis:
         ax2.set_ylabel("Membrane potential (mV)")
 
     def plot_lines(self, ax=None, legend=True):
+        """Plot the ion currents and the net current of a cell simulation.
+        
+        Args:
+            ax (Axes): The matplotlib axes object. Default is `None`.
+            legend (bool): Whether to plot the legend. Default is `True`.
+            
+        Returns:
+            None
+        """
         if ax is None:
             fig = plt.figure(figsize=(15, 6))
             ax = fig.add_subplot(111)

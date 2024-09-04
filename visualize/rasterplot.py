@@ -18,14 +18,15 @@ from data_base.analyze._helper_functions import is_int
 from data_base.utils import convertible_to_int
 
 
-def rasterplot2(st,
-                ax=None,
-                x_offset=0,
-                c=None,
-                plot_kwargs=dict(solid_capstyle='butt'),
-                y_offset=None,
-                y_plot_length=1,
-                marker='line'):
+def rasterplot2(
+    st,
+    ax=None,
+    x_offset=0,
+    c=None,
+    plot_kwargs=dict(solid_capstyle='butt'),
+    y_offset=None,
+    y_plot_length=1,
+    marker='line'):
     if ax is None:
         ax = plt.figure().add_subplot(111)
     if c is not None:
@@ -51,12 +52,13 @@ def rasterplot2(st,
         y = y - 1
 
 
-def rasterplot2_pdf_grouped(pdf,
-                            grouplabel,
-                            ax=None,
-                            xlim=None,
-                            x_offset=0,
-                            color='k'):
+def rasterplot2_pdf_grouped(
+    pdf,
+    grouplabel,
+    ax=None,
+    xlim=None,
+    x_offset=0,
+    color='k'):
     if ax is None:
         fig = plt.figure(figsize=(7, 4), dpi=600)
         ax = fig.add_subplot(111)
