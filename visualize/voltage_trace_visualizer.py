@@ -3,20 +3,62 @@ from . import plt
 
 
 def plot_vt(voltage_traces, key='BAC.hay_measure'):
+    """Plot voltage traces from simulation results.
+    
+    The results of e.g. :class:`biophysics_fitting.simulator.Simulator` are nested dictionaries,
+    containing various voltage traces. NEURON simulation results are NEURON vectors. 
+    This is a helper method to extract that data and plot out specific voltage traces from those results.
+
+    Args:
+        voltage_traces (dict): dictionary containing the voltage traces.
+        key (str): key to access the specific voltage trace to plot.
+
+    Returns:
+        None
+    """
     plt.figure()
-    plt.plot(voltage_traces[key]['tVec'],
-             voltage_traces[key]['vList'][0],
-             c='k')
+    plt.plot(
+        voltage_traces[key]['tVec'],
+        voltage_traces[key]['vList'][0],
+        c='k')
     try:
-        plt.plot(voltage_traces[key]['tVec'],
-                 voltage_traces[key]['vList'][1],
-                 c='r')
+        plt.plot(
+            voltage_traces[key]['tVec'],
+            voltage_traces[key]['vList'][1],
+            c='r')
     except IndexError:
         pass
     display.display(plt.gcf())
     plt.close()
 
 def visualize_vt(vt, fig=None, soma_color='k', dend_color='#f7941d', BAC_select = 295+80):
+    """Visualize voltage traces from the Hay stimulus protocols.
+
+    The results of e.g. :class:`biophysics_fitting.simulator.Simulator` are nested dictionaries,
+    containing various voltage traces. NEURON simulation results are NEURON vectors.
+    This is a helper method to extract that data and plot out specific voltage traces from those results.
+
+    Args:
+        vt (dict): dictionary containing the voltage traces. 
+        Must contain the keys:
+
+            - 'BAC.hay_measure'
+            - 'bAP.hay_measure'
+            - 'StepOne.hay_measure'
+            - 'StepTwo.hay_measure'
+            - 'StepThree.hay_measure'
+        
+        fig (matplotlib.figure.Figure): figure to plot the voltage traces on.
+        soma_color (str): color to plot the soma voltage traces.
+        dend_color (str): color to plot the dendrite voltage traces.
+        BAC_select (int): timepoint for the end of the BAC stimulus.
+
+    Returns:
+        None
+
+    Note:
+        See :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011` for more details on the stimulus protocols.
+    """
     if fig is None:
         fig = plt.figure(dpi=200, figsize=(8, 6))
     ax = fig.add_subplot(2, 2, 1)

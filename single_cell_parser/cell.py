@@ -808,6 +808,7 @@ class SpikeTrain(PointCell):
     '''
     DEPRECATED: only still in here in case some old
     dependency turns up that has not been found yet.
+    
     Simple object for use as spike train source.
     Pre-computes spike times according to user-provided
     parameters and plays them as a regular point cell.
