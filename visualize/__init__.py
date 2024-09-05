@@ -1,7 +1,5 @@
 """
-Visualization toolbox. Provides modules for visualizing cell morphologies, ion currents, membrane voltage, rasterplots, PSTHs...
-
-Authors: Arco Bast, Maria Royo, Bjorge Meulemeester
+Visualization toolbox. Provides modules for visualizing cell morphologies, ion currents, membrane voltage, rasterplots, PSTHs..
 """
 
 from .cell_morphology_visualizer import CellMorphologyVisualizer
