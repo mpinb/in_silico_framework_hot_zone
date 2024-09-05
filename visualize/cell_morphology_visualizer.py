@@ -1131,17 +1131,36 @@ class CellMorphologyInteractiveVisualizer(CMVDataParser):
     Attributes:
         dash_ip (str): IP address to run dash server on.
         show (bool): Whether to show the plot. Set to False for testing purposes. Default: True
-        renderer (str): 
-            Type of backend renderer to use for rendering the javascript/HTML VBox. Defaults to "notebook_connected".
-            Available renderers are::
-            
-            ['plotly_mimetype', 'jupyterlab', 'nteract', 'vscode', 'notebook', 
-            'notebook_connected', 'kaggle', 'azure', 'colab','cocalc', 'databricks', 
-            'json', 'png', 'jpeg', 'jpg', 'svg', 'pdf', 'browser', 'firefox', 
-            'chrome', 'chromium', 'iframe', 'iframe_connected', 'sphinx_gallery', 
-            'sphinx_gallery_png']
-            
         background_color (str): Background color of the plot. Defaults to "#f0f0f0"
+        renderer (str): Type of backend renderer to use for rendering the javascript/HTML VBox. 
+            Defaults to "notebook_connected". Available renderers are:
+            
+            - 'plotly_mimetype'
+            - 'jupyterlab'
+            - 'nteract'
+            - 'vscode'
+            - 'notebook'
+            - 'notebook_connected'
+            - 'kaggle'
+            - 'azure'
+            - 'colab'
+            - 'cocalc'
+            - 'databricks'
+            - 'json'
+            - 'png'
+            - 'jpeg'
+            - 'jpg'
+            - 'svg'
+            - 'pdf'
+            - 'browser'
+            - 'firefox'
+            - 'chrome'
+            - 'chromium'
+            - 'iframe'
+            - 'iframe_connected'
+            - 'sphinx_gallery'
+            - 'sphinx_gallery_png'
+            
     """
 
     def __init__(
