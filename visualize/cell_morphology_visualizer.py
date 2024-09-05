@@ -564,7 +564,7 @@ class CMVDataParser:
         color_dict={}):
         """Returns a scalar data array based on some keyword (ion dynamics or membrane voltage).
         
-        If :paramref:`return_as_color`is True (default), the returned array is a map from the input keyword to a color
+        If :paramref:`return_as_color` is True (default), the returned array is a map from the input keyword to a color
         Otherwise, it is the raw data, not mapped to a colorscale. Which data is returned (mapped to colors or not)
         depends on the keyword (case-insensitive):
         
