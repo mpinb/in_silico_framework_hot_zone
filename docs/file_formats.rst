@@ -129,10 +129,36 @@ Example::
     ...
     }
 
+.. _network_parameters_format:
+
 Network parameters
 ------------------
-The `.param` format is used to store network parametrs, containing synapse information and ongoing spike intervals for various cell types in a network.
-Such synapse information contains the receptor type(s), rise and decay time dynamics (if applicable), weights, and release probabilities upon spike.
+The `.param` format is used to store network parameters, containing information for each cell type in a network.
+For each presynaptic cell type in the network, this following information is provided:
+
+.. list-table:: Network Parameters
+   :header-rows: 1
+
+   * - Parameter
+     - Description
+   * - celltype
+     - Spiking type of the presynaptic cell ("spiketrain", or "pointcell").
+   * - interval
+     - Average interval of the spikes.
+   * - synapses
+     - Additional synapse information (see below)
+   * - releaseProb
+     - Release probability of the synapse upon a spike.
+   * - cellNr
+     - Amount of connected presynaptic cells of this type.
+
+The `synapse` key contains the following information:
+
+- receptor type
+- activation threshold
+- activation delay
+- rise and decay time dynamics (if applicable)
+- weights
         
 Example::
 
@@ -165,8 +191,18 @@ Example::
                     },
                 },
             "releaseProb": 0.6,
+            "cellNr": 1,
+            "noise": 0.0,
+            "start": 0.0,
+            "nspikes": 2,
             },
         },
-        "cell_type_2": {...},
+        "cell_type_2": {
+            "celltype": "pointcell",
+            "distribution": "PSTH"
+            "intervals": [(0, 10), (10, 20), (20, 40), (40, 50)],
+            "probabilities": [0.0, 0.01, 0.05, 0.0],
+            "offset": 0.0,
+        },
         ...
     }

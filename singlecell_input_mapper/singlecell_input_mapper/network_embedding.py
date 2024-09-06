@@ -1,4 +1,7 @@
-'''
+'''Create anatomical realizations of connectivity.
+In contrast to :py:mod:`single_cell_parser.network_embedding`, 
+this module does not handle the activity of presynaptic populations, but provides functionality to fully investigate the network connectivity.
+
 Created on Nov 17, 2012
 
 @author: regger

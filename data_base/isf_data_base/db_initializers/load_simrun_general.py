@@ -839,10 +839,11 @@ def load_param_files_from_db(db, sti):
     return scp.build_parameters(neuf), scp.build_parameters(netf)
 
 
-def load_initialized_cell_and_evokedNW_from_db(db,
-                                                sti,
-                                                allPoints=False,
-                                                reconnect_synapses=True):
+def load_initialized_cell_and_evokedNW_from_db(
+        db,
+        sti,
+        allPoints=False,
+        reconnect_synapses=True):
     import dask
     from data_base.IO.roberts_formats import write_pandas_synapse_activation_to_roberts_format
     neup, netp = load_param_files_from_db(db, sti)
