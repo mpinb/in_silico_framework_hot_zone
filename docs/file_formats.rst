@@ -12,10 +12,34 @@ This flexible format can be used to store 3D scalar meshes, 3D neuron morphology
 ===
 AMIRA proprietary file format for saving AMIRA projects.
 
+.. _hoc_file_format:
+
 .hoc
 ====
 NEURON :cite:`hines2001neuron` file format for neuron morphologies. Documentation can be found `here <https://nrn.readthedocs.io/en/latest/guide/hoc_chapter_11_old_reference.html>`_.
 Used for 3D morphology reconstructions. Can be read with :py:mod:`single_cell_parser.cell_parser`.
+
+Example::
+
+    {create soma}
+    {access soma}
+    {nseg = 1}
+    {pt3dclear()}
+    {pt3dadd(1.933390,221.367004,-450.045990,12.542000)}
+    {pt3dadd(2.321820,221.046997,-449.989990,13.309400)}
+    ...
+    {pt3dadd(13.961900,210.149002,-447.901001,3.599700)}
+
+    {create BasalDendrite_1_0}
+    {connect BasalDendrite_1_0(0), soma(0.009696)}
+    {access BasalDendrite_1_0}
+    {nseg = 1}
+    {pt3dclear()}
+    {pt3dadd(6.369640, 224.735992, -452.399994, 2.040000)}
+    {pt3dadd(6.341550, 222.962997, -451.906006, 2.040000)}
+    ...
+
+.. _mod_file_format:
 
 .mod
 ====
@@ -23,15 +47,22 @@ NEURON :cite:`hines2001neuron` file format for neuron mechanisms. Documentation 
 Used to define channel and synapse dynamics in NEURON simulations.
 See the folder `mechanisms` in the project source.
 
+.. _con_file_format:
+
 .con
 ====
-ISF custom file format to store neuron connection data. To be used in conjunction with an associated `.syn` file and morphology.
+ISF custom file format to store connectivity data. 
+To be used in conjunction with an associated :ref:`_syn_file_format` file and morphology :ref:`_hoc_file_format` file.
 It numbers each synapse, and links it to its associated presynaptic cell type and ID.
+
+Readers:
+
+- :py:mod:`~single_cell_parser.reader.read_functional_realization_map`
 
 Example::
 
     # Anatomical connectivity realization file; only valid with synapse realization:
-    # 86_L5_CDK20041214_nr3L5B_dend_PC_neuron_transform_registered_C2center_synapses_20150504-1611_10389.syn
+    # synapse_ralization_file.syn
     # Type - cell ID - synapse ID
 
     L6cc_A3 0       0
@@ -42,12 +73,22 @@ Example::
     L6cc_A3 4       5
     ...
 
+.. _syn_file_format:
+
 .syn
 ====
-ISF custom file format to store synapse data. To be used in conjunction with an associated `.con` file and morphology.
-For each synapse, it provides the synapse type and location onto the post-synaptic cell.
+ISF custom file format to store synapse locations onto a morphology. 
+To be used in conjunction with an associated :ref:`_con_file_format` file and morphology :ref:`_hoc_file_format` file.
+
+For each synapse, it provides the synapse type and location onto the morphology.
+Each row index corresponds to its synapse ID, providing a backlink to the :ref:`_con_file_format` file format.
 The location is encoded as a section ID and x (a normalized distance along the section),
 to be consistent with NEURON syntax.
+
+Readers:
+
+- :py:mod:`~single_cell_parser.reader.read_synapse_realization`
+- :py:mod:`~single_cell_parser.reader.read_pruned_synapse_realization`
 
 Example::
 

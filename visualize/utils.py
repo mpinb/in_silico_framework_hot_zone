@@ -6,19 +6,17 @@ import os
 import shutil
 import jinja2
 import IPython
-import dask
 import glob
 import numpy as np
-import pandas as pd
 from base64 import b64encode
 import subprocess
 from data_base.utils import mkdtemp
-import math
-
 from mpl_toolkits.mplot3d.proj3d import proj_transform
 from matplotlib.patches import FancyArrowPatch
 from matplotlib.text import Annotation
 from mpl_toolkits.mplot3d.axes3d import Axes3D
+from matplotlib.colors import Normalize
+import matplotlib.cm as cm
 
 
 def write_video_from_images(
@@ -457,3 +455,23 @@ def draw_arrow(
 
     #print(start_x, start_y)
     ax.arrow3D(start_x, start_y, start_z, dx, dy, dz, **highlight_arrow_kwargs)
+
+
+
+def value_to_color(v, vmin=0, vmax=1):
+    '''Map a value to a color.
+        
+    See: https://stackoverflow.com/questions/15140072/how-to-map-number-to-color-using-matplotlibs-colormap
+    
+    Args:
+        v (float): The value to map to a color.
+        vmin (float): The minimum value of the range. Default is 0.
+        vmax (float): The maximum value of the range. Default is 1.
+        
+    Returns:
+        tuple: The RGBA color tuple.
+    '''
+    norm = Normalize(vmin=vmin, vmax=vmax)
+    cmap = cm.inferno
+    m = cm.ScalarMappable(norm=norm, cmap=cmap)
+    return m.to_rgba(v)[:-1]

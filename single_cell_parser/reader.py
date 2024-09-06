@@ -13,11 +13,19 @@ logger = logging.getLogger("ISF").getChild(__name__)
 
 
 class Edge(object):
-    '''
-    Edge object contains list of points,
-    diameter at each point, label,
-    string hocLabel, parentID
-    Used during reading of hoc files
+    '''Edge class for NEURON segments.
+
+    Used in :py:meth:`~single_cell_parser.reader.read_hoc_file` to store information about a segment.
+    Note that attributes are not set here, but in the :py:meth:`~single_cell_parser.reader.read_hoc_file` method.
+
+    Attributes:
+        label (str): label and ID of the segment (e.g. "Dendrite_1_0_0").
+        hocLabel (str): Hoc label of the segment (e.g. "Soma", "Axon" ...).
+        edgePts (list): List of points in the segment.
+        diameterList (list): List of diameters at each point.
+        parentID (int): label and ID of the parent segment.
+        parentConnect (float): How far along the parent section the connection is (i.e. the `x`-coordinate).
+        valid (bool): Flag indicating if the segment is valid.
     '''
 
     def is_valid(self):
@@ -39,21 +47,42 @@ def read_hoc_file(fname=''):
     
     This list of sections is parsed to a :class:`~single_cell_parser.cell_parser.CellParser` object
     using :py:meth:`~single_cell_parser.cell_parser.CellParser.spatialgraph_to_cell`.
+
+    See :ref:_`hoc_file_format` for more information on the hoc file format.
     
-    Warning:
-        The module :py:mod:`singlecell_input_mapper` also conains a 
-        :py:meth:`~singlecell_input_mapper.singlecell_input_mapper.reader.read_hoc_file` 
-        method with subtle differences. A notable difference is that this method reads in axon sections,
+    Attention:
+        The module :py:mod:`singlecell_input_mapper` also conains a method
+        :py:meth:`~singlecell_input_mapper.singlecell_input_mapper.reader.read_hoc_file`.
+        A notable **difference** is that this method reads in axon sections,
         while the :py:mod:`singlecell_input_mapper` variant does not.
 
     Args:
         fname (str): The name of the file to be read.
 
+    Raises:
+        IOError: If the input file does not have a `.hoc` or `.HOC` suffix.
+
     Returns:
         list: A list of :class:`Edge` objects.
+
+    Example:
+        >>> read_hoc_file(hoc_file)
+        [
+            Edge(
+                label='Soma', 
+                hocLabel='soma', 
+                edgePts=[(1.93339, 221.367004, -450.04599), ... , (13.9619, 210.149002, -447.901001)], 
+                diameterList=[12.542, 13.3094, ... , 3.5997), parentID=None, parentConnect=None),
+            Edge(
+                label='BasalDendrite_1_0', 
+                hocLabel='BasalDendrite_1_0', 
+                edgePts=[(6.36964, 224.735992, -452.399994), (6.34155, 222.962997, -451.906006), ...], 
+                diameterList=[2.04, 2.04, ... , 2.04), parentID=0, parentConnect=0.009696)
+        ]
     """
     if not fname.endswith('.hoc') and not fname.endswith('.HOC'):
         raise IOError('Input file is not a .hoc file!')
+
 
     with dbopen(fname, 'r') as neuronFile:
         logger.info("Reading hoc file %s" % fname)
@@ -182,18 +211,26 @@ def read_hoc_file(fname=''):
                 if segment.is_valid():
                     cell.append(segment)
                 else:
-                    raise IOError(
-                        'Logical error reading hoc file: invalid segment')
+                    raise IOError('Logical error reading hoc file: invalid segment')
 
         else:
-            raise IOError(
-                'Logical error reading hoc file: Number of labels does not equal number of edges'
-            )
+            raise IOError('Logical error reading hoc file: Number of labels does not equal number of edges')
 
         return cell
 
 
 def read_scalar_field(fname=''):
+    """Read AMIRA scalar fields and return a :class:`~single_cell_parser.scalar_field.ScalarField` object.
+    
+    Args:
+        fname (str): The name of the file to be read.
+
+    Raises:
+        IOError: If the input file does not have a `.am` or `.AM` suffix.
+
+    Returns:
+        :class:`~single_cell_parser.scalar_field.ScalarField`: A scalar field object.
+    """
     if not fname.endswith('.am') and not fname.endswith('.AM'):
         raise IOError('Input file is not an Amira Mesh file!')
 
@@ -247,6 +284,51 @@ def read_scalar_field(fname=''):
 
 
 def read_synapse_realization(fname):
+    """Read a :ref:`_syn_file_format` file and returns a dictionary of synapse locations.
+    
+    See also:
+
+    - :ref:`_syn_file_format` for more information on the `.syn` file format.
+    - :py:meth:`~single_cell_parser.reader.read_pruned_synapse_realization`.
+    - :py:meth:`~single_cell_parser.writer.write_cell_synapse_locations` for the corresponding writer.
+    
+    Args:
+        fname (str): The name of the file to be read.
+
+    Raises:
+        IOError: If the input file does not have a `.syn` or `.SYN` suffix.
+
+    Returns:
+        dict: A dictionary with synapse types as keys and lists of synapse locations as values.
+        Each synapse location is a tuple of (section ID, section point ID).
+
+    Example:
+
+        >>> synapse_file
+        # Synapse distribution file
+        # corresponding to cell: 86_L5_86_L5_CDK20041214_nr3L5B_dend_PC_neuron_transform_registered_C2center
+        # Type - section - section.x
+
+        VPM_E1  112     0.138046479525
+        VPM_E1  130     0.305058053119
+        VPM_E1  130     0.190509288017
+        VPM_E1  9       0.368760777084
+        VPM_E1  110     0.0
+        VPM_E1  11      0.120662910562
+        ...
+        >>> read_synapse_realization(synapse_file)
+        {
+            'VPM_E1': [
+                (112, 0.138046479525),
+                (130, 0.305058053119),
+                (130, 0.190509288017),
+                (9, 0.368760777084),
+                (110, 0.0),
+                (11, 0.120662910562),
+                ...
+            ]
+        }
+    """
     if not fname.endswith('.syn') and not fname.endswith('.SYN'):
         raise IOError('Input file is not a synapse realization file!')
 
@@ -269,6 +351,44 @@ def read_synapse_realization(fname):
 
 
 def read_pruned_synapse_realization(fname):
+    """Read in a :ref:`_syn_file_format` and returns a dictionary of synapse locations and whether they are pruned or not.
+    
+    Pruned synapses are synapses that have been removed from the model.
+    Whether or not they are pruned is indicated by an additional column in the synapse realization file.
+    
+    See also:
+
+    - :ref:`_syn_file_format` for more information on the `.syn` file format.
+    - :py:meth:`~single_cell_parser.reader.read_synapse_realization`.
+    - :py:meth:`~single_cell_parser.writer.write_pruned_synapse_locations` for the corresponding writer.
+    
+    Args:
+        fname (str): The name of the file to be read.
+
+    Raises:
+        IOError: If the input file does not have a `.syn` or `.SYN` suffix.
+        
+    Returns:
+        dict: A dictionary with synapse types as keys and lists of synapse locations as values.
+        
+    Example:
+        >>> synapse_file
+        # Synapse distribution file
+        # corresponding to cell: 86_L5_86_L5_CDK20041214_nr3L5B_dend_PC_neuron_transform_registered_C2center
+        # Type - section - section.x - pruned
+         
+        VPM_E1  112     0.138046479525  0
+        VPM_E1  130     0.305058053119  0
+        ...
+        >>> read_pruned_synapse_realization(synapse_file)
+        {
+            'VPM_E1': [
+                (112, 0.138046479525, 0),
+                (130, 0.305058053119, 0),  
+                ...
+                ]
+        }
+    """
     if not fname.endswith('.syn') and not fname.endswith('.SYN'):
         raise IOError('Input file is not a synapse realization file!')
 
@@ -292,10 +412,25 @@ def read_pruned_synapse_realization(fname):
 
 
 def read_functional_realization_map(fname):
-    '''
-    reads list of all functional connections
-    coded by tuples (cell type, presynaptic cell index, synapse index).
-    Only valid for anatomical synapse realization given by anatomicalID
+    '''Read in a :ref:`_con_file_format` file and return a dictionary of functional connections.
+
+    Only valid for anatomical synapse realization given by anatomicalID.
+
+    See also:
+
+    - :ref:`_con_file_format` for more information on the `.con` file format.
+    - :py:meth:`~single_cell_parser.writer.write_functional_realization_map` for the corresponding writer.
+
+    Args:
+        fname (str): The name of the file to be read.
+
+    Raises:
+        IOError: If the input file does not have a `.con` or `.CON` suffix.
+
+    Returns:
+        tuple: 
+            A dictionary with cell types as keys and lists of synapse locations as values.
+            The filename of the corresponding :ref:`_syn_file_format` file.
     '''
     if not fname.endswith('.con') and not fname.endswith('.CON'):
         raise IOError('Input file is not a functional map realization file!')
@@ -389,7 +524,6 @@ def read_complete_synapse_activation_file(fname):
     
     This reader also returns "structure label" in addition to the columns of :py:func:`read_synapse_activation_file`.
     
-    
     Args: 
         fname (str): 
             Filename of a synapse activation file.
@@ -429,16 +563,33 @@ def read_complete_synapse_activation_file(fname):
 
 
 def read_spike_times_file(fname):
-    '''
-    reads list of all trials and spike times within these trials.
+    '''Reads all trials and spike times within these trials.
     
     Args:
         fname (str): 
             file of format:
             trial nr.   activation times (comma-separated list or empty)
+
+    Raises:
+        RuntimeError: If a trial number is found twice in the file
     
     Returns:
         dict: Dictionary with trial numbers as keys (integers), and tuples of spike times in each trial as values
+    
+    Example:
+
+        >>> spike_file
+        # Spike times file
+        # trial nr.   activation times (ms)
+        1   100.2,698.1
+        2   100.2,698.1,1000.0
+        ...
+        >>> read_spike_times_file(spike_file)
+        {
+            1: (100.2, 698.1),
+            2: (100.2, 698.1, 1000.0),
+            ...
+        }
     '''
     spikeTimes = {}
     with dbopen(fname, 'r') as spikeTimeFile:
@@ -469,7 +620,9 @@ def read_synapse_weight_file(fname):
     '''Reads list of all anatomical synapses and their maximum conductance values.
     
     Args: 
-        fname (str): Synapse weight filename. See: :py:meth:`~single_cell_parser.writer.write_synapse_weight_file`.
+        fname (str): 
+            Synapse weight filename. 
+            See: :py:meth:`~single_cell_parser.writer.write_synapse_weight_file`.
     
     Returns: 
         tuple: two dictionaries with cell types as keys, ordered the same as the anatomical synapses:
@@ -513,8 +666,16 @@ def read_synapse_weight_file(fname):
 
 
 def read_landmark_file(landmarkFilename):
-    '''
-    returns list of (x,y,z) points
+    '''Read an AMIRA landmark file
+
+    Args:
+        landmarkFilename (str): Filename of the landmark file to be read.
+
+    Raises:
+        RuntimeError: If the input file does not have a `.landmarkAscii` suffix.    
+
+    Returns:
+        list: (x,y,z) points of landmarks.
     '''
     if not landmarkFilename.endswith('.landmarkAscii'):
         errstr = 'Wrong input format: has to be landmarkAscii format'
