@@ -1,4 +1,9 @@
 '''
+Implementation of 3D scalar fields based on numpy arrays.
+
+Note that this class is identical to :class:`single_cell_parser.scalar_field.ScalarField`.
+It is duplicated here for package independence.
+
 Created on Mar 27, 2012
 
 @author: regger

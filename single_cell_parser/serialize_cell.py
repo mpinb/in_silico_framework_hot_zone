@@ -14,12 +14,19 @@ from .cell_parser import CellParser
 
 
 def convert_hoc_array_to_np_array(hoc_array):
-    '''converts hoc array to list of lists'''
+    '''Convert hoc array to list of lists
+    
+    Args:
+        hoc_array: hoc array
+        
+    Returns:
+        list: list of lists
+    '''
     return [np.array(x) for x in hoc_array]
 
 
 def convert_dict_of_hoc_arrays_to_dict_of_np_arrays(hoc_array_dict):
-    '''converts dictionary of hoc arrays to dictionary of list of lists'''
+    '''Convert dictionary of hoc arrays to dictionary of list of lists'''
     out = {}
     for name in hoc_array_dict:
         out[name] = convert_hoc_array_to_np_array(hoc_array_dict[name])
@@ -27,8 +34,32 @@ def convert_dict_of_hoc_arrays_to_dict_of_np_arrays(hoc_array_dict):
 
 
 def cell_to_serializable_object(cell):
-    '''takes cell object and returns an object, that contains the saved information
-    (recorded range vars, voltage) and that can be serialized.'''
+    '''Convert a :class:`~single_cell_parser.cell.Cell` object to a dict, so that it can be serialized.
+
+    Useful for parallellization using e.g. Dask or Joblib.
+    
+    The serialized object contains the following information:
+    
+    - tVec: time vector
+    - parameters: dictionary of parameters
+    - allPoints: point coordinates fo the cell
+    - sections: list of dictionaries containing the following information for each section:
+        - recVList: membrane potential
+        - recordVars: dictionary of hoc arrays
+        - label: label of the section
+        - sec_id: ID of the section
+        - parent_id: ID of the parent section
+    - synapses: dictionary of synapse populations, each containing a list of synapses with the following information:
+        - preCell: dictionary containing the spike times of the presynaptic cell
+        - coordinates: coordinates of the synapse
+    - hoc: hoc file content
+
+    Args:
+        cell (:class:`~single_cell_parser.cell.Cell`): cell object
+
+    Returns:
+        dict: serializable cell object
+    '''
     out = {}
     out['sections'] = []
     out['tVec'] = np.array(cell.tVec)
@@ -71,6 +102,14 @@ import os
 
 
 def restore_cell_from_serializable_object(sc):
+    """Restore a :class:`~single_cell_parser.cell.Cell` object from a serializable object.
+    
+    Args:
+        sc (dict): serializable object
+        
+    Returns:
+        :class:`~single_cell_parser.cell.Cell`: cell object
+    """
     # create hoc file
     with mkdtemp() as tempdir:
         hoc_file_path = os.path.join(tempdir, 'morphology.hoc')
@@ -90,16 +129,18 @@ def restore_cell_from_serializable_object(sc):
         with silence_stdout:
             # we do not scale! maybe trigger a warning?
             # or better deprecate the scale apical function?
-            parser.spatialgraph_to_cell(sumatra.parameters.NTParameterSet(
-                sc['parameters']),
-                                        axon,
-                                        scaleFunc=None)
+            parser.spatialgraph_to_cell(
+                sumatra.parameters.NTParameterSet(sc['parameters']),
+                axon,
+                scaleFunc=None
+                )
 
             # the following is needed to assure that the reconstructed cell
             # has an equal amount of segments compared to the original cell
             parser.set_up_biophysics(
                 sumatra.parameters.NTParameterSet(sc['parameters']),
-                sc['allPoints'])
+                sc['allPoints']
+                )
 
         ##############################
         # end of code from single_cell_parser.create_cell
@@ -114,11 +155,28 @@ def restore_cell_from_serializable_object(sc):
 
 
 def save_cell_to_file(path, cell):
+    """Save a :class:`~single_cell_parser.cell.Cell` object to a file in .pickle format.
+    
+    Args:
+        path (str): path to file
+        cell (:class:`~single_cell_parser.cell.Cell`): cell object
+        
+    Returns:
+        None. Writes out the cell object to :paramref:`path` in .pickle format.
+    """
     sc = cell_to_serializable_object(cell)
     pd.Series([sc]).to_pickle(path)
 
 
 def load_cell_from_file(path):
+    """Load a :class:`~single_cell_parser.cell.Cell` object from a file in .pickle format.
+    
+    Args:
+        path (str): path to .pickle file
+        
+    Returns:
+        :class:`~single_cell_parser.cell.Cell`: cell object
+    """
     pds = pd.read_pickle(path)
     sc = pds[0]
     return restore_cell_from_serializable_object(sc)

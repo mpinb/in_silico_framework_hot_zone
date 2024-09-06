@@ -1,4 +1,7 @@
-'''
+'''Runfile to test VPM activation of an L5tt cell.
+
+Used by the Oberlaender lab in Bonn.
+
 Created on Apr 21, 2012
 
 @author: robert

@@ -1,4 +1,8 @@
-'''
+'''Run a NEURON current injection simulation.
+
+Deprecated. Simulations are set up using the high-level interface :py:class:`~biophysics_fitting.simulator.Simulator`.
+Can still be useful for low-level control with NEURON.
+
 Created on Mar 19, 2012
 
 @author: robert
@@ -10,20 +14,39 @@ import neuron
 from . import cell_parser
 from . import reader
 from . import synapse_mapper as smap
+import matplotlib.pyplot as plt
 
 
 class SimControl(object):
-    '''
-    Objects of this class control a current clamp simulation. Example of use:
-      >>> cell = CellParser()
-      >>> sim = SimControl(cell=cell.get_cell())
-      >>> sim.go()
-      >>> sim.show()
+    '''Control a current clamp simulation.
+
+    Deprecated. Simulations are set up using the high-level interface :py:class:`~biophysics_fitting.simulator.Simulator`.
+    Can still be useful for low-level control with NEURON.
+
+    Attributes:
+            cell (:class:`neuron.h.Section`): The cell to simulate.
+            simTime (float): Simulation time [ms]. Default: 5 [ms]
+            dt (float): Time step [ms]. Default: 0.001 [ms]
+            T (float): Temperature [C]. Default
+            goAlready (bool): Simulation status
+            h (:class:`neuron.h`): NEURON interface
+    
+    Example:
+
+        >>> cell = CellParser()
+        >>> sim = SimControl(cell=cell.get_cell())
+        >>> sim.go()
+        >>> sim.show()
+    
     '''
 
     def __init__(self, cell=None, sim_time=5, dt=0.001, T=37):
         '''
-        Constructor
+        Args:
+            cell (:class:`neuron.h.Section`): The cell to simulate.
+            simTime (float): Simulation time (ms). Default: 5
+            dt (float): Time step (ms). Default: 0.001
+            T (float): Temperature (Celsius). Default: 37
         '''
         self.cell = cell
         self.simTime = sim_time
@@ -33,14 +56,13 @@ class SimControl(object):
         self.h = neuron.h
 
     def set_IClamp(self, delay=1, amp=-1, dur=3):
-        """
-        Initializes values for current clamp.
+        """Initializes values for current clamp.
         
         Default values:
           
-          delay = 1 [ms]
-          amp   = -1 [nA]
-          dur   = 3 [ms]
+          delay = 1 ms
+          amp   = -1 nA
+          dur   = 3 ms
         """
         stim = self.h.IClamp(self.cell.neuronTree.soma.hocSec(0.5))
         stim.delay = delay
@@ -49,6 +71,7 @@ class SimControl(object):
         self.stim = stim
 
     def show(self):
+        """Plot the voltage trace."""
         if self.go_already:
             x = np.array(self.rec_t)
             y = np.array(self.rec_v)
@@ -62,6 +85,7 @@ class SimControl(object):
             print("""First you have to `go()` the simulation.""")
 
     def set_recording(self):
+        """Record the voltage trace."""
         # Record Time
         self.rec_t = self.h.Vector()
         self.rec_t.record(self.h._ref_t)
@@ -70,6 +94,7 @@ class SimControl(object):
         self.rec_v.record(self.cell.soma(0.5)._ref_v)
 
     def go(self, simTime=None):
+        """Run the simulation."""
         self.set_recording()
         self.h.celsius = self.T
         print('Temperature = {:d}'.format(int(self.h.celsius)))
