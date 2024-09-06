@@ -1,3 +1,11 @@
+"""Plot out the cell morphology and its activity during a simulation.
+
+Provides functionality to plot out the cell morphology and its simulation data. 
+This includes the cell morphology, membrane voltage, ion dynamics, and synapse activations. 
+The data is parsed from a :class:`~single_cell_parser.cell.Cell` object to a format that is easier to work with for visualization purposes. 
+The data is then visualized using matplotlib (:class:`CellMorphologyVisualizer`) and plotly (:class:`CellMorphologyInteractiveVisualizer`).
+"""
+
 from biophysics_fitting import get_main_bifurcation_section
 import pandas as pd
 from distributed import Client, LocalCluster
@@ -555,7 +563,8 @@ class CMVDataParser:
         return_as_color=False,
         color_dict={}):
         """Returns a scalar data array based on some keyword (ion dynamics or membrane voltage).
-        If :paramref:`return_as_color`is True (default), the returned array is a map from the input keyword to a color
+        
+        If :paramref:`return_as_color` is True (default), the returned array is a map from the input keyword to a color
         Otherwise, it is the raw data, not mapped to a colorscale. Which data is returned (mapped to colors or not)
         depends on the keyword (case-insensitive):
         
@@ -1122,13 +1131,36 @@ class CellMorphologyInteractiveVisualizer(CMVDataParser):
     Attributes:
         dash_ip (str): IP address to run dash server on.
         show (bool): Whether to show the plot. Set to False for testing purposes. Default: True
-        renderer (str): 
-            Type of backend renderer to use for rendering the javascript/HTML VBox. Defaults to "notebook_connected"
-            Available renderers are: 
-            ['plotly_mimetype', 'jupyterlab', 'nteract', 'vscode', 'notebook', 'notebook_connected', 'kaggle', 'azure', 'colab',
-            'cocalc', 'databricks', 'json', 'png', 'jpeg', 'jpg', 'svg', 'pdf', 'browser', 'firefox', 'chrome', 'chromium', 
-            'iframe', 'iframe_connected', 'sphinx_gallery', 'sphinx_gallery_png']
         background_color (str): Background color of the plot. Defaults to "#f0f0f0"
+        renderer (str): Type of backend renderer to use for rendering the javascript/HTML VBox. 
+            Defaults to "notebook_connected". Available renderers are:
+            
+            - 'plotly_mimetype'
+            - 'jupyterlab'
+            - 'nteract'
+            - 'vscode'
+            - 'notebook'
+            - 'notebook_connected'
+            - 'kaggle'
+            - 'azure'
+            - 'colab'
+            - 'cocalc'
+            - 'databricks'
+            - 'json'
+            - 'png'
+            - 'jpeg'
+            - 'jpg'
+            - 'svg'
+            - 'pdf'
+            - 'browser'
+            - 'firefox'
+            - 'chrome'
+            - 'chromium'
+            - 'iframe'
+            - 'iframe_connected'
+            - 'sphinx_gallery'
+            - 'sphinx_gallery_png'
+            
     """
 
     def __init__(
@@ -1138,8 +1170,10 @@ class CellMorphologyInteractiveVisualizer(CMVDataParser):
         dash_ip=None,
         show=True,
         renderer="notebook_connected",
-        t_start=None, t_stop=None, t_step=None):
+        t_start=None, t_stop=None, t_step=None
+        ):
         """Initializes the CellMorphologyInteractiveVisualizer object.
+        
         Args:
             cell (:class:`~single_cell_parser.cell.Cell`): Cell object
             align_trunk (bool): Whether or not to align the cell trunk with the z-axis.
@@ -1163,7 +1197,7 @@ class CellMorphologyInteractiveVisualizer(CMVDataParser):
         color=None,
         time_point=None,
         diameter=None):
-        ''' Setup plotly for rendering in notebooks.
+        '''Setup plotly for rendering in notebooks.
         Shows an interactive 3D render of the Cell with NO data overlayed.
 
         Args:
