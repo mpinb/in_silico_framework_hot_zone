@@ -186,7 +186,7 @@ def write_cell_synapse_locations(fname=None, synapses=None, cellID=None):
     See also:
 
     - :ref:`syn_file_format` for more information on the `.syn` file format.
-    - :py:meth:`single_cell_parser.reader.read_synapse_locations` for the corresponding reader function.
+    - :py:meth:`single_cell_parser.reader.read_synapse_realization` for the corresponding reader function.
     - :py:meth:`write_pruned_synapse_locations` for a similar function that includes a `pruned` flag.
 
     Args:
@@ -232,7 +232,7 @@ def write_pruned_synapse_locations(fname=None, synapses=None, cellID=None):
     See also:
 
     - :ref:`syn_file_format` for more information on the `.syn` file format.
-    - :py:meth:`single_cell_parser.reader.read_synapse_locations` for the corresponding reader function.
+    - :py:meth:`single_cell_parser.reader.read_pruned_synapse_realization` for the corresponding reader function.
     - :py:meth:`write_cell_synapse_locations` for a similar function that does not include a `pruned` flag.
 
     Args:
