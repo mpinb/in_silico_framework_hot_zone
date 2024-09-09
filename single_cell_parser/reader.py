@@ -77,7 +77,8 @@ def read_hoc_file(fname=''):
                 label='BasalDendrite_1_0', 
                 hocLabel='BasalDendrite_1_0', 
                 edgePts=[(6.36964, 224.735992, -452.399994), (6.34155, 222.962997, -451.906006), ...], 
-                diameterList=[2.04, 2.04, ... , 2.04), parentID=0, parentConnect=0.009696)
+                diameterList=[2.04, 2.04, ... , 2.04), parentID=0, parentConnect=0.009696),
+            ...
         ]
     """
     if not fname.endswith('.hoc') and not fname.endswith('.HOC'):
@@ -308,7 +309,6 @@ def read_synapse_realization(fname):
         # Synapse distribution file
         # corresponding to cell: 86_L5_86_L5_CDK20041214_nr3L5B_dend_PC_neuron_transform_registered_C2center
         # Type - section - section.x
-
         VPM_E1  112     0.138046479525
         VPM_E1  130     0.305058053119
         VPM_E1  130     0.190509288017
@@ -376,7 +376,6 @@ def read_pruned_synapse_realization(fname):
         # Synapse distribution file
         # corresponding to cell: 86_L5_86_L5_CDK20041214_nr3L5B_dend_PC_neuron_transform_registered_C2center
         # Type - section - section.x - pruned
-         
         VPM_E1  112     0.138046479525  0
         VPM_E1  130     0.305058053119  0
         ...

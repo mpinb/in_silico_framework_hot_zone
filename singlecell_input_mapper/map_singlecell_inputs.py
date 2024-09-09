@@ -141,7 +141,7 @@ def map_singlecell_inputs(
     
     Args:
         cellName (str): 
-            path to a .hoc file containing the morphology of the cell.
+            path to a :ref:`hoc_file_format` file containing the morphology of the cell.
         cellTypeName (str): 
             name of the postsynaptic cell type.
         nrOfSamples (int): 

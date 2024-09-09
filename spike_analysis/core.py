@@ -354,7 +354,6 @@ def filter_short_ISIs(t, tdelta=0.):
     Examples:
         >>> filter_short_ISIs([1,2,3,4,5], tdelta=1.5)
         [1, 3, 5]
-
         >>> filter_short_ISIs([1,2,3,4,5], tdelta=2)
         [1, 3, 5]
     """
@@ -396,10 +395,8 @@ def stimulus_interval_filter(stim_times, period_length=1, offset=0):
     Examples:
         >>> stimulus_interval_filter([1,2,3,4])
         [1, 2, 3, 4]
-
         >>> stimulus_interval_filter([1,2,3,4], period_length=2)
         [1, 3]
-
         >>> stimulus_interval_filter([1,2,3,4], period_length=2, offset=1)
         [2, 4]
     """

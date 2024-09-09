@@ -368,11 +368,11 @@ def get_L5tt_template_v2():
 def set_morphology(cell_param, filename=None):
     """Add the morphology to a cell parameter object.
     
-    The morphology is simply a path to a .hoc file in string format.
+    The morphology is simply a path to a :ref:`hoc_file_format` file in string format.
     
     Args:
         cell_param (sumatra.parameters.NTParameterSet | dict): The cell parameter dictionary.
-        filename (str): The path to the .hoc file.
+        filename (str): The path to the :ref:`hoc_file_format` file.
         
     Returns:
         sumatra.parameters.NTParameterSet | dict: The updated cell parameter dictionary."""

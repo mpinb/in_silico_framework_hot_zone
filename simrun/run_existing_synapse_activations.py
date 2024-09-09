@@ -211,7 +211,7 @@ def run_existing_synapse_activations(cellParamName, evokedUpParamName, synapseAc
     Parameters:
         cellParamName (str): 
             Path to a cell parameter file (e.g. getting_started/example_data/biophysical_constraints/*.param), 
-            containing information about the neuron morphology (link to a .hoc file) and biophysical properties.
+            containing information about the neuron morphology (link to a :ref:`hoc_file_format` file) and biophysical properties.
             See :py:meth:`~single_cell_parser.create_cell` for more information on the structure and contents of this filetype
         evokedUpParamName (str): 
             Path to network parameter file (e.g. getting_started/example_data/functional_constraints/network.param),

@@ -361,7 +361,7 @@ class StreamToLogger(object):
         >>> with StreamToLogger() as sys.stdout:
         >>>    do_something()
     
-    Used for reading in .hoc files that provide output due to various print statements in the `.hoc` file, or capturing NEURON output.
+    Used for reading in :ref:`hoc_file_format` files that provide output due to various print statements in the `.hoc` file, or capturing NEURON output.
     """
 
     def __init__(self, logger, level):

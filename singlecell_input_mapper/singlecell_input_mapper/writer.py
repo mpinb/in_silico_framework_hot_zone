@@ -110,7 +110,7 @@ def write_landmark_file(fname=None, landmarkList=None):
 
 
 def write_cell_synapse_locations(fname=None, synapses=None, cellID=None):
-    '''Write a .syn file, containing all synapses and their corresponding cellID, sectionID and x.
+    '''Write a :ref:`syn_file_format` file, containing all synapses and their corresponding cellID, sectionID and x.
     
     The locations of each synapse are coded by section ID and section x of cell with ID :paramref:`cellID`.
 
@@ -178,7 +178,7 @@ def write_anatomical_realization_map(
         fname=None,
         functionalMap=None,
         anatomicalID=None):
-    '''Writes a .con file containing a list of all functional connections.
+    '''Writes a :ref:`con_file_format` file containing a list of all functional connections.
      
     Connections are tuples of the form: (cell type, presynaptic cell index, synapse index).
     Only valid for an anatomical synapse realization with ID :paramref:`anatomicalID`.
@@ -191,7 +191,7 @@ def write_anatomical_realization_map(
         anatomicalID (str): ID of the anatomical realization
 
     Warning:
-        A .con file is only valid with a corresponding .syn file.
+        A :ref:`con_file_format` file is only valid with a corresponding :ref:`syn_file_format` file.
         See :py:meth:`~write_cell_synapse_locations`
 
     Returns:
@@ -220,7 +220,7 @@ def write_anatomical_realization_map(
             outputFile.write(line)
 
     # added by arco: single_cell_parser needs number of connected cells spreadsheet
-    # this can be generated out of the .con file.
+    # this can be generated out of the :ref:`con_file_format` file.
     # todo: find a less ugly method to do this
     con_file_to_NumberOfConnectedCells_sheet(fname)
 
