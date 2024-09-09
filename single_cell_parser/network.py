@@ -35,7 +35,7 @@ class NetworkMapper:
         cells (dict): dictionary holding all presynaptic cells ordered by cell type.
         connected_cells (dict): dictionary holding indices of all active presynaptic cells ordered by cell type.
         postCell (:class:`single_cell_parser.cell.Cell`): reference to postsynaptic (multi-compartment) cell model.
-        nwParam (:class:`sumatra.parameters.NTParameterSet`): network parameter set (see :ref:`_network_parameters_format` for more info).
+        nwParam (:class:`sumatra.parameters.NTParameterSet`): network parameter set (see :ref:`network_parameters_format` for more info).
         simParam (:class:`sumatra.parameters.NTParameterSet`): simulation parameter set.
     '''
 
@@ -43,7 +43,7 @@ class NetworkMapper:
         '''Initialize NetworkMapper.        
         Args:
             postCell (:class:`single_cell_parser.cell.Cell`): The cell to map synapses onto.
-            nwParam (:class:`sumatra.parameters.NTParameterSet`): The network parameter set (see :ref:`_network_parameters_format` for more info).
+            nwParam (:class:`sumatra.parameters.NTParameterSet`): The network parameter set (see :ref:`network_parameters_format` for more info).
             simParam (:class:`sumatra.parameters.NTParameterSet`): The simulation parameter set. Default: None.
         '''
         self.cells = {}
@@ -352,9 +352,9 @@ class NetworkMapper:
                 self.cells[synType] = []
 
     def _assign_anatomical_synapses(self):
-        '''Assigns synapses to postsynaptic cell from :ref:`_syn_file_format` files.
+        '''Assigns synapses to postsynaptic cell from :ref:`syn_file_format` files.
 
-        Fetches the correct :ref:`_syn_file_format` files from the network parameters.
+        Fetches the correct :ref:`syn_file_format` files from the network parameters.
         Assigns all synapses from these files to the postsynaptic cell.
         
         This is the first step in creating a functional network.
@@ -571,7 +571,7 @@ class NetworkMapper:
 
         Uses :py:meth:`~single_cell_parser.cell.PointCell.compute_spike_train_times` to calculate
         spike times based on the network parameter keys "noise", "start", "interval", "nspikes".
-        See :ref:`_network_parameters_format` for more information.
+        See :ref:`network_parameters_format` for more information.
         '''
         interval = networkParameters.interval
         noise = 1.0
@@ -631,7 +631,7 @@ class NetworkMapper:
            * - "poissontrain_modulated"
              - "rate_before_t_offset", "mean_rate", "max_modulation", "modulation_frequency", "bin_size", "phase_distribution", "offset"
 
-        See :ref:`_network_parameters_format` for more information on the network parameter file format.
+        See :ref:`network_parameters_format` for more information on the network parameter file format.
 
         Args:
             preCellType (str): The presynaptic cell type.

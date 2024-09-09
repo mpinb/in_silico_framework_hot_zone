@@ -284,11 +284,11 @@ def read_scalar_field(fname=''):
 
 
 def read_synapse_realization(fname):
-    """Read a :ref:`_syn_file_format` file and returns a dictionary of synapse locations.
+    """Read a :ref:`syn_file_format` file and returns a dictionary of synapse locations.
     
     See also:
 
-    - :ref:`_syn_file_format` for more information on the `.syn` file format.
+    - :ref:`syn_file_format` for more information on the `.syn` file format.
     - :py:meth:`~single_cell_parser.reader.read_pruned_synapse_realization`.
     - :py:meth:`~single_cell_parser.writer.write_cell_synapse_locations` for the corresponding writer.
     
@@ -351,14 +351,14 @@ def read_synapse_realization(fname):
 
 
 def read_pruned_synapse_realization(fname):
-    """Read in a :ref:`_syn_file_format` and returns a dictionary of synapse locations and whether they are pruned or not.
+    """Read in a :ref:`syn_file_format` and returns a dictionary of synapse locations and whether they are pruned or not.
     
     Pruned synapses are synapses that have been removed from the model.
     Whether or not they are pruned is indicated by an additional column in the synapse realization file.
     
     See also:
 
-    - :ref:`_syn_file_format` for more information on the `.syn` file format.
+    - :ref:`syn_file_format` for more information on the `.syn` file format.
     - :py:meth:`~single_cell_parser.reader.read_synapse_realization`.
     - :py:meth:`~single_cell_parser.writer.write_pruned_synapse_locations` for the corresponding writer.
     
@@ -412,13 +412,13 @@ def read_pruned_synapse_realization(fname):
 
 
 def read_functional_realization_map(fname):
-    '''Read in a :ref:`_con_file_format` file and return a dictionary of functional connections.
+    '''Read in a :ref:`con_file_format` file and return a dictionary of functional connections.
 
     Only valid for anatomical synapse realization given by anatomicalID.
 
     See also:
 
-    - :ref:`_con_file_format` for more information on the `.con` file format.
+    - :ref:`con_file_format` for more information on the `.con` file format.
     - :py:meth:`~single_cell_parser.writer.write_functional_realization_map` for the corresponding writer.
 
     Args:
@@ -430,7 +430,7 @@ def read_functional_realization_map(fname):
     Returns:
         tuple: 
             A dictionary with cell types as keys and lists of synapse locations as values.
-            The filename of the corresponding :ref:`_syn_file_format` file.
+            The filename of the corresponding :ref:`syn_file_format` file.
     '''
     if not fname.endswith('.con') and not fname.endswith('.CON'):
         raise IOError('Input file is not a functional map realization file!')

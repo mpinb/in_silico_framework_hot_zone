@@ -178,14 +178,14 @@ def write_all_traces(fname, t, vTraces):
 
 
 def write_cell_synapse_locations(fname=None, synapses=None, cellID=None):
-    '''Write a :ref:`_syn_file_format` file.
+    '''Write a :ref:`syn_file_format` file.
      
-    :ref:`_syn_file_format` files contain a cell's synapses with the locations
+    :ref:`syn_file_format` files contain a cell's synapses with the locations
     coded by section ID and section x of cell with ID "cellID".
 
     See also:
 
-    - :ref:`_syn_file_format` for more information on the `.syn` file format.
+    - :ref:`syn_file_format` for more information on the `.syn` file format.
     - :py:meth:`single_cell_parser.reader.read_synapse_locations` for the corresponding reader function.
     - :py:meth:`write_pruned_synapse_locations` for a similar function that includes a `pruned` flag.
 
@@ -224,14 +224,14 @@ def write_cell_synapse_locations(fname=None, synapses=None, cellID=None):
 
 
 def write_pruned_synapse_locations(fname=None, synapses=None, cellID=None):
-    '''Write a :ref:`_syn_file_format` file with a `pruned` flag.
+    '''Write a :ref:`syn_file_format` file with a `pruned` flag.
 
-    :ref:`_syn_file_format` files contain a cell's synapses with the locations
+    :ref:`syn_file_format` files contain a cell's synapses with the locations
     coded by section ID and section x of cell with ID "cellID" and a pruned flag (1 or 0).
 
     See also:
 
-    - :ref:`_syn_file_format` for more information on the `.syn` file format.
+    - :ref:`syn_file_format` for more information on the `.syn` file format.
     - :py:meth:`single_cell_parser.reader.read_synapse_locations` for the corresponding reader function.
     - :py:meth:`write_cell_synapse_locations` for a similar function that does not include a `pruned` flag.
 
@@ -275,14 +275,14 @@ def write_functional_realization_map(
         fname=None,
         functionalMap=None,
         anatomicalID=None):
-    '''Write out a :ref:`_con_file_format` file.
+    '''Write out a :ref:`con_file_format` file.
 
     Writes list of all functional connections coded by tuples (cell type, presynaptic cell index, synapse index).
     Only valid for anatomical synapse realization given by anatomicalID
 
     See also:
 
-    - :ref:`_con_file_format` for more information on the `.con` file format.
+    - :ref:`con_file_format` for more information on the `.con` file format.
     - :py:meth:`single_cell_parser.reader.read_functional_realization_map` for the corresponding reader function.
 
     Args:

@@ -15,7 +15,7 @@ class SynapseMapper(object):
     The synapse distribution can be:
 
     - a previously created synapse realization in dictionary form 
-      (see the :ref:`_syn_file_type` file type and :py:meth:`~single_cell_parser.reader.read_synapse_realization` for more info)
+      (see the :ref:`syn_file_type` file type and :py:meth:`~single_cell_parser.reader.read_synapse_realization` for more info)
     - a :class:`~single_cell_parser.scalar_field.ScalarField` of synapse densities, in which case the synapses are mapped
       in the same way as in :py:meth:`~single_cell_parser.synapse_mapper.SynapseMapper.create_synapses`.
     - a list of synapse distances.
@@ -29,12 +29,12 @@ class SynapseMapper(object):
     '''
     def __init__(self, cell=None, synDist=None, isDensity=True):
         '''
-        :paramref:`synDist` can be read from a :ref:`_syn_file_type` file using :py:meth:`~single_cell_parser.reader.read_synapse_realization`.
+        :paramref:`synDist` can be read from a :ref:`syn_file_type` file using :py:meth:`~single_cell_parser.reader.read_synapse_realization`.
 
         Args:
             cell (:class:`~single_cell_parser.cell.Cell`): The cell to map synapses onto.
             synDist (dict | :class:`single_cell_parser.scalar_field.ScalarField`): 
-                Either a previously created synapse realization in dictionary form (see the :ref:`_syn_file_type` file type and :py:meth:`~single_cell_parser.reader.read_synapse_realization` for more info)
+                Either a previously created synapse realization in dictionary form (see the :ref:`syn_file_type` file type and :py:meth:`~single_cell_parser.reader.read_synapse_realization` for more info)
                 or a :class:`~single_cell_parser.scalar_field.ScalarField` of synapse densities.
             isDensity (bool): 
                 If True, then the synapse distribution is interpreted as an average density, and the actual number of synapses that will be assigned is drawn from a Poisson distribution. 
@@ -57,7 +57,7 @@ class SynapseMapper(object):
         See also:
 
         - :py:meth:`~single_cell_parser.reader.read_synapse_realization`
-        - The :ref:`_syn_file_type` file type.
+        - The :ref:`syn_file_type` file type.
         '''
         sections = self.cell.sections
         synDist = self.synDist
@@ -88,7 +88,7 @@ class SynapseMapper(object):
         See also:
 
         - :py:meth:`~single_cell_parser.reader.read_pruned_synapse_realization`
-        - The :ref:`_syn_file_type` file type.
+        - The :ref:`syn_file_type` file type.
         '''
         sections = self.cell.sections
         synDist = self.synDist

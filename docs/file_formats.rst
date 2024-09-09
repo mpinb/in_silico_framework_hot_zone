@@ -52,7 +52,7 @@ See the folder `mechanisms` in the project source.
 .con
 ====
 ISF custom file format to store connectivity data. 
-To be used in conjunction with an associated :ref:`_syn_file_format` file and morphology :ref:`_hoc_file_format` file.
+To be used in conjunction with an associated :ref:`syn_file_format` file and morphology :ref:`hoc_file_format` file.
 It numbers each synapse, and links it to its associated presynaptic cell type and ID.
 
 Readers:
@@ -78,10 +78,10 @@ Example::
 .syn
 ====
 ISF custom file format to store synapse locations onto a morphology. 
-To be used in conjunction with an associated :ref:`_con_file_format` file and morphology :ref:`_hoc_file_format` file.
+To be used in conjunction with an associated :ref:`con_file_format` file and morphology :ref:`hoc_file_format` file.
 
 For each synapse, it provides the synapse type and location onto the morphology.
-Each row index corresponds to its synapse ID, providing a backlink to the :ref:`_con_file_format` file format.
+Each row index corresponds to its synapse ID, providing a backlink to the :ref:`con_file_format` file format.
 The location is encoded as a section ID and x (a normalized distance along the section),
 to be consistent with NEURON syntax.
 
