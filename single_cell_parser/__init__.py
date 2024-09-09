@@ -153,7 +153,7 @@ def create_cell(
 
     Args:
         parameters (dict | dict-like):
-        A nested dictionary structure. Should include at least the keys 'filename' and one key per structure present in the `.hoc`_ file (e.g. "AIS", "Soma" ...). 
+        A nested dictionary structure. Should include at least the keys 'filename' and one key per structure present in the :ref:`hoc_file_format` file (e.g. "AIS", "Soma" ...). 
             Optional keys include: ``cell_modify_functions``, ``discretization``
         scaleFunc (bool): 
             DEPRECATED,  should be specified in the parameters, as described in :meth:`~single_cell_parser.cell_modify_funs`
