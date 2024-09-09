@@ -1,11 +1,13 @@
-from data_base.dbopen import dbopen
-import os
-from visualize.utils import value_to_color
-'''
+'''Write out anatomical, morphology or simulation data.
+
 Created on Mar 8, 2012
 
 @author: regger
 '''
+from data_base.dbopen import dbopen
+import os
+from visualize.utils import value_to_color
+
 
 labels2int = {\
     "Neuron":                 2,\
@@ -467,7 +469,7 @@ def write_synapse_weight_file(fname=None, cell=None):
 def write_PSTH(fname=None, PSTH=None, bins=None):
     '''Write PSTH and time bins of PSTH, 
     
-    Bins contain left and right end of each bin, i.e. len(bins) = len(PSTH) + 1
+    Bins contain left and right end of each bin, i.e. ``len(bins) = len(PSTH) + 1``
 
     Args:
         fname (str): The name of the file to write to.
@@ -608,10 +610,10 @@ def write_cell_simulation(
     attached to Sections of cell
 
     Attention:
-        Make sure to have created the cell with `allPoints = True`.
+        Make sure to have created the cell with ``allPoints = True``.
     
     Attention:
-        Performs interpolation if `nseg != nrOfPts` for a Section
+        Performs interpolation if ``nseg != nrOfPts`` for a Section
 
     Args:
         fname (str): The name of the file to write to.
@@ -973,7 +975,7 @@ def write_functional_map(fname, functionalMap):
     """Write a functional map to an AMIRA file.
     
     Deprecated. Consider using :py:meth:`visualize.vtk.write_vtk_pointcloud_file` 
-    or :py:meth:`visualize.cell_morphology_visualizer.write_vtk_frames` for visualization purposes.
+    or :py:meth:`visualize.vtk.write_vtk_frames` for visualization purposes.
 
     This method may still serve well if you need an AMIRA mesh file.
     
