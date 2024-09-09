@@ -48,7 +48,7 @@ def read_hoc_file(fname=''):
     This list of sections is parsed to a :class:`~single_cell_parser.cell_parser.CellParser` object
     using :py:meth:`~single_cell_parser.cell_parser.CellParser.spatialgraph_to_cell`.
 
-    See :ref:_`hoc_file_format` for more information on the hoc file format.
+    See :ref:`hoc_file_format` for more information on the hoc file format.
     
     Attention:
         The module :py:mod:`singlecell_input_mapper` also conains a method
