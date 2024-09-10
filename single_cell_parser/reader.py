@@ -428,7 +428,8 @@ def read_functional_realization_map(fname):
 
     Returns:
         tuple: 
-            A dictionary with cell types as keys and lists of synapse locations as values.
+            A dictionary with cell types as keys and a list of synapse information for each synapse as values.
+            Synapse information is a 3-tuple with (cell type, cell ID, synapse ID)
             The filename of the corresponding :ref:`syn_file_format` file.
     '''
     if not fname.endswith('.con') and not fname.endswith('.CON'):
