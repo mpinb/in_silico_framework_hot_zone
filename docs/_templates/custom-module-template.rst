@@ -1,4 +1,4 @@
-{{ fullname | escape | underline}}
+{{ name | escape | underline}}
 
 .. automodule:: {{ fullname }}
 
@@ -55,7 +55,7 @@
 {% block modules %}
 {% if modules %}
 .. rubric:: {{ _('Modules') }}
-   
+
 .. autosummary::
    :toctree:
    :template: custom-module-template.rst
