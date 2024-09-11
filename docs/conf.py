@@ -51,7 +51,7 @@ extensions = [
     'sphinx.ext.autodoc',  # Core library for html generation from docstrings
     'sphinx.ext.todo',
     'sphinx_paramlinks',
-    'sphinx.ext.viewcode',
+    # 'sphinx.ext.viewcode',  # does not work with immaterial theme
     'sphinx.ext.coverage',
     # 'sphinx.ext.intersphinx',  # Link to other project's documentation
     'sphinx.ext.autosummary',  # Create neat summary tables
