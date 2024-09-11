@@ -31,14 +31,14 @@ class Cell(object):
     Attributes: 
         hoc_path (str)
         id (str | int, optional)
-        soma (PySection)
+        soma (:class:`single_cell_parser.cell.PySection`): The soma section of the cell.
         tree (neuron.h.SectionList)
-        branches ({str: neuron.h.SectionList}): maps the section ID of the root seciton of each dendritic subtree to its corresponding section list.
-        structures ({str: [PySection]}): All sections, aggregated by label (e.g. Dendrite, ApicalDendrite, ApicalTuft, Myelin...)
-        sections ([PySection]): All sections. sections[0] is the soma. Each section contains recorded data (if any was recorded, e.g. membrane voltage): a 2D array where axis 0 is segment number, and axis 1 is time.
+        branches (dict): maps the section ID (str) of the root section of each dendritic subtree to its corresponding section list (neuron.h.SectionList).
+        structures (dict): All sections, aggregated by label (e.g. Dendrite, ApicalDendrite, ApicalTuft, Myelin...). Keys are labels (str), values are lists of :class:`PySection`s.
+        sections (list): List of all :class:`PySection`s. sections[0] is the soma. Each section contains recorded data (if any was recorded, e.g. membrane voltage): a 2D array where axis 0 is segment number, and axis 1 is time.
         synapses (dict): a dictionary of lists of :class:`single_cell_parser.synapse.Synapse` objects
         E (float): Default resting membrane potential. Defaults to -70.0
-        changeSynParamDict
+        changeSynParamDict (dict)
         tVec (neuron.h.Vector): a hoc Vector recording time.
         neuron_param
         neuron_sim_param
@@ -51,10 +51,6 @@ class Cell(object):
     '''
 
     def __init__(self):
-        '''
-
-        '''
-
         self.hoc_path = None
         self.id = None
         self.soma = None
@@ -415,52 +411,31 @@ class PySection(nrn.Section):
     '''
     Subclass of nrn.Section providing additional geometric
     and mechanism information/ handling methods
+    
+    Attributes:
+        label (str): label of the section
+        parent (PySection): reference to parent section
+        parentx (float): connection point at parent section
+        bounds (tuple): bounding box around 3D coordinates
+        nrOfPts (int): number of traced 3D coordinates
+        pts (list): list of traced 3D coordinates
+        relPts (list): list of relative position of 3D points along section
+        diamList (list): list of diameters at traced 3D coordinates
+        area (float): total area of all NEURON segments in this section
+        segPts (list): list of center points of segments used during simulation
+        segx (list): list of x values corresponding to center of each segment
+        segDiams (list): list of diameters of all segments
+        recVList (list): list of neuron Vectors recording voltage in each compartment
+        recordVars (dict): dict of range variables recorded
     '''
 
     def __init__(self, name=None, cell=None, label=None):
         '''
-        structure
-        self.label = label
         
-        reference to parent section
-        self.parent = None
-        
-        connection point at parent section
-        self.parentx = 1.0
-        
-        bounding box around 3D coordinates
-        self.bounds = ()
-        
-        number of traced 3D coordinates
-        self.nrOfPts = 0
-        
-        list of traced 3D coordinates
-        self.pts = []
-        
-        list of relative position of 3D points along section
-        self.relPts = []
-        
-        list of diameters at traced 3D coordinates
-        self.diamList = []
-        
-        total area of all NEURON segments in this section
-        self.area = 0.0
-        
-        list of center points of segments used during simulation
-        self.segPts = []
-        
-        list of x values corresponding to center of each segment
-        for looping akin to the hoc function for(x) (without 0  and 1)
-        self.segx = []
-        
-        list of diameters of all segments
-        self.segDiams = []
-        
-        list of neuron Vectors recording voltage in each compartment
-        self.recVList = []
-        
-        dict of range variables recorded
-        self.recordVars = {}
+        Args:
+            name (str, optional): name of the section
+            cell (Cell, optional): reference to the cell object
+            label (str, optional): label of the section
         '''
         if name is None:
             name = ''

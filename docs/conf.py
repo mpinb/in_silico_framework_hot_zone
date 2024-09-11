@@ -53,7 +53,7 @@ extensions = [
     'sphinx_paramlinks',
     # 'sphinx.ext.viewcode',  # does not work with immaterial theme
     'sphinx.ext.coverage',
-    # 'sphinx.ext.intersphinx',  # Link to other project's documentation
+    'sphinx.ext.intersphinx',  # Link to other project's documentation
     'sphinx.ext.autosummary',  # Create neat summary tables
     'sphinx.ext.napoleon',
     'nbsphinx',  # for rendering tutorial notebooks
