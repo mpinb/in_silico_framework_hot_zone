@@ -48,15 +48,15 @@ extensions = [
     'sphinx.ext.autodoc',      # Core library for html generation from docstrings
     'sphinx.ext.todo',         # To-do notes
     'sphinx_paramlinks',       # Parameter links
-    # 'sphinx.ext.viewcode',   # Does not work with immaterial theme?
+    'sphinx.ext.viewcode',
     'sphinx.ext.coverage',     # Coverage reporting
     'sphinx.ext.intersphinx',  # Link to other project's documentation, for e.g. NEURON classes as attributes in docstrings
-    # 'sphinx.ext.autosummary',  # Create neat summary tables
+    'sphinx.ext.autosummary',  # Create neat summary tables
     'sphinx.ext.napoleon',     # Support for NumPy and Google style docstrings
     'nbsphinx',                # For rendering tutorial notebooks
     'sphinxcontrib.bibtex',    # For citations
-    'sphinx_immaterial',       # Immaterial theme
-    'sphinx_immaterial.apidoc.python.apigen',  # Python API support
+    # 'sphinx_immaterial',     # Immaterial theme
+    # 'sphinx_immaterial.apidoc.python.apigen',  # Python API support
 ]
 
 bibtex_bibfiles = ['bibliography.bib']
@@ -87,8 +87,8 @@ autodoc_default_options = {
 
 autoclass_content = 'both'  # document both the class docstring, as well as __init__
 ## Generate autodoc stubs with summaries from code
-# autosummary_generate = ['modules.rst']
-# autosummary_imported_members = False  # do not show all imported modules per module, this is too bloated
+autosummary_generate = ['modules.rst']
+autosummary_imported_members = False  # do not show all imported modules per module, this is too bloated
 paramlinks_hyperlink_param = 'name'
 
 # Don't run notebooks
@@ -141,7 +141,7 @@ todo_include_todos = False
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-html_theme = "sphinx_immaterial"  # furo is nice too
+html_theme = "furo"  # sphinx_immaterial is nice, but requires more config
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
