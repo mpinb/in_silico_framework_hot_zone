@@ -17,11 +17,11 @@ import os
 project = 'In-Silico Framework (ISF)'
 copyright = '2023, Arco Bast, Amir Najafgholi, Maria Royo Cano, Rieke Fruengel, Matt Keaton, Bjorge Meulemeester, Omar Valerio'
 author = 'Arco Bast, Amir Najafgholi, Maria Royo Cano, Rieke Fruengel, Matt Keaton, Bjorge Meulemeester, Omar Valerio'
-release = '0.0.1'
-version = '0.0.1'
+release = '0.2.0-alpha'
+version = '0.2.0-alpha'
 ## Make your modules available in sys.path
 project_root = os.path.join(os.path.abspath(os.pardir))
-sys.path.append(project_root)
+sys.path.insert(0, project_root)
 ## copy over tutorials
 import shutil
 shutil.rmtree(os.path.join(project_root, 'docs', 'tutorials'), ignore_errors=True)
@@ -55,8 +55,8 @@ extensions = [
     'sphinx.ext.napoleon',     # Support for NumPy and Google style docstrings
     'nbsphinx',                # For rendering tutorial notebooks
     'sphinxcontrib.bibtex',    # For citations
-    # 'sphinx_immaterial',     # Immaterial theme
-    # 'sphinx_immaterial.apidoc.python.apigen',  # Python API support
+    'sphinx_autodoc_typehints', # Automatically document param types (less noise in class signature)
+    'IPython.sphinxext.ipython_console_highlighting'
 ]
 
 bibtex_bibfiles = ['bibliography.bib']
