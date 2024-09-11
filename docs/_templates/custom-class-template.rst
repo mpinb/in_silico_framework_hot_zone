@@ -6,12 +6,12 @@
    :members:
    :show-inheritance:
 
-   {% block functions %}
-   {% if functions %}
-   .. rubric:: {{ _('Functions') }}
+   {% block methods %}
+   {% if methods %}
+   .. rubric:: {{ _('Methods') }}
 
    .. autosummary::
-   {% for item in functions %}
+   {% for item in methods %}
       {{ item }}
    {%- endfor %}
    {% endif %}
