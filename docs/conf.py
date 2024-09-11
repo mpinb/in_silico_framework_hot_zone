@@ -55,7 +55,7 @@ extensions = [
     'sphinx.ext.napoleon',     # Support for NumPy and Google style docstrings
     'nbsphinx',                # For rendering tutorial notebooks
     'sphinxcontrib.bibtex',    # For citations
-    'sphinx_immaterial'        # Immaterial theme
+    'sphinx_immaterial',       # Immaterial theme
     'sphinx_immaterial.apidoc.python.apigen',  # Python API support
 ]
 
