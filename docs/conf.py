@@ -54,7 +54,11 @@ extensions = [
     'sphinx.ext.autosummary',  # Create neat summary tables
     'sphinx.ext.napoleon',
     'nbsphinx',  # for rendering tutorial notebooks
+<<<<<<< HEAD
     'sphinxcontrib.bibtex',  # for citations
+=======
+    'sphinxcontrib.bibtex'  # for citations
+>>>>>>> a650e3c1ff5cf7e2ca3d5e70f896049ea345c117
     'sphinx_immaterial'
 ]
 
