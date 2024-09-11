@@ -45,16 +45,17 @@ shutil.copytree(os.path.join(project_root, 'docs', '_static', '_images'),
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    'sphinx.ext.autodoc',
+    'sphinx.ext.autodoc',  # Core library for html generation from docstrings
     'sphinx.ext.todo',
     'sphinx_paramlinks',
     'sphinx.ext.viewcode',
     'sphinx.ext.coverage',
-    'sphinx.ext.intersphinx',
-    'sphinx.ext.autosummary',
+    # 'sphinx.ext.intersphinx',  # Link to other project's documentation
+    'sphinx.ext.autosummary',  # Create neat summary tables
     'sphinx.ext.napoleon',
     'nbsphinx',  # for rendering tutorial notebooks
-    'sphinxcontrib.bibtex'  # for citations
+    'sphinxcontrib.bibtex',  # for citations
+    'sphinx_immaterial'
 ]
 
 bibtex_bibfiles = ['bibliography.bib']
@@ -79,8 +80,8 @@ napoleon_attr_annotations = True
 # autodoc_member_order = 'bysource'
 ## Default flags used by autodoc directives
 autodoc_default_options = {
-    'members': True,
-    'show-inheritance': False,
+    'members': True,  # to document member functions of classes.
+    'show-inheritance': False,  # list the base class
 }
 
 autoclass_content = 'both'  # document both the class docstring, as well as __init__
@@ -139,7 +140,7 @@ todo_include_todos = False
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-html_theme = "furo"
+html_theme = "sphinx_immaterial"  # furo is nice too
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
