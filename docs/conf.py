@@ -84,7 +84,7 @@ napoleon_attr_annotations = True
 ## Default flags used by autodoc directives
 ## Note that these are overridden by custom templates, which we do in fact use.
 autodoc_default_options = {
-    'members': True,  # to document member functions of classes.
+    'members': False,  # to document member functions of classes. Set to False, since custom template takes care of this. Otherwise we have duplicate descriptions of everything.
     'show-inheritance': False,  # list the base class
 }
 
