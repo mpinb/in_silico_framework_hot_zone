@@ -33,7 +33,7 @@ Module list
 Tutorials
 =============
 
-..include:: tutorials.rst
+.. include:: tutorials.rst
 
 Indices and tables
 ==================
