@@ -51,7 +51,7 @@ extensions = [
     # 'sphinx.ext.viewcode',   # Does not work with immaterial theme?
     'sphinx.ext.coverage',     # Coverage reporting
     'sphinx.ext.intersphinx',  # Link to other project's documentation, for e.g. NEURON classes as attributes in docstrings
-    'sphinx.ext.autosummary',  # Create neat summary tables
+    # 'sphinx.ext.autosummary',  # Create neat summary tables
     'sphinx.ext.napoleon',     # Support for NumPy and Google style docstrings
     'nbsphinx',                # For rendering tutorial notebooks
     'sphinxcontrib.bibtex',    # For citations
@@ -87,8 +87,8 @@ autodoc_default_options = {
 
 autoclass_content = 'both'  # document both the class docstring, as well as __init__
 ## Generate autodoc stubs with summaries from code
-autosummary_generate = ['modules.rst']
-autosummary_imported_members = False  # do not show all imported modules per module, this is too bloated
+# autosummary_generate = ['modules.rst']
+# autosummary_imported_members = False  # do not show all imported modules per module, this is too bloated
 paramlinks_hyperlink_param = 'name'
 
 # Don't run notebooks
