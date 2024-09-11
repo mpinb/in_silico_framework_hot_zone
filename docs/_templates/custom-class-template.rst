@@ -8,7 +8,7 @@
 
    {% block functions %}
    {% if functions %}
-   .. rubric:: {{ _('Methods') }}
+   .. rubric:: {{ _('Functions') }}
 
    .. autosummary::
    {% for item in functions %}
