@@ -55,8 +55,6 @@ extensions = [
     'sphinx.ext.napoleon',     # Support for NumPy and Google style docstrings
     'nbsphinx',                # For rendering tutorial notebooks
     'sphinxcontrib.bibtex',    # For citations
-    'sphinx_autodoc_typehints', # Automatically document param types (less noise in class signature)
-    'IPython.sphinxext.ipython_console_highlighting'
 ]
 
 bibtex_bibfiles = ['bibliography.bib']
