@@ -13,7 +13,7 @@ import neuron
 nrn = neuron.nrn
 h = neuron.h
 from itertools import chain
-import single_cell_parser.analyze as sca
+from . import analyze as sca
 import pandas as pd
 import json
 import logging
