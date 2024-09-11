@@ -35,6 +35,9 @@ if os.path.exists(os.path.join(project_root, 'docs', '_autosummary', '_images'))
 shutil.copytree(os.path.join(project_root, 'docs', '_static', '_images'),
                 os.path.join(project_root, 'docs', '_autosummary', '_images'))
 
+from compatibility import init_data_base_compatibility
+init_data_base_compatibility()  # make db importable before running autosummary or autodoc etc...
+
 
 # -- General configuration ------------------------------------------------
 
