@@ -12,7 +12,7 @@
 
    .. autosummary::
    {% for item in methods %}
-      ~{{ name }}.{{ item }}
+      {{ item }}
    {%- endfor %}
    {% endif %}
    {% endblock %}
@@ -23,7 +23,7 @@
 
    .. autosummary::
    {% for item in attributes %}
-      ~{{ name }}.{{ item }}
+      {{ item }}
    {%- endfor %}
    {% endif %}
    {% endblock %}
