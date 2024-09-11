@@ -36,7 +36,7 @@ class Cell(object):
         branches ({str: neuron.h.SectionList}): maps the section ID of the root seciton of each dendritic subtree to its corresponding section list.
         structures ({str: [PySection]}): All sections, aggregated by label (e.g. Dendrite, ApicalDendrite, ApicalTuft, Myelin...)
         sections ([PySection]): All sections. sections[0] is the soma. Each section contains recorded data (if any was recorded, e.g. membrane voltage): a 2D array where axis 0 is segment number, and axis 1 is time.
-        synapses (dict): a dictionary of lists of :class:`Synapse` objects
+        synapses (dict): a dictionary of lists of :class:`single_cell_parser.synapse.Synapse` objects
         E (float): Default resting membrane potential. Defaults to -70.0
         changeSynParamDict
         tVec (neuron.h.Vector): a hoc Vector recording time.
@@ -391,9 +391,6 @@ class Cell(object):
         """Generates a map that shows which sections are connected to which sections.
         Saves this as a class attribute if it's the first time calculatingm otherwise returns
 
-        Args:
-            self (cell): the cell boject
-
         Returns:
             dict: a dictionary where each key is the section id, and the value is a list of adjacent section ids
         """
@@ -680,16 +677,20 @@ class PointCell(object):
     requires VecStim to trigger spikes at specified times
     
     initialize with list (iterable) of spike times
+    
+    Attributes:
+        spikeTimes (list): list of spike times
+        spikeVec (neuron.h.Vector): hoc Vector containing spike times
+        spikes (neuron.h.VecStim): VecStim object
+        playing (bool): flag indicating whether VecStim is playing
+        synapseList (list): list of synapses connected to this cell. 
     '''
 
     def __init__(self, spikeTimes=None):
         '''
-        self.spikeTimes = list(spikeTimes)
-        self.spikeVec = h.Vector(spikeTimes)
-        self.spikes = h.VecStim()
+        Args:
+            spikeTimes (list): list of spike times. Defaults to None.
         
-        for use as cell connecting to synapses, not directly to NetCons:
-        self.synapseList = None
         '''
         if spikeTimes is not None:
             self.spikeTimes = spikeTimes
@@ -802,8 +803,9 @@ class PointCell(object):
 
 class SpikeTrain(PointCell):
     '''
-    DEPRECATED: only still in here in case some old
-    dependency turns up that has not been found yet.
+    .. deprecated: 0.1.0 
+        only still in here in case some old
+        dependency turns up that has not been found yet.
     
     Simple object for use as spike train source.
     Pre-computes spike times according to user-provided
