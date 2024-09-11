@@ -6,5 +6,5 @@
    :members:
    :undoc-members:
    :private-members:
-   :special-members:
+   :special-members: __get__, __set__
    :show-inheritance:
