@@ -16,19 +16,7 @@ ISF is a multi-scale simulation environment for the generation, simulation, and 
 Module list
 =============
 
-.. autosummary::
-   :toctree: _autosummary
-   :recursive:
-
-   Interface
-   barrel_cortex
-   biophysics_fitting
-   data_base
-   simrun
-   single_cell_parser
-   singlecell_input_mapper
-   spike_analysis
-   visualize
+.. include:: modules.rst
 
 Tutorials
 =============

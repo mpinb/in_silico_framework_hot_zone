@@ -19,9 +19,7 @@
    .. rubric:: {{ _('Functions') }}
 
    .. autosummary::
-   {% for item in functions %}
-      {{ item }}
-   {%- endfor %}
+   
    {% endif %}
    {% endblock %}
 
@@ -32,9 +30,6 @@
    .. autosummary::
       :toctree:
       :template: custom-class-template.rst
-   {% for item in classes %}
-      {{ item }}
-   {%- endfor %}
    {% endif %}
    {% endblock %}
 

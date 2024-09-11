@@ -79,7 +79,10 @@ napoleon_attr_annotations = True
 ## Include Python objects as they appear in source files
 ## Default: alphabetically ('alphabetical')
 # autodoc_member_order = 'bysource'
+
+
 ## Default flags used by autodoc directives
+## Note that these are overridden by custom templates, which we do in fact use.
 autodoc_default_options = {
     'members': True,  # to document member functions of classes.
     'show-inheritance': False,  # list the base class
@@ -97,6 +100,8 @@ pygments_style = "python"
 nbsphinx_codecell_lexer = "python"
 
 # Add any paths that contain templates here, relative to this directory.
+# We have custom templates that produce toctrees for modules and classes on module pages,
+# and separate pages for classes
 templates_path = ['_templates']
 
 # The suffix(es) of source filenames.
