@@ -44,21 +44,19 @@ init_data_base_compatibility()  # make db importable before running autosummary 
 # If your documentation needs a minimal Sphinx version, state it here.
 #needs_sphinx = '1.0'
 
-# Add any Sphinx extension module names here, as strings. They can be
-# extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
-# ones.
 extensions = [
-    'sphinx.ext.autodoc',  # Core library for html generation from docstrings
-    'sphinx.ext.todo',
-    'sphinx_paramlinks',
-    # 'sphinx.ext.viewcode',  # does not work with immaterial theme
-    'sphinx.ext.coverage',
-    'sphinx.ext.intersphinx',  # Link to other project's documentation
+    'sphinx.ext.autodoc',      # Core library for html generation from docstrings
+    'sphinx.ext.todo',         # To-do notes
+    'sphinx_paramlinks',       # Parameter links
+    # 'sphinx.ext.viewcode',   # Does not work with immaterial theme?
+    'sphinx.ext.coverage',     # Coverage reporting
+    'sphinx.ext.intersphinx',  # Link to other project's documentation, for e.g. NEURON classes as attributes in docstrings
     'sphinx.ext.autosummary',  # Create neat summary tables
-    'sphinx.ext.napoleon',
-    'nbsphinx',  # for rendering tutorial notebooks
-    'sphinxcontrib.bibtex',  # for citations
-    'sphinx_immaterial'
+    'sphinx.ext.napoleon',     # Support for NumPy and Google style docstrings
+    'nbsphinx',                # For rendering tutorial notebooks
+    'sphinxcontrib.bibtex',    # For citations
+    'sphinx_immaterial'        # Immaterial theme
+    'sphinx_immaterial.apidoc.python.apigen',  # Python API support
 ]
 
 bibtex_bibfiles = ['bibliography.bib']
