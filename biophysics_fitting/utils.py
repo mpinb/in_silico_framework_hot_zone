@@ -66,7 +66,7 @@ def get_inner_sec_dist_dict(
     Returns:
         dict: A dictionary with the soma distance as key and the section as value.
         
-    Note:
+    See also:
         See also: :py:meth:`~get_inner_section_at_distance` that returns the closest section at a specific distance, rather than all sections beyond some distance.
     '''
     sec_dist_dict = {
@@ -102,7 +102,7 @@ def get_inner_section_at_distance(
     Returns:
         tuple: The section and the relative distance from the section to the soma. Only returns the section that's closest to the provided :paramref:`dist`.
         
-    Note:
+    See also:
         See also: :py:meth:`~get_inner_sec_dist_dict` that returns all sections beyond some distance, rather than only the closest section at a specific distance.
     '''
     import six

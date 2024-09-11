@@ -743,7 +743,10 @@ class CellMorphologyVisualizer(CMVDataParser):
             
         Note:
             :paramref:`align_trunk` assumes the cell has a trunk, which is defined as the dendrite between the soma
-            and the main bifurcation section. See: :meth:`~biophysics_fitting.get_main_bifurcation_section`.
+            and the main bifurcation section.
+            
+        See also:
+            :meth:`~biophysics_fitting.get_main_bifurcation_section`.
         """
         super().__init__(cell, align_trunk, t_start, t_stop, t_step)
         # ---------------------------------------------------------------

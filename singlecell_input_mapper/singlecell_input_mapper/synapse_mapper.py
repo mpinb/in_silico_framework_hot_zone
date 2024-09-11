@@ -224,6 +224,7 @@ class SynapseDensity(object):
         The only cell type specificity that is considered here is whether or not the postsynaptic cell is excitatory or inhibitory.
         Cell type wiring specificity is only considered in the network realization phase, when the synapse density field is Poisson sampled and normalized.
         Then the normalization values depend on the exact presynaptic cell type.
+    See also:
         See: :py:class:`~singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper`
     '''
     def __init__(

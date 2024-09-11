@@ -82,7 +82,7 @@ def record_bAP(cell, recSite1=None, recSite2=None):
     Returns:
         dict: A dictionary with the voltage traces.
         
-    Note:
+    See also:
         See :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011` for more information.
     """
     assert recSite1 is not None
@@ -111,7 +111,7 @@ def record_BAC(cell, recSite=None):
     Returns:
         dict: A dictionary with the voltage traces.
         
-    Note:
+    See also:
         See :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011` for more information.
     """
     return {
@@ -133,7 +133,7 @@ def record_Step(cell):
     Returns:
         dict: A dictionary with the voltage traces.
         
-    Note:
+    See also:
         See :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011` for more information.
     """
     return {'tVec': tVec(cell), 'vList': [vmSoma(cell)]}

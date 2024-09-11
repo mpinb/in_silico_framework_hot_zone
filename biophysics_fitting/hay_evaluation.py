@@ -48,7 +48,7 @@ def setup_hay_evaluator(testing=False):
         therefore minimally change the results. Before testing reproducability, 
         it is therefore necessary to initialize the evaluator.
         
-    Note:
+    See also:
         See :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011` for more information.
         
     '''
@@ -93,7 +93,7 @@ def setup_hay_evaluator(testing=False):
 def is_setup():
     """Check if the NEURON environment is set up for the Hay evaluator.
     
-    Note:
+    See also:
         See :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011` for more information."""
     import neuron
     h = neuron.h
@@ -328,7 +328,7 @@ def hay_evaluate_bAP(tVec=None, vList=None):
         tVec (list): The time vector.
         vList (list): The voltage list.
         
-    Note:
+    See also:
         See :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011` for more information."""
     cur_stim = get_cur_stim('bAP')
     return hay_evaluate(cur_stim, tVec, vList)
@@ -343,7 +343,7 @@ def hay_evaluate_BAC(tVec=None, vList=None):
         tVec (list): The time vector.
         vList (list): The voltage list.
         
-    Note:
+    See also:
         See :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011` for more information."""
     cur_stim = get_cur_stim('BAC')
     return hay_evaluate(cur_stim, tVec, vList)
@@ -358,7 +358,7 @@ def hay_evaluate_StepOne(tVec=None, vList=None):
         tVec (list): The time vector.
         vList (list): The voltage list.
         
-    Note:
+    See also:
         See :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011` for more information.
     """
     cur_stim = get_cur_stim('StepOne')
@@ -374,7 +374,7 @@ def hay_evaluate_StepTwo(tVec=None, vList=None):
         tVec (list): The time vector.
         vList (list): The voltage list.
         
-    Note:
+    See also:
         See :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011` for more information.
     """ 
     cur_stim = get_cur_stim('StepTwo')
@@ -390,7 +390,7 @@ def hay_evaluate_StepThree(tVec=None, vList=None):
         tVec (list): The time vector.
         vList (list): The voltage list.
         
-    Note:
+    See also:
         See :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011` for more information.
     """
     cur_stim = get_cur_stim('StepThree')

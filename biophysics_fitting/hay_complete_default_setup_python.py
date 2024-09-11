@@ -48,7 +48,7 @@ def record_bAP(cell, recSite1=None, recSite2=None):
         recSite1 (float): The distance (um) from the soma to the first recording site.
         recSite2 (float): The distance (um) from the soma to the second recording site.
         
-    Note:
+    See also:
         See :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011` for more information.
     """
     assert recSite1 is not None
@@ -71,7 +71,7 @@ def record_BAC(cell, recSite=None):
         cell (:class:`~single_cell_parser.cell.Cell`): The cell object.
         recSite (float): The distance (um) from the soma to the apical recording site.
         
-    Note:
+    See also:
         See :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011` for more information.
     """
     return {
@@ -86,7 +86,7 @@ def record_Step(cell):
     
     This is used to quantify the response of the cell to step currents.
     
-    Note:
+    See also:
         See :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011` for more information.
     """
     return {
@@ -109,7 +109,7 @@ def get_Simulator(fixed_params, step=False, vInit=False):
     Returns
         (:class:`~biophysics_fitting.simulator.Simulator`): A simulator object.
         
-    Note:
+    See also:
         See :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011` for more information.    
     """
     s = hay_complete_default_setup.get_Simulator(fixed_params, step=step)
@@ -199,7 +199,7 @@ def get_Evaluator(
     Raises:
         NotImplementedError: If :paramref:step or :paramref:vInit are set to True.
         
-    Note:
+    See also:
         See :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011` for more information.
     """
     e = Evaluator()
@@ -239,7 +239,7 @@ def get_Combiner(step=False):
     Returns:
         (:class:`~biophysics_fitting.combiner.Combiner`): A combiner object.
         
-    Note:
+    See also:
         See :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011` for more information.
     """
     return hay_complete_default_setup.get_Combiner(step=step)

@@ -56,7 +56,7 @@ def visualize_vt(vt, fig=None, soma_color='k', dend_color='#f7941d', BAC_select 
     Returns:
         None
 
-    Note:
+    See also:
         See :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011` for more details on the stimulus protocols.
     """
     if fig is None:
