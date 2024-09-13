@@ -77,11 +77,15 @@ while true; do
     # Validate the installation directory
     PARENT_DIR=$(dirname "$INSTALL_DIR")
     if [ -d "$PARENT_DIR" ]; then
-        break
+        if [ ! -d "$INSTALL_DIR" ]; then
+            mkdir "$INSTALL_DIR" || { echo "Failed to create directory $INSTALL_DIR"; exit 1; }
+        fi
     else
         echo "Invalid directory. The parent directory ${PARENT_DIR} does not exist."
     fi
 done
+
+
 
 if [ "$DOWNLOAD_BC_MODEL" == "yes" ]; then
     echo $SCRIPT_DIR
