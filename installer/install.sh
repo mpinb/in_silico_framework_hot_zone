@@ -21,22 +21,27 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 INVOCATION_DIR=$(pwd)
 
 # Ask the user for the Python version
-while true; do
-    echo "Please enter the Python version (2.7, 3.8, or 3.9):"
-    read PYTHON_VERSION
+# while true; do
+#     echo "Please enter the Python version (2.7, 3.8, or 3.9):"
+#     read PYTHON_VERSION
 
-    # Validate the Python version
-    if [[ "$PYTHON_VERSION" == "2.7" || "$PYTHON_VERSION" == "3.8" || "$PYTHON_VERSION" == "3.9" ]]; then
-        break
-    else
-        echo "Invalid Python version. Please enter 2.7, 3.8, or 3.9."
-    fi
-done
+#     # Validate the Python version
+#     if [[ "$PYTHON_VERSION" == "2.7" || "$PYTHON_VERSION" == "3.8" || "$PYTHON_VERSION" == "3.9" ]]; then
+#         break
+#     else
+#         echo "Invalid Python version. Please enter 2.7, 3.8, or 3.9."
+#     fi
+# done
+PYTHON_VERSION="3.8"  # 3.8 by default, no reason to promp the user
+MAMBA_OR_ANACONDA="mamba"
+if [ "$PYTHON_VERSION" == "2.7" ]; then
+    MAMBA_OR_ANACONDA="anaconda"    # no mamba for py2.7
+fi
 
 # If Python version is 3.8, ask whether or not to install Node.js
 if [ "$PYTHON_VERSION" == "3.8" ]; then
     while true; do
-        echo "Do you want to install Node.js alongside the Anaconda installation? ([Yy]es/[Nn]o)"
+        echo "Do you want to install Node.js alongside the Anaconda installation? ([y]es/[n]o)"
         read INSTALL_NODEJS
         if [[ "$INSTALL_NODEJS" =~ ^[Nn].*$ ]]; then
             INSTALL_NODEJS="no"
@@ -45,13 +50,13 @@ if [ "$PYTHON_VERSION" == "3.8" ]; then
             INSTALL_NODEJS="yes"
             break
         else
-            echo "Invalid option. Please enter 'Yes/yes/Y/y' or 'No/no/N/n'."
+            echo "Invalid option. Please enter 'yes/y' or 'no/n'."
         fi
     done
 fi
 
 while true; do
-    echo "Would you like to additionally download an anatomical model of the rat barrel cortex, compatible with ISF? ([Yy]es/[Nn]o)"
+    echo "Would you like to additionally download an anatomical model of the rat barrel cortex, compatible with ISF? ([y]es/[n]o)"
     read DOWNLOAD_BC_MODEL
     if [[ "$DOWNLOAD_BC_MODEL" =~ ^[Nn].*$ ]]; then
         DOWNLOAD_BC_MODEL="no"
@@ -60,7 +65,7 @@ while true; do
         DOWNLOAD_BC_MODEL="yes"
         break
     else
-        echo "Invalid option. Please enter 'Yes/yes/Y/y' or 'No/no/N/n'."
+            echo "Invalid option. Please enter 'yes/y' or 'no/n'."
     fi
 done
 
@@ -86,9 +91,9 @@ fi
 
 # Invoke the installation script in the correct folder
 if [ "$INSTALL_NODEJS" == "yes" ]; then
-    bash "${SCRIPT_DIR}/py${PYTHON_VERSION}/install.sh" -p "${INSTALL_DIR}" --node || exit 1
+    bash "${SCRIPT_DIR}/py${PYTHON_VERSION}/install_$MAMBA_OR_ANACONDA.sh" -p "${INSTALL_DIR}" --node || exit 1
 else
-    bash "${SCRIPT_DIR}/py${PYTHON_VERSION}/install.sh" -p "${INSTALL_DIR}" || exit 1
+    bash "${SCRIPT_DIR}/py${PYTHON_VERSION}/install_$MAMBA_OR_ANACONDA.sh" -p "${INSTALL_DIR}" || exit 1
 fi
 
 cd $SCRIPT_DIR
@@ -103,6 +108,6 @@ echo -e <<EOF
 \e[1;32m*                                                               *\e[0m
 \e[1;32m*****************************************************************\e[0m
 
-You are now ready to use ISF. Start by activating the ISF conda environment: \"source ${INSTALL_DIR}/bin/activate\"
+You are now ready to use ISF. Start by activating the ISF conda environment: \"source ${INSTALL_DIR}/bin/activate\"  -------- TODO
 For a general introduction to ISF, please refer to $(realpath $(dirname $SCRIPT_DIR))/getting_started/Introduction_to_ISF.ipynb
 EOF
