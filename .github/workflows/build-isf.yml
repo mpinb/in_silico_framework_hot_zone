@@ -86,7 +86,7 @@ jobs:
     steps:
     - name: (re)build ISF
       run: |
-        CONDA_TARGET_DIR="$HOME/anaconda_isf${{ inputs.py_version }}"
+        CONDA_TARGET_DIR="$HOME/${{ inputs.mamba_or_anaconda }}_isf${{ inputs.py_version }}"
         if [ -d "$CONDA_TARGET_DIR" ]; then
           echo "Found existing installation in $HOME. Removing previous Anaconda installation..."
           rm -r "$CONDA_TARGET_DIR"
