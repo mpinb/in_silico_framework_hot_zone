@@ -153,7 +153,7 @@ echo $(which python)
 echo $(python --version)
 
 echo "Creating activation script in $MAMBA_INSTALL_PATH/activate"
-cat <<EOF > $MAMBA_INSTALL_PATH/activate
+cat <<EOF > $MAMBA_INSTALL_PATH/bin/activate
 #!/bin/bash
 export MAMBA_ROOT_PREFIX="$MAMBA_INSTALL_PATH"
 $($MAMBA_INSTALL_PATH/bin/micromamba shell hook -s posix)
@@ -240,9 +240,4 @@ do
     fi
 done
 
-
-
-
-# -------------------- Cleanup -------------------- #
-rm $SCRIPT_DIR/tempfile
 exit 0

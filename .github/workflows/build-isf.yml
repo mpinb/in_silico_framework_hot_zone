@@ -101,7 +101,11 @@ jobs:
         exit_status=${PIPESTATUS[0]}
         popd
         source $CONDA_TARGET_DIR/bin/activate
-        conda list
+        if [ ${{ inputs.mamba_or_anaconda }} == "mamba" ] ; then
+          micromamba list
+        else
+          conda list
+        fi
         exit $exit_status
 
     - name: Save success state
