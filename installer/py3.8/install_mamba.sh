@@ -133,8 +133,8 @@ echo "Mamba will be installed in: ${MAMBA_INSTALL_PATH}"
 cd $MAMBA_INSTALL_PATH
 curl -Ls https://micro.mamba.pm/api/micromamba/$mamba_version | tar -xvj bin/micromamba
 # setup mamba in current shell; avoid having to restart shell
-export MAMBA_ROOT_PREFIX="$MAMBA_INSTALL_PATH/bin/"
-eval "$(./bin/micromamba shell hook -s posix)" || exit 1
+export MAMBA_ROOT_PREFIX="$MAMBA_INSTALL_PATH"
+eval "$($MAMBA_INSTALL_PATH/bin/micromamba shell hook -s posix)" || exit 1
 echo $(micromamba info)
 cat <<EOF > ~/.mambarc
 channels:
@@ -151,6 +151,14 @@ echo "Activating the isf38 environment with \"${activate_cmd}\""
 $activate_cmd
 echo $(which python)
 echo $(python --version)
+
+echo "Creating activation script in $MAMBA_INSTALL_PATH/activate"
+cat <<EOF > $MAMBA_INSTALL_PATH/activate
+#!/bin/bash
+export MAMBA_ROOT_PREFIX="$MAMBA_INSTALL_PATH"
+$($MAMBA_INSTALL_PATH/bin/micromamba shell hook -s posix)
+micromamba activate isf38
+EOF
 
 
 # -------------------- 2. Installing conda dependencies -------------------- #
