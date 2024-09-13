@@ -164,7 +164,7 @@ EOF
 # -------------------- 2. Installing conda dependencies -------------------- #
 print_title "2/6. Installing conda dependencies "
 # different from normal installations, now we dont download them ourselves.
-micromamba install --file $SCRIPT_DIR/mamba_minimal_requirements.txt -y
+micromamba install --file $SCRIPT_DIR/mamba_all_requirements.txt -y
 
 # 2.2 -- Installing nodejs if necessary
 if [ "$INSTALL_NODE" = true ]; then
@@ -173,16 +173,16 @@ if [ "$INSTALL_NODE" = true ]; then
 fi
 
 # -------------------- 3. Installing PyPI dependencies -------------------- #
-print_title "3/6. Installing PyPI dependencies"
-# 3.0 -- Downloading In-Silico-Framework pip dependencies (if necessary).
-if [ "${download_pip_packages_flag}" == "true" ]; then
-    echo "Downloading In-Silico-Framework pip dependencies."
-    python -m pip --no-cache-dir download --no-deps -r $SCRIPT_DIR/pip_requirements.txt -d $SCRIPT_DIR/downloads/pip_packages_mamba
-    echo "Download pip packages completed."
-fi
-# 3.1 -- Installing In-Silico-Framework pip dependencies.
-echo "Installing In-Silico-Framework pip dependencies."
-python -m pip --no-cache-dir install --no-deps -r $SCRIPT_DIR/pip_requirements.txt --no-index --find-links $SCRIPT_DIR/downloads/pip_packages_mamba
+# print_title "3/6. Installing PyPI dependencies"
+# # 3.0 -- Downloading In-Silico-Framework pip dependencies (if necessary).
+# if [ "${download_pip_packages_flag}" == "true" ]; then
+#     echo "Downloading In-Silico-Framework pip dependencies."
+#     python -m pip --no-cache-dir download --no-deps -r $SCRIPT_DIR/pip_requirements.txt -d $SCRIPT_DIR/downloads/pip_packages_mamba
+#     echo "Download pip packages completed."
+# fi
+# # 3.1 -- Installing In-Silico-Framework pip dependencies.
+# echo "Installing In-Silico-Framework pip dependencies."
+# python -m pip --no-cache-dir install --no-deps -r $SCRIPT_DIR/pip_requirements.txt --no-index --find-links $SCRIPT_DIR/downloads/pip_packages_mamba
 
 # -------------------- 4. Patching pandas-msgpack -------------------- #
 print_title "4/6. Installing & patching pandas-msgpack"
