@@ -177,13 +177,20 @@ fi
 # 3.0 -- Downloading In-Silico-Framework pip dependencies (if necessary).
 if [ "${download_pip_packages_flag}" == "true" ]; then
     echo "Downloading In-Silico-Framework pip dependencies."
-    python -m pip --no-cache-dir download --no-deps -r $SCRIPT_DIR/pip_only_requirements.txt -d $SCRIPT_DIR/downloads/pip_packages_mamba
+    python -m pip --no-cache-dir download \
+        --no-deps \
+        -r $SCRIPT_DIR/pip_only_requirements.txt \
+        -d $SCRIPT_DIR/downloads/pip_packages_mamba    
     echo "Download pip packages completed."
 fi
 # 3.1 -- Installing In-Silico-Framework pip dependencies.
 echo "Installing In-Silico-Framework pip dependencies."
-python -m pip --no-cache-dir install --no-deps -r $SCRIPT_DIR/pip_only_requirements.txt --no-index --find-links $SCRIPT_DIR/downloads/pip_packages_mamba
-
+echo "Using pip $(pip --verison)"
+pip --no-cache-dir install \
+    --no-deps \
+    -r $SCRIPT_DIR/pip_only_requirements.txt \
+    --no-index \
+    --find-links $SCRIPT_DIR/downloads/pip_packages_mamba
 # -------------------- 4. Patching pandas-msgpack -------------------- #
 print_title "4/6. Installing & patching pandas-msgpack"
 PD_MSGPACK_HOME="$SCRIPT_DIR/pandas-msgpack"
