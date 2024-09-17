@@ -324,7 +324,7 @@ def write_synapse_activation_file(
     synDistances=None,
     synTimes=None,
     activeSyns=None):
-    """Write out a synapse activation file.
+    """Write out a :ref:`syn_activation_format` file.
 
     Used in :py:meth:`~single_cell_parser.analyze.synanalysis.compute_synapse_distances_times` 
     to write out a synapse activation file.
@@ -357,18 +357,13 @@ def write_synapse_activation_file(
         >>> synDistances = {'cell_type_1': [150.0, 200.0, 250.0]}
         >>> activeSyns = {'cell_type_1': [True, True, True]}  # all 3 synapses are active
         >>> write_synapse_activation_file(
-        ...     'synapse_activation.param', 
+        ...     'synapse_activation.csv', 
         ...     cell, 
         ...     synTypes, 
         ...     synDistances, 
         ...     synTimes, 
         ...     activeSyns
         ... )
-        >>> synapse_activation.param
-        # synapse type	synapse ID	soma distance	section ID	section pt ID	dendrite label	activation times
-        cell_type_1	0	150.0	0	0	0	0.1,0.2,0.3,
-        cell_type_1	1	200.0	1	0	0	0.15,0.25,0.35,
-        cell_type_1	2	250.0	2	0	0	0.2,0.3,0.4,
 
     """
     if fname is None or cell is None or synTypes is None or synDistances is None or synTimes is None or activeSyns is None:
