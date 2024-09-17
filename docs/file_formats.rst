@@ -52,8 +52,11 @@ See the folder `mechanisms` in the project source.
 .con
 ====
 ISF custom file format to store connectivity data. 
-To be used in conjunction with an associated :ref:`_syn_file_format` file and morphology :ref:`_hoc_file_format` file.
+To be used in conjunction with an associated :ref:`syn_file_format` file and morphology :ref:`hoc_file_format` file.
 It numbers each synapse, and links it to its associated presynaptic cell type and ID.
+While a :ref:`syn_file_format` file and :ref:`hoc_file_format` file provide the anatomical realization of a network,
+the addition of a :ref:`con_file_format` file makes it into a functional realization, as it allows linking the synapses to
+their presynaptic cells, which in turn allow cell type specific activation patters (see: :py:meth:`single_cell_parser.network.NetworkMapper`).
 
 Readers:
 
@@ -78,12 +81,16 @@ Example::
 .syn
 ====
 ISF custom file format to store synapse locations onto a morphology. 
-To be used in conjunction with an associated :ref:`_con_file_format` file and morphology :ref:`_hoc_file_format` file.
+This file fully captures an anatomical realization of a network.
+Only valid with an associated morphology :ref:`_hoc_file_format` file.
 
 For each synapse, it provides the synapse type and location onto the morphology.
 Each row index corresponds to its synapse ID, providing a backlink to the :ref:`_con_file_format` file format.
 The location is encoded as a section ID and x (a normalized distance along the section),
 to be consistent with NEURON syntax.
+
+To create a functional network (i.e., known presynaptic origin), 
+it must be used in conjunction with an associated :ref:`_con_file_format` file.
 
 Readers:
 
@@ -206,3 +213,34 @@ Example::
         },
         ...
     }
+
+
+Dataframes
+==========
+
+.. _syn_activation_format:
+
+Synapse activation
+------------------
+
+Writers:
+    
+    - :py:meth:`single_cell_parser.writer.write_synapse_activation_file`
+
+Example:
+
+    +---------------------+-------------+---------------+-------------+----------------+----------------+-------------------+
+    | synapse type        | synapse ID  | soma distance | section ID  | section pt ID  | dendrite label | activation times  |
+    +=====================+=============+===============+=============+================+================+===================+
+    | presyn_cell_type_1  | 0           | 150.0         | 24          | 0              | 'basal'        | 10.2,80.5,140.8   |
+    +---------------------+-------------+---------------+-------------+----------------+----------------+-------------------+
+    | presyn_cell_type_1  | 1           | 200.0         | 112         | 0              | 'apical'       |                   |
+    +---------------------+-------------+---------------+-------------+----------------+----------------+-------------------+
+    | presyn_cell_type_2  | 2           | 250.0         | 72          | 0              | 'apical'       | 300.1,553.5       |
+    +---------------------+-------------+---------------+-------------+----------------+----------------+-------------------+
+
+.. _spike_times_format:
+
+Spike times
+-----------
+
