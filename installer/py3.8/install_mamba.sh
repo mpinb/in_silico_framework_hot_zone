@@ -96,35 +96,35 @@ if [ ! -d "$SCRIPT_DIR/downloads" ]; then
 fi
 
 # 0.1 -- Check 1: Are the conda packages already downloaded?
-if [ ! -d "$SCRIPT_DIR/downloads/mamba_packages" ]; then
-    echo "No mamba_packages directory found in $SCRIPT_DIR/downloads. Created one to download conda packages in."
-    mkdir $SCRIPT_DIR/downloads/mamba_packages # conda packages download directory
-    download_conda_packages_flag="true"
-elif [ ! "$(ls -A $SCRIPT_DIR/downloads/mamba_packages)" ]; then
-    echo "No conda packages found in $SCRIPT_DIR/downloads/mamba_packages. They will be downloaded."
-    download_conda_packages_flag="true"
-else
-    echo "Warning: found conda packages in $SCRIPT_DIR/downloads/mamba_packages. They will not be redownloaded. If you have changed the conda_requirements.txt file, you should remove this folder or its contents before attemtping a reinstall."
-    download_conda_packages_flag="false"
-fi
+# if [ ! -d "$SCRIPT_DIR/downloads/mamba_packages" ]; then
+#     echo "No mamba_packages directory found in $SCRIPT_DIR/downloads. Created one to download conda packages in."
+#     mkdir $SCRIPT_DIR/downloads/mamba_packages # conda packages download directory
+#     download_conda_packages_flag="true"
+# elif [ ! "$(ls -A $SCRIPT_DIR/downloads/mamba_packages)" ]; then
+#     echo "No conda packages found in $SCRIPT_DIR/downloads/mamba_packages. They will be downloaded."
+#     download_conda_packages_flag="true"
+# else
+#     echo "Warning: found conda packages in $SCRIPT_DIR/downloads/mamba_packages. They will not be redownloaded. If you have changed the conda_requirements.txt file, you should remove this folder or its contents before attemtping a reinstall."
+#     download_conda_packages_flag="false"
+# fi
 
 # 0.2 -- Check 2: Are the pip packages already downloaded?
-if [ ! -d "$SCRIPT_DIR/downloads/pip_packages_mamba" ]; then
-    echo "No pip_packages directory found in $SCRIPT_DIR/downloads. Created one to download PyPI packages in."
-    mkdir $SCRIPT_DIR/downloads/pip_packages_mamba  # pip packages download directory
-    download_pip_packages_flag="true"
-elif [ ! "$(ls -A $SCRIPT_DIR/downloads/pip_packages_mamba)" ]; then
-    echo "No PyPI packages found in $SCRIPT_DIR/downloads/pip_packages_mamba. They will be downloaded."
-    download_pip_packages_flag="true"
-else
-    echo "Warning: found PyPI packages in $SCRIPT_DIR/downloads/pip_packages_mamba. They will not be redownloaded. If you have changed the pip_requirements.txt file, you should remove this folder or its contents before attemtping a reinstall."
-    download_pip_packages_flag="false"
-fi
+# if [ ! -d "$SCRIPT_DIR/downloads/pip_packages_mamba" ]; then
+#     echo "No pip_packages directory found in $SCRIPT_DIR/downloads. Created one to download PyPI packages in."
+#     mkdir $SCRIPT_DIR/downloads/pip_packages_mamba  # pip packages download directory
+#     download_pip_packages_flag="true"
+# elif [ ! "$(ls -A $SCRIPT_DIR/downloads/pip_packages_mamba)" ]; then
+#     echo "No PyPI packages found in $SCRIPT_DIR/downloads/pip_packages_mamba. They will be downloaded."
+#     download_pip_packages_flag="true"
+# else
+#     echo "Warning: found PyPI packages in $SCRIPT_DIR/downloads/pip_packages_mamba. They will not be redownloaded. If you have changed the pip_requirements.txt file, you should remove this folder or its contents before attemtping a reinstall."
+#     download_pip_packages_flag="false"
+# fi
 
 # 0.3 -- Check 3: Are there any downloads necessary?
-if [[ "${download_conda_packages_flag}" == "false" && "${download_pip_packages_flag}" == "false" ]]; then
-    echo "No downloads necessary."
-fi
+# if [[ "${download_conda_packages_flag}" == "false" && "${download_pip_packages_flag}" == "false" ]]; then
+#     echo "No downloads necessary."
+# fi
 
 # -------------------- 1. Installing micromamba -------------------- #
 print_title "1/6. Installing micromamba"
@@ -175,22 +175,26 @@ fi
 # -------------------- 3. Installing PyPI dependencies -------------------- #
 # print_title "3/6. Installing PyPI dependencies"
 # 3.0 -- Downloading In-Silico-Framework pip dependencies (if necessary).
-if [ "${download_pip_packages_flag}" == "true" ]; then
-    echo "Downloading In-Silico-Framework pip dependencies."
-    python -m pip --no-cache-dir download \
-        --no-deps \
-        -r $SCRIPT_DIR/pip_only_requirements.txt \
-        -d $SCRIPT_DIR/downloads/pip_packages_mamba    
-    echo "Download pip packages completed."
-fi
+# if [ "${download_pip_packages_flag}" == "true" ]; then
+#     echo "Downloading In-Silico-Framework pip dependencies."
+#     python -m pip --no-cache-dir download \
+#         --no-deps \
+#         -r $SCRIPT_DIR/pip_only_requirements.txt \
+#         -d $SCRIPT_DIR/downloads/pip_packages_mamba    
+#     echo "Download pip packages completed."
+# fi
 # 3.1 -- Installing In-Silico-Framework pip dependencies.
 echo "Installing In-Silico-Framework pip dependencies."
 echo "Using pip $(pip --verison)"
+# pip --no-cache-dir install \
+#     --no-deps \
+#     -r $SCRIPT_DIR/pip_only_requirements.txt \
+#     --no-index \
+#     --find-links $SCRIPT_DIR/downloads/pip_packages_mamba
 pip --no-cache-dir install \
     --no-deps \
-    -r $SCRIPT_DIR/pip_only_requirements.txt \
-    --no-index \
-    --find-links $SCRIPT_DIR/downloads/pip_packages_mamba
+    -r $SCRIPT_DIR/pip_only_requirements.txt
+
 # -------------------- 4. Patching pandas-msgpack -------------------- #
 print_title "4/6. Installing & patching pandas-msgpack"
 PD_MSGPACK_HOME="$SCRIPT_DIR/pandas-msgpack"
