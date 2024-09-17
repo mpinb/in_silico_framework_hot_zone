@@ -3,8 +3,6 @@
 .. currentmodule:: {{ module }}
 
 .. autoclass:: {{ objname }}
-   :members:
-   :private-members:
    :show-inheritance:
 
    {% block methods %} 
