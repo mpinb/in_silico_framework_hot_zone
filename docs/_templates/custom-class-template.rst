@@ -9,9 +9,6 @@
    :automethod: __get__, __set__
    :show-inheritance:
 
-   {% block methods %}
-   .. automethod:: __init__
-
    {% if methods %}
    .. rubric:: {{ _('Methods') }}
 
