@@ -1,4 +1,5 @@
 {{ fullname.split('.')[:-1] | join('.') | escape }}
+
 {{ fullname.split('.')[-1] | escape | underline }}
 
 .. automodule:: {{ fullname }}
