@@ -1,5 +1,10 @@
 {{ fullname | escape | underline}}
 
+.. This template decides how the class pages look
+   autosummary directives decide what to include in the class page
+   the for loops decide which entries to add to the autosummary directive
+   
+
 .. currentmodule:: {{ module }}
 
 .. autoclass:: {{ objname }}
@@ -13,7 +18,9 @@
 
    .. autosummary::
    {% for item in methods %}
+      {% if item != "__init__" %}
       ~{{ name }}.{{ item }}
+      {% endif %}
    {%- endfor %}
    {% endif %}
    {% endblock %}
