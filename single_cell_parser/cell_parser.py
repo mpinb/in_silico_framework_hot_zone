@@ -4,9 +4,6 @@ abast:
 february 2019: deprecated scaleFunc keyword, added support to specify cell_modify_functions 
 within the parameters
 '''
-__author__  = "Robert Egger, Arco Bast"
-__credits__ = ["Robert Egger", "Arco Bast"]
-__date__    = "2012-03-08"
 
 import warnings, traceback
 from neuron import h
@@ -16,6 +13,10 @@ from . import reader
 from .cell import PySection, Cell
 from . import cell_modify_functions
 import logging
+
+__author__  = "Robert Egger, Arco Bast"
+__credits__ = ["Robert Egger", "Arco Bast"]
+__date__    = "2012-03-08"
 
 logger = logging.getLogger("ISF").getChild(__name__)
 

@@ -4,12 +4,12 @@ The :class:`~singlecell_input_mapper.singlecell_input_mapper.network_embedding.N
 While the classes in this module can be used in isolation, there are also full pipelines available that use the classes here to map synapses to a neuron morphology.
 Consult the module :py:mod:`~singlecell_input_mapper.map_singlecell_inputs` for such a pipeline, or the documentation of :class:`~singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper` for more info on how to use these classes in a pipeline.
 '''
-__author__ = 'Robert Egger'
-__date__ = '2012-03-30'
 import numpy as np
 from .scalar_field import ScalarField
 import sys
 
+__author__ = 'Robert Egger'
+__date__ = '2012-03-30'
 
 class SynapseMapper(object):
     '''Assign synapses to neuron morphology from density meshes.

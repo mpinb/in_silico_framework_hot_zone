@@ -3,11 +3,11 @@
 Used to create network realizations. 
 For functional network realizations (i.e. known presynaptic origin of each synapse), see :py:mod:`single_cell_parser.network`
 '''
-__author__ = 'Robert Egger'
-__date__ = '2012-04-28'
 from __future__ import absolute_import
 import numpy as np
 from . import reader
+__author__ = 'Robert Egger'
+__date__ = '2012-04-28'
 
 
 class Cell(object):

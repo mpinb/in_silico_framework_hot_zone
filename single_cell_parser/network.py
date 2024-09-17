@@ -24,8 +24,6 @@ and :py:meth:`~single_cell_parser.network_mapper.NetworkMapper.create_network`.
 See also:
     :py:mod:`~singlecell_input_mapper.singlecell_input_mapper`.
 '''
-__author__  = "Robert Egger"
-__credits__ = ["Robert Egger", "Arco Bast"]
 
 import os
 import time
@@ -41,10 +39,12 @@ import six
 import math
 import logging
 
-logger = logging.getLogger("ISF").getChild(__name__)
-
 from . import network_modify_functions
 
+__author__  = "Robert Egger"
+__credits__ = ["Robert Egger", "Arco Bast"]
+
+logger = logging.getLogger("ISF").getChild(__name__)
 
 class NetworkMapper:
     '''Map active presynaptic cells to a multi-compartmental neuron model.

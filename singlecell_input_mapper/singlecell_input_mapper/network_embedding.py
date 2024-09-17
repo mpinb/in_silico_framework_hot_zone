@@ -3,8 +3,6 @@ In contrast to :py:mod:`single_cell_parser.network_embedding`,
 this module does not handle the activity of presynaptic populations, but provides functionality to fully investigate the network connectivity.
 
 '''
-__author__ = 'Robert Egger'
-__date__ = '2012-11-17'
 from __future__ import absolute_import
 import os
 import sys
@@ -15,6 +13,8 @@ from . import writer
 from .synapse_mapper import SynapseMapper, SynapseDensity
 from data_base.dbopen import dbopen
 import logging
+__author__ = 'Robert Egger'
+__date__ = '2012-11-17'
 logger = logging.getLogger("ISF").getChild(__name__)
 
 

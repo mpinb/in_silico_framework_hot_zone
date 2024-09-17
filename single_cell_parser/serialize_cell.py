@@ -1,7 +1,4 @@
-'''
-Created 2016/2017
-
-@author: arco
+'''Convert a :class:`~single_cell_parser.cell.Cell` object to a serializable object and vice versa.
 '''
 from __future__ import absolute_import
 import numpy as np
@@ -12,6 +9,8 @@ from data_base.utils import silence_stdout
 from data_base.dbopen import dbopen
 from .cell_parser import CellParser
 
+__author__  = 'Arco Bast'
+__date__    = '2016/2017'
 
 def convert_hoc_array_to_np_array(hoc_array):
     '''Convert hoc array to list of lists

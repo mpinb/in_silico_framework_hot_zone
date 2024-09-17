@@ -1,13 +1,14 @@
 '''
 
 '''
-__author__  = 'Robert Egger'
-__date__    = '2012-03-08'
 
 import numpy as np
 from . import scalar_field
 from data_base.dbopen import dbopen
 import logging
+
+__author__  = 'Robert Egger'
+__date__    = '2012-03-08'
 
 logger = logging.getLogger("ISF").getChild(__name__)
 

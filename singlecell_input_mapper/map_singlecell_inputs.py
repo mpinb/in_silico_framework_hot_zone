@@ -48,7 +48,6 @@ Outputs:
 - Synapse location and connectivity file compatible with :py:mod:`simrun`.
 """
 from __future__ import absolute_import
-__author__ = 'Robert Egger'
 
 #===============================================================================
 # Python standard library imports
@@ -69,6 +68,10 @@ import time
 import numpy as np
 from . import singlecell_input_mapper as sim
 import getting_started
+
+#===============================================================================
+# Metadata
+__author__ = 'Robert Egger'
 #===============================================================================
 # This is the only line that needs to be adapted to your system.
 # Change the string 'prefix' to the folder where all anatomical data is

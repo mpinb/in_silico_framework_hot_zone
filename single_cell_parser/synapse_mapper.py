@@ -1,13 +1,13 @@
 '''
 
 '''
-__author__ = 'Robert Egger'
-__date__ = '2012-03-30'
 import numpy as np
 #import reader
 #import writer
 #import cell_parser
 
+__author__ = 'Robert Egger'
+__date__ = '2012-03-30'
 
 class SynapseMapper(object):
     '''Assign synapses to a neuron morphology based on a synapse distribution.

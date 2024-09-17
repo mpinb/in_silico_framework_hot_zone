@@ -44,8 +44,6 @@ Attention:
           - :py:meth:`~single_cell_parser.reader.read_scalar_field`
 
 '''
-__author__  = "Robert Egger"
-__credits__ = ["Robert Egger", "Arco Bast"]
 import logging
 
 logger = logging.getLogger("ISF").getChild(__name__)
@@ -84,6 +82,9 @@ from sumatra.parameters import NTParameterSet
 import numpy as np
 import warnings
 from data_base.dbopen import dbopen
+
+__author__  = "Robert Egger"
+__credits__ = ["Robert Egger", "Arco Bast"]
 
 
 #------------------------------------------------------------------------------

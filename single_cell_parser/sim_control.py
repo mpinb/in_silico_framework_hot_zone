@@ -3,8 +3,6 @@
 Deprecated. Simulations are set up using the high-level interface :py:class:`~biophysics_fitting.simulator.Simulator`.
 Can still be useful for low-level control with NEURON.
 '''
-__author__ = 'Robert Egger'
-__date__ = '2012-03-19'
 
 import numpy as np
 #import matplotlib.pyplot as plt
@@ -14,6 +12,8 @@ from . import reader
 from . import synapse_mapper as smap
 import matplotlib.pyplot as plt
 
+__author__ = 'Robert Egger'
+__date__ = '2012-03-19'
 
 class SimControl(object):
     '''Control a current clamp simulation.

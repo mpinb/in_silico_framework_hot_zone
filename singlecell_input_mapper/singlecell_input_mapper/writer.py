@@ -1,12 +1,12 @@
 '''Write out the results of a single connectivity realization or a population of realizations.
 '''
-__author__ = 'Robert Egger'
-__date__ = '2012-03-08'
 from __future__ import absolute_import
 from .scalar_field import ScalarField
 from .generate_nr_of_cells_spreadsheet import con_file_to_NumberOfConnectedCells_sheet
 from data_base.dbopen import dbopen
 import logging
+__author__ = 'Robert Egger'
+__date__ = '2012-03-08'
 logger = logging.getLogger("ISF").getChild(__name__)
 
 labels2int = {\

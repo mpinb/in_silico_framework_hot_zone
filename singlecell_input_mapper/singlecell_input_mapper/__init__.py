@@ -49,8 +49,6 @@ Attention:
         * - :py:meth:`~singlecell_input_mapper.singlecell_input_mapper.reader.read_scalar_field`
           - :py:meth:`~single_cell_parser.reader.read_scalar_field`
 """
-__author__ = 'Robert Egger'
-
 from __future__ import absolute_import
 from .reader import *
 from .writer import *
@@ -59,6 +57,7 @@ from .synapse_mapper import *
 from .scalar_field import *
 from .cell import CellParser
 
+__author__ = 'Robert Egger'
 #===============================================================================
 # for testing only
 #===============================================================================

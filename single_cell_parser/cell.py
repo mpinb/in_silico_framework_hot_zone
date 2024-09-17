@@ -1,9 +1,6 @@
 '''
 
 '''
-__author__  = "Robert Egger"
-__credits__ = ["Robert Egger", "Arco Bast"]
-__date__    = "2012-04-28"
 
 #from neuron import h, nrn
 import numpy as np
@@ -18,6 +15,10 @@ from . import analyze as sca
 import pandas as pd
 import json
 import logging
+
+__author__  = "Robert Egger"
+__credits__ = ["Robert Egger", "Arco Bast"]
+__date__    = "2012-04-28"
 
 logger = logging.getLogger("ISF").getChild(__name__)
 

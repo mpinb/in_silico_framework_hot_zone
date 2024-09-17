@@ -1,7 +1,5 @@
 '''Create anatomical and functional network realizations.
 '''
-__author__  = 'Robert Egger'
-__date__    = '2013-02-01'
 
 import os, time
 from . import reader
@@ -11,6 +9,8 @@ from .synapse_mapper import SynapseMapper
 from .network import NetworkMapper
 from sumatra.parameters import build_parameters
 import neuron
+__author__  = 'Robert Egger'
+__date__    = '2013-02-01'
 
 
 def create_synapse_realization(pname):

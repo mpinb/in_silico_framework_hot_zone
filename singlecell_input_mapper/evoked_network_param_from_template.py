@@ -47,11 +47,11 @@ Example:
         "NMODL_mechanisms": {...}
     }
 """
-__author__ = "Robert Egger"
 import sys, os
 import single_cell_parser as scp
 import getting_started
 from data_base.dbopen import dbopen
+__author__ = "Robert Egger"
 
 #evokedPrefix = '/nas1/Data_regger/AXON_SAGA/Axon4/PassiveTouch/L5tt/evoked_activity/'
 #evokedPrefix = '/home/abast/test/neurosim_getting_started/getting_started_files/functional_constraints/evoked_activity/PW_SuW_RF_CDK/'

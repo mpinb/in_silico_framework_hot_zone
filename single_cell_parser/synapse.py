@@ -1,12 +1,12 @@
 '''
 
 '''
-__author__ = 'Robert Egger'
-__date__ = '2012-03-30'
 from neuron import h
 from collections import Sequence
 import numpy as np
 
+__author__ = 'Robert Egger'
+__date__ = '2012-03-30'
 
 class Synapse(object):
     '''Synapse base class
