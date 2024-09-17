@@ -84,7 +84,7 @@ class NetworkMapper:
 
         Args:
             postCellName (str):
-                Path to the postsynaptic .hoc morphology file.
+                Path to the postsynaptic :ref:`hoc_file_format` morphology file.
             boutonDensities (dict):
                 Dictionary of bouton densities, ordered by anatomical area and cell type.
             nrOfSamples (int):
@@ -184,7 +184,7 @@ class NetworkMapper:
             
         Args:
             postCellName (str):
-                Path to the postsynaptic .hoc morphology file.
+                Path to the postsynaptic :ref:`hoc_file_format` morphology file.
             boutonDensities (dict):
                 Dictionary of bouton densities, ordered by anatomical area and cell type.
             nrOfRealizations (int):
@@ -290,7 +290,7 @@ class NetworkMapper:
         
         Args:
             postCellName (str):
-                Path to the postsynaptic .hoc morphology file.
+                Path to the postsynaptic :ref:`hoc_file_format` morphology file.
             synapseDensities (dict):
                 Dictionary of synapse densities, ordered by anatomical area and cell type.
         '''
@@ -1105,7 +1105,7 @@ class NetworkMapper:
         :py:meth:`~create_network_embedding_from_synapse_densities` to write output files to disk.
 
         Args:
-            postCellName (str): Path to the postsynaptic .hoc file.
+            postCellName (str): Path to the postsynaptic :ref:`hoc_file_format` file.
             connectivityMap (list): 
                 Connections between presynaptic cells and postsynaptic cell of the form
                 (cell type, presynaptic cell index, synapse index). 
@@ -1203,7 +1203,7 @@ class NetworkMapper:
         Used by :py:meth:`_create_network_embedding` to write output files to disk.
 
         Args:
-            postCellName (str): Path to the postsynaptic .hoc file.
+            postCellName (str): Path to the postsynaptic :ref:`hoc_file_format` file.
             populationDistribution (dict): Population distribution of anatomical parameters.
             connectivityMap (list): 
                 Connections between presynaptic cells and postsynaptic cell of the form

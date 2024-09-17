@@ -8,7 +8,7 @@ Connectivity
 ------------
 
 :py:mod:`singlecell_input_mapper.singlecell_input_mapper` is responsible for assigning synapses to the morphology of a postsynaptic neuron, 
-and keeping track of th3e synapse type and associated presynaptic cell type. Based on this presynaptic cell type, different spike times can be generated (see section Activity below).
+and keeping track of the synapse type and associated presynaptic cell type. Based on this presynaptic cell type, different spike times can be generated (see section Activity below).
 Assigning synapses onto the postsynaptic morphology is referred to as a 'network realization'. The network realization in ISF is based on the following inputs:
 
 - The morphology and location of the postsynaptic neuron

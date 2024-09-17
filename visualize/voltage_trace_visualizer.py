@@ -40,7 +40,7 @@ def visualize_vt(vt, fig=None, soma_color='k', dend_color='#f7941d', BAC_select 
 
     Args:
         vt (dict): dictionary containing the voltage traces. 
-        Must contain the keys:
+            Must contain the keys:
 
             - 'BAC.hay_measure'
             - 'bAP.hay_measure'
@@ -56,7 +56,7 @@ def visualize_vt(vt, fig=None, soma_color='k', dend_color='#f7941d', BAC_select 
     Returns:
         None
 
-    Note:
+    See also:
         See :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011` for more details on the stimulus protocols.
     """
     if fig is None:

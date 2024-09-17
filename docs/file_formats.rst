@@ -8,6 +8,11 @@ File formats
 The Amira proprietary file format. See `here <https://www.csc.kth.se/~weinkauf/notes/amiramesh.html>`_ for more information.
 This flexible format can be used to store 3D scalar meshes, 3D neuron morphology reconstructions, slice image data etc.
 
+Readers:
+
+- :py:mod:`~single_cell_parser.reader.read_scalar_field`
+- :py:mod:`~single_cell_parser.reader.read_landmark_file`
+
 .hx
 ===
 AMIRA proprietary file format for saving AMIRA projects.
@@ -17,7 +22,12 @@ AMIRA proprietary file format for saving AMIRA projects.
 .hoc
 ====
 NEURON :cite:`hines2001neuron` file format for neuron morphologies. Documentation can be found `here <https://nrn.readthedocs.io/en/latest/guide/hoc_chapter_11_old_reference.html>`_.
-Used for 3D morphology reconstructions. Can be read with :py:mod:`single_cell_parser.cell_parser`.
+Used for 3D morphology reconstructions.
+
+Readers:
+
+- :py:mod:`~single_cell_parser.cell_parser`
+- :py:meth:`~single_cell_parser.reader.read_hoc_file`
 
 Example::
 
@@ -43,7 +53,7 @@ Example::
 
 .mod
 ====
-NEURON :cite:`hines2001neuron` file format for neuron mechanisms. Documentation can be found `here <https://neuron.yale.edu/neuron/docs/using-nmodl-files>`.
+NEURON :cite:`hines2001neuron` file format for neuron mechanisms. Documentation can be found `here <https://neuron.yale.edu/neuron/docs/using-nmodl-files>`_.
 Used to define channel and synapse dynamics in NEURON simulations.
 See the folder `mechanisms` in the project source.
 
@@ -85,7 +95,7 @@ This file fully captures an anatomical realization of a network.
 Only valid with an associated morphology :ref:`_hoc_file_format` file.
 
 For each synapse, it provides the synapse type and location onto the morphology.
-Each row index corresponds to its synapse ID, providing a backlink to the :ref:`_con_file_format` file format.
+Each row index corresponds to its synapse ID, providing a backlink to the :ref:`con_file_format` file format.
 The location is encoded as a section ID and x (a normalized distance along the section),
 to be consistent with NEURON syntax.
 

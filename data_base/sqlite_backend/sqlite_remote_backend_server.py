@@ -2,7 +2,7 @@ import os
 import argparse
 import zmq
 from collections import defaultdict
-from data_base import distributed_lock
+from .. import distributed_lock
 import sqlite3
 import cloudpickle
 import yaml

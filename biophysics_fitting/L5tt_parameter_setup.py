@@ -20,7 +20,7 @@ def hay_param_to_scp_neuron_param(p):
     Returns:
         str: The SCP neuron parameter name.
         
-    Note:
+    See also:
         See :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011` for more information.
     """
     p = p.split('.')
@@ -63,18 +63,18 @@ def get_L5tt_template():
     It provides information on:
     
     - For each section label (for an L5PT: Soma, AIS, ApicalDendrite, Dendrite, Myelin):
-        - neuron.<section_label>.mechanisms: active biophysics of the cell (e.g. ion channel densities)
-        - neuron.<section_label>.properties: passive biophysics of the cell (e.g. membrane capacitance)
+        - ``neuron.<section_label>.mechanisms``: active biophysics of the cell (e.g. ion channel densities)
+        - ``neuron.<section_label>.properties``: passive biophysics of the cell (e.g. membrane capacitance)
     - sim: simulation parameters:
-        - T: temperature
-        - Vinit: initial voltage
-        - dt: time step
-        - recordingSites: recording sites
-        - tStart: start time
-        - tStop: stop time
+        - ``T``: temperature
+        - ``Vinit``: initial voltage
+        - ``dt``: time step
+        - ``recordingSites``: recording sites
+        - ``tStart``: start time
+        - ``tStop``: stop time
             
     Returns:
-        sumatra.parameters.NTParameterSet (dict-like): The template cell parameters.       
+        sumatra.parameters.NTParameterSet: The template cell parameters.       
     
     """
     p = {
@@ -327,13 +327,13 @@ def get_L5tt_template():
 def get_L5tt_template_v2():
     """Get a template cell parameter dictionary for a L5PT cell.
     
-    This method is identical to :py:meth:`get_L5tt_template`, but adds the following specifications::
+    This method is identical to :py:meth:`get_L5tt_template`, but adds the following specifications:
     
-        - The CaDynamics_E2 mechanism is replaced with CaDynamics_E2_v2 (see :py:mod:`mechanisms`).
-        - The SKv3_1 mechanism is set to have a linear spatial distribution with intercept (see :cite:t:`Schaefer_Helmstaedter_Schmitt_Bar_Yehuda_Almog_Ben_Porat_Sakmann_Korngreen_2007`).
+    - The CaDynamics_E2 mechanism is replaced with CaDynamics_E2_v2 (see :py:mod:`mechanisms`).
+    - The SKv3_1 mechanism is set to have a linear spatial distribution with intercept (see :cite:t:`Schaefer_Helmstaedter_Schmitt_Bar_Yehuda_Almog_Ben_Porat_Sakmann_Korngreen_2007`).
         
     Returns:
-        sumatra.NTParameterSet (dict-like): The template cell parameters.
+        sumatra.NTParameterSet: The template cell parameters.
     """
     neup = get_L5tt_template()
     for loc in neup:
@@ -368,11 +368,11 @@ def get_L5tt_template_v2():
 def set_morphology(cell_param, filename=None):
     """Add the morphology to a cell parameter object.
     
-    The morphology is simply a path to a .hoc file in string format.
+    The morphology is simply a path to a :ref:`hoc_file_format` file in string format.
     
     Args:
         cell_param (sumatra.parameters.NTParameterSet | dict): The cell parameter dictionary.
-        filename (str): The path to the .hoc file.
+        filename (str): The path to the :ref:`hoc_file_format` file.
         
     Returns:
         sumatra.parameters.NTParameterSet | dict: The updated cell parameter dictionary."""
@@ -385,7 +385,7 @@ def set_ephys(cell_param, params=None):
     
     Parameter names reflect the Hay naming convention.
     
-    Note:
+    See also:
         See :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011` for more information.
     """
     for k, v in six.iteritems(params):

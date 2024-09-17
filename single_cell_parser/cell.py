@@ -13,7 +13,7 @@ import neuron
 nrn = neuron.nrn
 h = neuron.h
 from itertools import chain
-import single_cell_parser.analyze as sca
+from . import analyze as sca
 import pandas as pd
 import json
 import logging
@@ -28,37 +28,29 @@ class Cell(object):
     It is a helper class for other methods. 
     E.g. :class:`~single_cell_parser.cell_parser.CellParser` creates morphological attributes using the class defined here.
 
-    Notable attributes:
-    - sections: a list of PySection objects
-        - sections[0] is the soma
-        - Each section contains recorded data (if any was recorded, e.g. membrane voltage): a 2D array where axis 0 is segment number, and axis 1 is time
-    - synapses: a dictionary of lists of Synapse objects
-    - tVec: a hoc Vector recording time
+    Attributes: 
+        hoc_path (str)
+        id (str | int, optional)
+        soma (:class:`single_cell_parser.cell.PySection`): The soma section of the cell.
+        tree (neuron.h.SectionList)
+        branches (dict): maps the section ID (str) of the root section of each dendritic subtree to its corresponding section list (neuron.h.SectionList).
+        structures (dict): All sections, aggregated by label (e.g. Dendrite, ApicalDendrite, ApicalTuft, Myelin...). Keys are labels (str), values are lists of :class:`PySection`s.
+        sections (list): List of all :class:`PySection`s. sections[0] is the soma. Each section contains recorded data (if any was recorded, e.g. membrane voltage): a 2D array where axis 0 is segment number, and axis 1 is time.
+        synapses (dict): a dictionary of lists of :class:`single_cell_parser.synapse.Synapse` objects
+        E (float): Default resting membrane potential. Defaults to -70.0
+        changeSynParamDict (dict)
+        tVec (neuron.h.Vector): a hoc Vector recording time.
+        neuron_param
+        neuron_sim_param
+        network_param
+        network_sim_param
+        section_adjacency_map (dict): maps each section (by ID) to its parent sections and children sections.
 
-    WARNING: while it contains similar methods, this is not the same class as :class:`~singlecell_input_mapper.cell.Cell`:
+    WARNING: 
+        While it contains similar methods, this is not the same class as :class:`~singlecell_input_mapper.cell.Cell`:
     '''
 
     def __init__(self):
-        '''
-        Attributes: 
-            hoc_path (str)
-            id (str | int, optional)
-            soma (PySection)
-            tree (neuron.h.SectionList)
-            branches ({str: neuron.h.SectionList}): maps the section ID of the root seciton of each dendritic subtree to its corresponding section list.
-            structures ({str: [PySection]}): All sections, aggregated by label (e.g. Dendrite, ApicalDendrite, ApicalTuft, Myelin...)
-            sections ([PySection]): All sections.
-            synapses (dict)
-            E (float): Default resting membrane potential. Defaults to -70.0
-            changeSynParamDict
-            tVec (neuron.h.Vector): Time vector.
-            neuron_param
-            neuron_sim_param
-            network_param
-            network_sim_param
-            section_adjacency_map (dict): maps each section (by ID) to its parent sections and children sections.
-        '''
-
         self.hoc_path = None
         self.id = None
         self.soma = None
@@ -395,9 +387,6 @@ class Cell(object):
         """Generates a map that shows which sections are connected to which sections.
         Saves this as a class attribute if it's the first time calculatingm otherwise returns
 
-        Args:
-            self (cell): the cell boject
-
         Returns:
             dict: a dictionary where each key is the section id, and the value is a list of adjacent section ids
         """
@@ -422,52 +411,31 @@ class PySection(nrn.Section):
     '''
     Subclass of nrn.Section providing additional geometric
     and mechanism information/ handling methods
+    
+    Attributes:
+        label (str): label of the section
+        parent (PySection): reference to parent section
+        parentx (float): connection point at parent section
+        bounds (tuple): bounding box around 3D coordinates
+        nrOfPts (int): number of traced 3D coordinates
+        pts (list): list of traced 3D coordinates
+        relPts (list): list of relative position of 3D points along section
+        diamList (list): list of diameters at traced 3D coordinates
+        area (float): total area of all NEURON segments in this section
+        segPts (list): list of center points of segments used during simulation
+        segx (list): list of x values corresponding to center of each segment
+        segDiams (list): list of diameters of all segments
+        recVList (list): list of neuron Vectors recording voltage in each compartment
+        recordVars (dict): dict of range variables recorded
     '''
 
     def __init__(self, name=None, cell=None, label=None):
         '''
-        structure
-        self.label = label
         
-        reference to parent section
-        self.parent = None
-        
-        connection point at parent section
-        self.parentx = 1.0
-        
-        bounding box around 3D coordinates
-        self.bounds = ()
-        
-        number of traced 3D coordinates
-        self.nrOfPts = 0
-        
-        list of traced 3D coordinates
-        self.pts = []
-        
-        list of relative position of 3D points along section
-        self.relPts = []
-        
-        list of diameters at traced 3D coordinates
-        self.diamList = []
-        
-        total area of all NEURON segments in this section
-        self.area = 0.0
-        
-        list of center points of segments used during simulation
-        self.segPts = []
-        
-        list of x values corresponding to center of each segment
-        for looping akin to the hoc function for(x) (without 0  and 1)
-        self.segx = []
-        
-        list of diameters of all segments
-        self.segDiams = []
-        
-        list of neuron Vectors recording voltage in each compartment
-        self.recVList = []
-        
-        dict of range variables recorded
-        self.recordVars = {}
+        Args:
+            name (str, optional): name of the section
+            cell (Cell, optional): reference to the cell object
+            label (str, optional): label of the section
         '''
         if name is None:
             name = ''
@@ -684,16 +652,20 @@ class PointCell(object):
     requires VecStim to trigger spikes at specified times
     
     initialize with list (iterable) of spike times
+    
+    Attributes:
+        spikeTimes (list): list of spike times
+        spikeVec (neuron.h.Vector): hoc Vector containing spike times
+        spikes (neuron.h.VecStim): VecStim object
+        playing (bool): flag indicating whether VecStim is playing
+        synapseList (list): list of synapses connected to this cell. 
     '''
 
     def __init__(self, spikeTimes=None):
         '''
-        self.spikeTimes = list(spikeTimes)
-        self.spikeVec = h.Vector(spikeTimes)
-        self.spikes = h.VecStim()
+        Args:
+            spikeTimes (list): list of spike times. Defaults to None.
         
-        for use as cell connecting to synapses, not directly to NetCons:
-        self.synapseList = None
         '''
         if spikeTimes is not None:
             self.spikeTimes = spikeTimes
@@ -806,8 +778,9 @@ class PointCell(object):
 
 class SpikeTrain(PointCell):
     '''
-    DEPRECATED: only still in here in case some old
-    dependency turns up that has not been found yet.
+    .. deprecated: 0.1.0 
+        only still in here in case some old
+        dependency turns up that has not been found yet.
     
     Simple object for use as spike train source.
     Pre-computes spike times according to user-provided

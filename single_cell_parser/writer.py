@@ -1,11 +1,13 @@
-from data_base.dbopen import dbopen
-import os
-from visualize.utils import value_to_color
-'''
+'''Write out anatomical, morphology or simulation data.
+
 Created on Mar 8, 2012
 
 @author: regger
 '''
+from data_base.dbopen import dbopen
+import os
+from visualize.utils import value_to_color
+
 
 labels2int = {\
     "Neuron":                 2,\
@@ -176,15 +178,15 @@ def write_all_traces(fname, t, vTraces):
 
 
 def write_cell_synapse_locations(fname=None, synapses=None, cellID=None):
-    '''Write a :ref:`_syn_file_format` file.
+    '''Write a :ref:`syn_file_format` file.
      
-    :ref:`_syn_file_format` files contain a cell's synapses with the locations
+    :ref:`syn_file_format` files contain a cell's synapses with the locations
     coded by section ID and section x of cell with ID "cellID".
 
     See also:
 
-    - :ref:`_syn_file_format` for more information on the `.syn` file format.
-    - :py:meth:`single_cell_parser.reader.read_synapse_locations` for the corresponding reader function.
+    - :ref:`syn_file_format` for more information on the `.syn` file format.
+    - :py:meth:`single_cell_parser.reader.read_synapse_realization` for the corresponding reader function.
     - :py:meth:`write_pruned_synapse_locations` for a similar function that includes a `pruned` flag.
 
     Args:
@@ -222,15 +224,15 @@ def write_cell_synapse_locations(fname=None, synapses=None, cellID=None):
 
 
 def write_pruned_synapse_locations(fname=None, synapses=None, cellID=None):
-    '''Write a :ref:`_syn_file_format` file with a `pruned` flag.
+    '''Write a :ref:`syn_file_format` file with a `pruned` flag.
 
-    :ref:`_syn_file_format` files contain a cell's synapses with the locations
+    :ref:`syn_file_format` files contain a cell's synapses with the locations
     coded by section ID and section x of cell with ID "cellID" and a pruned flag (1 or 0).
 
     See also:
 
-    - :ref:`_syn_file_format` for more information on the `.syn` file format.
-    - :py:meth:`single_cell_parser.reader.read_synapse_locations` for the corresponding reader function.
+    - :ref:`syn_file_format` for more information on the `.syn` file format.
+    - :py:meth:`single_cell_parser.reader.read_pruned_synapse_realization` for the corresponding reader function.
     - :py:meth:`write_cell_synapse_locations` for a similar function that does not include a `pruned` flag.
 
     Args:
@@ -273,14 +275,14 @@ def write_functional_realization_map(
         fname=None,
         functionalMap=None,
         anatomicalID=None):
-    '''Write out a :ref:`_con_file_format` file.
+    '''Write out a :ref:`con_file_format` file.
 
     Writes list of all functional connections coded by tuples (cell type, presynaptic cell index, synapse index).
     Only valid for anatomical synapse realization given by anatomicalID
 
     See also:
 
-    - :ref:`_con_file_format` for more information on the `.con` file format.
+    - :ref:`con_file_format` for more information on the `.con` file format.
     - :py:meth:`single_cell_parser.reader.read_functional_realization_map` for the corresponding reader function.
 
     Args:
@@ -462,7 +464,7 @@ def write_synapse_weight_file(fname=None, cell=None):
 def write_PSTH(fname=None, PSTH=None, bins=None):
     '''Write PSTH and time bins of PSTH, 
     
-    Bins contain left and right end of each bin, i.e. len(bins) = len(PSTH) + 1
+    Bins contain left and right end of each bin, i.e. ``len(bins) = len(PSTH) + 1``
 
     Args:
         fname (str): The name of the file to write to.
@@ -603,10 +605,10 @@ def write_cell_simulation(
     attached to Sections of cell
 
     Attention:
-        Make sure to have created the cell with `allPoints = True`.
+        Make sure to have created the cell with ``allPoints = True``.
     
     Attention:
-        Performs interpolation if `nseg != nrOfPts` for a Section
+        Performs interpolation if ``nseg != nrOfPts`` for a Section
 
     Args:
         fname (str): The name of the file to write to.
@@ -968,7 +970,7 @@ def write_functional_map(fname, functionalMap):
     """Write a functional map to an AMIRA file.
     
     Deprecated. Consider using :py:meth:`visualize.vtk.write_vtk_pointcloud_file` 
-    or :py:meth:`visualize.cell_morphology_visualizer.write_vtk_frames` for visualization purposes.
+    or :py:meth:`visualize.vtk.write_vtk_frames` for visualization purposes.
 
     This method may still serve well if you need an AMIRA mesh file.
     

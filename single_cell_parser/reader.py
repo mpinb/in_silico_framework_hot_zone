@@ -48,7 +48,7 @@ def read_hoc_file(fname=''):
     This list of sections is parsed to a :class:`~single_cell_parser.cell_parser.CellParser` object
     using :py:meth:`~single_cell_parser.cell_parser.CellParser.spatialgraph_to_cell`.
 
-    See :ref:_`hoc_file_format` for more information on the hoc file format.
+    See :ref:`hoc_file_format` for more information on the hoc file format.
     
     Attention:
         The module :py:mod:`singlecell_input_mapper` also conains a method
@@ -77,7 +77,8 @@ def read_hoc_file(fname=''):
                 label='BasalDendrite_1_0', 
                 hocLabel='BasalDendrite_1_0', 
                 edgePts=[(6.36964, 224.735992, -452.399994), (6.34155, 222.962997, -451.906006), ...], 
-                diameterList=[2.04, 2.04, ... , 2.04), parentID=0, parentConnect=0.009696)
+                diameterList=[2.04, 2.04, ... , 2.04), parentID=0, parentConnect=0.009696),
+            ...
         ]
     """
     if not fname.endswith('.hoc') and not fname.endswith('.HOC'):
@@ -284,11 +285,11 @@ def read_scalar_field(fname=''):
 
 
 def read_synapse_realization(fname):
-    """Read a :ref:`_syn_file_format` file and returns a dictionary of synapse locations.
+    """Read a :ref:`syn_file_format` file and returns a dictionary of synapse locations.
     
     See also:
 
-    - :ref:`_syn_file_format` for more information on the `.syn` file format.
+    - :ref:`syn_file_format` for more information on the `.syn` file format.
     - :py:meth:`~single_cell_parser.reader.read_pruned_synapse_realization`.
     - :py:meth:`~single_cell_parser.writer.write_cell_synapse_locations` for the corresponding writer.
     
@@ -308,7 +309,6 @@ def read_synapse_realization(fname):
         # Synapse distribution file
         # corresponding to cell: 86_L5_86_L5_CDK20041214_nr3L5B_dend_PC_neuron_transform_registered_C2center
         # Type - section - section.x
-
         VPM_E1  112     0.138046479525
         VPM_E1  130     0.305058053119
         VPM_E1  130     0.190509288017
@@ -351,14 +351,14 @@ def read_synapse_realization(fname):
 
 
 def read_pruned_synapse_realization(fname):
-    """Read in a :ref:`_syn_file_format` and returns a dictionary of synapse locations and whether they are pruned or not.
+    """Read in a :ref:`syn_file_format` and returns a dictionary of synapse locations and whether they are pruned or not.
     
     Pruned synapses are synapses that have been removed from the model.
     Whether or not they are pruned is indicated by an additional column in the synapse realization file.
     
     See also:
 
-    - :ref:`_syn_file_format` for more information on the `.syn` file format.
+    - :ref:`syn_file_format` for more information on the `.syn` file format.
     - :py:meth:`~single_cell_parser.reader.read_synapse_realization`.
     - :py:meth:`~single_cell_parser.writer.write_pruned_synapse_locations` for the corresponding writer.
     
@@ -376,7 +376,6 @@ def read_pruned_synapse_realization(fname):
         # Synapse distribution file
         # corresponding to cell: 86_L5_86_L5_CDK20041214_nr3L5B_dend_PC_neuron_transform_registered_C2center
         # Type - section - section.x - pruned
-         
         VPM_E1  112     0.138046479525  0
         VPM_E1  130     0.305058053119  0
         ...
@@ -412,13 +411,13 @@ def read_pruned_synapse_realization(fname):
 
 
 def read_functional_realization_map(fname):
-    '''Read in a :ref:`_con_file_format` file and return a dictionary of functional connections.
+    '''Read in a :ref:`con_file_format` file and return a dictionary of functional connections.
 
     Only valid for anatomical synapse realization given by anatomicalID.
 
     See also:
 
-    - :ref:`_con_file_format` for more information on the `.con` file format.
+    - :ref:`con_file_format` for more information on the `.con` file format.
     - :py:meth:`~single_cell_parser.writer.write_functional_realization_map` for the corresponding writer.
 
     Args:
@@ -429,8 +428,9 @@ def read_functional_realization_map(fname):
 
     Returns:
         tuple: 
-            A dictionary with cell types as keys and lists of synapse locations as values.
-            The filename of the corresponding :ref:`_syn_file_format` file.
+            A dictionary with cell types as keys and a list of synapse information for each synapse as values.
+            Synapse information is a 3-tuple with (cell type, cell ID, synapse ID)
+            The filename of the corresponding :ref:`syn_file_format` file.
     '''
     if not fname.endswith('.con') and not fname.endswith('.CON'):
         raise IOError('Input file is not a functional map realization file!')

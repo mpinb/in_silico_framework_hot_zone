@@ -153,13 +153,13 @@ def create_cell(
 
     Args:
         parameters (dict | dict-like):
-            A nested dictionary structure. Should include at least the keys 'filename' and one key per structure present in the `.hoc` file (e.g. "AIS", "Soma" ...). 
-            Optional keys include: 'cell_modify_functions', 'discretization'
+            A nested dictionary structure. Should include at least the keys 'filename' and one key per structure present in the :ref:`hoc_file_format` file (e.g. "AIS", "Soma" ...). 
+            Optional keys include: ``cell_modify_functions``, ``discretization``
         scaleFunc (bool): 
             DEPRECATED,  should be specified in the parameters, as described in :meth:`~single_cell_parser.cell_modify_funs`
         allPoints (bool): 
             Whether or not to use all the points in the `.hoc` file, or one point per segment (according to the distance-lambda rule). 
-            Will be passed to ``full``in :meth:`~single_cell_parser.cell_parser.CellParser.determine_nseg`
+            Will be passed to ``full`` in :meth:`~single_cell_parser.cell_parser.CellParser.determine_nseg`
         setUpBiophysics (bool): 
             Whether or not to insert mechanisms corresponding to the biophysical parameters in ``parameters``
         
@@ -241,11 +241,11 @@ def init_neuron_run(simparam, vardt=False, *events):
             Must include the keys 'dt', 'tStop', 'Vinit', 'T'.
         vardt (bool):
             Whether or not to use variable time step integration.
-        events, optional (callable):
+        events (callable, optional):
             Optional parameters: callable "events" that are
             passed to Event objects holding a FInitializeHandler.
             This can be used to implement changes of parameters during
-            the course of the simulation using h.cvode.event(t, "statement")
+            the course of the simulation using ``h.cvode.event(t, "statement")``
             in the supplied callable, where "statement" is another
             Python callable which may be used to change parameters.
 
@@ -311,7 +311,7 @@ def spines_update_synapse_distribution_file(
         cell, 
         synapse_distribution_file,
         new_synapse_distribution_file):
-    '''Update the .syn file to correctly point to spine heads as excitatory synapse locations. Spines must already exist, so call after create_cell, using the same .syn file that was used to create the cell. new_synfile will be created if it does not already exist.'''
+    '''Update the :ref:`syn_file_format` file to correctly point to spine heads as excitatory synapse locations. Spines must already exist, so call after create_cell, using the same :ref:`syn_file_format` file that was used to create the cell. new_synfile will be created if it does not already exist.'''
     ## update the .syn file
     spine_heads = []
     for sec in cell.sections:
@@ -344,9 +344,12 @@ def spines_update_synapse_distribution_file(
     logger.info("Success: .syn file updated")
 
 
-def spines_update_network_paramfile(new_synapse_distribution_file,
-                                    network_paramfile, new_network_paramfile):
-    '''update the network.param file to point to the new synapse distribution file'''
+def spines_update_network_paramfile(
+    new_synapse_distribution_file,
+    network_paramfile, 
+    new_network_paramfile
+    ):
+    '''Update the network.param file to point to the new synapse distribution file'''
     network_param = build_parameters(network_paramfile)
     for i in list(network_param.network.keys()):
         network_param.network[
