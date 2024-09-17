@@ -7,11 +7,12 @@
    :private-members:
    :show-inheritance:
 
-   {% block methods %}
+   {% block methods %} 
    {% if methods %}
    .. rubric:: {{ _('Methods') }}
 
    .. autosummary::
+      :special-members: __get__, __set__
    {% for item in methods %}
       ~{{ name }}.{{ item }}
    {%- endfor %}
