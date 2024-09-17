@@ -1,4 +1,8 @@
-{{ fullname | escape | underline}}
+.. raw:: html
+
+   <small>{{ fullname.split('.')[:-1] | join('.') | escape }}</small>
+
+{{ fullname.split('.')[-1] | escape | underline }}
 
 .. automodule:: {{ fullname }}
 

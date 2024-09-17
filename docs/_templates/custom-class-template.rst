@@ -1,5 +1,8 @@
-{{ fullname.split('.')[:-1] | join('.') | escape }}
-{{ fullname.split('.')[-1] | escape | underline}}
+.. raw:: html
+
+   <small>{{ fullname.split('.')[:-1] | join('.') | escape }}</small>
+
+{{ fullname.split('.')[-1] | escape | underline }}
 
 .. This template decides how the class pages look
    autosummary directives decide what to include in the class page
