@@ -1,4 +1,7 @@
-Back to :mod:`{{ fullname.split('.')[:-1] | join('.') | escape }}`
+{% set parent_module = fullname.split('.')[:-1] | join('.') | escape %}
+{% if parent_module %}
+Back to :mod:`{{ parent_module }}`
+{% endif %}
 
 {{ fullname.split('.')[-1] | escape | underline }}
 
