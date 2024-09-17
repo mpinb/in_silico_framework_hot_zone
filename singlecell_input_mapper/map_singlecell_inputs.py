@@ -47,12 +47,12 @@ Outputs:
   synapses of each presynaptic type and column
 - Synapse location and connectivity file compatible with :py:mod:`simrun`.
 """
+from __future__ import absolute_import
 __author__ = 'Robert Egger'
 
 #===============================================================================
 # Python standard library imports
 #===============================================================================
-from __future__ import absolute_import
 import sys
 import os.path
 import glob

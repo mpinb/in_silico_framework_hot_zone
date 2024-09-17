@@ -1,8 +1,6 @@
 #!/usr/bin/python
 """
 Create a network parameter template file.
-
-
 """
 
 
