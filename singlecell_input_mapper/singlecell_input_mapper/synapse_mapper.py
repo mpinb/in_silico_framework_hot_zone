@@ -3,11 +3,9 @@ This module allows to compute synapse density fields from a Post-Synaptic Target
 The :class:`~singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper` class uses these classes to create synapse realizations.
 While the classes in this module can be used in isolation, there are also full pipelines available that use the classes here to map synapses to a neuron morphology.
 Consult the module :py:mod:`~singlecell_input_mapper.map_singlecell_inputs` for such a pipeline, or the documentation of :class:`~singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper` for more info on how to use these classes in a pipeline.
-
-Created on Mar 30, 2012
-
-@author: regger
 '''
+__author__ = 'Robert Egger'
+__date__ = '2012-03-30'
 import numpy as np
 from .scalar_field import ScalarField
 import sys

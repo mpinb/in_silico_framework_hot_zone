@@ -46,13 +46,8 @@ Outputs:
 - AmiraMesh landmark file containing 3D synapse locations of anatomical
   synapses of each presynaptic type and column
 - Synapse location and connectivity file compatible with :py:mod:`simrun`.
-
-Author: 
-    Robert Egger
-    Computational Neuroanatomy
-    Max Planck Institute for Biological Cybernetics
-    Tuebingen, Germany
 """
+__author__ = 'Robert Egger'
 
 #===============================================================================
 # Python standard library imports

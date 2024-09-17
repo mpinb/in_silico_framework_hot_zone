@@ -1,11 +1,7 @@
+'''Create anatomical and functional network realizations.
 '''
-Created on Feb 1, 2013
-
-Implements standard scripts for
-anatomical and functional network realizations.
-
-@author: regger
-'''
+__author__  = 'Robert Egger'
+__date__    = '2013-02-01'
 
 import os, time
 from . import reader

@@ -76,4 +76,7 @@ Ongoing activity network parameter files can be found in getting_started/example
             "cell_type_2": {...},
             ...
     }
+    
 """
+__author__  = "Robert Egger"
+__credits__ = ["Robert Egger", "Arco Bast"]

@@ -2,11 +2,9 @@
 
 Deprecated. Simulations are set up using the high-level interface :py:class:`~biophysics_fitting.simulator.Simulator`.
 Can still be useful for low-level control with NEURON.
-
-Created on Mar 19, 2012
-
-@author: robert
 '''
+__author__ = 'Robert Egger'
+__date__ = '2012-03-19'
 
 import numpy as np
 #import matplotlib.pyplot as plt

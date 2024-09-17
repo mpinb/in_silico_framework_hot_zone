@@ -1,8 +1,7 @@
+'''Read in hoc files, Amira Mesh files, and spreadsheets with connection probabilities.
 '''
-Created on Mar 8, 2012
-
-@author: regger
-'''
+__author__ = 'Robert Egger'
+__date__ = '2012-03-08'
 
 import numpy as np
 from . import scalar_field

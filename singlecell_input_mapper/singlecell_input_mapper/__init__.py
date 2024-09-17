@@ -48,14 +48,8 @@ Attention:
           - :py:meth:`~single_cell_parser.reader.read_hoc_file`
         * - :py:meth:`~singlecell_input_mapper.singlecell_input_mapper.reader.read_scalar_field`
           - :py:meth:`~single_cell_parser.reader.read_scalar_field`
-
-Author:
- 
-    Robert Egger
-    Computational Neuroanatomy
-    Max Planck Institute for Biological Cybernetics
-    Tuebingen, Germany
 """
+__author__ = 'Robert Egger'
 
 from __future__ import absolute_import
 from .reader import *

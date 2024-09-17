@@ -1,8 +1,8 @@
 '''
-Created on Mar 30, 2012
 
-@author: regger
 '''
+__author__ = 'Robert Egger'
+__date__ = '2012-03-30'
 from neuron import h
 from collections import Sequence
 import numpy as np

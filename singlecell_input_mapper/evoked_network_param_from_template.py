@@ -47,6 +47,7 @@ Example:
         "NMODL_mechanisms": {...}
     }
 """
+__author__ = "Robert Egger"
 import sys, os
 import single_cell_parser as scp
 import getting_started

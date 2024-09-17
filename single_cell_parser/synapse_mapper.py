@@ -1,8 +1,8 @@
 '''
-Created on Mar 30, 2012
 
-@author: regger
 '''
+__author__ = 'Robert Egger'
+__date__ = '2012-03-30'
 import numpy as np
 #import reader
 #import writer

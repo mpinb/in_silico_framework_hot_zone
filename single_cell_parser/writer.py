@@ -1,9 +1,8 @@
 '''Write out anatomical, morphology or simulation data.
-
-Created on Mar 8, 2012
-
-@author: regger
 '''
+__author__  = 'Robert Egger'
+__date__    = '2012-03-08'
+
 from data_base.dbopen import dbopen
 import os
 from visualize.utils import value_to_color

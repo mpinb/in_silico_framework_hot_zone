@@ -1,11 +1,9 @@
 '''Runfile to test VPM activation of an L5tt cell.
 
-Used by the Oberlaender lab in Bonn.
-
-Created on Apr 21, 2012
-
-@author: robert
+Used by the Oberlaender lab in MPINB, Bonn.
 '''
+__author__ = 'Robert Egger'
+__date__ = '2012-04-21'
 
 import neuron
 from . import reader

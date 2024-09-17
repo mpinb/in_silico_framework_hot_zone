@@ -1,8 +1,9 @@
 '''
-Created on Apr 28, 2012
 
-@author: regger
 '''
+__author__  = "Robert Egger"
+__credits__ = ["Robert Egger", "Arco Bast"]
+__date__    = "2012-04-28"
 
 #from neuron import h, nrn
 import numpy as np

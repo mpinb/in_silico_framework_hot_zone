@@ -24,6 +24,8 @@ and :py:meth:`~single_cell_parser.network_mapper.NetworkMapper.create_network`.
 See also:
     :py:mod:`~singlecell_input_mapper.singlecell_input_mapper`.
 '''
+__author__  = "Robert Egger"
+__credits__ = ["Robert Egger", "Arco Bast"]
 
 import os
 import time

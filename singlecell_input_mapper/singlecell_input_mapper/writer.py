@@ -1,8 +1,7 @@
+'''Write out the results of a single connectivity realization or a population of realizations.
 '''
-Created on Mar 8, 2012
-
-@author: regger
-'''
+__author__ = 'Robert Egger'
+__date__ = '2012-03-08'
 from __future__ import absolute_import
 from .scalar_field import ScalarField
 from .generate_nr_of_cells_spreadsheet import con_file_to_NumberOfConnectedCells_sheet
