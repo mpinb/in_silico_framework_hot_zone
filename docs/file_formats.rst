@@ -92,7 +92,7 @@ Example::
 ====
 ISF custom file format to store synapse locations onto a morphology. 
 This file fully captures an anatomical realization of a network.
-Only valid with an associated morphology :ref:`_hoc_file_format` file.
+Only valid with an associated morphology :ref:`hoc_file_format` file.
 
 For each synapse, it provides the synapse type and location onto the morphology.
 Each row index corresponds to its synapse ID, providing a backlink to the :ref:`con_file_format` file format.
@@ -100,7 +100,7 @@ The location is encoded as a section ID and x (a normalized distance along the s
 to be consistent with NEURON syntax.
 
 To create a functional network (i.e., known presynaptic origin), 
-it must be used in conjunction with an associated :ref:`_con_file_format` file.
+it must be used in conjunction with an associated :ref:`con_file_format` file.
 
 Readers:
 
