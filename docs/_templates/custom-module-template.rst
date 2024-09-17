@@ -1,4 +1,4 @@
-Back to :mod:`{{ fullname.split('.')[:-1] | join('.') | escape }}``
+Back to :mod:`{{ fullname.split('.')[:-1] | join('.') | escape }}`
 
 {{ fullname.split('.')[-1] | escape | underline }}
 
