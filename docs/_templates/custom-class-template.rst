@@ -21,23 +21,23 @@ Back to :mod:`{{ parent_module }}`
    {% set filtered_methods = methods | select("ne", "__init__") | list %}
 
    {% block methods %} 
-      {% if filtered_methods %}
-      .. rubric:: {{ _('Methods') }}
+   {% if filtered_methods %}
+   .. rubric:: {{ _('Methods') }}
 
-      .. autosummary::
-      {% for item in filtered_methods %}
-         ~{{ name }}.{{ item }}
-      {%- endfor %}
-      {% endif %}
+   .. autosummary::
+   {% for item in filtered_methods %}
+      ~{{ name }}.{{ item }}
+   {%- endfor %}
+   {% endif %}
    {% endblock %}
 
    {% block attributes %}
-      {% if attributes %}
-      .. rubric:: {{ _('Attributes') }}
+   {% if attributes %}
+   .. rubric:: {{ _('Attributes') }}
 
-      .. autosummary::
-      {% for item in attributes %}
-         ~{{ name }}.{{ item }}
-      {%- endfor %}
-      {% endif %}
+   .. autosummary::
+   {% for item in attributes %}
+      ~{{ name }}.{{ item }}
+   {%- endfor %}
+   {% endif %}
    {% endblock %}
