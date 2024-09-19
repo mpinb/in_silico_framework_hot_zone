@@ -89,7 +89,7 @@ class Evaluator:
                 If False, will not raise an error, and evaluate all features that can be evaluated given the provided `features_dict`. 
 
         Raises:
-            KeyError: if the Evaluator tries to evaluate a trace with a name that is not present in `features_dict.keys()` and :paramref:`raise_` is set to True
+            KeyError: if the Evaluator tries to evaluate a trace with a name that is not present in `features_dict.keys()` and :paramref:`raise_` is set to ``True``.
 
         Returns:
             obj: Whatever the return value is of :py:attr:`Evaluator.setup.finalize_funs`. 
