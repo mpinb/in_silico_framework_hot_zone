@@ -6,18 +6,18 @@ from NEURON hoc files, and to map synapse locations to these cells.
 It is specialized to handle biophysical models of neurons, and to run simulations with these models.
 
 Attention:
-    This package has similar, but not identical functionality as 
-    :py:mod:`singlecell_input_mapper.singlecell_input_mapper`. 
-    This package is specialized to handle biophysical and electrical properties of neurons,
-    while :py:mod:`singlecell_input_mapper.singlecell_input_mapper` is specialized to handle 
-    morphological and connectivity attributes of single cells. 
+    This package should not be confused with :py:mod:`singlecell_input_mapper.singlecell_input_mapper`. 
+    This package is specialized to handle biophysical properties of neurons.
+    It handles (among other things) synaptic activations onto a biophysically detailed neuron model, 
+    i.e. a functional network realization. To create functional network realizations, this package
+    can read in the network realization results from :py:meth:`singlecell_input_mapper.map_singlecell_inputs`.
+    Only when the activity of the presynaptic cell of each synapse is known, does the network realization
+    become a **functional** network realization.
     
-    It is unlikely to confuse the two in practice; the classes and methods from 
-    :py:mod:`singlecell_input_mapper.singlecell_input_mapper` are used by the pipeline method
-    :py:mod:`singlecell_input_mapper.map_singlecell_inputs`, and rarely directly invoked or imported.
-    In addition, the pipeline of creating anatomical realizations is very distinct from the pipeline of 
-    creating biophysical models, and crossover between the two pipelines is unlikely. 
-    Nonetheless, beware of the following classes and methods that are duplicates only in name:
+    On the other hand, :py:mod:`singlecell_input_mapper.singlecell_input_mapper` is specialized to create
+    empirically consistent network realizations, without network activity or biophysical properties.
+    
+    Beware of the following classes and methods that are duplicates only in name:
     
     .. list-table:: 
         :header-rows: 1
@@ -34,14 +34,14 @@ Attention:
           - :class:`~single_cell_parser.synapse_mapper.SynapseMapper`
         * - :class:`~singlecell_input_mapper.singlecell_input_mapper.scalar_field.ScalarField`
           - :class:`~single_cell_parser.scalar_field.ScalarField`
-        * - :py:class:`~singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper`
-          - :py:class:`~single_cell_parser.network.NetworkMapper`
-        * - :py:meth:`~singlecell_input_mapper.singlecell_input_mapper.cell.Synapse`
-          - :py:meth:`~single_cell_parser.synapse.Synapse`
-        * - :py:meth:`~singlecell_input_mapper.singlecell_input_mapper.reader.read_hoc_file`
-          - :py:meth:`~single_cell_parser.reader.read_hoc_file`
-        * - :py:meth:`~singlecell_input_mapper.singlecell_input_mapper.reader.read_scalar_field`
-          - :py:meth:`~single_cell_parser.reader.read_scalar_field`
+        * - :class:`~singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper`
+          - :class:`~single_cell_parser.network.NetworkMapper`
+        * - :meth:`~singlecell_input_mapper.singlecell_input_mapper.cell.Synapse`
+          - :meth:`~single_cell_parser.synapse.Synapse`
+        * - :meth:`~singlecell_input_mapper.singlecell_input_mapper.reader.read_hoc_file`
+          - :meth:`~single_cell_parser.reader.read_hoc_file`
+        * - :meth:`~singlecell_input_mapper.singlecell_input_mapper.reader.read_scalar_field`
+          - :meth:`~single_cell_parser.reader.read_scalar_field`
 
 '''
 import logging

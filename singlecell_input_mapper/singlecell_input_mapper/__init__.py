@@ -15,15 +15,16 @@ Inputs:
 - The 1D and 2D densities of PSTs onto the postsynaptic neuron per length and area (cell type specific)
 
 Attention:
-    This package has similar, but not identical functionality as :py:mod:`single_cell_parser`. 
-    :py:mod:`single_cell_parser` is specialized to handle biophysical and electrical properties,
-    while this package is specialized to handle morphological and connectivity attributes of single cells. 
+    This package should not be confused with :py:mod:`single_cell_parser`. 
+    This package is specialized to create empirically consistent dense connectome models.
+    It does not concern itself with assigning activity patterns to this network.
+  
+    :py:mod:`single_cell_parser` handles biophysical properties of neurons, including
+    synaptic activations onto a biophysically detailed neuron model (i.e. a functional network realization). 
+    To create such a functional network realizations, :py:mod:`single_cell_parser` can read in 
+    the network realization results from this package (see :py:meth:`single_cell_parser.network.Networkmapper.create_saved_network2`).
     
-    It is unlikely to confuse the two in practice; the classes and methods here are used by the pipeline method
-    :py:mod:`singlecell_input_mapper.map_singlecell_inputs`, and rarely directly invoked or imported.
-    In addition, the pipeline of creating anatomical realizations is very distinct from the pipeline of 
-    creating biophysical models, and crossover between the two pipelines is unlikely. 
-    Nonetheless, beware of the following classes and methods that are duplicates only in name:
+    Beware of the following classes and methods that are duplicates only in name:
     
     .. list-table:: 
         :header-rows: 1
@@ -40,14 +41,14 @@ Attention:
           - :class:`~single_cell_parser.synapse_mapper.SynapseMapper`
         * - :class:`~singlecell_input_mapper.singlecell_input_mapper.scalar_field.ScalarField`
           - :class:`~single_cell_parser.scalar_field.ScalarField`
-        * - :py:class:`~singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper`
-          - :py:class:`~single_cell_parser.network.NetworkMapper`
-        * - :py:class:`~singlecell_input_mapper.singlecell_input_mapper.cell.Synapse`
-          - :py:class:`~single_cell_parser.synapse.Synapse`
-        * - :py:meth:`~singlecell_input_mapper.singlecell_input_mapper.reader.read_hoc_file`
-          - :py:meth:`~single_cell_parser.reader.read_hoc_file`
-        * - :py:meth:`~singlecell_input_mapper.singlecell_input_mapper.reader.read_scalar_field`
-          - :py:meth:`~single_cell_parser.reader.read_scalar_field`
+        * - :class:`~singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper`
+          - :class:`~single_cell_parser.network.NetworkMapper`
+        * - :meth:`~singlecell_input_mapper.singlecell_input_mapper.cell.Synapse`
+          - :meth:`~single_cell_parser.synapse.Synapse`
+        * - :meth:`~singlecell_input_mapper.singlecell_input_mapper.reader.read_hoc_file`
+          - :meth:`~single_cell_parser.reader.read_hoc_file`
+        * - :meth:`~singlecell_input_mapper.singlecell_input_mapper.reader.read_scalar_field`
+          - :meth:`~single_cell_parser.reader.read_scalar_field`
 """
 from __future__ import absolute_import
 from .reader import *
