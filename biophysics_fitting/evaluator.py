@@ -10,7 +10,7 @@ class Evaluator_Setup:
     This class is an attribute of the :class:`~Evaluator` class, and should only veer be accessed via the :class:`~Evaluator` object.
     It takes care of applying evaluation functions to voltage traces, and finalizing the results.
     
-    Attrs:
+    Attributes:
         pre_funs (list): 
             A list of functions to be applied to the input dictionary before the evaluation functions are applied.
         evaluate_funs (list): 
@@ -71,14 +71,14 @@ class Evaluator:
         >>> e.setup.finalize_funs.append(finalize_fun)  # corresponds to step (2)
 
     Note: 
-        Combining features to reduce the number of objectives should be done with the :class:`~biophysics-fitting.combiner.Combiner` object.        
+        Combining features to reduce the number of objectives should be done with the :class:`~biophysics_fitting.combiner.Combiner` object.        
     '''
     def __init__(self):
         #self.objectives = objectives
         self.setup = Evaluator_Setup()
 
     def evaluate(self, features_dict, raise_=True):
-        '''Extracts features from a simulation result computed by :py:meth:`Simulator.run`
+        '''Extracts features from a simulation result computed by :py:meth:`biophysics_fitting.simulator.Simulator.run`
         
         Details on how to set up the Evaluator are in the docstring of the Evaluator class.
 
