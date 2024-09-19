@@ -142,7 +142,7 @@ def record_Step(cell):
 def get_Simulator(fixed_params, step=False):
     """Set up a Simulator object for the Hay stimulus protocol on a Layer 5 Pyramidal Tract (L5PT) neuron.
     
-    This method sets up a simulator object for the Hay stimulus protocol.
+    This method sets up a simulator object for the Hay :cite;t:`Hay_Hill_Schuermann_Markram_Segev_2011` stimulus protocol.
     It sets: 
     
     - The cell-specific :paramref:`fixed_params`
@@ -163,7 +163,7 @@ def get_Simulator(fixed_params, step=False):
         step (bool): Whether to include the step currents in the setup.
         
     Returns:
-        :class:`~biophysics_fitting.simulator.Simulator`: The simulator object, set up for the Hay stimulus protocol for a specific L5PT.
+        :class:`~biophysics_fitting.simulator.Simulator`: The simulator object, set up for the :cite;t:`Hay_Hill_Schuermann_Markram_Segev_2011` stimulus protocol for a specific L5PT.
         
     
     Note:
@@ -291,19 +291,19 @@ def interpolate_vt(voltage_trace_):
 def get_Evaluator(step=False, interpolate_voltage_trace=False):
     """Set up an Evaluator object for the Hay stimulus protocol on L5PTs.
     
-    This method sets up an evaluator object for the Hay stimulus protocol.
-    It sets::
+    This method sets up an evaluator object for the :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011` stimulus protocol.
+    It sets:
     
-        - The interpolation of the voltage traces (see :py:meth:`interpolate_vt`)
-        - The evaluation functions for the bAP and BAC stimuli (see :py:meth:`hay_evaluate_BAC` and :py:meth:`hay_evaluate_bAP`)
-        - (optional) The evaluation functions for the step currents (see :py:meth:`hay_evaluate_StepOne`, :py:meth:`hay_evaluate_StepTwo`, and :py:meth:`hay_evaluate_StepThree`)
+    - The interpolation of the voltage traces (see :py:meth:`interpolate_vt`)
+    - The evaluation functions for the bAP and BAC stimuli (see :py:meth:`hay_evaluate_BAC` and :py:meth:`hay_evaluate_bAP`)
+    - (optional) The evaluation functions for the step currents (see :py:meth:`hay_evaluate_StepOne`, :py:meth:`hay_evaluate_StepTwo`, and :py:meth:`hay_evaluate_StepThree`)
         
     Args:
         step (bool): Whether to include the step currents in the setup.
         interpolate_voltage_trace (bool): Whether to interpolate the voltage traces.
         
     Returns:
-        :class:`~biophysics_fitting.evaluator.Evaluator`: The evaluator object, set up for the Hay stimulus protocol.
+        :class:`~biophysics_fitting.evaluator.Evaluator`: The evaluator object, set up for the Hay :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011` stimulus protocol.
     """
     e = Evaluator()
 
@@ -348,7 +348,7 @@ def get_Combiner(step=False, include_DI3=False):
         include_DI3 (bool): Whether to include the DI3 measurement in the setup.
         
     Returns:
-        :class:`~biophysics_fitting.combiner.Combiner`: The combiner object, set up for the Hay stimulus protocol.
+        :class:`~biophysics_fitting.combiner.Combiner`: The combiner object, set up for the :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011` stimulus protocol.
     """
     #up to 20220325, DI3 has not been included and was not in the fit_features file.
     c = Combiner()
