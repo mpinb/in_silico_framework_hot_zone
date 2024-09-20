@@ -26,7 +26,7 @@ Back to :mod:`{{ parent_module }}`
    .. autosummary::
       :toctree:
    {% for item in functions %}
-      {{ item }}
+      {{ item.split('.')[-1] }}
    {%- endfor %}
    {% endif %}
    {% endblock %}
