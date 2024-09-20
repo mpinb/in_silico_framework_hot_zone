@@ -1,7 +1,7 @@
 # MAMBA pip dependencies
 # These are just a list of packages we need, but not their dependencies, nor core modules.
 #
-Werkzeug==1.0.1
+Werkzeug==3.0.4  # 1.0.1
 matplotlib==3.3.2
 mpmath==1.1.0
 numpy==1.19.2
