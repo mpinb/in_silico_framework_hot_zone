@@ -7,14 +7,10 @@
 
 {% if class_name %}
 Back to :py:class:`{{ parent_module }}.{{ class_name }}`
-{% else %}
-Back to :mod:`{{ parent_module }}`
-{% endif %}
-
-{% if class_name %}
 {{ class_name }}.{{ method_name | escape | underline }}
 .. automethod:: {{ class_name }}.{{ method_name }}
 {% else %}
+Back to :mod:`{{ parent_module }}`
 {{ method_name | escape | underline }}
 .. autofunction:: {{ method_name }}
 {% endif %}
