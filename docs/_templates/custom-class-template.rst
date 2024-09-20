@@ -17,7 +17,7 @@ Back to :mod:`{{ parent_module }}`
    :undoc-members:
    :special-members: __get__, __set__
    
-   {% set filtered_methods = methods | select("ne", "__init__") | list %}
+   {% set filtered_methods = methods | select("ne", "__init__") | selectattr("meta", "not in", ["private"]) | list %}
 
    {% block methods %} 
    {% if filtered_methods %}

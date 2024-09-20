@@ -19,8 +19,10 @@ Back to :mod:`{{ parent_module }}`
    {% endif %}
    {% endblock %}
 
-   {% block functions %}
-   {% if functions %}
+   {% set filtered_functions = functions | selectattr("meta", "not in", ["private"]) | list %}
+
+   {% block filtered_functions %}
+   {% if filtered_functions %}
    .. rubric:: {{ _('Functions') }}
 
    .. autosummary::
