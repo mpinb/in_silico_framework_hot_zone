@@ -5,11 +5,6 @@ Back to :mod:`{{ parent }}`
 
 {{ fullname.split('.')[-1] | escape | underline }}
 
-.. This template decides how the class pages look
-   autosummary directives decide what to include in the class page
-   the for loops decide which entries to add to the autosummary directive
-
-
-.. currentmodule:: {{ module }}
+.. currentmodule:: {{ parent }}
 
 .. automethod:: {{ objname }}
