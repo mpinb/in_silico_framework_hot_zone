@@ -13,7 +13,6 @@ Back to :mod:`{{ parent_module }}`
 .. currentmodule:: {{ module }}
 
 .. autoclass:: {{ objname }}
-   :members:
    :show-inheritance:
    :undoc-members:
    :special-members: __get__, __set__
