@@ -19,17 +19,17 @@ Back to :mod:`{{ parent_module }}`
    {% endif %}
    {% endblock %}
 
-   {% set filtered_functions = functions | selectattr("meta", "not in", ["private"]) | list %}
-
-   {% block filtered_functions %}
-   {% if filtered_functions %}
+   {% block functions %}
+   {% if functions %}
    .. rubric:: {{ _('Functions') }}
 
    .. autosummary::
       :toctree:
       :template: custom-method-template.rst
    {% for item in functions %}
-      {{ item.split('.')[-1] }}
+      {% if not item.meta or not item.meta.private %}
+         {{ item.split('.')[-1] }}
+      {% endif %}
    {%- endfor %}
    {% endif %}
    {% endblock %}

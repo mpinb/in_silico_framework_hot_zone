@@ -17,7 +17,7 @@ Back to :mod:`{{ parent_module }}`
    :undoc-members:
    :special-members: __get__, __set__
    
-   {% set filtered_methods = methods | select("ne", "__init__") | selectattr("meta", "not in", ["private"]) | list %}
+   {% set filtered_methods = methods | select("ne", "__init__") | list %}
 
    {% block methods %} 
    {% if filtered_methods %}
@@ -27,7 +27,9 @@ Back to :mod:`{{ parent_module }}`
       :toctree:
       :template: custom-method-template.rst
    {% for item in filtered_methods %}
-      ~{{ name }}.{{ item }}
+      {% if not item.meta or not item.meta.private %}
+         {{ item.split('.')[-1] }}
+      {% endif %}
    {%- endfor %}
    {% endif %}
    {% endblock %}
