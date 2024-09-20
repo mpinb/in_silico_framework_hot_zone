@@ -778,17 +778,18 @@ class CellParser(object):
                 exec('sec.' + s)
 
     def _add_spines(self, label, spineParam):
-        '''Adds passive spines to the membrane.
-        
+        '''
+        Adds passive spines to the membrane.
+    
         Spines are added according to spine parameters for individual (dendritic) structures
         by scaling :math:`C_m` and :math:`R_m` by :math:`F` and :math:`1/F` respectively, where
-        
+    
         .. math::
             
             F = 1 + \frac{A_{spines}}{A_{dend}}
-            
+    
         Precise morphological effects of the spines are not considered, only their effect on membrane capacitance and resistance.
-            
+    
         See also:
             :cite:t:`Koch_Segev_1998`
         '''
