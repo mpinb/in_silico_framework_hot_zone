@@ -45,7 +45,7 @@ Outputs:
   and column of anatomical synapses
 - AmiraMesh landmark file containing 3D synapse locations of anatomical
   synapses of each presynaptic type and column
-- Synapse location and connectivity file compatible with :py:mod:`simrun`.
+- Synapse location (:ref:`syn_file_format`) and connectivity (:ref:`con_file_format`) file compatible with :py:mod:`simrun`.
 """
 from __future__ import absolute_import
 
