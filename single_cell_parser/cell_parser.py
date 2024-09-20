@@ -945,8 +945,8 @@ class CellParser(object):
             user-specified fraction ("d-lambda") of :math:`\\lambda_{100}`, the length constant at 100 Hz. This
             frequency is high enough for signal propagation to be insensitive to shunting by ionic
             conductances, but it is not unreasonably high because the rise time τr of fast EPSPs and
-            spikes is ~ 1 ms, which corresponds to a bandpass of :math:`1/\\tau r 2 π \\approx 400 Hz`.
-            At frequencies where Rm can be ignored, the attenuation of signal amplitude is
+            spikes is ~ 1 ms, which corresponds to a bandpass of :math:`1/\\tau \\, 2 \\, \\pi \\, r \\approx 400 Hz`.
+            At frequencies where :math:`Rm` can be ignored, the attenuation of signal amplitude is
             described by
             
             .. math::
