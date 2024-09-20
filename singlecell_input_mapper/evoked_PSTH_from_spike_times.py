@@ -4,7 +4,7 @@ Create PSTHs from spike times.
 
 Attention:
     This module is specific to the data gathering process and file formats used by the `Oberlaender lab in Bonn <https://mpinb.mpg.de/en/research-groups/groups/in-silico-brain-sciences/research-focus-ibs.html>`_.
-    If you are in the process of adapting this module to your own data, please focus on the output format of each method, rather than tyring to apply these blindly to your files.
+    If you are in the process of adapting this module to your own data, please focus on the output format of each method, rather than trying to apply these blindly to your files.
 """
 import sys
 import numpy as np

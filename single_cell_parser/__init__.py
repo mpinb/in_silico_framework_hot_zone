@@ -1,23 +1,23 @@
-'''
-Cell parser and synapse mapper for single cell simulations.
+'''Cell API for single cell simulations.
 
 This package provides functionality to parse :class:`~single_cell_parser.cell.Cell` objects
-from NEURON hoc files, and to map synapse locations to these cells.
-It is specialized to handle biophysical models of neurons, and to run simulations with these models.
+from NEURON :ref:`hoc_file_format` files, map synapses  onto these cells, and run biophysically 
+detailed NEURON simulations with the resulting neuron-network models.
 
 Attention:
-    This package should not be confused with :py:mod:`singlecell_input_mapper.singlecell_input_mapper`. 
-    This package is specialized to handle biophysical properties of neurons.
-    It handles (among other things) synaptic activations onto a biophysically detailed neuron model, 
-    i.e. a functional network realization. To create functional network realizations, this package
-    can read in the network realization results from :py:meth:`singlecell_input_mapper.map_singlecell_inputs`.
-    Only when the activity of the presynaptic cell of each synapse is known, does the network realization
-    become a **functional** network realization.
+    This package should not be confused with :py:mod:`singlecell_input_mapper`. 
     
-    On the other hand, :py:mod:`singlecell_input_mapper.singlecell_input_mapper` is specialized to create
-    empirically consistent network realizations, without network activity or biophysical properties.
+    This package is specialized to handle biophysical properties of neurons and simulation runs, and
+    provides API access to the NEURON simulator :cite:`hines2001neuron`.
+    It handles (among other things) synaptic activations onto a biophysically detailed neuron model.
+    To assign activity to a network realization (i.e. making it a **functional** network realization),
+    this package implements only basic functionality to generate such network realizations, or activity.
     
-    Beware of the following classes and methods that are duplicates only in name:
+    :py:mod:`singlecell_input_mapper` provides extensive functionality to generate network realizations and activity,
+    constrained by empirical data. The results of such pipelines can be read in with this package.
+    To use different network models, please familiarize yourself with the :ref:`file_formats`.
+    
+    In any case, beware of the following classes and methods that are duplicates in name, but not in functionality:
     
     .. list-table:: 
         :header-rows: 1
@@ -156,7 +156,8 @@ def create_cell(
 
     Args:
         parameters (dict | dict-like):
-            A nested dictionary structure. Should include at least the keys 'filename' and one key per structure present in the :ref:`hoc_file_format` file (e.g. "AIS", "Soma" ...). 
+            A nested dictionary structure, read from a :ref:`cell_parameters_format` file. 
+            Should include at least the keys 'filename' and one key per structure present in the :ref:`hoc_file_format` file (e.g. "AIS", "Soma" ...). 
             Optional keys include: ``cell_modify_functions``, ``discretization``
         scaleFunc (bool): 
             DEPRECATED,  should be specified in the parameters, as described in :meth:`~single_cell_parser.cell_modify_funs`
@@ -166,43 +167,6 @@ def create_cell(
         setUpBiophysics (bool): 
             Whether or not to insert mechanisms corresponding to the biophysical parameters in ``parameters``
         
-    Example:
-    
-        >>> parameters
-        {
-            'info': {...},
-            'neuron': {
-                'filename': 'getting_started/example_data/anatomical_constraints/*.hoc',
-                'Soma': {
-                    'properties': {
-                        'Ra': 100.0,
-                        'cm': 1.0,
-                        'ions': {'ek': -85.0, 'ena': 50.0}
-                        },
-                    'mechanisms': {
-                        'global': {},
-                        'range': {
-                            'pas': {
-                                'spatial': 'uniform',
-                                'g': 3.26e-05,
-                                'e': -90},
-                            'Ca_LVAst': {
-                                'spatial': 'uniform',
-                                'gCa_LVAstbar': 0.00462},
-                            'Ca_HVA': {...},
-                            ...,}}},
-                'Dendrite': {...},
-                'ApicalDendrite': {...},
-                'AIS': {...},
-                'Myelin': {...},
-            'sim': {
-                'Vinit': -75.0,
-                'tStart': 0.0,
-                'tStop': 250.0,
-                'dt': 0.025,
-                'T': 34.0,
-                'recordingSites': ['getting_started/example_data/apical_proximal_distal_rec_sites.landmarkAscii']}
-        }
     '''
     if scaleFunc is not None:
         warnings.warn(
