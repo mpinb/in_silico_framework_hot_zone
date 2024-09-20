@@ -82,7 +82,7 @@ def _evoked_activity(
         While the random state is set for the network embedding, capturing animal-to-animal and cell-to-cell
         anatomical variability, the random state is not used for the synaptic input patterns.
         Stochasticity in activity is introduced each time the activity generation method is called 
-        (see e.g. :py:meth`~single_cell_parser.cell.PointCell.compute_spike_train_times`).
+        (see e.g. :py:meth:`~single_cell_parser.cell.PointCell.compute_spike_train_times`).
         This means that the same seed will produce the same network embedding, but different synaptic input patterns.
         For this reason, the exact synaptic activations for each simulation run are saved as output data.
 
