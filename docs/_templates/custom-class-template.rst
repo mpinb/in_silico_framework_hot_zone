@@ -25,6 +25,7 @@ Back to :mod:`{{ parent_module }}`
    .. rubric:: {{ _('Methods') }}
 
    .. autosummary::
+      :toctree:
    {% for item in filtered_methods %}
       ~{{ name }}.{{ item }}
    {%- endfor %}
