@@ -946,7 +946,7 @@ class CellParser(object):
             frequency is high enough for signal propagation to be insensitive to shunting by ionic
             conductances, but it is not unreasonably high because the rise time τr of fast EPSPs and
             spikes is ~ 1 ms, which corresponds to a bandpass of :math:`1/\\tau \\, 2 \\, \\pi \\, r \\approx 400 Hz`.
-            At frequencies where :math:`Rm` can be ignored, the attenuation of signal amplitude is
+            At frequencies where :math:`R_m` can be ignored, the attenuation of signal amplitude is
             described by
             
             .. math::
