@@ -44,4 +44,4 @@ dash==2.9.3
     plotly==4.14.3
     # flask technically in conflict with Werkzeug 1.0.1
     # But we don't want to break other things by updating werkzeug
-    flask==1.1.2
+    flask==2.0.3
