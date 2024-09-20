@@ -1,3 +1,5 @@
+.. _file_formats:
+
 ============
 File formats
 ============
@@ -121,14 +123,64 @@ Example::
     VPM_E1  11      0.120662910562
     ...
 
+.. _param_file_format:
+
 .param
 ======
 ISF custom file format to save JSON-like ASCII data. These can be read in using :py:mod:`single_cell_parser`.
 Used in a variety of ways, as seen below.
 
+.. _cell_parameters_format:
+
+Cell parameters
+---------------
+
+:ref:`param_file_format` file to store biophysical parameters of a cell.
+Includes the path to the :ref:`hoc_file_format` morphology file, biophysical properties of the cell per cellular structure (i.e. soma, dendrite, axon initial segment ...),
+and basic simulation parameters. Simulation parameters are usually overridden by higher level modules, such as :py:mod:`simrun`.
+
+Example::
+
+    {
+        'info': {...},
+        'neuron': {
+            'filename': 'getting_started/example_data/anatomical_constraints/*.hoc',
+            'Soma': {
+                'properties': {
+                    'Ra': 100.0,
+                    'cm': 1.0,
+                    'ions': {'ek': -85.0, 'ena': 50.0}
+                    },
+                'mechanisms': {
+                    'global': {},
+                    'range': {
+                        'pas': {
+                            'spatial': 'uniform',
+                            'g': 3.26e-05,
+                            'e': -90},
+                        'Ca_LVAst': {
+                            'spatial': 'uniform',
+                            'gCa_LVAstbar': 0.00462},
+                        'Ca_HVA': {...},
+                        ...,}}},
+            'Dendrite': {...},
+            'ApicalDendrite': {...},
+            'AIS': {...},
+            'Myelin': {...},
+        'sim': {
+            'Vinit': -75.0,
+            'tStart': 0.0,
+            'tStop': 250.0,
+            'dt': 0.025,
+            'T': 34.0,
+            'recordingSites': ['getting_started/example_data/apical_proximal_distal_rec_sites.landmarkAscii']}
+    }
+
+.. _activity_data_format:
+
 Activity data
 -------------
-The `.param` format is used to store activity data covering spike times and time bins for specific cell types in response to a stimulus, as seen in e.g. getting_started/example_data/functional_constraints/evoked_activity/
+:ref:`param_file_format` files are used to store activity data covering spike times and time bins for specific cell types in response to a stimulus, as seen in e.g. getting_started/example_data/functional_constraints/evoked_activity/
 
 Example::
 
@@ -150,7 +202,7 @@ Example::
 
 Network parameters
 ------------------
-The `.param` format is used to store network parameters, containing information for each cell type in a network.
+The :ref:`param_file_format` format is used to store network parameters, containing information for each cell type in a network.
 For each presynaptic cell type in the network, this following information is provided:
 
 .. list-table:: Network Parameters
@@ -239,15 +291,15 @@ Writers:
 
 Example:
 
-    +---------------------+-------------+---------------+-------------+----------------+----------------+-------------------+
-    | synapse type        | synapse ID  | soma distance | section ID  | section pt ID  | dendrite label | activation times  |
-    +=====================+=============+===============+=============+================+================+===================+
-    | presyn_cell_type_1  | 0           | 150.0         | 24          | 0              | 'basal'        | 10.2,80.5,140.8   |
-    +---------------------+-------------+---------------+-------------+----------------+----------------+-------------------+
-    | presyn_cell_type_1  | 1           | 200.0         | 112         | 0              | 'apical'       |                   |
-    +---------------------+-------------+---------------+-------------+----------------+----------------+-------------------+
-    | presyn_cell_type_2  | 2           | 250.0         | 72          | 0              | 'apical'       | 300.1,553.5       |
-    +---------------------+-------------+---------------+-------------+----------------+----------------+-------------------+
+    +-------------+---------------------+-------------+---------------+-------------+----------------+----------------+-------------------+
+    | trial index | synapse type        | synapse ID  | soma distance | section ID  | section pt ID  | dendrite label | activation times  |
+    +=============+=====================+=============+===============+=============+================+================+===================+
+    | 0           | presyn_cell_type_1  | 0           | 150.0         | 24          | 0              | 'basal'        | 10.2,80.5,140.8   |
+    +-------------+---------------------+-------------+---------------+-------------+----------------+----------------+-------------------+
+    | 0           | presyn_cell_type_1  | 1           | 200.0         | 112         | 0              | 'apical'       |                   |
+    +-------------+---------------------+-------------+---------------+-------------+----------------+----------------+-------------------+
+    | 0           | presyn_cell_type_2  | 2           | 250.0         | 72          | 0              | 'apical'       | 300.1,553.5       |
+    +-------------+---------------------+-------------+---------------+-------------+----------------+----------------+-------------------+
 
 .. _spike_times_format:
 
