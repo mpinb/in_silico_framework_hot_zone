@@ -1,9 +1,7 @@
+'''Read and parse a :class:`single_cell_parser.cell.Cell` object from a NEURON :ref:`hoc_file_format` file.
 '''
-
-abast: 
-february 2019: deprecated scaleFunc keyword, added support to specify cell_modify_functions 
-within the parameters
-'''
+__author__ = 'Robert Egger, Arco Bast'
+__credits__ = ['Robert Egger', 'Arco Bast']
 
 import warnings, traceback
 from neuron import h
@@ -22,15 +20,22 @@ logger = logging.getLogger("ISF").getChild(__name__)
 
 
 class CellParser(object):
-    '''
-    This class provides methods for setting up a morphology from a NEURON hoc object
+    '''Set up a morphology from a NEURON hoc object
+    
+    Attributes:
+        hoc_path (str): Path to hoc file
+        membraneParams (dict): Membrane parameters
+        cell_modify_functions_applied (bool): 
+            Whether or not cell modify functions have already been applied. See: :py:meth:`single_cell_parser.cell_parser.CellParser.apply_cell_modify_functions`
+        cell (:class:`single_cell_parser.cell.Cell`): Cell object.
     '''
     #    h = neuron.h
     cell = None
 
     def __init__(self, hocFilename=''):
         '''
-        Constructor
+        Args:
+            hocFilename (str): Path to :ref:`hoc_file_format` file.
         '''
         self.hoc_path = hocFilename
         #         self.hoc_fname = self.hoc_path.split('/')[-1]
@@ -44,12 +49,21 @@ class CellParser(object):
         self.cell_modify_functions_applied = False
 
     def spatialgraph_to_cell(self, parameters, axon=False, scaleFunc=None):
-        '''
-        reads cell morphology from Amira hoc file
-        and sets up PySections and Cell object
-        optional: takes function object scaleFunc as argument
-        for scaling dendritic diameters.
-        scaleFunc takes cell object as argument
+        '''Create a :class:`single_cell_parser.cell.Cell` object from an AMIRA spatial graph in :ref:`hoc_file_format` format.
+        
+        Reads cell morphology from Amira hoc file and sets up PySections and Cell object.
+        
+        Args:
+            parameters (dict): Neuron biophysical parameters, read from a :ref:`cell_parameters_format` file.
+            axon (bool): Whether or not to add an axon initial segment (AIS). AIS creation is according to :cite:t:`Hay_Schuermann_Markram_Segev_2013`.
+            scaleFunc (callable, optional): Optional function object that scales dendritic diameters.
+                **Deprecated**: This argument is deprecated and will be removed in a future version.
+        
+        .. deprecated:: 1.0
+            The `scaleFunc` argument is deprecated and will be removed in a future version.
+            To ensure reproducability, scaleFunc should be specified in the parameters, as 
+            described in :py:mod:`~single_cell_parser.cell_modify_funs`
+        
         '''
         edgeList = reader.read_hoc_file(self.hoc_path)
         #part1 = self.hoc_fname.split('_')[0]
@@ -131,17 +145,32 @@ class CellParser(object):
             scaleFunc(self.cell)
 
     def set_up_biophysics(self, parameters, full=False):
-        '''
-        Default method for initializing membrane properties
-        (e.g. cm, Rm, spines), linear and non-linear mechanisms
-        and determine the compartment sizes for the simulations.
+        '''Initialize membrane properties.
         
-        Parameters should be the parameters of the postsynaptic neuron from the parameter file.
-        This is the preferred method for setting up biophysics.
-
+        Default method for determining the compartment sizes for NEURON simulation, initializing membrane properties, and mechanisms.
+        Properties are constants that are defined for an entire structure. Mechanisms have specific densities (not always uniform), and can be transient.
+        Poperties are added to the section by executing the NEURON command ``sec.<property>=<value>``.
+        
+        - Properties:
+            - :math:`C_m` (see :py:meth:`insert_membrane_properties`)
+            - :math:`R_a` (see :py:meth:`insert_membrane_properties`)
+            - ion properties (see :py:meth:`_insert_ion_properties`)
+        - Mechanisms:
+            - range mechanisms (see :py:meth:`insert_range_mechanisms`)
+            
+        The workflow is as follows:
+        
+        1. Add membrane properties to all structures (see :py:meth:`insert_membrane_properties`).
+        2. Determine the number of segments for each structure (see :py:meth:`determine_nseg`).
+        3. Add range mechanisms to all structures (see :py:meth:`insert_range_mechanisms`).
+        4. Add ion properties to all structures (see :py:meth:`_insert_ion_properties`), if the ``ion`` keyword is present in the :ref:`cell_parameters_format` file.
+        5. Add spines, if the ``spines`` keyword is present in the :ref:`cell_parameters_format` file.
+            5.1 Add passive spines if ``pas`` is present in the range mechanisms (see :py:meth:`_add_spines`).
+            5.2 Add passive spines to anomalously rectifying membrane if ``ar`` is present in the range mechanisms (see :py:meth:`_add_spines_ar`).
+                
         Args:
-            - parameters
-            - full (bool)
+            parameters (dict): Neuron biophysical parameters, read from a :ref:`cell_parameters_format` file.
+            full (bool): Whether or not to use full spatial discretization.
         '''
         for label in list(parameters.keys()):
             if label == 'filename':
@@ -183,14 +212,17 @@ class CellParser(object):
                         continue
             except AttributeError:
                 pass
+            
             logger.info('    Adding membrane range mechanisms to %s' % label)
             self.insert_range_mechanisms(
                 label,
                 parameters[label].mechanisms.range)
+            
             if 'ions' in parameters[label].properties:
                 self._insert_ion_properties(
                     label,
                     parameters[label].properties.ions)
+            
             #  add spines if desired
             if 'pas' in parameters[label].mechanisms.range\
                 and 'spines' in parameters[label].properties:
@@ -206,6 +238,14 @@ class CellParser(object):
         self.cell.neuron_param = parameters
 
     def apply_cell_modify_functions(self, parameters):
+        """Apply cell modify functions to the cell object.
+        
+        Cell modify functions that appear in the :ref:`cell_parameters_format` file are applied to the cell object.
+        For a list of possible cell modify functions, refer to :py:mod:`~single_cell_parser.cell_modify_functions`.
+        
+        Args:
+            parameters (dict): Neuron parameters, read from a :ref:`cell_parameters_format` file.
+        """
         if 'cell_modify_functions' in list(parameters.keys()):
             if self.cell_modify_functions_applied == True:
                 logger.warning('Cell modify functions have already been applied. We '+\
@@ -226,18 +266,29 @@ class CellParser(object):
         self.cell.neuron_param = parameters
 
     def get_cell(self):
-        '''
-        returns cell if it is set up for simulations
+        '''Returns cell if it is set up for simulations.
+        
+        Raises:
+            RuntimeError: If cell is not set up.
+            
+        Returns:
+            :class:`single_cell_parser.cell.Cell`: Cell object.
         '''
         if self.cell is None:
-            raise RuntimeError(
-                'Trying to start simulation with empty morphology')
+            raise RuntimeError('Trying to start simulation with empty morphology')
         return self.cell
 
     def insert_membrane_properties(self, label, props):
-        '''
-        inserts membrane properties into all 
-        structures named as "label"
+        '''Inserts membrane properties into all structures named as :paramref:`label`.
+        
+        Args:
+            label (str): Label of the structure.
+            props (dict): Membrane properties. 
+                Keys named ``spines`` or ``ions`` are ignored, 
+                as they are taken care of by :py:meth:`insert_range_mechanisms` and :py:meth:`_insert_ion_properties`.
+                
+        Raises:
+            RuntimeError: If the structure has not been parsed from the :ref:`hoc_file_format` file yet.
         '''
         if self.cell is None:
             raise RuntimeError(
@@ -263,10 +314,41 @@ class CellParser(object):
                 exec('sec.' + s)
 
     def insert_range_mechanisms(self, label, mechs):
-        '''
-        inserts range mechanisms into all structures named as "label"
-        so far, only implements spatially uniform distributions, but easily
-        extendable to other functional forms (e.g., piece-wise constant, linear etc.)
+        '''Inserts range mechanisms into all structures named as :paramref:`label`.
+        
+        Range mechanism specifications can be found in :py:mod:`mechanisms`.
+        
+        Args:
+            label (str): Label of the structure.
+            mechs (dict): Range mechanisms. Must contain the key ``spatial`` to define the spatial distribution. Possible values for spatial distributions are given below.
+            
+        Raises:
+            RuntimeError: If the structure has not been parsed from the :ref:`hoc_file_format` file yet.
+            NotImplementedError: If the spatial distribution is not implemented.
+                
+        
+        The following table lists the possible spatial keywords of ``mech``, the additional keys each spatial key requires, and its description:
+        
+        +------------------------+-------------------------------------------------------------+-------------------------------------------------------------+
+        | Spatial Key            | Additional Keys                                             | Math Equation                                                |
+        +========================+=============================================================+=============================================================+
+        | uniform                | None                                                        | :math:`y = c`                                                |
+        +------------------------+-------------------------------------------------------------+-------------------------------------------------------------+
+        | linear                 | ``slope``, ``offset``                                       | :math:`y = \text{slope} \cdot x + \text{offset}`             |
+        +------------------------+-------------------------------------------------------------+-------------------------------------------------------------+
+        | linear_capped          | ``prox_value``, ``dist_value``, ``dist_value_distance``     | :math:`y = \min(\text{prox_value} + \frac{\text{dist_value} - \text{prox_value}}{\text{dist_value_distance}} x, \text{dist_value})` |
+        +------------------------+-------------------------------------------------------------+-------------------------------------------------------------+
+        | exponential            | ``offset``, ``linScale``, ``_lambda``, ``xOffset``          | :math:`y = \text{offset} + \text{linScale} \cdot e^{-\frac{x - \text{xOffset}}{\lambda}}` |
+        +------------------------+-------------------------------------------------------------+-------------------------------------------------------------+
+        | exponential_by_z_dist  | ``offset``, ``linScale``, ``_lambda``, ``xOffset``          | :math:`y = \text{offset} + \text{linScale} \cdot e^{-\frac{z - \text{xOffset}}{\lambda}}` |
+        +------------------------+-------------------------------------------------------------+-------------------------------------------------------------+
+        | capped_exponential     | ``offset``, ``linScale``, ``_lambda``, ``xOffset``, ``max_g`` | :math:`y = \min(\text{offset} + \text{linScale} \cdot e^{-\frac{x - \text{xOffset}}{\lambda}}, \text{max_g})` |
+        +------------------------+-------------------------------------------------------------+-------------------------------------------------------------+
+        | sigmoid                | ``offset``, ``linScale``, ``xOffset``, ``width``            | :math:`y = \text{offset} + \frac{\text{linScale}}{1 + e^{\frac{x - \text{xOffset}}{\text{width}}}}` |
+        +------------------------+-------------------------------------------------------------+-------------------------------------------------------------+
+        | uniform_range          | ``begin``, ``end``, ``outsidescale``, ``outsidescale_sections`` | :math:`y = c` for :math:`\text{begin} \leq x \leq \text{end}`, :math:`y = c \cdot \text{outsidescale}` otherwise |
+        +------------------------+-------------------------------------------------------------+-------------------------------------------------------------+
+        
         '''
         if self.cell is None:
             raise RuntimeError(
@@ -282,9 +364,8 @@ class CellParser(object):
 
         for mechName in list(mechs.keys()):
             mech = mechs[mechName]
-            logger.info(
-                '        Inserting mechanism %s with spatial distribution %s' %
-                (mechName, mech.spatial))
+            logger.info('        Inserting mechanism %s with spatial distribution %s' %(mechName, mech.spatial))
+            
             if mech.spatial == 'uniform':
                 ''' spatially uniform distribution'''
                 paramStrings = []
@@ -354,8 +435,7 @@ class CellParser(object):
                             exec(s)
                             
             elif mech.spatial == 'linear_capped':
-                ''' spatially linear distribution which reaches a constant value 
-                after a specified soma distance'''
+                ''' spatially linear distribution which reaches a constant value after a specified soma distance'''
                 maxDist = self.cell.max_distance(label)
                 #                set origin to 0 of first branch with this label
                 if label == 'Soma':
@@ -622,11 +702,21 @@ class CellParser(object):
                 raise NotImplementedError(errstr)
 
     def update_range_mechanisms(self, label, updateMechName, mechs):
-        '''
-        updates range mechanism 'updateMechName' in all structures named as "label".
-        essentially the same as insert_range_mechanisms, but does not
-        insert mechanism; instead assumes they're already present.
-        used during parameter variations; e.g. for optimization of neuron models.
+        '''Updates range mechanism :paramref:`updateMechName` in all structures named as :paramref:`label`.
+        
+        This method is essentially the same as insert_range_mechanisms, but does not
+        insert mechanisms. Instead assumes they're already present.
+        
+        Used during parameter variations; e.g. for optimization and exploration of neuron models (see :py:mod:`biophysics_fitting`).
+        
+        Args:
+            label (str): Label of the structure.
+            updateMechName (str): Name of the mechanism to update.
+            mechs (dict): Range mechanisms. Must contain the key ``spatial`` to define the spatial distribution. Possible values for spatial distributions are given in :py:meth:`insert_range_mechanisms`.
+            
+        Raises:
+            RuntimeError: If the structure has not been parsed from the :ref:`hoc_file_format` file yet.
+            NotImplementedError: If the spatial distribution is not implemented.
         '''
         if self.cell is None:
             raise RuntimeError(
@@ -660,9 +750,11 @@ class CellParser(object):
             raise NotImplementedError(errstr)
 
     def _insert_ion_properties(self, label, ionParam):
-        '''
-        inserts membrane properties into all 
-        structures named as "label"
+        '''Inserts ion properties into all structures named as :paramref:`label`
+        
+        Args:
+            label (str): Label of the structure.
+            ionParam (dict): Ion properties. See :ref:`cell_parameters_format` for an example.
         '''
         if self.cell is None:
             raise RuntimeError(
@@ -686,11 +778,19 @@ class CellParser(object):
                 exec('sec.' + s)
 
     def _add_spines(self, label, spineParam):
-        '''
-        adds passive spines to membrane according to spine
-        parameters for individual (dendritic) structures
-        by scaling cm and Rm by F and 1/F respectively,
-        where F = 1 + A(spines)/A(dend) (see Koch & Segev 1999)
+        '''Adds passive spines to the membrane.
+        
+        Spines are added according to spine parameters for individual (dendritic) structures
+        by scaling :math:`C_m` and :math:`R_m` by :math:`F` and :math:`1/F` respectively, where
+        
+        .. math::
+            
+            F = 1 + \frac{A_{spines}}{A_{dend}}
+            
+        Precise morphological effects of the spines are not considered, only their effect on membrane capacitance and resistance.
+            
+        See also:
+            :cite:t:`Koch_Segev_1998`
         '''
         if self.cell is None:
             raise RuntimeError(
@@ -716,12 +816,16 @@ class CellParser(object):
                 seg.g_pas = seg.g_pas * F
 
     def _add_spines_ar(self, label, spineParam):
-        '''
-        adds passive spines to anomalously rectifying membrane
-        (Waters and Helmchen 2006) according to spine
-        parameters for individual (dendritic) structures
-        by scaling cm and Rm by F and 1/F respectively,
-        where F = 1 + A(spines)/A(dend) (see Koch & Segev 1999)
+        '''Adds passive spines to anomalously rectifying membrane :cite:`Waters_Helmchen_2006`.
+        
+        Spines are added according to spine parameters for individual (dendritic) structures
+        by scaling :math:`C_m` and :math:`R_{N,0}` by :math:`F` and :math:`1/F` respectively, where
+        
+        .. math::
+            
+            F = 1 + \frac{A_{spines}}{A_{dend}}
+            
+        Precise morphological effects of the spines are not considered, only their effect on membrane capacitance and resistance. 
         '''
         if self.cell is None:
             raise RuntimeError(
@@ -745,12 +849,20 @@ class CellParser(object):
             sec.cm = sec.cm * F
             for seg in sec:
                 seg.g0_ar = seg.g0_ar * F
-               # seg.c_ar = seg.c_ar*F*F
+               # seg.c_ar = seg.c_ar*F*F  # quadratic term
 
     def insert_passive_membrane(self, label):
+        """Set up a passive membrane with default values.
+        
+        Sets up the cell structure :paramref:`label` with a passive membrane that has the following properties:
+        
+        * :math:`R_a = 200 \Omega \cdot cm`
+        * :math:`C_m = 0.75 \mu F/cm^2`
+        * :math:`g_{pas} = 0.00025 S/cm^2`
+        * :math:`E_{pas} = -60 mV`
+        """
         if self.cell is None:
-            raise RuntimeError(
-                'Trying to insert membrane properties into empty morphology')
+            raise RuntimeError('Trying to insert membrane properties into empty morphology')
         if label != 'Soma' and label not in self.cell.branches:
             errstr = 'Trying to insert membrane properties, but %s has not' % label\
                                +' yet been parsed as hoc'
@@ -770,6 +882,23 @@ class CellParser(object):
                     seg.pas.e = -60.0
 
     def insert_hh_membrane(self, label):
+        """Set up a Hodgkin-Huxley membrane with default values.
+        
+        Sets up the cell structure :paramref:`label` with a Hodgkin-Huxley membrane that has the following properties:
+        
+        
+        * :math:`\bar{g}_{L} = 0.0003 \, S/cm^2`
+        * :math:`E_{L} = -54.3 \, mV`
+        - Soma:
+            * :math:`\bar{g}_{Na} = 0.003 \, S/cm^2`
+            * :math:`\bar{g}_{K} = 0.01 \, S/cm^2`
+        - Axon:
+            * :math:`\bar{g}_{Na} = 3.0 \, S/cm^2`
+            * :math:`\bar{g}_{K} = 0.0 \, S/cm^2`
+        - Dendrite:
+            * :math:`\bar{g}_{Na} = 0.003 \, S/cm^2`
+            * :math:`\bar{g}_{K} = 0.01 \, S/cm^2`
+        """
         if self.cell is None:
             raise RuntimeError(
                 'Trying to insert membrane properties into empty morphology')
@@ -801,9 +930,38 @@ class CellParser(object):
                         seg.hh.el = -54.3
 
     def determine_nseg(self, f=100.0, full=False, max_seg_length=None):
-        '''
-        determine the number of segments (compartments) to be used according to the d-lambda rule
-        optionally set frequency, default f=100.0 Hz
+        '''Determine the number of segments for each section according to the d-lambda rule.
+
+        Args:
+            f (float, optional): frequency used for determining discretization. Default is 100.0 Hz.
+            full (bool, optional): Whether or not to use full spatial discretization (one segment per morphology point). Default is False.
+            max_seg_length (float, optional): Maximum segment length. Default is None.
+            
+        Note:
+            The d-lambda rule predicates the spatial grid on the AC length constant :math:`\lambda_f`
+            computed at a frequency :math:`f` that is high enough for transmembrane current to be primarily
+            capacitive, yet still within the range of frequencies relevant to neuronal function.
+            :cite:t:`hines2001neuron` suggested that the distance between adjacent nodes should be no larger than a
+            user-specified fraction ("d-lambda") of :math:`\lambda_{100}`, the length constant at 100 Hz. This
+            frequency is high enough for signal propagation to be insensitive to shunting by ionic
+            conductances, but it is not unreasonably high because the rise time τr of fast EPSPs and
+            spikes is ~ 1 ms, which corresponds to a bandpass of :math:`1/\tau r 2 π \approx 400 Hz`.
+            At frequencies where Rm can be ignored, the attenuation of signal amplitude is
+            described by
+            
+            .. math::
+            
+                \log \left| \frac{V_0}{V_x} \right| \approx 2 x \sqrt{\frac{\pi f R_a C_m}{d}}
+        
+            So the distance over which an e-fold attenuation occurs is
+            
+            .. math::
+            
+                \lambda_f \approx \frac{1}{2} \sqrt{\frac{d}{\pi f R_a C_m}}
+        
+
+        See also:
+            :cite:t:`hines2001neuron` (Chapter 5).
         '''
         totalNSeg = 0
         maxL = 0.0
@@ -827,8 +985,7 @@ class CellParser(object):
                             maxLabel = label
                     else:
                         d = sec.diamList[sec.nrOfPts // 2]
-                        _lambda = 100000 * math.sqrt(
-                            d / (4 * np.pi * f * sec.Ra * sec.cm))
+                        _lambda = 100000 * math.sqrt(d / (4 * np.pi * f * sec.Ra * sec.cm))
                         nrOfSegments = int(((sec.L /
                                              (0.1 * _lambda) + 0.5) // 2) * 2 +
                                            1)
@@ -838,8 +995,8 @@ class CellParser(object):
                                 nrOfSegments = int(
                                     np.ceil(
                                         float(sec.L) / float(max_seg_length)))
-#                        nrOfSegments = 1 + 2*int(sec.L/40.0)
-#                        nrOfSegments = int(((sec.L/(0.05*_lambda) + 0.5)//2)*2 + 1)
+                        # nrOfSegments = 1 + 2*int(sec.L/40.0)
+#                        # nrOfSegments = int(((sec.L/(0.05*_lambda) + 0.5)//2)*2 + 1)
                         sec.set_segments(nrOfSegments)
                         totalNSeg += nrOfSegments
                         tmpL = sec.L / nrOfSegments
@@ -848,10 +1005,9 @@ class CellParser(object):
                             maxL = tmpL
                             maxLabel = label
 
-
-#                    logger.info sec.name()
-#                    logger.info '\tnr of points: %d' % sec.nrOfPts
-#                    logger.info '\tnr of segments: %d' % sec.nseg
+                    # logger.info sec.name()
+                    # logger.info '\tnr of points: %d' % sec.nrOfPts
+                    # logger.info '\tnr of segments: %d' % sec.nseg
         totalL = avgL
         avgL /= totalNSeg
         logger.info(
@@ -863,10 +1019,15 @@ class CellParser(object):
         logger.info('    Maximum compartment (%s) length: %.2f' % (maxLabel, maxL))
 
     def _create_ais(self):
-        '''create axon hillock and AIS for proper spike initiation
-        according to Mainen et al. Neuron 1995
-        connectivity is automatically taken care of
-        since this should only be called from spatialgraph_to_cell()!!!'''
+        '''Create axon hillock and AIS according to :cite:t:`Mainen_Joerges_Huguenard_Sejnowski_1995`
+        
+        .. deprecated:: 0.1.0
+            This method is deprecated in favor of the more recent :py:meth:`_create_ais_Hay2013`.
+       
+        Note:
+            Connectivity is automatically taken care of, since this should only be called from :py:meth:`spatialgraph_to_cell`.
+        
+        '''
         nseg = 11  # nr of segments for hillock/ais
 
         somaDiam = 2 * np.sqrt(h.area(0.5, sec=self.cell.soma) / (4 * np.pi))
@@ -972,10 +1133,13 @@ class CellParser(object):
             myelinBegin = node[-1]
 
     def _create_ais_Hay2013(self):
-        '''create axon hillock and AIS for proper spike initiation
-        according to Hay et al. J Neurophys 2013
-        connectivity is automatically taken care of
-        since this should only be called from spatialgraph_to_cell()!!!'''
+        '''Create axon hillock and AIS according to :cite:t:`Hay_Schuermann_Markram_Segev_2013`
+        
+        Note:
+            connectivity is automatically taken care of since this should only be called from spatialgraph_to_cell()
+            
+        '''
+        
         '''myelin'''
         myelinDiam = 1.0  # [um]
         myelinLength = 1000.0  # [um]
@@ -1060,6 +1224,18 @@ class CellParser(object):
         self.cell.sections.append(hMyelin)
 
     def rieke_spines(self, parameters):
+        """Add spines with morphological features to the neuron.
+        
+        .. deprecated:: 0.1.0
+            Including specific morphological features of spines provided no substantial physiological differences
+            compared to simply scaling the membrane capacitance and resistance of the dendritic structures (see :py:meth:`_add_spines`).
+            However, computation time substantially increased.
+            
+        Args:
+            parameters (dict): Parameters for spine morphology. See :ref:`cell_parameters_format` for an example.
+        
+        :meta private:
+        """
         spineneckDiam = parameters.spatialgraph_modify_functions.rieke_spines.spine_morphology.spineneckDiam
         spineneckLength = parameters.spatialgraph_modify_functions.rieke_spines.spine_morphology.spineneckLength
 

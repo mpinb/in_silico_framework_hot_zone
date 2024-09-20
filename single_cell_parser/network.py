@@ -285,8 +285,8 @@ class NetworkMapper:
             corresponding functional realizations already in it.
                  
         Attention: 
-            assumes path names to anatomical realization files     
-            work from the working directory! so should be correct relative, or
+            Assumes path names to anatomical realization files     
+            work from the working directory! So they should be correct relative, or
             preferably absolute paths.
 
         Returns:
@@ -832,8 +832,7 @@ class NetworkMapper:
                 rates[0] = rate_before_t_offset
                 spikeTimes = sample_times_from_rates(bins, rates)
                 for spike_time in spikeTimes:
-                    cell.append(spike_time,
-                                spike_source='poissontrain_modulated')
+                    cell.append(spike_time, spike_source='poissontrain_modulated')
 
         else:
             errstr = 'Unknown spike time distribution: %s' % dist
@@ -1554,6 +1553,8 @@ def activate_functional_synapse(
     This method simulates the activation of a single synapse onto a biophysically detailed neuron model using NEURON.
 
     The activation times for the synapse can be passed explicitly, or generated in case :paramref:`releaseTimes` is ``None``.
+    In the latter case, this method generates release times based on the synapse's release probability from :paramref:`synParameters`,
+    and spike times of :paramref:`preSyncell`.
     
     If they need to be generated (default behavior), the release times are calculated from the ``releaseProb`` keyword in the synapse parameter file.
     If the ``releaseProb`` is not given, or set to ``'dynamic'``, the synapse is assumed to release each time the presynaptic cell spikes.
@@ -1570,10 +1571,11 @@ def activate_functional_synapse(
         tChange (float): Time at which the synapse parameters change (e.g. the release probability due to a spike).
         synParametersChange (dict): Synapse parameters after change (including e.g. the release probability).
         forceSynapseActivation (bool): If True, the synapse is activated regardless of the release probability.
-        releaseTimes (list): 
+        releaseTimes (list):
             List of synaptic release times.
             If None, the release times are generated from the :paramref:`synapseParameters`'s ``releaseProb`` keyword,
-            or (if not given) the presynaptic cell's spike times, with an assumed release probability of 1.
+            If None and ``releaseprob`` does not appear in :paramref:`synapseParameters`, the release probability is assumed to equal 1,
+            and synapse release times equal presynaptic spike times without delay.
     '''
     #     try:
     #         conductance_delay = synParameters.delay

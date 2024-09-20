@@ -1,4 +1,6 @@
 '''Create anatomical and functional network realizations.
+
+For more fine-grained control over the creation of anatomical network realizations, please refer to :py:mod:`singlecell_input_mapper.singlecell_input_mapper`.
 '''
 
 import os, time
@@ -14,6 +16,7 @@ __date__    = '2013-02-01'
 
 
 def create_synapse_realization(pname):
+    """Create a synapse realization from a :ref:`network_parameters_format` file."""
     parameters = build_parameters(pname)
     cellParam = parameters.network.post
     preParam = parameters.network.pre
@@ -45,11 +48,15 @@ def create_synapse_realization(pname):
 
 
 def create_functional_network(cellParamName, nwParamName):
-    '''
-    Public interface:
-    used for creating fixed functional connectivity.
-    cellParamName - parameter file of postsynaptic neuron
-    nwParamName - parameter file of anatomical network
+    '''Create fixed functional connectivity based on ``convergence``.
+    
+    Creates anatomical realizations based on the ``convergence`` parameter (i.e. cell type specific connection probability, see :py:meth:`~single_cell_parser.network.NetworkMapper.create_functional_realization`).
+    For more fine-grained control over anatomically consistent network realizations, please refer to :py:mod:`singlecell_input_mapper.singlecell_input_mapper`,
+    The results of the :py:mod:`singlecell_input_mapper.map_single_cell_inputs` can be read in with :py:meth:`~single_cell_parser.network.NetworkMapper.create_saved_network2`.
+    
+    Args:
+        cellParamName (str): Parameter file of postsynaptithe c neuron
+        nwParamName (str): :ref:`network_parameter_format` file.
     '''
     preParam = build_parameters(cellParamName)
     neuronParam = preParam.neuron

@@ -19,16 +19,17 @@ class Synapse(object):
     Attributes:
         secID (int): ID of attached section in cell.sections
         ptID (int): ID of attached point in cell.sections[self.secID].pts
-        x (float): relative coordinate along attached section (from 0 to 1)
-        preCellType (str): reference to presynaptic cell (PointCell)
-        preCell (PointCell): reference to presynaptic release site (PointCell)
-        postCellType (str): reference to postsynaptic cell (PointCell)
+        x (float): Relative coordinate along attached section (from 0 to 1)
+        preCellType (str): Reference to presynaptic cell (PointCell)
+        preCell (PointCell): Reference to presynaptic cell (PointCell)
+        releaseSite (PointCell): Release site of presynaptic cell.
+        postCellType (str): Reference to postsynaptic cell (PointCell)
         coordinates (list): 3D coordinates of synapse location
-        receptors (dict): stores hoc mechanisms
-        netcons (list): stores NetCons
-        weight (float): synaptic weight
-        _active (bool): activation status
-        pruned (bool): pruning status
+        receptors (dict): Stores hoc mechanisms
+        netcons (list): Stores NetCons
+        weight (float): Synaptic weight
+        _active (bool): Activation status
+        pruned (bool): Pruning status
     '''
 
     def __init__(
@@ -65,7 +66,13 @@ class Synapse(object):
 
     def activate_hoc_syn(self, source, preCell, targetCell, receptors):
         '''setup of all necessary hoc connections.
-        stores all mechanisms and NetCons for reference counting.'''
+        stores all mechanisms and NetCons for reference counting.
+        
+        Args:
+            source (:class:`single_cell_parser.cell.PointCell`): 
+                Presynaptic cell whose :py:attr:`single_cell_parser.cell.PointCell.spikes` attribute is used as ``source`` in NEURON's NetCon object.
+                Note that in the context of a synapse, ``spikes`` means release times, which is not necessarily the same as the presynaptic spike times.
+        '''
         self.releaseSite = source
         self.preCell = preCell
         '''careful: point processes not allowed at nodes between sections
@@ -98,6 +105,10 @@ class Synapse(object):
         self._active = True
 
     def disconnect_hoc_synapse(self):
+        """Disconnect the synapse from the neuron model.
+        
+        
+        """
         if self.releaseSite:
             self.releaseSite.turn_off()
         self.preCell = None

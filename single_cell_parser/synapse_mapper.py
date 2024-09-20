@@ -176,7 +176,7 @@ class SynapseMapper(object):
         - the synapses are not assigned on a per-structure basis (e.g. separate for soma, dendrite, axon ...)
 
         It is added here for completeness, in case you need a singular, quick network realization.
-        For a more comprehensive investigation of network connectivity, use the :py:mod:`singlecell_inputmapper` package instead.
+        For a specialized network realization with more fine-grained control, use the :py:mod:`singlecell_inputmapper.singlecell_input_mapper` package instead.
 
         Args:
             preType (str): The type of presynaptic cell. Default: 'Generic'.
