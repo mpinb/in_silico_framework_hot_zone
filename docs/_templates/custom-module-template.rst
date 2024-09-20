@@ -25,6 +25,7 @@ Back to :mod:`{{ parent_module }}`
 
    .. autosummary::
       :toctree:
+      :template: custom-method-template.rst
    {% for item in functions %}
       {{ item.split('.')[-1] }}
    {%- endfor %}
