@@ -1,4 +1,4 @@
-{% set parent = fullname.split('.')[:-1] | join('.') | escape %}
+{% set parent = fullname.split('.')[:-2] | join('.') | escape %}
 {% if parent %}
 Back to :mod:`{{ parent }}`
 {% endif %}
