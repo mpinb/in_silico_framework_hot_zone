@@ -200,7 +200,7 @@ def get_depolarization_index(dataframe):
     This index is defined as:
     
     .. math::
-        \frac{Ca_{LVA} - Ca_{HVA}}{Ca_{HVA} + Ca_{LVA}}
+        \\frac{Ca_{LVA} - Ca_{HVA}}{Ca_{HVA} + Ca_{LVA}}
     
     Args:
         dataframe (pd.DataFrame): the dataframe containing the biophysical parameters
@@ -220,7 +220,7 @@ def get_hyperpolarization_index(dataframe):
     This index is defined as:
     
     .. math::
-        \frac{I_{SK} - I_{m}}{I_{SK} + I_{m}}
+        \\frac{I_{SK} - I_{m}}{I_{SK} + I_{m}}
         
     Returns:
         pd.Series: the hyperpolarization index for each model in the dataframe"""

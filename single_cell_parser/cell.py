@@ -910,11 +910,11 @@ class PointCell(object):
     def _next_interval(self):
         """Calculate the next spike interval :math:`t` for a simple spike train.
         
-        Includes both noise (:math:`\sigma_{noise}`) and random variation (:math:`\sigma_{rand}`) on the spike interval (:math:`\Delta_t`):
+        Includes both noise (:math:`\\sigma_{noise}`) and random variation (:math:`\\sigma_{rand}`) on the spike interval (:math:`\\Delta_t`):
         
         .. math::
         
-            t = (1 - \sigma_{noise}) \cdot \Delta_t + \sigma_{noise} \cdot \Delta_t \cdot \sigma_{rand}
+            t = (1 - \\sigma_{noise}) \\cdot \\Delta_t + \\sigma_{noise} \\cdot \\Delta_t \\cdot \\sigma_{rand}
         
         Returns:
             float: The next spike interval.

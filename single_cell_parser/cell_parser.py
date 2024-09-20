@@ -329,25 +329,25 @@ class CellParser(object):
         
         The following table lists the possible spatial keywords of ``mech``, the additional keys each spatial key requires, and its description:
         
-        +------------------------+-------------------------------------------------------------+-------------------------------------------------------------+
-        | Spatial Key            | Additional Keys                                             | Math Equation                                                |
-        +========================+=============================================================+=============================================================+
-        | uniform                | None                                                        | :math:`y = c`                                                |
-        +------------------------+-------------------------------------------------------------+-------------------------------------------------------------+
-        | linear                 | ``slope``, ``offset``                                       | :math:`y = \text{slope} \cdot x + \text{offset}`             |
-        +------------------------+-------------------------------------------------------------+-------------------------------------------------------------+
-        | linear_capped          | ``prox_value``, ``dist_value``, ``dist_value_distance``     | :math:`y = \min(\text{prox_value} + \frac{\text{dist_value} - \text{prox_value}}{\text{dist_value_distance}} x, \text{dist_value})` |
-        +------------------------+-------------------------------------------------------------+-------------------------------------------------------------+
-        | exponential            | ``offset``, ``linScale``, ``_lambda``, ``xOffset``          | :math:`y = \text{offset} + \text{linScale} \cdot e^{-\frac{x - \text{xOffset}}{\lambda}}` |
-        +------------------------+-------------------------------------------------------------+-------------------------------------------------------------+
-        | exponential_by_z_dist  | ``offset``, ``linScale``, ``_lambda``, ``xOffset``          | :math:`y = \text{offset} + \text{linScale} \cdot e^{-\frac{z - \text{xOffset}}{\lambda}}` |
-        +------------------------+-------------------------------------------------------------+-------------------------------------------------------------+
-        | capped_exponential     | ``offset``, ``linScale``, ``_lambda``, ``xOffset``, ``max_g`` | :math:`y = \min(\text{offset} + \text{linScale} \cdot e^{-\frac{x - \text{xOffset}}{\lambda}}, \text{max_g})` |
-        +------------------------+-------------------------------------------------------------+-------------------------------------------------------------+
-        | sigmoid                | ``offset``, ``linScale``, ``xOffset``, ``width``            | :math:`y = \text{offset} + \frac{\text{linScale}}{1 + e^{\frac{x - \text{xOffset}}{\text{width}}}}` |
-        +------------------------+-------------------------------------------------------------+-------------------------------------------------------------+
-        | uniform_range          | ``begin``, ``end``, ``outsidescale``, ``outsidescale_sections`` | :math:`y = c` for :math:`\text{begin} \leq x \leq \text{end}`, :math:`y = c \cdot \text{outsidescale}` otherwise |
-        +------------------------+-------------------------------------------------------------+-------------------------------------------------------------+
+        +------------------------+-----------------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------+
+        | Spatial Key            | Additional Keys                                                 | Math Equation                                                                                                                       |
+        +========================+=================================================================+=====================================================================================================================================+
+        | uniform                | None                                                            | :math:`y = c`                                                                                                                       |
+        +------------------------+-----------------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------+
+        | linear                 | ``slope``, ``offset``                                           | :math:`y = \\text{slope} \\cdot x + \\text{offset}`                                                                                    |
+        +------------------------+-----------------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------+
+        | linear_capped          | ``prox_value``, ``dist_value``, ``dist_value_distance``         | :math:`y = \\min\\text{prox_value} + \\frac\\text{dist_value} - \\text{prox_value\\text{dist_value_distance}} x, \\text{dist_value})` |
+        +------------------------+-----------------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------+
+        | exponential            | ``offset``, ``linScale``, ``_lambda``, ``xOffset``              | :math:`y = \\text{offset} + \\text{linScale} \\cdot e\\frac{x - \\text{xOffset\\lambda}}`                                           |
+        +------------------------+-----------------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------+
+        | exponential_by_z_dist  | ``offset``, ``linScale``, ``_lambda``, ``xOffset``              | :math:`y = \\text{offset} + \\text{linScale} \\cdot e\\frac{z - \\text{xOffset\\lambda}}`                                           |
+        +------------------------+-----------------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------+
+        | capped_exponential     | ``offset``, ``linScale``, ``_lambda``, ``xOffset``, ``max_g``   | :math:`y = \\min\\text{offset} + \\text{linScale} \\cdot e\\frac{x - \\text{xOffset\\lambda}}, \\text{max_g})`                       |
+        +------------------------+-----------------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------+
+        | sigmoid                | ``offset``, ``linScale``, ``xOffset``, ``width``                | :math:`y = \\text{offset} + \\frac\\text{linScale}}{1 + e\\frac{x - \\text{xOffset\\text{width}}}}`                                 |
+        +------------------------+-----------------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------+
+        | uniform_range          | ``begin``, ``end``, ``outsidescale``, ``outsidescale_sections`` | :math:`y = c` for :math\\text{begin} \\leq x \\leq \\text{end}`, :math:`y = c \\cdot \\text{outsidescale}` otherwise                    |
+        +------------------------+-----------------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------+
         
         '''
         if self.cell is None:
@@ -778,15 +778,14 @@ class CellParser(object):
                 exec('sec.' + s)
 
     def _add_spines(self, label, spineParam):
-        '''
-        Adds passive spines to the membrane.
+        '''Adds passive spines to the membrane.
     
         Spines are added according to spine parameters for individual (dendritic) structures
         by scaling :math:`C_m` and :math:`R_m` by :math:`F` and :math:`1/F` respectively, where
     
         .. math::
             
-            F = 1 + \frac{A_{spines}}{A_{dend}}
+            F = 1 + \\frac{A_{spines}}{A_{dend}}
     
         Precise morphological effects of the spines are not considered, only their effect on membrane capacitance and resistance.
     
@@ -824,7 +823,7 @@ class CellParser(object):
         
         .. math::
             
-            F = 1 + \frac{A_{spines}}{A_{dend}}
+            F = 1 + \\frac{A_{spines}}{A_{dend}}
             
         Precise morphological effects of the spines are not considered, only their effect on membrane capacitance and resistance. 
         '''
@@ -857,8 +856,8 @@ class CellParser(object):
         
         Sets up the cell structure :paramref:`label` with a passive membrane that has the following properties:
         
-        * :math:`R_a = 200 \Omega \cdot cm`
-        * :math:`C_m = 0.75 \mu F/cm^2`
+        * :math:`R_a = 200 \\Omega \\cdot cm`
+        * :math:`C_m = 0.75 \\mu F/cm^2`
         * :math:`g_{pas} = 0.00025 S/cm^2`
         * :math:`E_{pas} = -60 mV`
         """
@@ -888,17 +887,17 @@ class CellParser(object):
         Sets up the cell structure :paramref:`label` with a Hodgkin-Huxley membrane that has the following properties:
         
         
-        * :math:`\bar{g}_{L} = 0.0003 \, S/cm^2`
-        * :math:`E_{L} = -54.3 \, mV`
+        * :math:`\\bar{g}_{L} = 0.0003 \\, S/cm^2`
+        * :math:`E_{L} = -54.3 \\, mV`
         - Soma:
-            * :math:`\bar{g}_{Na} = 0.003 \, S/cm^2`
-            * :math:`\bar{g}_{K} = 0.01 \, S/cm^2`
+            * :math:`\\bar{g}_{Na} = 0.003 \\, S/cm^2`
+            * :math:`\\bar{g}_{K} = 0.01 \\, S/cm^2`
         - Axon:
-            * :math:`\bar{g}_{Na} = 3.0 \, S/cm^2`
-            * :math:`\bar{g}_{K} = 0.0 \, S/cm^2`
+            * :math:`\\bar{g}_{Na} = 3.0 \\, S/cm^2`
+            * :math:`\\bar{g}_{K} = 0.0 \\, S/cm^2`
         - Dendrite:
-            * :math:`\bar{g}_{Na} = 0.003 \, S/cm^2`
-            * :math:`\bar{g}_{K} = 0.01 \, S/cm^2`
+            * :math:`\\bar{g}_{Na} = 0.003 \\, S/cm^2`
+            * :math:`\\bar{g}_{K} = 0.01 \\, S/cm^2`
         """
         if self.cell is None:
             raise RuntimeError(
@@ -939,26 +938,26 @@ class CellParser(object):
             max_seg_length (float, optional): Maximum segment length. Default is None.
             
         Note:
-            The d-lambda rule predicates the spatial grid on the AC length constant :math:`\lambda_f`
+            The d-lambda rule predicates the spatial grid on the AC length constant :math:`\\lambda_f`
             computed at a frequency :math:`f` that is high enough for transmembrane current to be primarily
             capacitive, yet still within the range of frequencies relevant to neuronal function.
             :cite:t:`hines2001neuron` suggested that the distance between adjacent nodes should be no larger than a
-            user-specified fraction ("d-lambda") of :math:`\lambda_{100}`, the length constant at 100 Hz. This
+            user-specified fraction ("d-lambda") of :math:`\\lambda_{100}`, the length constant at 100 Hz. This
             frequency is high enough for signal propagation to be insensitive to shunting by ionic
             conductances, but it is not unreasonably high because the rise time τr of fast EPSPs and
-            spikes is ~ 1 ms, which corresponds to a bandpass of :math:`1/\tau r 2 π \approx 400 Hz`.
+            spikes is ~ 1 ms, which corresponds to a bandpass of :math:`1/\\tau r 2 π \\approx 400 Hz`.
             At frequencies where Rm can be ignored, the attenuation of signal amplitude is
             described by
             
             .. math::
             
-                \log \left| \frac{V_0}{V_x} \right| \approx 2 x \sqrt{\frac{\pi f R_a C_m}{d}}
+                \\log \\left| \\frac{V_0}{V_x} \\right| \\approx 2 x \\sqrt{\\frac{\\pi f R_a C_m}{d}}
         
             So the distance over which an e-fold attenuation occurs is
             
             .. math::
             
-                \lambda_f \approx \frac{1}{2} \sqrt{\frac{d}{\pi f R_a C_m}}
+                \\lambda_f \\approx \\frac{1}{2} \\sqrt{\\frac{d}{\\pi f R_a C_m}}
         
 
         See also:
@@ -1137,7 +1136,7 @@ class CellParser(object):
         '''Create axon hillock and AIS according to :cite:t:`Hay_Schuermann_Markram_Segev_2013`
         
         Note:
-            connectivity is automatically taken care of since this should only be called from spatialgraph_to_cell()
+            connectivity is automatically taken care of since this should only be called from :py:meth:`spatialgraph_to_cell`
             
         '''
         
