@@ -5,4 +5,4 @@
 Back to :py:mod:`{{ parent_module }}`
 {{ method_name | escape | underline }}
 .. autosummary:: {{ parent_module }}
-    :members: {{ method_name }}
+   :members: {{ method_name }}
