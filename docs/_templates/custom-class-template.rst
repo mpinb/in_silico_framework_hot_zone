@@ -21,6 +21,8 @@ Back to :mod:`{{ parent_module | escape }}`
    .. rubric:: {{ _('Methods') }}
 
    .. autosummary::
+      :toctree:
+      :template: custom-method-template.rst
       {% for item in filtered_methods %}
          {% if not item.meta or not item.meta.private %}
             {{ item }}
