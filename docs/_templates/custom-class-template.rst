@@ -46,3 +46,9 @@ Back to :mod:`{{ parent_module | escape }}`
    {%- endfor %}
    {% endif %}
    {% endblock %}
+
+.. note::
+   parent_module: {{ parent_module }}
+   class_name: {{ class_name }}
+   objname: {{ objname }}
+   methods: {{ filtered_methods }}
