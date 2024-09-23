@@ -12,7 +12,6 @@ Back to :mod:`{{ parent_module }}`
    .. rubric:: Module attributes
 
    .. autosummary::
-      :toctree:
       {% for item in attributes %}
          {{ item }}
       {%- endfor %}
@@ -24,6 +23,7 @@ Back to :mod:`{{ parent_module }}`
    .. rubric:: {{ _('Functions') }}
 
    .. autosummary::
+      :toctree:
       
       {% for item in functions %}
          {% if not item.meta or not item.meta.private %}
