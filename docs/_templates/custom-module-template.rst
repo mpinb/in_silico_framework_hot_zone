@@ -7,17 +7,6 @@ Back to :mod:`{{ parent_module }}`
 
 .. automodule:: {{ fullname }}
 
-   {% block attributes %}
-   {% if attributes %}
-   .. rubric:: Module attributes
-
-   .. autosummary::
-      {% for item in attributes %}
-         {{ item }}
-      {%- endfor %}
-   {% endif %}
-   {% endblock %}
-
    {% block functions %}
    {% if functions %}
    .. rubric:: {{ _('Functions') }}
