@@ -18,18 +18,18 @@ Back to :mod:`{{ parent_module | escape }}`
    {% set filtered_methods = methods | select("ne", "__init__") | list %}
 
    {% block methods %} 
-   {% if filtered_methods %}
-   .. rubric:: {{ _('Methods') }}
+      {% if filtered_methods %}
+      .. rubric:: {{ _('Methods') }}
 
-   .. autosummary::
-      :toctree:
-      :template: custom-method-template.rst
-      {% for item in filtered_methods %}
-         {% if not item.meta or not item.meta.private %}
-            {{ parent_module }}.{{ class_name }}.{{ item }}
-         {% endif %}
-      {%- endfor %}
-   {% endif %}
+      .. autosummary::
+         :toctree:
+         :template: custom-method-template.rst
+         {% for item in filtered_methods %}
+            {% if not item.meta or not item.meta.private %}
+               {{ parent_module }}.{{ class_name }}.{{ item }}
+            {% endif %}
+         {%- endfor %}
+      {% endif %}
    {% endblock %}
 
    {% block attributes %}
