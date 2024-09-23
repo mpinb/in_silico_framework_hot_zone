@@ -5,7 +5,7 @@ Back to :mod:`{{ parent_module }}`
 
 {{ fullname.split('.')[-1] | escape | underline }}
 
-.. autosummary:: {{ fullname }}
+.. automodule:: {{ fullname }}
 
    {% block attributes %}
    {% if attributes %}
@@ -31,8 +31,8 @@ Back to :mod:`{{ parent_module }}`
             {{ item.split('.')[-1] }}
          {% endif %}
       {%- endfor %}
-      {% endif %}
-      {% endblock %}
+   {% endif %}
+   {% endblock %}
 
    {% block classes %}
    {% if classes %}
