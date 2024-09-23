@@ -8,3 +8,10 @@
 Back to :py:class:`{{ full_class_name }}`
 {{ class_name }}.{{ method_name | escape | underline }}
 .. automethod:: {{ full_class_name }}.{{ method_name }}
+
+.. note::
+   Fullname: {{ fullname }}
+   Method Name: {{ method_name }}
+   Class Name: {{ class_name }}
+   Parent Module: {{ parent_module }}
+   Full Class Name: {{ full_class_name }}
