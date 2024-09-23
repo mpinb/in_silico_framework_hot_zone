@@ -4,4 +4,5 @@
 .. currentmodule:: {{ parent_module }}
 Back to :py:mod:`{{ parent_module }}`
 {{ method_name | escape | underline }}
-.. autofunction:: {{ method_name }}
+.. autosummary:: {{ parent_module }}
+    :members: {{ method_name }}
