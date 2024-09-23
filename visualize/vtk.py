@@ -1,4 +1,5 @@
 '''Save simulation data in vtk compatible formats'''
+'''Save simulation data in vtk compatible formats'''
 
 import os
 import numpy as np
@@ -264,7 +265,6 @@ def write_vtk_skeleton_file(
     for dataname, data in point_scalar_data.items():
         assert len(data) == len(lookup_table), \
             "Length of point scalar data \"{}\" does not match number of points. Scalar data: {}. Amount of points: {}".format(dataname, len(data), len(lookup_table))
-
     
     # write out all data to .vtk file
     with open(
@@ -335,8 +335,7 @@ def convert_amira_lattice_to_vtk(
         
         co_type_line = [l for l in header if "coordtype" in l.lower()][0]
         co_type = co_type_line.split()[1].strip('\"')
-        assert co_type == "uniform", "Only uniform lattice files are supported for this method."
-        "Coordinate type of given file is {co_type}."
+        assert co_type == "uniform", "Only uniform lattice files are supported for this method. Coordinate type of given file is {}.".format(co_type)
         
         lattice_line = [l for l in header if "define lattice" in l.lower()][0]
         nx, ny, nz = tuple(int(num) for num in lattice_line.split()[2:])
