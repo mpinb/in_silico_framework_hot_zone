@@ -9,6 +9,7 @@ Back to :mod:`{{ parent_module }}`
    autosummary directives decide what to include in the class page
    the for loops decide which entries to add to the autosummary directive
 
+.. currentmodule:: {{ parent_module }}
 
 .. autoclass:: {{ objname }}
    :show-inheritance:
