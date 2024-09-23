@@ -74,8 +74,10 @@ def setup(app):
     app.connect('builder-inited', add_jinja2_filters)
 
 def add_jinja2_filters(app):
-    app.builder.templates.environment.filters['debug'] = debug_filter
-
+    if hasattr(app.builder, 'templates'):
+        app.builder.templates.environment.filters['debug'] = debug_filter
+    else:
+        logger.error("Builder does not have 'templates' attribute")
 
 # Napoleon settings
 napoleon_google_docstring = True
