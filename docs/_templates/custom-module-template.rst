@@ -24,6 +24,7 @@ Back to :mod:`{{ parent_module }}`
 
    .. autosummary::
       :toctree:
+      :template: custom-function-template.rst
       
       {% for item in functions %}
          {% if not item.meta or not item.meta.private %}
@@ -39,6 +40,7 @@ Back to :mod:`{{ parent_module }}`
 
    .. autosummary::
       :toctree:
+      :template: custom-class-template.rst
       
       {% for item in classes %}
          {{ item }}
@@ -52,11 +54,11 @@ Back to :mod:`{{ parent_module }}`
 
    .. autosummary::
       :toctree:
-      {% for item in exceptions %}
-         {{ item }}
-      {%- endfor %}
-      {% endif %}
-      {% endblock %}
+   {% for item in exceptions %}
+      {{ item }}
+   {%- endfor %}
+   {% endif %}
+   {% endblock %}
 
 {% block modules %}
 {% if modules %}
