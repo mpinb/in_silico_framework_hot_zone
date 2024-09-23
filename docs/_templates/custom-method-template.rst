@@ -11,13 +11,4 @@ Back to :py:class:`{{ full_class_name }}`
 
 {{ class_name }}.{{ method_name | escape | underline }}
 
-.. autoclass:: {{ full_class_name }}
-   :members: {{ method_name }}
-
-.. note::
-   Fullname: {{ fullname }}
-   Method Name: {{ method_name }}
-   Class Name: {{ class_name }}
-   Parent Module: {{ parent_module }}
-   Full Class Name: {{ full_class_name }}
-   Full Method Name: {{ full_method_name }}
+.. automethod:: {{ full_method_name }}

@@ -42,6 +42,3 @@ Back to :mod:`{{ parent_module | escape }}`
    {%- endfor %}
    {% endif %}
    {% endblock %}
-
-.. note::
-   filtered_methods: {{ filtered_methods }}
