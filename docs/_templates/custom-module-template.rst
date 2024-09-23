@@ -58,16 +58,3 @@ Back to :mod:`{{ parent_module }}`
    {%- endfor %}
    {% endif %}
    {% endblock %}
-
-{% block modules %}
-{% if modules %}
-.. rubric:: {{ _('Modules') }}
-
-.. autosummary::
-   :toctree:
-   :template: custom-module-template.rst
-   {% for item in modules %}
-      {{ item.split('.')[-1] }}
-   {%- endfor %}
-{% endif %}
-{% endblock %}
