@@ -69,11 +69,9 @@ def debug_filter(value, item_type):
     logger.debug(f"Found {item_type}: {value}")
     return value
 
+# Function to add the custom filter to the Jinja2 environment
 def setup(app):
-    app.connect('env-before-read-docs', add_jinja2_filters)
-
-def add_jinja2_filters(app, env, docnames):
-    env.filters['debug'] = debug_filter
+    app.builder.templates.environment.filters['debug'] = debug_filter
 
 # Napoleon settings
 napoleon_google_docstring = True
