@@ -3,11 +3,12 @@
 {% set class_name = parts[-2] %}
 {% set parent_module = parts[:-2] | join('.') %}
 {% set full_class_name = parent_module + '.' + class_name %}
+{% set full_method_name = full_class_name + '.' + method_name %}
 
 .. currentmodule:: {{ parent_module }}
 Back to :py:class:`{{ full_class_name }}`
-{{ class_name }}.{ method_name | escape | underline }}
-.. automethod:: {{ fullname }}
+{{ class_name }}.{{ method_name | escape | underline }}
+.. automethod:: {{ full_method_name }}
 
 .. note::
    Fullname: {{ fullname }}
@@ -15,3 +16,4 @@ Back to :py:class:`{{ full_class_name }}`
    Class Name: {{ class_name }}
    Parent Module: {{ parent_module }}
    Full Class Name: {{ full_class_name }}
+   Full Method Name: {{ full_method_name }}
