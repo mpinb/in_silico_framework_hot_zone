@@ -6,10 +6,13 @@
 {% set full_method_name = full_class_name + '.' + method_name %}
 
 .. currentmodule:: {{ parent_module }}
+
 Back to :py:class:`{{ full_class_name }}`
+
 {{ class_name }}.{{ method_name | escape | underline }}
+
 .. autoclass:: {{ full_class_name }}
-    :members: {{ method_name }}
+   :members: {{ method_name }}
 
 .. note::
    Fullname: {{ fullname }}
