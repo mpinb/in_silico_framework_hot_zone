@@ -24,6 +24,7 @@ Back to :mod:`{{ parent_module | escape }}`
    .. autosummary::
       :toctree:
       :template: custom-method-template.rst
+
       {% for item in filtered_methods %}
       {% if not item.meta or not item.meta.private %}
          {{ item }}
@@ -34,9 +35,11 @@ Back to :mod:`{{ parent_module | escape }}`
 
    {% block attributes %}
    {% if attributes %}
+   
    .. rubric:: {{ _('Attributes') }}
 
    .. autosummary::
+
    {% for item in attributes %}
       ~{{ name }}.{{ item }}
    {%- endfor %}

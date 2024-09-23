@@ -14,9 +14,11 @@ Back to :mod:`{{ parent_module }}`
 
    {% block attributes %}
    {% if attributes %}
+   
    .. rubric:: Module attributes
 
    .. autosummary::
+   
       {% for item in attributes %}
          {{ item }}
       {%- endfor %}
@@ -25,6 +27,7 @@ Back to :mod:`{{ parent_module }}`
 
    {% block functions %}
    {% if functions %}
+
    .. rubric:: {{ _('Functions') }}
 
    .. autosummary::
@@ -41,6 +44,7 @@ Back to :mod:`{{ parent_module }}`
 
    {% block classes %}
    {% if classes %}
+
    .. rubric:: {{ _('Classes') }}
 
    .. autosummary::
@@ -59,6 +63,7 @@ Back to :mod:`{{ parent_module }}`
 
    .. autosummary::
       :toctree:
+
       {% for item in exceptions %}
          {{ item }}
       {%- endfor %}
@@ -67,11 +72,13 @@ Back to :mod:`{{ parent_module }}`
 
 {% block modules %}
 {% if modules %}
+
 .. rubric:: {{ _('Modules') }}
 
 .. autosummary::
    :toctree:
    :template: custom-module-template.rst
+
    {% for item in modules %}
       {{ item.split('.')[-1] }}
    {%- endfor %}
