@@ -4,7 +4,7 @@
 {% set class_name = parts[-2] %}
 {% set parent_module = parts[:-2] | join('.') %}
 {% set full_class_name = parent_module + '.' + class_name %}
-{% set full_function_name = full_class_name + '.' + method_name %}
+{% set full_function_name = full_class_name + '.' + function_name %}
 .. currentmodule:: {{ parent_module }}
 
 .. backlink:
