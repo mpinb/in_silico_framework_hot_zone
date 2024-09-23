@@ -66,9 +66,8 @@ Back to :mod:`{{ parent_module }}`
 .. autosummary::
    :toctree:
    :template: custom-module-template.rst
-   :recursive:
-{% for item in modules %}
-   {{ item.split('.')[-1] }}
-{%- endfor %}
-{% endif %}
-{% endblock %}
+   {% for item in modules %}
+      {{ item.split('.')[-1] }}
+   {%- endfor %}
+   {% endif %}
+   {% endblock %}
