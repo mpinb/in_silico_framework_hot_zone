@@ -1,4 +1,5 @@
 .. setup:
+
 {% set parts = fullname.split('.') %}
 {% set method_name = parts[-1] %}
 {% set class_name = parts[-2] %}
@@ -10,9 +11,11 @@
 .. currentmodule:: {{ parent_module }}
 
 .. backlink:
+
 Back to :py:class:`{{ full_class_name }}`
 
 .. title:
+
 {{ class_dot_method_name | escape | underline }}
 
 .. content:

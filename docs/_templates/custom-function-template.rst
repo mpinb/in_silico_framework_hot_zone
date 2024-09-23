@@ -1,4 +1,5 @@
 .. setup:
+
 {% set parts = fullname.split('.') %}
 {% set function_name = parts[-1] %}
 {% set module_name = parts[-2] %}
@@ -9,9 +10,11 @@
 .. currentmodule:: {{ full_module_name }}
 
 .. backlink:
+
 Back to :py:mod:`{{ full_module_name }}`
 
 .. title:
+
 {{ function_name | escape | underline }}
 
 .. content:
