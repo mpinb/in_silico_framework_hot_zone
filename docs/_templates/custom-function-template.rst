@@ -3,13 +3,13 @@
 {% set function_name = parts[-1] %}
 {% set module_name = parts[-2] %}
 {% set parent_module = parts[:-2] | join('.') %}
-{% set full_module_name = parent_module + '.' + module_name %}
+{% set full_module_name = parts[:-1] | join('.') %}
 {% set full_function_name = full_module_name + '.' + function_name %}
 
 .. currentmodule:: {{ full_module_name }}
 
 .. backlink:
-Back to :py:mod:`{{ parent_module }}`
+Back to :py:mod:`{{ full_module_name }}`
 
 .. title:
 {{ function_name | escape | underline }}
