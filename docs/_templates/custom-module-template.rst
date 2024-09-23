@@ -16,7 +16,7 @@ Back to :mod:`{{ parent_module }}`
       {% for item in attributes %}
          {{ item }}
       {%- endfor %}
-      {% endif %}
+   {% endif %}
    {% endblock %}
 
    {% block functions %}
