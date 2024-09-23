@@ -73,7 +73,7 @@ def debug_filter(value, item_type):
 def setup(app):
     app.connect('config-inited', add_jinja2_filters)
 
-def add_jinja2_filters(app):
+def add_jinja2_filters(app, config):
     if hasattr(app.builder, 'templates'):
         app.builder.templates.environment.filters['debug'] = debug_filter
     else:
