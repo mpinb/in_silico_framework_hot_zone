@@ -28,7 +28,7 @@ Back to :mod:`{{ parent_module | escape }}`
 
       {% for item in filtered_methods %}
       {% if not item.meta or not item.meta.private %}
-         {{ parent_module }}.{{ class_name }}.{{ item }}
+         {{ class_name }}.{{ item }}
       {% endif %}
       {%- endfor %}
    {% endif %}
@@ -46,9 +46,3 @@ Back to :mod:`{{ parent_module | escape }}`
    {%- endfor %}
    {% endif %}
    {% endblock %}
-
-.. note::
-   parent_module: {{ parent_module }}
-   class_name: {{ class_name }}
-   objname: {{ objname }}
-   methods: {{ filtered_methods }}
