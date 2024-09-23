@@ -14,7 +14,6 @@ Back to :mod:`{{ parent_module }}`
 
 .. autoclass:: {{ objname }}
    :show-inheritance:
-   :undoc-members:
    :special-members: __get__, __set__
    
    {% set filtered_methods = methods | select("ne", "__init__") | list %}
@@ -25,7 +24,7 @@ Back to :mod:`{{ parent_module }}`
 
    .. autosummary::
       :toctree:
-      
+
       {% for item in filtered_methods %}
          {% if not item.meta or not item.meta.private %}
             {{ item.split('.')[-1] }}
