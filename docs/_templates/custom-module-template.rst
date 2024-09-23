@@ -7,18 +7,20 @@ Back to :mod:`{{ parent_module }}`
 {% endif %}
 
 .. title:
+
 {{ fullname.split('.')[-1] | escape | underline }}
 
 .. content:
+
 .. automodule:: {{ fullname }}
 
    {% block attributes %}
    {% if attributes %}
-   
+
    .. rubric:: Module attributes
 
    .. autosummary::
-   
+
       {% for item in attributes %}
          {{ item }}
       {%- endfor %}
@@ -50,7 +52,7 @@ Back to :mod:`{{ parent_module }}`
    .. autosummary::
       :toctree:
       :template: custom-class-template.rst
-      
+
       {% for item in classes %}
          {{ item }}
       {%- endfor %}
@@ -59,6 +61,7 @@ Back to :mod:`{{ parent_module }}`
 
    {% block exceptions %}
    {% if exceptions %}
+
    .. rubric:: {{ _('Exceptions') }}
 
    .. autosummary::
@@ -70,17 +73,17 @@ Back to :mod:`{{ parent_module }}`
    {% endif %}
    {% endblock %}
 
-{% block modules %}
-{% if modules %}
+   {% block modules %}
+   {% if modules %}
 
-.. rubric:: {{ _('Modules') }}
+   .. rubric:: {{ _('Modules') }}
 
-.. autosummary::
-   :toctree:
-   :template: custom-module-template.rst
+   .. autosummary::
+      :toctree:
+      :template: custom-module-template.rst
 
-   {% for item in modules %}
-      {{ item.split('.')[-1] }}
-   {%- endfor %}
-{% endif %}
-{% endblock %}
+      {% for item in modules %}
+         {{ item.split('.')[-1] }}
+      {%- endfor %}
+   {% endif %}
+   {% endblock %}
