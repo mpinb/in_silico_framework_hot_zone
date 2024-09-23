@@ -26,7 +26,7 @@ Back to :mod:`{{ parent_module | escape }}`
       :template: custom-method-template.rst
       {% for item in filtered_methods %}
          {% if not item.meta or not item.meta.private %}
-            {{ class_name }}.{{ item }}
+            {{ parent_module }}.{{ class_name }}.{{ item }}
          {% endif %}
       {%- endfor %}
    {% endif %}
