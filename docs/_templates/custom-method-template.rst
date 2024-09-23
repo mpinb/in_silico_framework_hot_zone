@@ -5,14 +5,13 @@
 {% set parent_module = parts[:-2] | join('.') %}
 {% set full_class_name = parent_module + '.' + class_name %}
 {% set full_method_name = full_class_name + '.' + method_name %}
-.. currentmodule:: {{ parent_module }}
 
-.. backlink:
-Back to :py:class:`{{ full_class_name }}`
+{% if method_name %}
+    .. currentmodule:: {{ parent_module }}
 
-.. title:
-{{ class_name }}.{{ method_name | escape | underline }}
+    Back to :py:class:`{{ full_class_name }}`
 
-.. content:
-.. note that this is a method (i.e. attribute of a class), not a function (i.e. attribute of a module)
-.. automethod:: {{ full_method_name }}
+    {{ class_name }}.{{ method_name | escape | underline }}
+
+    .. automethod:: {{ full_method_name }}
+{% endif %}
