@@ -10,8 +10,6 @@ Back to :mod:`{{ parent_module }}`
    the for loops decide which entries to add to the autosummary directive
 
 
-.. currentmodule:: {{ module }}
-
 .. autoclass:: {{ objname }}
    :show-inheritance:
    
