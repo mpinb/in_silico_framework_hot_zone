@@ -1,6 +1,6 @@
-{% set parent_module = fullname.split('.')[:-1] | join('.') | escape %}
+{% set parent_module = fullname.split('.')[:-1] | join('.') %}
 {% if parent_module %}
-Back to :mod:`{{ parent_module }}`
+Back to :mod:`{{ parent_module | escape }}`
 {% endif %}
 
 {{ fullname.split('.')[-1] | escape | underline }}
@@ -9,7 +9,7 @@ Back to :mod:`{{ parent_module }}`
    autosummary directives decide what to include in the class page
    the for loops decide which entries to add to the autosummary directive
 
-.. currentmodule:: {{ parent_module | escape }}
+.. currentmodule:: {{ parent_module  }}
 
 .. autoclass:: {{ objname }}
    :show-inheritance:
