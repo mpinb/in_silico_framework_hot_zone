@@ -71,7 +71,7 @@ def debug_filter(value, item_type):
 
 # Function to add the custom filter to the Jinja2 environment
 def setup(app):
-    app.connect('config-inited', add_jinja2_filters)
+    app.connect('env-before-read-docs', add_jinja2_filters)
 
 def add_jinja2_filters(app, config):
     if hasattr(app.builder, 'templates'):
