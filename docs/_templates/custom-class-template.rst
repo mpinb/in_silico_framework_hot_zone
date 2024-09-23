@@ -14,7 +14,6 @@ Back to :mod:`{{ parent_module }}`
 
 .. autoclass:: {{ objname }}
    :show-inheritance:
-   :special-members: __get__, __set__
    
    {% set filtered_methods = methods | select("ne", "__init__") | list %}
 
