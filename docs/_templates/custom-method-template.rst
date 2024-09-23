@@ -6,8 +6,8 @@
 
 .. currentmodule:: {{ parent_module }}
 Back to :py:class:`{{ full_class_name }}`
-{{ class_name }}.{{ method_name | escape | underline }}
-.. automethod:: {{ full_class_name }}.{{ method_name }}
+{{ class_name }}.{ method_name | escape | underline }}
+.. automethod:: {{ fullname }}
 
 .. note::
    Fullname: {{ fullname }}
