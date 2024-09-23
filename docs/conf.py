@@ -8,7 +8,11 @@
 
 import sys
 import os
+from sphinx.jinja2glue import BuiltinTemplateLoader
 # import mock
+import logging
+# Set up logging
+logger = logging.getLogger("ISF").getChild(__name__)
 
 # MOCK_MODULES = ['neuron', 'cloudpickle', 'tables', 'distributed', 'mechanisms']
 # for mod_name in MOCK_MODULES:
@@ -59,6 +63,15 @@ extensions = [
 ]
 
 bibtex_bibfiles = ['bibliography.bib']
+
+# Custom Jinja2 filter for debugging
+def debug_filter(value, item_type):
+    logger.debug(f"Found {item_type}: {value}")
+    return value
+
+# Register the custom filter
+def setup(app):
+    app.builder.templates.environment.filters['debug'] = debug_filter
 
 # Napoleon settings
 napoleon_google_docstring = True
