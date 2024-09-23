@@ -39,7 +39,6 @@ Back to :mod:`{{ parent_module }}`
 
    .. autosummary::
       :toctree:
-      :template: custom-class-template.rst
       
       {% for item in classes %}
          {{ item }}
@@ -53,8 +52,21 @@ Back to :mod:`{{ parent_module }}`
 
    .. autosummary::
       :toctree:
-   {% for item in exceptions %}
-      {{ item }}
+      {% for item in exceptions %}
+         {{ item }}
+      {%- endfor %}
+      {% endif %}
+      {% endblock %}
+
+{% block modules %}
+{% if modules %}
+.. rubric:: {{ _('Modules') }}
+
+.. autosummary::
+   :toctree:
+   :template: custom-module-template.rst
+   {% for item in modules %}
+      {{ item.split('.')[-1] }}
    {%- endfor %}
-   {% endif %}
-   {% endblock %}
+{% endif %}
+{% endblock %}
