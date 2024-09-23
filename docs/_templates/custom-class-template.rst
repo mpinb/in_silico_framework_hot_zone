@@ -1,9 +1,10 @@
 {% set parent_module = fullname.split('.')[:-1] | join('.') %}
+{% set class_name = fullname.split('.')[-1] %}
 {% if parent_module %}
 Back to :mod:`{{ parent_module | escape }}`
 {% endif %}
 
-{{ fullname.split('.')[-1] | escape | underline }}
+{{ class_name | escape | underline }}
 
 .. This template decides how the class pages look
    autosummary directives decide what to include in the class page
@@ -25,11 +26,11 @@ Back to :mod:`{{ parent_module | escape }}`
       :template: custom-method-template.rst
       {% for item in filtered_methods %}
          {% if not item.meta or not item.meta.private %}
-            {{ item }}
+            {{ class_name }}.{{ item }}
          {% endif %}
       {%- endfor %}
-      {% endif %}
-      {% endblock %}
+   {% endif %}
+   {% endblock %}
 
    {% block attributes %}
    {% if attributes %}
