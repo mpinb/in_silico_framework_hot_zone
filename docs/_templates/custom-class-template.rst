@@ -19,6 +19,7 @@ Back to :mod:`{{ parent_module | escape }}`
 
    {% block methods %} 
    {% if filtered_methods %}
+
    .. rubric:: {{ _('Methods') }}
 
    .. autosummary::
@@ -27,7 +28,7 @@ Back to :mod:`{{ parent_module | escape }}`
 
       {% for item in filtered_methods %}
       {% if not item.meta or not item.meta.private %}
-         {{ item }}
+         {{ parent_module }}.{{ class_name }}.{{ item }}
       {% endif %}
       {%- endfor %}
    {% endif %}
