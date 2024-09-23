@@ -20,8 +20,6 @@ Back to :mod:`{{ parent_module }}`
    .. rubric:: {{ _('Methods') }}
 
    .. autosummary::
-      :toctree:
-
       {% for item in filtered_methods %}
          {% if not item.meta or not item.meta.private %}
             {{ item.split('.')[-1] }}
