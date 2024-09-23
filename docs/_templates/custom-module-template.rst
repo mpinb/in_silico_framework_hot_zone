@@ -14,6 +14,7 @@ Back to :mod:`{{ parent_module }}`
    .. autosummary::
       :toctree:
       {% for item in attributes %}
+         Found attribute {{ item }}
          {{ item }}
       {%- endfor %}
    {% endif %}
@@ -28,6 +29,7 @@ Back to :mod:`{{ parent_module }}`
       
       {% for item in functions %}
          {% if not item.meta or not item.meta.private %}
+            Found function {{ item }}
             {{ item.split('.')[-1] }}
          {% endif %}
       {%- endfor %}
@@ -43,6 +45,7 @@ Back to :mod:`{{ parent_module }}`
       :template: custom-class-template.rst
       
       {% for item in classes %}
+         Found class {{ item }}
          {{ item }}
       {%- endfor %}
       {% endif %}
@@ -69,6 +72,7 @@ Back to :mod:`{{ parent_module }}`
    :template: custom-module-template.rst
    :recursive:
 {% for item in modules %}
+   Found module {{ item }}
    {{ item.split('.')[-1] }}
 {%- endfor %}
 {% endif %}
