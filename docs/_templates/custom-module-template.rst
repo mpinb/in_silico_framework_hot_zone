@@ -13,10 +13,10 @@ Back to :mod:`{{ parent_module }}`
 
    .. autosummary::
       :toctree:
-   {% for item in attributes %}
-      {{ item }}
-   {%- endfor %}
-   {% endif %}
+      {% for item in attributes %}
+         {{ item }}
+      {%- endfor %}
+      {% endif %}
    {% endblock %}
 
    {% block functions %}
@@ -26,13 +26,14 @@ Back to :mod:`{{ parent_module }}`
    .. autosummary::
       :toctree:
       :template: custom-function-template.rst
-   {% for item in functions %}
-      {% if not item.meta or not item.meta.private %}
-         {{ item.split('.')[-1] }}
+      
+      {% for item in functions %}
+         {% if not item.meta or not item.meta.private %}
+            {{ item.split('.')[-1] }}
+         {% endif %}
+      {%- endfor %}
       {% endif %}
-   {%- endfor %}
-   {% endif %}
-   {% endblock %}
+      {% endblock %}
 
    {% block classes %}
    {% if classes %}
@@ -41,11 +42,12 @@ Back to :mod:`{{ parent_module }}`
    .. autosummary::
       :toctree:
       :template: custom-class-template.rst
-   {% for item in classes %}
-      {{ item }}
-   {%- endfor %}
-   {% endif %}
-   {% endblock %}
+      
+      {% for item in classes %}
+         {{ item }}
+      {%- endfor %}
+      {% endif %}
+      {% endblock %}
 
    {% block exceptions %}
    {% if exceptions %}

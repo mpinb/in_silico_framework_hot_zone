@@ -26,13 +26,14 @@ Back to :mod:`{{ parent_module }}`
    .. autosummary::
       :toctree:
       :template: custom-method-template.rst
-   {% for item in filtered_methods %}
-      {% if not item.meta or not item.meta.private %}
-         {{ item.split('.')[-1] }}
+      
+      {% for item in filtered_methods %}
+         {% if not item.meta or not item.meta.private %}
+            {{ item.split('.')[-1] }}
+         {% endif %}
+      {%- endfor %}
       {% endif %}
-   {%- endfor %}
-   {% endif %}
-   {% endblock %}
+      {% endblock %}
 
    {% block attributes %}
    {% if attributes %}
