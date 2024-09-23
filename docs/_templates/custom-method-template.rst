@@ -14,12 +14,10 @@
     else 'undefined'
 ) %}
 
-{% if method_name != 'undefined' %}
-    .. currentmodule:: {{ parent_module }}
-
-    Back to :py:class:`{{ full_class_name }}`
-
-    {{ class_name }}.{{ method_name | escape | underline }}
-
-    .. automethod:: {{ full_method_name }}
-{% endif %}
+.. note::
+   parts: {{ parts }}
+    method_name: {{ method_name }}
+    class_name: {{ class_name }}
+    parent_module: {{ parent_module }}
+    full_class_name: {{ full_class_name }}
+    full_method_name: {{ full_method_name }}
