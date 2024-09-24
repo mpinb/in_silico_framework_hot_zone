@@ -14,6 +14,7 @@ Back to :mod:`{{ parent_module | escape }}`
 
 .. autoclass:: {{ objname }}
    :show-inheritance:
+   :private-members:
    
    {% set filtered_methods = methods | select("ne", "__init__") | list %}
 
@@ -25,7 +26,6 @@ Back to :mod:`{{ parent_module | escape }}`
    .. autosummary::
       :toctree:
       :template: custom-method-template.rst
-      :private-members:
 
       {% for item in filtered_methods %}
       {% if not item.meta or not item.meta.private %}
