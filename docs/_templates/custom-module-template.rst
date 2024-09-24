@@ -15,6 +15,7 @@ Back to :mod:`{{ parent_module }}`
 .. content:
 
 .. automodule:: {{ fullname }}
+   :private-members:
 
    {% block attributes %}
    {% if attributes %}
@@ -37,7 +38,6 @@ Back to :mod:`{{ parent_module }}`
    .. autosummary::
       :toctree:
       :template: custom-function-template.rst
-      :private-members:
 
       {% for item in functions %}
       {% if not item.meta or not item.meta.private %}
