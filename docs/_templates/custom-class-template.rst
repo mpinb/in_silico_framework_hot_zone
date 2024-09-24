@@ -25,6 +25,7 @@ Back to :mod:`{{ parent_module | escape }}`
    .. autosummary::
       :toctree:
       :template: custom-method-template.rst
+      :private-members:
 
       {% for item in filtered_methods %}
       {% if not item.meta or not item.meta.private %}

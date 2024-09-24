@@ -37,6 +37,7 @@ Back to :mod:`{{ parent_module }}`
    .. autosummary::
       :toctree:
       :template: custom-function-template.rst
+      :private-members:
 
       {% for item in functions %}
       {% if not item.meta or not item.meta.private %}
