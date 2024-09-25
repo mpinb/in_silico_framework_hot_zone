@@ -18,22 +18,6 @@ if ! command -v wget &> /dev/null; then
     exit 1
 fi
 
-# Parse command line arguments
-USE_MAMBA="false"
-for arg in "$@"; do
-    case $arg in
-        --mamba)
-        USE_MAMBA="true"
-        shift # Remove --mamba from processing
-        ;;
-    esac
-done
-if [ "$USE_MAMBA" == "true" ]; then
-    install_suffix="_mamba"
-else
-    install_suffix=""
-fi
-
 # Global variables
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 INVOCATION_DIR=$(pwd)
@@ -105,9 +89,9 @@ fi
 
 # Invoke the installation script in the correct folder
 if [ "$INSTALL_NODEJS" == "yes" ]; then
-    bash "${SCRIPT_DIR}/py${PYTHON_VERSION}/install$install_suffix.sh" -p "${INSTALL_DIR}" --node || exit 1
+    bash "${SCRIPT_DIR}/py${PYTHON_VERSION}/install.sh" -p "${INSTALL_DIR}" --node || exit 1
 else
-    bash "${SCRIPT_DIR}/py${PYTHON_VERSION}/install$install_suffix.sh" -p "${INSTALL_DIR}" || exit 1
+    bash "${SCRIPT_DIR}/py${PYTHON_VERSION}/install.sh" -p "${INSTALL_DIR}" || exit 1
 fi
 
 cd $SCRIPT_DIR
@@ -122,6 +106,6 @@ echo -e <<EOF
 \e[1;32m*                                                               *\e[0m
 \e[1;32m*****************************************************************\e[0m
 
-You are now ready to use ISF. Start by activating the ISF conda environment: \"source ${INSTALL_DIR}/bin/activate\"  -------- TODO
+You are now ready to use ISF. Start by activating the ISF conda environment: \"source ${INSTALL_DIR}/bin/activate\"
 For a general introduction to ISF, please refer to $(realpath $(dirname $SCRIPT_DIR))/getting_started/Introduction_to_ISF.ipynb
 EOF
