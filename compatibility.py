@@ -137,8 +137,9 @@ def init_mdb_backwards_compatibility():
         replace_with="model_data_base"
     )
     
-    import data_base, model_data_base.model_data_base
-    model_data_base.model_data_base.get_mdb_by_unique_id = data_base.data_base.get_db_by_unique_id
+    import model_data_base.model_data_base
+    from data_base.data_base import get_db_by_unique_id
+    model_data_base.model_data_base.get_mdb_by_unique_id = get_db_by_unique_id
 
 def init_db_compatibility():
     """
@@ -147,10 +148,9 @@ def init_db_compatibility():
     For this reason, the old API of model_data_base needs to be updated.
     """
     import sys
-    from data_base.isf_data_base import IO, db_initializers, dbopen
+    from data_base.isf_data_base import IO, db_initializers
     sys.modules['data_base.IO'] = IO
     sys.modules['data_base.db_initializers'] = db_initializers 
-    sys.modules['data_base.dbopen'] = dbopen
     
 def init_data_base_compatibility():
     init_db_compatibility()

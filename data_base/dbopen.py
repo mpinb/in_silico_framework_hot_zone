@@ -35,7 +35,7 @@ def resolve_db_path(path):
         path = path.replace('/gpfs01/bethge/home/regger/data/',
                             '/nas1/Data_regger/AXON_SAGA/Axon4/PassiveTouch/')
         print('new path', path)
-    if not path.startswith('db://'):
+    if not path.startswith('mdb://'):
         return path
 
     path_splitted = path.split('//')[1].split('/')
@@ -60,13 +60,13 @@ def create_db_path(path):
     Create a database path from a given path.
     """
     db_path = path
-    if path.startswith('db://'):
+    if path.startswith('mdb://'):
         return path
     
     # Find mother database
     while True:
         if (os.path.isdir(db_path)) and (
-            'dbcore.pickle' in os.listdir(db_path) or 'db_state.json' in os.listdir(db_path)):
+            'dbcore.pickle' in os.listdir(db_path) or 'db_state.json' in os.listdir(db_path) or 'dbcore.pickle' in os.listdir(db_path)):
             break
         else:
             db_path = os.path.dirname(db_path)
@@ -92,7 +92,7 @@ def create_db_path(path):
         raise KeyError(
             "Found a Database at {}. However, there is no key pointing to the subfolder {} in it.".format(
                 db._basedir, path_minus_db_basedir.split('/')[0]))
-    return os.path.join('db://', db.get_id(), key,
+    return os.path.join('mdb://', db.get_id(), key,
                         os.path.relpath(path, db[key]))
 
 
