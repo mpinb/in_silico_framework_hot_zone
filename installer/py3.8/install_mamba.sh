@@ -167,7 +167,7 @@ EOF
 print_title "2/6. Installing conda dependencies "
 if [ "${download_conda_packages_flag}" == "true" ]; then
     # Get all lines starting with http (not #http), return empty string if there are none
-    package_list=$(cat $SCRIPT_DIR/$CONDA_REQUIREMENTS.txt | grep '^http' || echo "")
+    package_list=$(cat $SCRIPT_DIR/$CONDA_REQUIREMENTS | grep '^http' || echo "")
     if [ -z "$package_list" ]; then
         echo "No conda packages to download."
     else
@@ -178,7 +178,7 @@ if [ "${download_conda_packages_flag}" == "true" ]; then
 fi
 # 2.1 -- Installing In-Silico-Framework conda dependencies.
 echo "Installing In-Silico-Framework conda dependencies."
-sed "s|https://.*/|$SCRIPT_DIR/downloads/mamba_packages/|" $SCRIPT_DIR/$CONDA_REQUIREMENTS.txt > $SCRIPT_DIR/tempfile
+sed "s|https://.*/|$SCRIPT_DIR/downloads/mamba_packages/|" $SCRIPT_DIR/$CONDA_REQUIREMENTS > $SCRIPT_DIR/tempfile
 micromamba update --file $SCRIPT_DIR/tempfile --quiet
 
 # -------------------- 3. Installing PyPI dependencies -------------------- #
