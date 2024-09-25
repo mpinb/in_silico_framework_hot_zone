@@ -54,7 +54,8 @@ PYTHON_VERSION="3.8"  # 3.8 by default, no reason to promp the user
 # If Python version is 3.8, ask whether or not to install Node.js
 if [ "$PYTHON_VERSION" == "3.8" ]; then
     while true; do
-        echo "Do you want to install Node.js alongside the Anaconda installation? ([y]es/[n]o)"
+        echo "Node.js is required for Jupyter Lab extensions."
+        echo "Do you want to install Node.js alongside the ISF installation? ([y]es/[n]o)"
         read INSTALL_NODEJS
         if [[ "$INSTALL_NODEJS" =~ ^[Nn].*$ ]]; then
             INSTALL_NODEJS="no"
