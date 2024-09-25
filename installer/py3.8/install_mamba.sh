@@ -132,6 +132,9 @@ fi
 print_title "1/6. Installing micromamba"
 
 echo "Mamba will be installed in: ${MAMBA_INSTALL_PATH}"
+if [ ! -d "${MAMBA_INSTALL_PATH}" ]; then
+    mkdir -p $MAMBA_INSTALL_PATH
+fi
 cd $MAMBA_INSTALL_PATH
 curl -Ls https://micro.mamba.pm/api/micromamba/$mamba_version | tar -xvj bin/micromamba
 # setup mamba in current shell; avoid having to restart shell
