@@ -167,6 +167,9 @@ Example::
             'ApicalDendrite': {...},
             'AIS': {...},
             'Myelin': {...},
+            'cell_modify_functions': {
+                'scale_apical': {'scale': 2.1}
+            },
         'sim': {
             'Vinit': -75.0,
             'tStart': 0.0,
