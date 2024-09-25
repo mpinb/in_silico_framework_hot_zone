@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# Preliminary checks
 # Check if git is available
 if ! command -v git &> /dev/null; then
     echo "git could not be found. Please install git."
@@ -17,9 +18,26 @@ if ! command -v wget &> /dev/null; then
     exit 1
 fi
 
+# Parse command line arguments
+USE_MAMBA="false"
+for arg in "$@"; do
+    case $arg in
+        --mamba)
+        USE_MAMBA="true"
+        shift # Remove --mamba from processing
+        ;;
+    esac
+done
+if [ "$USE_MAMBA" == "true" ]; then
+    install_suffix="_mamba"
+else
+    install_suffix=""
+fi
+
+# Global variables
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 INVOCATION_DIR=$(pwd)
-
+PYTHON_VERSION="3.8"  # 3.8 by default, no reason to promp the user
 # Ask the user for the Python version
 # while true; do
 #     echo "Please enter the Python version (2.7, 3.8, or 3.9):"
@@ -32,7 +50,6 @@ INVOCATION_DIR=$(pwd)
 #         echo "Invalid Python version. Please enter 2.7, 3.8, or 3.9."
 #     fi
 # done
-PYTHON_VERSION="3.8"  # 3.8 by default, no reason to promp the user
 
 # If Python version is 3.8, ask whether or not to install Node.js
 if [ "$PYTHON_VERSION" == "3.8" ]; then
@@ -61,7 +78,7 @@ while true; do
         DOWNLOAD_BC_MODEL="yes"
         break
     else
-            echo "Invalid option. Please enter 'yes/y' or 'no/n'."
+        echo "Invalid option. Please enter 'yes/y' or 'no/n'."
     fi
 done
 
@@ -79,10 +96,6 @@ while true; do
     fi
 done
 
-if [ ! -d "$INSTALL_DIR" ]; then
-    mkdir -p $INSTALL_DIR
-fi
-
 if [ "$DOWNLOAD_BC_MODEL" == "yes" ]; then
     echo $SCRIPT_DIR
     ls $SCRIPT_DIR
@@ -91,9 +104,9 @@ fi
 
 # Invoke the installation script in the correct folder
 if [ "$INSTALL_NODEJS" == "yes" ]; then
-    bash "${SCRIPT_DIR}/py${PYTHON_VERSION}/install.sh" -p "${INSTALL_DIR}" --node || exit 1
+    bash "${SCRIPT_DIR}/py${PYTHON_VERSION}/install$install_suffix.sh" -p "${INSTALL_DIR}" --node || exit 1
 else
-    bash "${SCRIPT_DIR}/py${PYTHON_VERSION}/install.sh" -p "${INSTALL_DIR}" || exit 1
+    bash "${SCRIPT_DIR}/py${PYTHON_VERSION}/install$install_suffix.sh" -p "${INSTALL_DIR}" || exit 1
 fi
 
 cd $SCRIPT_DIR
