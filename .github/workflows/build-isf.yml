@@ -93,7 +93,6 @@ jobs:
         else
           echo "No previous Anaconda installation found. Continuing..."
         fi
-        mkdir $CONDA_TARGET_DIR || { echo "Failed to create directory $INSTALL_DIR"; exit 1; }
         pushd .
         cd installer/py${{ inputs.py_version }}
         set -o pipefail
