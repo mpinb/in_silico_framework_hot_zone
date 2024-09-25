@@ -29,6 +29,7 @@ jobs:
     with:
       py_version: 2.7
       mamba_or_anaconda: "anaconda"
+    # Py2 uses the defaults channel, which we currently dont have a license for
     if: false
 
   test:
@@ -41,6 +42,7 @@ jobs:
     defaults:
       run:
         shell: bash -l {0}
+    # Py2 uses the defaults channel, which we currently dont have a license for
     if: false
 
     # Steps represent a sequence of tasks that will be executed as part of the job
