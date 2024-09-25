@@ -13,7 +13,7 @@ __date__ = '2012-04-28'
 class Cell(object):
     '''Cell object for mapping synapses onto a morphology.
 
-    This class is specialized for use with :py:mod:`single_cell_input_mapper.single_cell_input_mapper.synapse_maper`.
+    This class is specialized for use with :py:mod:`single_cell_input_mapper.single_cell_input_mapper.synapse_mapper`.
 
     Warning: 
         While it contains similar methods, this is not the same class as :class:`single_cell_parser.cell.Cell`.
