@@ -33,10 +33,6 @@ INVOCATION_DIR=$(pwd)
 #     fi
 # done
 PYTHON_VERSION="3.8"  # 3.8 by default, no reason to promp the user
-MAMBA_OR_ANACONDA="mamba"
-if [ "$PYTHON_VERSION" == "2.7" ]; then
-    MAMBA_OR_ANACONDA="anaconda"    # no mamba for py2.7
-fi
 
 # If Python version is 3.8, ask whether or not to install Node.js
 if [ "$PYTHON_VERSION" == "3.8" ]; then
@@ -95,9 +91,9 @@ fi
 
 # Invoke the installation script in the correct folder
 if [ "$INSTALL_NODEJS" == "yes" ]; then
-    bash "${SCRIPT_DIR}/py${PYTHON_VERSION}/install_$MAMBA_OR_ANACONDA.sh" -p "${INSTALL_DIR}" --node || exit 1
+    bash "${SCRIPT_DIR}/py${PYTHON_VERSION}/install.sh" -p "${INSTALL_DIR}" --node || exit 1
 else
-    bash "${SCRIPT_DIR}/py${PYTHON_VERSION}/install_$MAMBA_OR_ANACONDA.sh" -p "${INSTALL_DIR}" || exit 1
+    bash "${SCRIPT_DIR}/py${PYTHON_VERSION}/install.sh" -p "${INSTALL_DIR}" || exit 1
 fi
 
 cd $SCRIPT_DIR
