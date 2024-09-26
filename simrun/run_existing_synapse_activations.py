@@ -1,9 +1,5 @@
 '''
-Created on Jan 28, 2013
-
 ongoing activity L2 neuron model
-
-@author: robert, arco
 '''
 from __future__ import absolute_import
 from ._matplotlib_import import *
@@ -24,6 +20,9 @@ from . import utils
 import logging
 
 logger = logging.getLogger("ISF").getChild(__name__)
+
+__author__ = ['Robert Egger', 'Arco Bast']
+__date__ = '2013-01-28'
 
 def _evoked_activity(cellParamName, evokedUpParamName, synapse_activation_files, \
                      dirPrefix = '', tStop = 345.0, scale_apical = None, post_hook = {}, \

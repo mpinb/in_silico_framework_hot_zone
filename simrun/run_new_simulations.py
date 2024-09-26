@@ -1,9 +1,5 @@
 '''
-Created on Jan 28, 2013
-
 ongoing activity L2 neuron model
-
-@author: robert, arco
 '''
 from __future__ import absolute_import
 from ._matplotlib_import import *
@@ -27,6 +23,9 @@ from .utils import *
 from data_base.dbopen import resolve_db_path
 from biophysics_fitting.utils import execute_in_child_process
 import socket
+
+__author__ = ['Robert Egger', 'Arco Bast']
+__date__ = '2013-01-28'
 
 def _evoked_activity(
         cellParamName, 

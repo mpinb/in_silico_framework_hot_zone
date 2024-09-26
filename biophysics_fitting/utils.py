@@ -1,11 +1,16 @@
-'''
-Created on Nov 01, 2018
+'''Utility functions for biophysics fitting.
 
-@author: abast
+This module contains utilities and convenience methods for:
+- Selection sections
+- Reading out Vm at a section
+- Multiprocessing
 '''
 
 import numpy as np
 from functools import partial
+
+__author__ = 'Arco Bast'
+__date__ = '2018-11-01'
 
 
 ####################################

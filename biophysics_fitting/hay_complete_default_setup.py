@@ -2,10 +2,6 @@
 This module provides a complete setup for the Hay stimulus protocol on a Layer 5 Pyramidal Tract (L5PT) neuron.
 While :py:mod:`~biophysics_fitting.hay_evaluation` is a direct Python translation of :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011`,
 this module has been adapted to allow for more flexibility and integration with ISF.
-
-Created on Nov 08, 2018
-
-@author: abast
 '''
 from __future__ import absolute_import
 
@@ -29,6 +25,9 @@ from .evaluator import Evaluator
 from toolz.dicttoolz import merge
 
 from .combiner import Combiner
+
+__author__ = 'Arco Bast'
+__date__ = '2018-11-08'
 
 ################################################
 # Simulator

@@ -1,7 +1,5 @@
 '''Read and parse a :class:`single_cell_parser.cell.Cell` object from a NEURON :ref:`hoc_file_format` file.
 '''
-__author__ = 'Robert Egger, Arco Bast'
-__credits__ = ['Robert Egger', 'Arco Bast']
 
 import warnings, traceback
 from neuron import h
@@ -12,7 +10,7 @@ from .cell import PySection, Cell
 from . import cell_modify_functions
 import logging
 
-__author__  = "Robert Egger, Arco Bast"
+__author__  = ["Robert Egger", "Arco Bast"]
 __credits__ = ["Robert Egger", "Arco Bast"]
 __date__    = "2012-03-08"
 

@@ -1,7 +1,4 @@
 '''
-Created on Aug 06, 2012
-
-@author: robert
 '''
 
 import sys
@@ -18,6 +15,9 @@ import matplotlib.pyplot as plt
 from single_cell_parser.network import activate_functional_synapse
 
 h = neuron.h
+
+__author__ = 'Robert Egger'
+__date__ = '2012-08-06'
 
 
 def unitary_connections(modelName,

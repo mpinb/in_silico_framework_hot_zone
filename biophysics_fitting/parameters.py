@@ -1,12 +1,11 @@
 '''
-This module provides convenience methods to fetch parameters with the dot naming convention.
-
-Created on Nov 08, 2018
-
-@author: abast
+Fetch parameters with the dot naming convention.
 '''
 
 import pandas as pd
+
+__author__ = 'Arco Bast'
+__date__ = '2018-11-08'
 
 
 def param_to_kwargs(fun):

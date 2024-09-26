@@ -1,11 +1,10 @@
 '''
 This module provides the :class:`Combiner` class and associated classes and functions.
 The :class:`~biophysics_fitting.combiner.Combiner` class can be used to combine features computed by an :class:`~biophysics_fitting.evaluator.Evaluator` object.
-
-Created on Nov 08, 2018
-
-@author: abast
 '''
+
+__author__ = 'Arco Bast'
+__date__ = '2018-11-08'
 
 
 class Combiner_Setup:

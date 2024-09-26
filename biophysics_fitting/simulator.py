@@ -8,18 +8,16 @@ The class :class:`Simulator` is used to transform a parameter vector into simula
 It allows to apply a variety of stimuli to the cell and extract voltage traces.
 
 The results of this module can be used in conjunction with :py:mod:`~biophysics_fitting.evaluator` to iteratively run and evaluate simulations.
-
-Created on Nov 08, 2018
-
-@author: abast
 '''
 
 import single_cell_parser as scp
 from .parameters import param_selector
 import time
 import logging
-
 logger = logging.getLogger("ISF").getChild(__name__)
+
+__author__ = 'Arco Bast'
+__date__ = '2018-11-08'
 
 
 class Simulator_Setup:

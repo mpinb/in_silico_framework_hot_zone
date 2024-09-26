@@ -1,8 +1,6 @@
+"""Database class for storing and retrieving data in a robust and efficient way.
 """
-Created October 2023
 
-@authors: Arco Bast, Bjorge Meulemeester
-"""
 
 import os, tempfile, string, json, threading, random, shutil, inspect, datetime, importlib, logging, errno, six
 from pathlib import Path
@@ -12,6 +10,9 @@ from data_base.utils import colorize
 VC = _module_versions.version_cached
 
 logger = logging.getLogger("ISF").getChild(__name__)
+
+__author__ = ['Arco Bast', 'Bjorge Meulemeester']
+__date__ = '2023-10-01'
 class LoaderWrapper:
     '''This is a pointer to data, which is stored elsewhere.
     

@@ -1,9 +1,5 @@
 '''
-Created on Jan 28, 2013
-
 passive properties L2 neuron model
-
-@author: robert
 '''
 
 import sys
@@ -19,6 +15,9 @@ h = neuron.h
 import logging
 
 logger = logging.getLogger("ISF").getChild(__name__)
+
+__author__ = 'Robert Egger'
+__date__ = '2013-01-28'
 
 
 def test_passive_props(fname):

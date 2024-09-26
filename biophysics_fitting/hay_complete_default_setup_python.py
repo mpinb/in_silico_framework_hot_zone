@@ -1,9 +1,5 @@
 '''
 A Python translation of the setup for in-silico curernt injection experiments as described in :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011`.
-
-Created on Nov 08, 2018
-
-@author: abast
 '''
 from __future__ import absolute_import
 
@@ -30,6 +26,9 @@ from toolz.dicttoolz import merge
 from . import hay_evaluation_python
 from .utils import tVec, vmSoma, vmApical, vmMax
 import numpy as np
+
+__author__ = 'Arco Bast'
+__date__ = '2018-11-08'
 
 ################################################
 # Simulator

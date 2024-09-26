@@ -1,9 +1,5 @@
-'''
-Created on Jan 28, 2013
+'''Ongoing activity L2 neuron model
 
-ongoing activity L2 neuron model
-
-@author: robert
 '''
 
 import sys
@@ -15,8 +11,10 @@ import single_cell_parser as scp
 import single_cell_parser.analyze as sca
 import numpy as np
 import matplotlib.pyplot as plt
-
 h = neuron.h
+
+__author__ = 'Robert Egger'
+__date__ = '2013-01-28'
 
 
 def ongoing_activity(simName, cellName, evokedUpParamName):
