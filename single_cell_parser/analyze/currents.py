@@ -1,13 +1,13 @@
 '''
-Created on Nov 6, 2012
 
-@author: regger
 '''
 
 import numpy as np
 import neuron
-
 h = neuron.h
+
+__author__ = 'Robert Egger'
+__date__ = '2012-11-06'
 
 #    TODO: this needs to be automated... i.e., should be such that
 #    section, or better, segment is passed as an argument and all
@@ -17,12 +17,26 @@ h = neuron.h
 
 
 def compute_soma_currents(cell, currents, tVec):
-    '''
+    '''Compute a selection of currents at the soma.
+
+    Computes:
+    - axial current from/to AIS
+    - capacitive current in soma
+    - ionic currents in soma:
+        - Na
+        - Kd
+        - Pas
+
     TODO: this needs to be automated... i.e., should be such that   
     section, or better, segment is passed as an argument and all    
     ionic/axial/capacitive currents are automatically calculated    
     => add automatic recording of all ionic (and synaptic?) currents
-    and conductances to PySection/Synapse classes                   
+    and conductances to PySection/Synapse classes
+
+    :skip-doc:
+
+    See also:
+        :class:`CurrentAnalysis`       
     '''
     #===========================================================================
     # units of axial currents: muS*mV = nA = 10^3 pA
@@ -50,17 +64,17 @@ def compute_soma_currents(cell, currents, tVec):
                     dendCurrs.append(1000 / ri * (vDend - vSoma))
                     iDendTotal += dendCurrs[-1]
 
-
-#                only interested in branch root section,
-#                therefore jump into outer loop
-#                break
+                # only interested in branch root section,
+                # therefore jump into outer loop
+                # break
                 secCnt += 1
 
+    # axial current in AIS
     vAx = np.array(cell.structures['AIS'][0].recVList[0])
-    riAx = h.ri(cell.structures['AIS'][0].segx[0],
-                sec=cell.structures['AIS'][0])
+    riAx = h.ri(cell.structures['AIS'][0].segx[0], sec=cell.structures['AIS'][0])
     iAx = 1000 / riAx * (vAx - vSoma)
 
+    # capacitive current
     dV = np.diff(vSoma)
     dt = np.diff(t)
     iCap_ = 0.01 * cell.soma.cm * cell.soma.area * dV / dt
@@ -79,9 +93,7 @@ def compute_soma_currents(cell, currents, tVec):
 
 
 def analyze_voltage_trace(vTrace, tTrace):
-    """
-    takes neuron Vectors and finds time and
-    amplitude of max depolarization
+    """Find time and amplitude of max depolarization.
     """
     v = np.array(vTrace)
     t = np.array(tTrace)
