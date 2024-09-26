@@ -27,7 +27,6 @@ jobs:
     uses: ./.github/workflows/build-isf.yml
     with:
       py_version: 3.9
-      mamba_or_anaconda: "anaconda"
 
   test:
     name: Test Py3.9

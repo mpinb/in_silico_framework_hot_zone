@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# Preliminary checks
 # Check if git is available
 if ! command -v git &> /dev/null; then
     echo "git could not be found. Please install git."
@@ -17,9 +18,10 @@ if ! command -v wget &> /dev/null; then
     exit 1
 fi
 
+# Global variables
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 INVOCATION_DIR=$(pwd)
-
+PYTHON_VERSION="3.8"  # 3.8 by default, no reason to promp the user
 # Ask the user for the Python version
 # while true; do
 #     echo "Please enter the Python version (2.7, 3.8, or 3.9):"
@@ -32,16 +34,12 @@ INVOCATION_DIR=$(pwd)
 #         echo "Invalid Python version. Please enter 2.7, 3.8, or 3.9."
 #     fi
 # done
-PYTHON_VERSION="3.8"  # 3.8 by default, no reason to promp the user
-MAMBA_OR_ANACONDA="mamba"
-if [ "$PYTHON_VERSION" == "2.7" ]; then
-    MAMBA_OR_ANACONDA="anaconda"    # no mamba for py2.7
-fi
 
 # If Python version is 3.8, ask whether or not to install Node.js
 if [ "$PYTHON_VERSION" == "3.8" ]; then
     while true; do
-        echo "Do you want to install Node.js alongside the Anaconda installation? ([y]es/[n]o)"
+        echo "Node.js is required for Jupyter Lab extensions."
+        echo "Do you want to install Node.js alongside the ISF installation? ([y]es/[n]o)"
         read INSTALL_NODEJS
         if [[ "$INSTALL_NODEJS" =~ ^[Nn].*$ ]]; then
             INSTALL_NODEJS="no"
@@ -65,7 +63,7 @@ while true; do
         DOWNLOAD_BC_MODEL="yes"
         break
     else
-            echo "Invalid option. Please enter 'yes/y' or 'no/n'."
+        echo "Invalid option. Please enter 'yes/y' or 'no/n'."
     fi
 done
 
@@ -83,10 +81,6 @@ while true; do
     fi
 done
 
-if [ ! -d "$INSTALL_DIR" ]; then
-    mkdir -p $INSTALL_DIR
-fi
-
 if [ "$DOWNLOAD_BC_MODEL" == "yes" ]; then
     echo $SCRIPT_DIR
     ls $SCRIPT_DIR
@@ -95,9 +89,9 @@ fi
 
 # Invoke the installation script in the correct folder
 if [ "$INSTALL_NODEJS" == "yes" ]; then
-    bash "${SCRIPT_DIR}/py${PYTHON_VERSION}/install_$MAMBA_OR_ANACONDA.sh" -p "${INSTALL_DIR}" --node || exit 1
+    bash "${SCRIPT_DIR}/py${PYTHON_VERSION}/install.sh" -p "${INSTALL_DIR}" --node || exit 1
 else
-    bash "${SCRIPT_DIR}/py${PYTHON_VERSION}/install_$MAMBA_OR_ANACONDA.sh" -p "${INSTALL_DIR}" || exit 1
+    bash "${SCRIPT_DIR}/py${PYTHON_VERSION}/install.sh" -p "${INSTALL_DIR}" || exit 1
 fi
 
 cd $SCRIPT_DIR
@@ -112,6 +106,6 @@ echo -e <<EOF
 \e[1;32m*                                                               *\e[0m
 \e[1;32m*****************************************************************\e[0m
 
-You are now ready to use ISF. Start by activating the ISF conda environment: \"source ${INSTALL_DIR}/bin/activate\"  -------- TODO
+You are now ready to use ISF. Start by activating the ISF conda environment: \"source ${INSTALL_DIR}/bin/activate\"
 For a general introduction to ISF, please refer to $(realpath $(dirname $SCRIPT_DIR))/getting_started/Introduction_to_ISF.ipynb
 EOF

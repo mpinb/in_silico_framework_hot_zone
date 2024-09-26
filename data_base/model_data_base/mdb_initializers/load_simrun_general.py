@@ -400,13 +400,13 @@ def generate_param_file_hashes(simresult_path, sim_trail_index):
 #####################################
 # step seven point one: replace paths in param files with relative mdbpaths
 #####################################
-from ..mdbopen import create_mdb_path
+from data_base.dbopen import create_db_path
 
 
 def create_mdb_path_print(path, replace_dict={}):
     ## replace_dict: todo
     try:
-        return create_mdb_path(path), True
+        return create_db_path(path), True
     except MdbException as e:
         # print e
         return path, False
