@@ -60,11 +60,20 @@ extensions = [
 ]
 
 def skip_member(app, what, name, obj, skip, options):
-    # Check if the member has a docstring
+    # skip commonly excluded members
+    exclusions = ['__weakref__', '__dict__', '__module__', '__doc__', '__abstractmethods__']
+    if name in exclusions:
+        return True
+    
+    # Skip if it has the :skip-doc: tag
     if obj.__doc__:
-        # Skip the member if it contains the custom tag ':skip-doc:'
-        if ':skip-doc:' in obj.__doc__:
-            return True
+            if ':skip-doc:' in obj.__doc__:
+                return True
+            
+    # Skip inherited members
+    if hasattr(obj, '__objclass__') and obj.__objclass__ is not obj.__class__:
+        return True
+    
     return skip
 
 def setup(app):
