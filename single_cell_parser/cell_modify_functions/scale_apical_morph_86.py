@@ -1,5 +1,5 @@
 """
-:meta private:
+:skip-doc:
 """
 
 import logging
@@ -15,7 +15,7 @@ def scale_apical_morph_86(cell):
     distance to soma; therefore only possible
     after creating complete cell
     
-    :meta private:
+    :skip-doc:
     '''
     import neuron
     h = neuron.h

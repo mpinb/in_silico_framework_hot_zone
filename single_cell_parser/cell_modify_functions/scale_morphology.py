@@ -65,7 +65,7 @@ def scale_morphology(cell, scale, target_morphology):
 
 def scale_morphology_old(cell, scaling_infragranular, scaling_granular, scaling_supragranular, home_column='C2'):
     """
-    :meta private:
+    :skip-doc:
     """
     mis = MorphologyInSpace(cell)
     mis.scale_morphology(scaling_infragranular, scaling_granular, scaling_supragranular, home_column)
@@ -75,7 +75,7 @@ def scale_morphology_old(cell, scaling_infragranular, scaling_granular, scaling_
     
 class MorphologyInSpace:
     """
-    :meta private:
+    :skip-doc:
     """
     def __init__(self, cell):
         self.cell = cell

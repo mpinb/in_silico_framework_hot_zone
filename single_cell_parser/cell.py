@@ -276,7 +276,7 @@ class Cell(object):
         Raises:
             NotImplementedError: Synapse parameter change does not work correctly with VecStim.
         
-        :meta private:
+        :skip-doc:
         '''
         raise NotImplementedError('Synapse parameter change does not work correctly with VecStim!')
         """ Old code
@@ -962,7 +962,7 @@ class SpikeTrain(PointCell):
     parameters and plays them as a regular point cell.
     Computation of spike times as in NEURON NetStim.
     
-    :meta private:
+    :skip-doc:
     '''
 
     def __init__(self):

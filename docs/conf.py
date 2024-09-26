@@ -59,6 +59,17 @@ extensions = [
     'sphinx.ext.mathjax',      # For math equations
 ]
 
+def skip_member(app, what, name, obj, skip, options):
+    # Check if the member has a docstring
+    if obj.__doc__:
+        # Skip the member if it contains the custom tag ':skip-doc:'
+        if ':skip-doc:' in obj.__doc__:
+            return True
+    return skip
+
+def setup(app):
+    app.connect('autodoc-skip-member', skip_member)
+
 bibtex_bibfiles = ['bibliography.bib']
 
 # Napoleon settings

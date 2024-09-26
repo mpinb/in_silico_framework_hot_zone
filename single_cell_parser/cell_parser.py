@@ -1235,7 +1235,7 @@ class CellParser(object):
         Args:
             parameters (dict): Parameters for spine morphology. See :ref:`cell_parameters_format` for an example.
         
-        :meta private:
+        :skip-doc:
         """
         spineneckDiam = parameters.spatialgraph_modify_functions.rieke_spines.spine_morphology.spineneckDiam
         spineneckLength = parameters.spatialgraph_modify_functions.rieke_spines.spine_morphology.spineneckLength

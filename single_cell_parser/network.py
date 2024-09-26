@@ -1694,7 +1694,7 @@ def functional_connectivity_visualization(functionalMap, cell):
 
     Left undocumented, as this seems to be a specific testing/convenience method.
     
-    :meta private:
+    :skip-doc:
     """
     nrL4ssCells = 3168
     nrL1Cells = 104
