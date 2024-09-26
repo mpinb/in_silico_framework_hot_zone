@@ -1,18 +1,25 @@
 '''
-Created on Nov 3, 2012
 
-@author: regger
 '''
 
 import numpy as np
 from data_base.dbopen import dbopen
 
+__author__ = 'Robert Egger'
+__date__ = '2012-11-03'
+
 
 def vm_mean(vVec, tVec, tStim, dtStim):
-    '''
-    computes mean subthreshold voltage from
-    voltage trace during stimulation time window
-    [tStim, tStim+dtStim]
+    '''Computes the mean voltage during a stimulation time window
+
+    Args:
+        vVec (list): voltage vector
+        tVec (list): time vector
+        tStim (float): start time of stimulation
+        dtStim (float): duration of stimulation
+
+    Returns:
+        float: mean voltage during stimulation time window
     '''
     t = np.array(tVec)
     v = np.array(vVec)
@@ -29,10 +36,16 @@ def vm_mean(vVec, tVec, tStim, dtStim):
 
 
 def vm_std(vVec, tVec, tStim, dtStim):
-    '''
-    computes standard deviation of subthreshold voltage from
-    voltage trace during stimulation time window
-    [tStim, tStim+dtStim]
+    '''Computes the standard deviation of the voltage during a stimulation time window
+
+    Args:
+        vVec (list): voltage vector
+        tVec (list): time vector
+        tStim (float): start time of stimulation
+        dtStim (float): duration of stimulation
+
+    Returns:
+        float: standard deviation of the voltage during stimulation time window
     '''
     t = np.array(tVec)
     v = np.array(vVec)
@@ -49,17 +62,44 @@ def vm_std(vVec, tVec, tStim, dtStim):
 
 
 def compute_mean_psp_amplitude(vTraces, tStim, dt):
+    """Compute the mean amplitude of all PSPs across multiple voltage traces.
+    
+    The post-synaptic potential (PSP) amplitude is the maximum membrane voltage deflection
+    between :paramref:`tStim` + ``delay`` and :paramref:`tStim` + ``delay`` + ``width``,
+    where ``delay`` and ``width`` are :math:`15.0` and :math:`35.0 \, ms` respectively.
+
+    Args:
+        vTraces (list): List of voltage traces
+        tStim (float): Time of stimulation
+        dt (float): Time step
+
+    Returns:
+        tuple: A tuple containing the delay and the mean amplitude of the PSPs.    
+    """
     width = 35.0
-    t = 15.0
+    t_delay = 15.0
     amplitudes = []
     for trace in vTraces:
-        begin = int((tStim + t) / dt + 0.5)
-        end = int((tStim + t + width) / dt + 0.5)
+        # +0.5 is simply for rounding up
+        begin = int((tStim + t_delay) / dt + 0.5)
+        end = int((tStim + t_delay + width) / dt + 0.5)
         amplitudes.append(np.max(trace[begin:end]))
-    return [t], [np.mean(amplitudes)]
+    return [t_delay], [np.mean(amplitudes)]
 
 
 def compute_vm_std_windows(vStd, tStim, dt):
+    """Compute the standard deviation of the voltage during different time windows.
+    
+    Time windows are defined as :math:`[-50.0, 15.0] \, ms` and :math:`[15.0, 50.0] \, ms`.
+    
+    Args:
+        vStd (list): List of standard deviations of the voltage
+        tStim (float): Time of stimulation
+        dt (float): Time step
+        
+    Returns:
+        tuple: A tuple containing the time windows and the average standard deviations.
+    """
     width = 35.0
     windows = [-50.0, 15.0]
     avgStds = []

@@ -1,5 +1,10 @@
-'''
+'''Compute synapse distances and activation times.
 
+This module provides functions to compute the distances of synapses to the soma 
+and to save the activation times and soma distances of synapses to a ``.csv`` file.
+
+See also:
+    The :ref:`syn_activation_format` file format.
 '''
 
 import numpy as np
