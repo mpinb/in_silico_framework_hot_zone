@@ -94,6 +94,13 @@ def compute_soma_currents(cell, currents, tVec):
 
 def analyze_voltage_trace(vTrace, tTrace):
     """Find time and amplitude of max depolarization.
+
+    Args:
+        vTrace (neuron.h.Vector | array): membrane potential trace
+        tTrace (neuron.h.Vector | array): time trace
+
+    Returns:
+        tuple: time and amplitude of max depolarization
     """
     v = np.array(vTrace)
     t = np.array(tTrace)
