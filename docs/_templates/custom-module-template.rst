@@ -40,9 +40,7 @@ Back to :mod:`{{ parent_module }}`
       :template: custom-function-template.rst
 
       {% for item in functions %}
-      {% if not item.meta or not item.meta.private %}
-         {{ item }}
-      {% endif %}
+      {{ item }}
       {%- endfor %}
    {% endif %}
    {% endblock %}
