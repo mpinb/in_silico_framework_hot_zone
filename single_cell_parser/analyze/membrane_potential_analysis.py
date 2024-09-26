@@ -61,7 +61,7 @@ def vm_std(vVec, tVec, tStim, dtStim):
     return vss
 
 
-def compute_mean_psp_amplitude(vTraces, tStim, dt):
+def compute_mean_psp_amplitude(vTraces, tStim, dt, width=35.0, t_delay=15.0):
     """Compute the mean amplitude of all PSPs across multiple voltage traces.
     
     The post-synaptic potential (PSP) amplitude is the maximum membrane voltage deflection
@@ -76,8 +76,6 @@ def compute_mean_psp_amplitude(vTraces, tStim, dt):
     Returns:
         tuple: A tuple containing the delay and the mean amplitude of the PSPs.    
     """
-    width = 35.0
-    t_delay = 15.0
     amplitudes = []
     for trace in vTraces:
         # +0.5 is simply for rounding up
@@ -87,7 +85,9 @@ def compute_mean_psp_amplitude(vTraces, tStim, dt):
     return [t_delay], [np.mean(amplitudes)]
 
 
-def compute_vm_std_windows(vStd, tStim, dt):
+def compute_vm_std_windows(vStd, tStim, dt, width=35.0, window_start_times=None):
+    if window_start_times is None:
+        window_start_times = [-50.0, 15.0]
     """Compute the standard deviation of the voltage during different time windows.
     
     Time windows are defined as :math:`[-50.0, 15.0] \, ms` and :math:`[15.0, 50.0] \, ms`.
@@ -100,18 +100,17 @@ def compute_vm_std_windows(vStd, tStim, dt):
     Returns:
         tuple: A tuple containing the time windows and the average standard deviations.
     """
-    width = 35.0
-    windows = [-50.0, 15.0]
     avgStds = []
-    for t in windows:
+    for t in window_start_times:
         begin = int((tStim + t) / dt + 0.5)
         end = int((tStim + t + width) / dt + 0.5)
         avgStds.append(np.mean(vStd[begin:end]))
-    return np.array(windows), np.array(avgStds)
+    return np.array(window_start_times), np.array(avgStds)
 
 
-def compute_vm_histogram(vTraces):
-    bins = np.array([-80.0 + i * 2.0 for i in range(21)])
+def compute_vm_histogram(vTraces, bins=None):
+    if bins is None:
+        bins = np.array([-80.0 + i * 2.0 for i in range(21)])
     vPoints = vTraces.flatten()
     hist, bin_edges = np.histogram(vPoints, bins=bins)
     norm = np.max(hist)
@@ -119,7 +118,7 @@ def compute_vm_histogram(vTraces):
     return hist, bins
 
 
-def compute_uPSP_amplitude(t, v, tSyn, isEPSP=True):
+def compute_uPSP_amplitude(t, v, tSyn, isEPSP=True, t_width_baseline=10.0):
     '''
     simple method for determining amplitude of
     unitary PSP starting at time tSyn:
@@ -130,29 +129,34 @@ def compute_uPSP_amplitude(t, v, tSyn, isEPSP=True):
     if len(t) != len(v):
         errstr = 'Time vector and membrane potential vector do not match'
         raise RuntimeError(errstr)
+    
+    # find baseline
     beginBin = 0
     endBin = 0
     while t[endBin] < tSyn:
         endBin += 1
-    while t[beginBin] < tSyn - 10.0:
+    while t[beginBin] < tSyn - t_width_baseline:
         beginBin += 1
     endBin -= 1
     beginBin -= 1
     if beginBin < 0:
         beginBin = 0
     baseline = np.median(v[beginBin:endBin])
+
+    # find amplitude wrt baseline
     if isEPSP:
         return np.max(v[endBin:]) - baseline
     else:
         return np.min(v[endBin:]) - baseline
 
 
-def simple_spike_detection(t,
-                           v,
-                           tBegin=None,
-                           tEnd=None,
-                           threshold=0.0,
-                           mode='regular'):
+def simple_spike_detection(
+        t,
+        v,
+        tBegin=None,
+        tEnd=None,
+        threshold=0.0,
+        mode='regular'):
     '''
     Simple spike detection method. Identify
     spike times within optional window [tBegin, tEnd]
@@ -193,11 +197,12 @@ def simple_spike_detection(t,
     return tSpike
 
 
-def PSTH_from_spike_times(spikeTimeVectors,
-                          binSize=1.0,
-                          tBegin=None,
-                          tEnd=None,
-                          aligned=True):
+def PSTH_from_spike_times(
+        spikeTimeVectors,
+        binSize=1.0,
+        tBegin=None,
+        tEnd=None,
+        aligned=True):
     '''
     Calculate PSTH from vectors of spike times
     with optional bin size and time window [tBegin, tEnd].
@@ -222,9 +227,9 @@ def PSTH_from_spike_times(spikeTimeVectors,
         tEnd = (int(tEnd / binSize) + 1.0) * binSize
 
 
-#    print 'binSize = %.2f' % binSize
-#    print 'tBegin = %.2f' % tBegin
-#    print 'tEnd = %.2f' % tEnd
+    # print 'binSize = %.2f' % binSize
+    # print 'tBegin = %.2f' % tBegin
+    # print 'tEnd = %.2f' % tEnd
 
     bins = np.arange(tBegin, tEnd, binSize)
     hist, bins = np.histogram(allSpikeTimes, bins)
@@ -248,8 +253,10 @@ class RecordingSiteManager(object):
         self.recordingSites = []
         for i in range(len(landmarks)):
             landmark = np.array(landmarks[i])
-            newRecSite = self.set_up_recording_site(landmark, i,
-                                                    landmarkFilename)
+            newRecSite = self.set_up_recording_site(
+                landmark, 
+                i,
+                landmarkFilename)
             self.recordingSites.append(newRecSite)
 
     def set_up_recording_site(self, location, ID, filename):
