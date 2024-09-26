@@ -1,7 +1,6 @@
-'''
-Created on Apr 21, 2012
+'''Runfile to test VPM activation of an L5tt cell.
 
-@author: robert
+Used by the Oberlaender lab in MPINB, Bonn.
 '''
 
 import neuron
@@ -11,6 +10,8 @@ from . import synapse_mapper as smap
 from . import sim_control
 import numpy as np
 import logging
+__author__ = 'Robert Egger'
+__date__ = '2012-04-21'
 
 logger = logging.getLogger("ISF").getChild(__name__)
 '''anatomical parameters'''

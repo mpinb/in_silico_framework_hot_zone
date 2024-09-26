@@ -45,19 +45,9 @@ class Combiner:
     but also a list of names of the features that go into that combination. 
     Each list of features is then combined by calling combinefun with that list.
     
-    Example: Assume, the evaluator returns a dictionary like:
-    
-        >>> features = {'feature1': 1, 'feature2': 2, 'feature3': 3, 'feature4': 4}
-        
-    We want to combine feature 1 and 2. 
-    We also want to combine features 2, 3 and 4. 
-    Combining features should be done by taking the maximum.
-    
-    How can this be set up?
-    An example, how the Combiner object can be set up can be found in :py:mod:`~biophysics_fitting.hay_complete_default_setup`
-    
     Example:
     
+        >>> features = {'feature1': 1, 'feature2': 2, 'feature3': 3, 'feature4': 4}
         >>> c = Combiner()
         >>> c.setup.append('combination1', ['feature1', 'feature2'])
         >>> c.setup.append('combination2', ['feature2', 'feature3', 'feature4'])

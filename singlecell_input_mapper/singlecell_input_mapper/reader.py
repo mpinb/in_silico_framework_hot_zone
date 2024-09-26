@@ -1,13 +1,12 @@
-'''
-Created on Mar 8, 2012
-
-@author: regger
+'''Read in hoc files, Amira Mesh files, and spreadsheets with connection probabilities.
 '''
 
 import numpy as np
 from . import scalar_field
 from data_base.dbopen import dbopen
 
+__author__ = 'Robert Egger'
+__date__ = '2012-03-08'
 
 class Edge(object):
     '''Convenience class around NEURON's section objects.

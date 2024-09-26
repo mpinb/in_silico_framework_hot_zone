@@ -3,15 +3,13 @@ This module allows to compute synapse density fields from a Post-Synaptic Target
 The :class:`~singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper` class uses these classes to create synapse realizations.
 While the classes in this module can be used in isolation, there are also full pipelines available that use the classes here to map synapses to a neuron morphology.
 Consult the module :py:mod:`~singlecell_input_mapper.map_singlecell_inputs` for such a pipeline, or the documentation of :class:`~singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper` for more info on how to use these classes in a pipeline.
-
-Created on Mar 30, 2012
-
-@author: regger
 '''
 import numpy as np
 from .scalar_field import ScalarField
 import sys
 
+__author__ = 'Robert Egger'
+__date__ = '2012-03-30'
 
 class SynapseMapper(object):
     '''Assign synapses to neuron morphology from density meshes.
@@ -208,7 +206,7 @@ class SynapseDensity(object):
     '''Compute synapse density mesh from a PST density mesh.
     
     Given a PST density mesh, create a 3D mesh of synapse densities for a single postsynaptic neuron using :py:meth:`compute_synapse_density`.
-    It is assumed that :py:attr:`~singlecell_input_mapper.singlecell_input_mapper.synapse_maper.SynapseMapper.exPST` and :py:attr:`~singlecell_input_mapper.singlecell_input_mapper.synapse_maper.SynapseMapper.inhPST` have the same bounding box and voxel size.
+    It is assumed that :py:attr:`~singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseMapper.exPST` and :py:attr:`~singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseMapper.inhPST` have the same bounding box and voxel size.
     This density mesh is used in :class:`~singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseMapper` to assign synapses to the postsynaptic neuron.
     
     This class is used in :class:`~singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper`
@@ -224,6 +222,7 @@ class SynapseDensity(object):
         The only cell type specificity that is considered here is whether or not the postsynaptic cell is excitatory or inhibitory.
         Cell type wiring specificity is only considered in the network realization phase, when the synapse density field is Poisson sampled and normalized.
         Then the normalization values depend on the exact presynaptic cell type.
+    See also:
         See: :py:class:`~singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper`
     '''
     def __init__(

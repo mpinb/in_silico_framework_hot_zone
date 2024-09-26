@@ -3,12 +3,18 @@ import single_cell_parser.analyze as sca
 
 def silence_synapses_by_somadist(cell, evokedNW, soma_dist_ranges=None):
     '''
-    This allows to silence synapses active at a certain soma distance.
-    Parameters:
-        soma_dist_ranges: dict, with synapse types as keys (e.g. L5tt_C2) and the range 
-            in which it should be silenced as value. Example:
-                {'VPM_C2': [0,200],
-                 'L5tt_C2': [1000,1200]}
+    Silence synapses at a certain soma distance.
+    
+    Args:
+        cell (:class:`single_cell_parser.cell.Cell`): The cell to modify.
+        soma_dist_ranges (dict): Dictionary with synapse types as keys (e.g. L5tt_C2) and the range 
+            in which it should be silenced as value. 
+            
+    Example:
+        >>> soma_dist_ranges = {
+        ... 'VPM_C2': [0,200],
+        ... 'L5tt_C2': [1000,1200]
+        ... }
     '''
 
     assert soma_dist_ranges is not None

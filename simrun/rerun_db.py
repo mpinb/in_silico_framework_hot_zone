@@ -112,8 +112,10 @@ def _evoked_activity(
 
         syn = synapse_activation_df_to_roberts_synapse_activation(syn_df)
 
-        evokedNW = scp.NetworkMapper(cell, network_param.network,
-                                     neuron_param.sim)
+        evokedNW = scp.NetworkMapper(
+            cell, 
+            network_param.network,
+            neuron_param.sim)
         evokedNW.reconnect_saved_synapses(syn, include_silent_synapses = True)
         additional_evokedNWs = [
             scp.NetworkMapper(cell, p.network, neuron_param.sim)
@@ -133,8 +135,9 @@ def _evoked_activity(
         tVec = h.Vector()
         tVec.record(h._ref_t)
         startTime = time.time()
-        scp.init_neuron_run(neuron_param.sim,
-                            vardt=False)  #trigger the actual simulation
+        scp.init_neuron_run(
+            neuron_param.sim,
+            vardt=False)  #trigger the actual simulation
         stopTime = time.time()
         simdt = stopTime - startTime
         logger.info('NEURON runtime: {:.2f} s'.format(simdt))

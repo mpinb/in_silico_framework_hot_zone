@@ -45,19 +45,13 @@ Outputs:
   and column of anatomical synapses
 - AmiraMesh landmark file containing 3D synapse locations of anatomical
   synapses of each presynaptic type and column
-- Synapse location and connectivity file compatible with :py:mod:`simrun`.
-
-Author: 
-    Robert Egger
-    Computational Neuroanatomy
-    Max Planck Institute for Biological Cybernetics
-    Tuebingen, Germany
+- Synapse location (:ref:`syn_file_format`) and connectivity (:ref:`con_file_format`) file compatible with :py:mod:`simrun`.
 """
+from __future__ import absolute_import
 
 #===============================================================================
 # Python standard library imports
 #===============================================================================
-from __future__ import absolute_import
 import sys
 import os.path
 import glob
@@ -74,6 +68,10 @@ import time
 import numpy as np
 from . import singlecell_input_mapper as sim
 import getting_started
+
+#===============================================================================
+# Metadata
+__author__ = 'Robert Egger'
 #===============================================================================
 # This is the only line that needs to be adapted to your system.
 # Change the string 'prefix' to the folder where all anatomical data is
@@ -141,7 +139,7 @@ def map_singlecell_inputs(
     
     Args:
         cellName (str): 
-            path to a .hoc file containing the morphology of the cell.
+            path to a :ref:`hoc_file_format` file containing the morphology of the cell.
         cellTypeName (str): 
             name of the postsynaptic cell type.
         nrOfSamples (int): 

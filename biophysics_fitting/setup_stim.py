@@ -38,8 +38,8 @@ def _append(cell, name, item):
 
 
 def setup_soma_step(cell, amplitude=None, delay=None, duration=None, dist=0):
-    """Setup up a step current at the soma for a given cell.
-    
+    """Setup up a step current at the soma, or a given :paramref:`dist` from the soma.
+
     Args:
         cell (:class:`~single_cell_parser.cell.Cell`): The cell object.
         amplitude (float): The amplitude of the step current.

@@ -1,14 +1,49 @@
-"""
-Create a dense connectome model with presynaptic activity.
+"""Create an empirically constrained dense connectome model with presynaptic activity.
 
 This package provides classes and methods to create a dense connectome model with defined activity patterns.
-It can be largely divided in two parts: connectivity and activity.
+It can be largely divided in two parts: :ref:`connectivity` and :ref:`activity`.
 
+Attention:
+    This package should not be confused with :py:mod:`single_cell_parser`. 
+    
+    This package is specialized to create empirically consistent network models, providing fine-grained control over the
+    network realization process, and ability to constrain it with empirical data.
+    :py:mod:`single_cell_parser` provides only basic functionality to generate network realizations and activity,
+    while its purpose is to provide an API to the NEURON simulator, and read in results from network realizations.
+  
+    In any case, beware of the following classes and methods that are duplicates in name, but not in functionality:
+    
+    .. list-table:: 
+        :header-rows: 1
+
+        * - :py:mod:`singlecell_input_mapper.singlecell_input_mapper`
+          - :py:mod:`single_cell_parser`
+        * - :class:`~singlecell_input_mapper.singlecell_input_mapper.cell.Cell`
+          - :class:`~single_cell_parser.cell.Cell`
+        * - :class:`~singlecell_input_mapper.singlecell_input_mapper.cell.CellParser`
+          - :class:`~single_cell_parser.cell_parser.CellParser`
+        * - :class:`~singlecell_input_mapper.singlecell_input_mapper.reader.Edge`
+          - :class:`~single_cell_parser.reader.Edge`
+        * - :class:`~singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseMapper`
+          - :class:`~single_cell_parser.synapse_mapper.SynapseMapper`
+        * - :class:`~singlecell_input_mapper.singlecell_input_mapper.scalar_field.ScalarField`
+          - :class:`~single_cell_parser.scalar_field.ScalarField`
+        * - :class:`~singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper`
+          - :class:`~single_cell_parser.network.NetworkMapper`
+        * - :meth:`~singlecell_input_mapper.singlecell_input_mapper.cell.Synapse`
+          - :meth:`~single_cell_parser.synapse.Synapse`
+        * - :meth:`~singlecell_input_mapper.singlecell_input_mapper.reader.read_hoc_file`
+          - :meth:`~single_cell_parser.reader.read_hoc_file`
+        * - :meth:`~singlecell_input_mapper.singlecell_input_mapper.reader.read_scalar_field`
+          - :meth:`~single_cell_parser.reader.read_scalar_field`
+
+.. _connectivity:
+ 
 Connectivity
 ------------
 
 :py:mod:`singlecell_input_mapper.singlecell_input_mapper` is responsible for assigning synapses to the morphology of a postsynaptic neuron, 
-and keeping track of th3e synapse type and associated presynaptic cell type. Based on this presynaptic cell type, different spike times can be generated (see section Activity below).
+and keeping track of the synapse type and associated presynaptic cell type. Based on this presynaptic cell type, different spike times can be generated (see section Activity below).
 Assigning synapses onto the postsynaptic morphology is referred to as a 'network realization'. The network realization in ISF is based on the following inputs:
 
 - The morphology and location of the postsynaptic neuron
@@ -24,14 +59,16 @@ If you want to use other methods, please familiarize yourself with the data form
 1. Convert the input data to the required input format for ISF and run the same network realization pipeline. Input file formats are described in more detail in :py:mod:`singlecell_input_mapper.map_singlecell_inputs`.
 2. Create your own network realization, and convert the output to the format used in ISF. These are `.syn` and `.con` files, and described in more detail in the [tutorials](../getting_started/tutorials/2. network models/2.1 Anatomical embedding.ipynb).
 
+.. _activity:
+
 Activity
 --------
 
 This section is responsible for generating activity patterns for the assigned synapses based in empirically observed PSTHs of the presynaptic neurons.
 ISF distinguishes two kinds of activity:
 
-1. Ongoing activity: the baseline synaptic activity patterns in the absence of the in-vivo condition of interest.
-2. Evoked activity: the activity patterns in response to a specific in-vivo condition.
+1. Ongoing activity: the baseline synaptic activity patterns in the absence of the in-vivo condition of interest. The ongoing activity is defined in tandem with the network parameters in a :ref:`network_parameters_format` file.
+2. Evoked activity: the activity patterns in response to a specific in-vivo condition. Its file format is described in :ref:`activity_data_format`. 
 
 The general workflow is as follows:
 
@@ -39,41 +76,6 @@ The general workflow is as follows:
 2. Create PSTHs for each cell type for the ongoing and evoked activity. Such files are present in getting_started/example_data/functional_constraints
 3. Create a network parameter file from the PSTHs.
 
-Evoked and ongoing activity each have their separate network parameter file. Example activity data for evoked activity can be found in the form of PSTHs in getting_started/example_data/functional_constraints/evoked_activity.
-Ongoing activity network parameter files can be found in getting_started/example_data/functional_constraints/ongoing_activity and has the following format::
-
-        {
-        "info": {
-            "date": "11Feb2015",
-            "name": "evoked_activity",
-            "author": "name",
-        },
-        "network": {
-            "cell_type_1": {
-                "celltype": "spiketrain" or "pointcell",
-                "interval": average interval between spikes for the given experimental condition,
-                "synapses": {
-                    "receptors": {
-                        "glutamate_syn": {
-                            "threshold": 0.0,
-                            "delay": 0.0,
-                                "parameter": {
-                                "tau1": 26.0,
-                                "tau2": 2.0,
-                                "tau3": 2.0,
-                                "tau4": 0.1,
-                                "decayampa": 1.0,
-                                "decaynmda": 1.0,
-                                "facilampa": 0.0,
-                                "facilnmda": 0.0,
-                                },
-                            "weight": [1.47, 1.47],
-                        },
-                    },
-                "releaseProb": 0.6,
-                },
-            },
-            "cell_type_2": {...},
-            ...
-    }
 """
+__author__  = "Robert Egger"
+__credits__ = ["Robert Egger", "Arco Bast"]

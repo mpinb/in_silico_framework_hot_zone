@@ -1,20 +1,35 @@
 '''
-Created on Mar 30, 2012
 
-@author: regger
 '''
 from neuron import h
 from collections import Sequence
 import numpy as np
 
+__author__ = 'Robert Egger'
+__date__ = '2012-03-30'
 
 class Synapse(object):
-    '''
-    Synapse base class
+    '''Synapse base class
+
     Contains information about pre- and postsynaptic cell type,
     branch ID of postsynaptic cell, branch pt ID,
-    and xyz-coordinates of synapse location
-    Biophysical mechanisms are specified in subclasses
+    and xyz-coordinates of synapse location.
+    Used in :class:`single_cell_parser.cell.Cell` to store synapse information.
+
+    Attributes:
+        secID (int): ID of attached section in cell.sections
+        ptID (int): ID of attached point in cell.sections[self.secID].pts
+        x (float): Relative coordinate along attached section (from 0 to 1)
+        preCellType (str): Reference to presynaptic cell (PointCell)
+        preCell (PointCell): Reference to presynaptic cell (PointCell)
+        releaseSite (PointCell): Release site of presynaptic cell.
+        postCellType (str): Reference to postsynaptic cell (PointCell)
+        coordinates (list): 3D coordinates of synapse location
+        receptors (dict): Stores hoc mechanisms
+        netcons (list): Stores NetCons
+        weight (float): Synaptic weight
+        _active (bool): Activation status
+        pruned (bool): Pruning status
     '''
 
     def __init__(
@@ -25,36 +40,12 @@ class Synapse(object):
         preCellType='',
         postCellType=''):
         '''
-        ID of attached section in cell.sections
-        self.secID = edgeID
-        
-        ID of attached point in cell.sections[self.secID].pts
-        self.ptID = edgePtID
-        
-        relatice coordinate along attached section
-        self.x = edgex
-        
-        self.preCellType = preCellType
-        reference to presynaptic cell (PointCell)
-        self.preCell = None
-        
-        reference to presynaptic release site (PointCell)
-        self.releaseSite = None
-        
-        self.postCellType = postCellType
-        
-        3D coordinates of synapse location
-        self.coordinates = None
-        
-        stores hoc mechanisms and NetCons
-        self.receptors = {}
-        self.netcons = []
-        
-        self.weights = None
-        
-        self._active = False
-        
-        self.pruned = False
+        Args:
+            edgeID (int): ID of attached section in cell.sections
+            edgePtID (int): ID of attached point in cell.sections[edgeID].pts
+            edgex (float): relative coordinate along attached section
+            preCellType (str): reference to presynaptic cell (PointCell)
+            postCellType (str): reference to postsynaptic cell (PointCell)
         '''
         self.secID = edgeID
         self.ptID = edgePtID
@@ -75,7 +66,13 @@ class Synapse(object):
 
     def activate_hoc_syn(self, source, preCell, targetCell, receptors):
         '''setup of all necessary hoc connections.
-        stores all mechanisms and NetCons for reference counting.'''
+        stores all mechanisms and NetCons for reference counting.
+        
+        Args:
+            source (:class:`single_cell_parser.cell.PointCell`): 
+                Presynaptic cell whose :py:attr:`single_cell_parser.cell.PointCell.spikes` attribute is used as ``source`` in NEURON's NetCon object.
+                Note that in the context of a synapse, ``spikes`` means release times, which is not necessarily the same as the presynaptic spike times.
+        '''
         self.releaseSite = source
         self.preCell = preCell
         '''careful: point processes not allowed at nodes between sections
@@ -108,6 +105,10 @@ class Synapse(object):
         self._active = True
 
     def disconnect_hoc_synapse(self):
+        """Disconnect the synapse from the neuron model.
+        
+        
+        """
         if self.releaseSite:
             self.releaseSite.turn_off()
         self.preCell = None
@@ -118,23 +119,31 @@ class Synapse(object):
 
 
 class ExSyn(Synapse):
-    '''
-    simple excitatory synapse for playing around
+    '''Simple excitatory synapse.
+
+    Used for testing purposes.
+
+    Attributes:
+        syn (h.ExpSyn): hoc ExpSyn object
+        netcon (h.NetCon): hoc NetCon object
+        _active (bool): activation status
     '''
 
     def __init__(self, edgeID, edgePtID, preCellType='', postCellType=''):
-        Synapse.__init__(self,
-                         edgeID,
-                         edgePtID,
-                         preCellType='',
-                         postCellType='')
+        Synapse.__init__(
+            self,
+            edgeID,
+            edgePtID,
+            preCellType='',
+            postCellType='')
 
-    def activate_hoc_syn(self,
-                         source,
-                         targetCell,
-                         threshold=10.0,
-                         delay=0.0,
-                         weight=0.0):
+    def activate_hoc_syn(
+            self,
+            source,
+            targetCell,
+            threshold=10.0,
+            delay=0.0,
+            weight=0.0):
         x = targetCell.sections[self.secID].relPts[self.ptID]
         hocSec = targetCell.sections[self.secID]
         self.syn = h.ExpSyn(x, hocSec)

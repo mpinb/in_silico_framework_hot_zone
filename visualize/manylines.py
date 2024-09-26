@@ -1,9 +1,5 @@
 '''
-date: 15.09.2016
-
-autor: arco bast
-
-the manylines function allowes to make plots in parallel
+Make lineplots in parallel
 '''
 
 import matplotlib.pyplot as plt

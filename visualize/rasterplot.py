@@ -1,11 +1,5 @@
 """ 
-Author: Unkown
-
-Last updated on: 23/01/2023 by Bjorge Meulemeester
-
-TODO:
-- rasterplot2() dummy plot makes little sense. What's happening there?
-- version supporting parallel?
+Efficiently create rasterplots from spike time dataframes.
 """
 
 # import dask
@@ -18,14 +12,38 @@ from data_base.analyze._helper_functions import is_int
 from data_base.utils import convertible_to_int
 
 
-def rasterplot2(st,
-                ax=None,
-                x_offset=0,
-                c=None,
-                plot_kwargs=dict(solid_capstyle='butt'),
-                y_offset=None,
-                y_plot_length=1,
-                marker='line'):
+def rasterplot2(
+    st,
+    ax=None,
+    x_offset=0,
+    c=None,
+    plot_kwargs=dict(solid_capstyle='butt'),
+    y_offset=None,
+    y_plot_length=1,
+    marker='line'):
+    """Plot a rasterplot from a spike times dataframe.
+
+    Args:
+        st (pandas.DataFrame): 
+            A DataFrame containing the spike times, where each row is a single trial of a single unit.
+        ax (matplotlib.axes.Axes, optional): 
+            An optional Matplotlib Axes object to plot on. If not provided, a new figure and axes are created.
+        x_offset (float, optional): 
+            An offset to apply to the x-values (event times). Default is 0.
+        c (str or array-like, optional): 
+            An optional color for the plot. Can be a single color format string, or a sequence of colors.
+        plot_kwargs (dict, optional): 
+            Additional keyword arguments for the plot function. Default is {'solid_capstyle': 'butt'}.
+        y_offset (int, optional): 
+            An optional starting y-value for the plot. If not provided, it is set to the number of rows in the DataFrame.
+        y_plot_length (float, optional): 
+            The length of the line to plot for each event. Default is 1.
+        marker (str, optional): 
+            The marker style to use for plotting events. Defaults to 'line'. If 'line', lines of defined length are plotted.
+    
+    Returns:
+        None
+    """
     if ax is None:
         ax = plt.figure().add_subplot(111)
     if c is not None:
@@ -45,18 +63,43 @@ def rasterplot2(st,
         else:  # plot with the specified marker
             dummy_x = [vv - x_offset for vv in list(v)]
             dummy_y = [y for vv in list(v)
-                      ]  # TODO: what the hell does this code do
+                      ]
             ax.plot(dummy_x, dummy_y, marker, **plot_kwargs)
 
         y = y - 1
 
 
-def rasterplot2_pdf_grouped(pdf,
-                            grouplabel,
-                            ax=None,
-                            xlim=None,
-                            x_offset=0,
-                            color='k'):
+def rasterplot2_pdf_grouped(
+    pdf,
+    grouplabel,
+    ax=None,
+    xlim=None,
+    x_offset=0,
+    color='k'):
+    """Plot a rasterplot per group fo a spike times dataframe.
+    
+    Similar to :py:meth:`~rasterplot2`, this method plots a rasterplot from a spike times dataframe,
+    but groups them with horizontal lines, based on the grouplabel.
+    Assumes the spike times dataframe has a column :paramref:`grouplabel`
+    
+    Args:
+        pdf (pandas.DataFrame):
+            A DataFrame containing the spike times.
+            Must contain a column with label :paramref:`grouplabel`.
+        grouplabel (str):
+            The column name in the DataFrame to group by.
+        ax (matplotlib.axes.Axes, optional):
+            An optional Matplotlib Axes object to plot on. If not provided, a new figure and axes are created.
+        xlim (tuple, optional):
+            The x-axis limits for the plot. Default is None.
+        x_offset (float, optional):
+            An offset to apply to the x-values (event times). Default is 0.
+        color (str, optional):
+            The color to use for the plot. Default is 'k'.
+
+    Returns:
+        None.
+    """
     if ax is None:
         fig = plt.figure(figsize=(7, 4), dpi=600)
         ax = fig.add_subplot(111)
@@ -67,8 +110,12 @@ def rasterplot2_pdf_grouped(pdf,
     for label in labels:
         df = pdf[pdf[grouplabel] == label]
         offset += len(df)
-        rasterplot2(df, ax = ax, y_offset=offset, x_offset = x_offset,\
-                          plot_kwargs = {'c': color, 'linewidth': 2, 'solid_capstyle': 'butt'})
+        rasterplot2(
+            df, 
+            ax = ax, 
+            y_offset=offset, 
+            x_offset = x_offset,
+            plot_kwargs = {'c': color, 'linewidth': 2, 'solid_capstyle': 'butt'})
         plt.axhline(offset, c='grey', linewidth=.1)
         yticks.append(offset - len(df) / 2.)
         ylabels.append(label)
@@ -99,12 +146,30 @@ def rasterplot(
     groupby_attribute=None,
     tlim=None,
     reset_index=True):
-    '''
-    creates a rasterplot,
-    expects dataframe in the usual spike times format
+    '''Creates a rasterplot from spike times dataframe.
     
-    if df is a dask.DataFrame: parallel plotting is used (not recommended, causes bad quality)
-    if df is a pandas.DataFrame, serial plotting is used
+    If df is a dask.DataFrame: parallel plotting is used (not recommended, causes bad quality)
+    If df is a pandas.DataFrame, serial plotting is used
+
+    Args:
+        df (pandas.DataFrame):
+            A DataFrame containing the spike times.
+        colormap (dict, optional):
+            A colormap to use for the plot. 
+            Must map a label from :paramref:`groupby_attribute` to a color.
+        ax (matplotlib.axes.Axes, optional):
+            An optional Matplotlib Axes object to plot on. If not provided, a new figure and axes are created.
+        label (str, optional):
+            The label for the plot. Default is None.
+        groupby_attribute (str, optional):
+            The column name in the DataFrame to group by. Default is None.
+        tlim (tuple, optional):
+            The x-axis limits for the plot. Default is None.
+        reset_index (bool, optional):
+            If True, reset the index of the DataFrame. Default is True.
+
+    Returns:
+        matplotlib.pyplot.Figure: Figure object containing the rasterplot. 
     '''
 
     if ax is None:
@@ -118,12 +183,13 @@ def rasterplot(
     if groupby_attribute:
         groups = df.groupby(groupby_attribute)
         for label, group_df in groups:
-            rasterplot(group_df,
-                       colormap=colormap,
-                       ax=ax,
-                       label=label,
-                       groupby_attribute=None,
-                       reset_index=False)
+            rasterplot(
+                group_df,
+                colormap=colormap,
+                ax=ax,
+                label=label,
+                groupby_attribute=None,
+                reset_index=False)
         return fig
 
     relevant_columns = [_ for _ in df.columns if is_int(_)]

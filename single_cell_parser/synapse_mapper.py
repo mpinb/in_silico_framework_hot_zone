@@ -1,31 +1,45 @@
 '''
-Created on Mar 30, 2012
 
-@author: regger
 '''
 import numpy as np
 #import reader
 #import writer
 #import cell_parser
 
+__author__ = 'Robert Egger'
+__date__ = '2012-03-30'
 
 class SynapseMapper(object):
-    '''Assign synapses to a neuron morphology based on a synapse distribution.'''
+    '''Assign synapses to a neuron morphology based on a synapse distribution.
+
+    The synapse distribution can be:
+
+    - a previously created synapse realization in dictionary form 
+      (see the :ref:`syn_file_type` file type and :py:meth:`~single_cell_parser.reader.read_synapse_realization` for more info)
+    - a :class:`~single_cell_parser.scalar_field.ScalarField` of synapse densities, in which case the synapses are mapped
+      in the same way as in :py:meth:`~single_cell_parser.synapse_mapper.SynapseMapper.create_synapses`.
+    - a list of synapse distances.
     
+    Attributes:
+        cell (:class:`~single_cell_parser.cell.Cell`): The cell to map synapses onto.
+        synDist (dict | :class:`single_cell_parser.scalar_field.ScalarField` | list): 
+            The synapse distribution to map onto the cell.
+        isDensity (bool): Flag for distribution type: (1) density or (0) realization.
+        voxelEdgeMap (dict): Dictionary that maps voxel edges to (sectionID, pointID) pairs.
+    '''
     def __init__(self, cell=None, synDist=None, isDensity=True):
         '''
+        :paramref:`synDist` can be read from a :ref:`syn_file_type` file using :py:meth:`~single_cell_parser.reader.read_synapse_realization`.
+
         Args:
             cell (:class:`~single_cell_parser.cell.Cell`): The cell to map synapses onto.
-            synDist (:class:`~single_cell_parser.scalar_field.ScalarField`): The average synapse distribution (a 3D scalar field).
+            synDist (dict | :class:`single_cell_parser.scalar_field.ScalarField`): 
+                Either a previously created synapse realization in dictionary form (see the :ref:`syn_file_type` file type and :py:meth:`~single_cell_parser.reader.read_synapse_realization` for more info)
+                or a :class:`~single_cell_parser.scalar_field.ScalarField` of synapse densities.
             isDensity (bool): 
                 If True, then the synapse distribution is interpreted as an average density, and the actual number of synapses that will be assigned is drawn from a Poisson distribution. 
                 If False, then the synapse distribution :paramref:`synDist` is interpreted as the actual number of synapses per voxel. 
         
-        Attributes:
-            cell (:class:`~single_cell_parser.cell.Cell`): The cell to map synapses onto.
-            synDist (:class:`~single_cell_parser.scalar_field.ScalarField`): The synapse distribution.
-            isDensity (bool): Flag for distribution type: (1) density or (0) realization.
-            voxelEdgeMap (dict): Dictionary that maps voxel edges to (sectionID, pointID) pairs.
         '''
         self.cell = cell
         self.synDist = synDist
@@ -35,11 +49,15 @@ class SynapseMapper(object):
         # self.ranGen = np.random.RandomState(seed)
 
     def map_synapse_realization(self):
-        '''
-        maps previously created synapse realization onto neuron
-        morphology. self.synDist has to be dict with synapse types as
-        keywords and list of tuples (sectionID, sectionx) coding
-        the synapse location on the specific sections.
+        '''Maps previously created synapse realization onto neuron morphology. 
+        
+        In this case, :paramref:`synDist` has to be a dictionary with synapse types as
+        keys and list of tuples (sectionID, sectionx) coding the synapse location on the specific sections as values.
+
+        See also:
+
+        - :py:meth:`~single_cell_parser.reader.read_synapse_realization`
+        - The :ref:`syn_file_type` file type.
         '''
         sections = self.cell.sections
         synDist = self.synDist
@@ -59,12 +77,18 @@ class SynapseMapper(object):
                 self.cell.add_synapse(sectionID, closestPtID, sectionx, synType)
 
     def map_pruned_synapse_realization(self):
-        '''
-        maps previously created synapse realization onto neuron
-        morphology. self.synDist has to be dict with synapse types as
+        '''Maps previously created synapse realization onto neuron
+        morphology. 
+        
+        In this case, :paramref:`synDist` has to be dict with synapse types as
         keywords and list of tuples (sectionID, sectionx, pruned) coding
         the synapse location on the specific sections and anatomical pruning
         status of these synapses.
+
+        See also:
+
+        - :py:meth:`~single_cell_parser.reader.read_pruned_synapse_realization`
+        - The :ref:`syn_file_type` file type.
         '''
         sections = self.cell.sections
         synDist = self.synDist
@@ -86,12 +110,15 @@ class SynapseMapper(object):
                 newSyn.pruned = pruned
 
     def map_synapse_model_distribution(self, synType, structLabel=None):
-        '''
-        maps modeled synapse distribution (e.g. normal, uniform, ...)
-        onto dendritic tree. synapse distribution synDist 
-        has to be iterable of distances of synapses; should be radial
-        only, i.e. dendritic branches are selected randomly.
-        substructure may be indicated by structLabel.
+        '''Maps modeled synapse distribution (e.g. normal, uniform, ...) onto dendritic tree. 
+
+        For each distance in :paramref:`synDist`, a synapse is placed on a random dendritic branch at that distance from the soma.
+        In this case, :paramref:`synDist` has to be iterable of distances of synapses.
+        Substructure may be indicated by structLabel.
+
+        Args:
+            synType (str): The type of synapse to be placed.
+            structLabel (str): The label of the substructure to place synapses on. Default: None (all dendritic sections).
         '''
         #        for numerical comparison
         eps = 1e-6
@@ -107,18 +134,20 @@ class SynapseMapper(object):
                 if sec.label == 'Dendrite' or sec.label == 'ApicalDendrite':
                     secIDs.append(i)
 
-#        not very elegant/efficient, but ok for now...
+        # not very elegant/efficient, but ok for now...
         for synD in self.synDist:
-            candidateSections = []
+            # all cell sections that contain a distance of synD
+            candidateSections = []  
             for ID in secIDs:
                 sec = self.cell.sections[ID]
                 dist = self._compute_path_length(sec, 0.0)
                 if dist + eps <= synD <= dist + sec.L - eps:
                     candidateSections.append(ID)
-#            select section
+            
+            # select section
             n = np.random.randint(len(candidateSections))
             sectionID = candidateSections[n]
-            #            select point along section
+            # select point along section
             sec = self.cell.sections[sectionID]
             dist = self._compute_path_length(sec, 0.0)
             synx = (synD - dist) / sec.L
@@ -135,9 +164,22 @@ class SynapseMapper(object):
             self.cell.add_synapse(sectionID, closestPtID, synx, synType)
 
     def create_synapses(self, preType='Generic'):
-        '''
-        main function; creates instantiation of synapses
-        on cell from synapse distribution
+        '''Map synapses onto a morphology based on a synapse distribution.
+
+        In this case, :paramref:`synDist` has to be a :class:`~single_cell_parser.scalar_field.ScalarField` of synapse densities.
+
+        This method is nearly identical to :py:mod:`singlecell_inputmapper`'s
+        :py:meth:`~singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseMapper.create_synapses`, 
+        but with the following differences:
+
+        - the synapse density is not drawn from a Poisson distribution if :paramref:`isDensity` is False.
+        - the synapses are not assigned on a per-structure basis (e.g. separate for soma, dendrite, axon ...)
+
+        It is added here for completeness, in case you need a singular, quick network realization.
+        For a specialized network realization with more fine-grained control, use the :py:mod:`singlecell_inputmapper.singlecell_input_mapper` package instead.
+
+        Args:
+            preType (str): The type of presynaptic cell. Default: 'Generic'.
         '''
         mesh = self.synDist.mesh
         self._create_voxel_edge_map()
@@ -146,7 +188,7 @@ class SynapseMapper(object):
                 nrOfSyn = mesh[vxIndex]
                 if self.isDensity:
                     nrOfSyn = np.random.poisson(nrOfSyn)
-#                    nrOfSyn = self.ranGen.poisson(nrOfSyn)
+                    # nrOfSyn = self.ranGen.poisson(nrOfSyn)
                 else:
                     nrOfSyn = int(round(nrOfSyn))
                 '''choose points at random by shuffling
@@ -157,7 +199,7 @@ class SynapseMapper(object):
                 while len(candidatePts) < nrOfSyn:
                     candidatePts.append(candEdges[np.random.randint(
                         len(candEdges))])
-#                    print 'added another point where nSyn > nPts'
+                    # print 'added another point where nSyn > nPts'
                 for n in range(nrOfSyn):
                     edgeID = candidatePts[n][0]
                     edgePtID = candidatePts[n][1]
@@ -167,9 +209,11 @@ class SynapseMapper(object):
                     self.cell.add_synapse(edgeID, edgePtID, edgex, preType)
 
     def _create_voxel_edge_map(self):
-        '''
-        fills dictionary voxelEdgeMap with indices of voxels
-        and list of pts within that voxel
+        '''Fills dictionary :paramref:`voxelEdgeMap` with indices of voxels pts within that voxel
+
+        The dictionary is structured as follows:
+        - keys: voxel indices
+        - values: list of (sectionID, pointID) pairs of points within that voxel
         '''
         sections = self.cell.sections
         synDist = self.synDist
@@ -197,8 +241,14 @@ class SynapseMapper(object):
                             voxelEdgeMap[vxIndexT].append((i, n))
 
     def _intersect_bboxes(self, bbox1, bbox2):
-        '''
-        check if two bounding boxes overlap
+        '''Check if two bounding boxes overlap
+        
+        Args:
+            bbox1 (tuple): Bounding box of the first object (minx, maxx, miny, maxy, minz, maxz).
+            bbox2 (tuple): Bounding box of the second object (minx, maxx, miny, maxy, minz, maxz).
+            
+        Returns:
+            bool: True if the bounding boxes overlap, False otherwise.
         '''
         for i in range(3):
             intersect = False
@@ -222,11 +272,28 @@ class SynapseMapper(object):
         return True
 
     def _pt_in_box(self, pt, box):
+        """Check if a point is within a bounding box
+        
+        Args:
+            pt (tuple): The point to check.
+            box (tuple): The bounding box (minx, maxx, miny, maxy, minz, maxz).
+        
+        Returns:
+            bool: True if the point is within the bounding box, False otherwise.
+        """
         return box[0] <= pt[0] <= box[1] and box[2] <= pt[1] <= box[3] and box[
             4] <= pt[2] <= box[5]
 
     def _compute_path_length(self, sec, x):
-        '''path length to soma from location x on section sec'''
+        '''Compute the path length to soma from location :paramref:`x` on section :paramref:`sec`
+        
+        Args:
+            sec (:class:`~single_cell_parser.section.Section`): The section to compute the path length on.
+            x (float): The relative coordinate along the section.
+
+        Returns:
+            float: The path length to the soma.
+        '''
         currentSec = sec
         parentSec = currentSec.parent
         dist = x * currentSec.L

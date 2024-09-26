@@ -13,23 +13,49 @@ import logging
 logger = logging.getLogger("ISF").getChild(__name__)
 
 def scale_morphology(cell, scale, target_morphology):
+    """Scale a morphology between its current shape and a target morphology.
+
+    Given a target morphology :ref:`hoc_file_format` file, this method scales the current
+    :paramref:`cell` to be closer to the target morphology. The scaling is done by linearly
+    interpolating each point between the current and target morphology.
+
+    A :paramref:`scale` factor of 0.0 will result in the current morphology, while a factor of 1.0
+    will result in the target morphology. Anything in between will be a linear interpolation.
+
+    The target morphology must contain the same amount of points as the current morphology, 
+    (ignoring AIS and Myelin), and the points must be in the same order.
+    
+    Args:
+        cell (:class:`~single_cell_parser.cell.Cell`): The cell to scale.
+        scale (float): The scaling factor.
+        target_morphology (str): The path to the target morphology file.
+        
+    Returns:
+        :class:`~single_cell_parser.cell.Cell`: The scaled cell.
+    """
     import re
-    pattern = r"[-+]?(?:\d*\.*\d+)"
+    pattern = r"[-+]?(?:\d*\.*\d+)"  # matches floats
     f = open(target_morphology)
+    
+    # extract points from target morphology
     points = []
     for l in f:
         if 'pt3dadd' in l:
             _,x,y,z,_ = [float(i) for i in re.findall(pattern,l)]
             points.append([x,y,z])
+    
+    # count amount of non-AIS, non-Myelin points in cell
     n_pts = 0
     for sec in cell.sections:
         if sec.label not in ['AIS', 'Myelin']:
             n_pts += len(sec.pts)
     assert(n_pts == len(points))
+    
+    # scale each point
     count = -1
-    for i,sec in enumerate(cell.sections):
+    for i, sec in enumerate(cell.sections):
         if sec.label not in ['AIS', 'Myelin']:
-            for j,pt in enumerate(sec.pts):
+            for j, pt in enumerate(sec.pts):
                 count += 1
                 x = pt[0] + (points[count][0] - pt[0]) * scale
                 y = pt[1] + (points[count][1] - pt[1]) * scale
@@ -38,6 +64,9 @@ def scale_morphology(cell, scale, target_morphology):
     return cell
 
 def scale_morphology_old(cell, scaling_infragranular, scaling_granular, scaling_supragranular, home_column='C2'):
+    """
+    :skip-doc:
+    """
     mis = MorphologyInSpace(cell)
     mis.scale_morphology(scaling_infragranular, scaling_granular, scaling_supragranular, home_column)
     cell = mis.update_cell_morphology()
@@ -45,12 +74,15 @@ def scale_morphology_old(cell, scaling_infragranular, scaling_granular, scaling_
     return cell
     
 class MorphologyInSpace:
+    """
+    :skip-doc:
+    """
     def __init__(self, cell):
         self.cell = cell
         self.original_hoc_file = cell.neuron_param.filename
         self.soma = None
         self._update_soma()
-        #self.soma = np.mean(cell.soma.pts, axis=0) # Center of the soma of the original cell object, unaligned with z-axis
+        # self.soma = np.mean(cell.soma.pts, axis=0) # Center of the soma of the original cell object, unaligned with z-axis
         self.parents = {} # Maps sections to their parents. self.parents[10] returns the parent of section 10
         self.morphology = None # pd.DataFrame containing point information, diameter and section ID
         self.sections = None # Set of section indices

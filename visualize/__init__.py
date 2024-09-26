@@ -1,5 +1,5 @@
-"""
-Visualization toolbox. Provides modules for visualizing cell morphologies, ion currents, membrane voltage, rasterplots and PSTHs.
+"""Visualization toolbox. 
+Provides modules for efficiently visualizing cell morphologies, ion currents, voltage traces, rasterplots, histograms, and PSTHs.
 """
 
 from .cell_morphology_visualizer import CellMorphologyVisualizer

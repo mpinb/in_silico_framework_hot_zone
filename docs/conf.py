@@ -8,6 +8,7 @@
 
 import sys
 import os
+from sphinx.jinja2glue import BuiltinTemplateLoader
 # import mock
 
 # MOCK_MODULES = ['neuron', 'cloudpickle', 'tables', 'distributed', 'mechanisms']
@@ -17,11 +18,11 @@ import os
 project = 'In-Silico Framework (ISF)'
 copyright = '2023, Arco Bast, Amir Najafgholi, Maria Royo Cano, Rieke Fruengel, Matt Keaton, Bjorge Meulemeester, Omar Valerio'
 author = 'Arco Bast, Amir Najafgholi, Maria Royo Cano, Rieke Fruengel, Matt Keaton, Bjorge Meulemeester, Omar Valerio'
-release = '0.0.1'
-version = '0.0.1'
+release = '0.2.0-alpha'
+version = '0.2.0-alpha'
 ## Make your modules available in sys.path
 project_root = os.path.join(os.path.abspath(os.pardir))
-sys.path.append(project_root)
+sys.path.insert(0, project_root)
 ## copy over tutorials
 import shutil
 shutil.rmtree(os.path.join(project_root, 'docs', 'tutorials'), ignore_errors=True)
@@ -35,27 +36,39 @@ if os.path.exists(os.path.join(project_root, 'docs', '_autosummary', '_images'))
 shutil.copytree(os.path.join(project_root, 'docs', '_static', '_images'),
                 os.path.join(project_root, 'docs', '_autosummary', '_images'))
 
+from compatibility import init_data_base_compatibility
+init_data_base_compatibility()  # make db importable before running autosummary or autodoc etc...
+
 
 # -- General configuration ------------------------------------------------
 
 # If your documentation needs a minimal Sphinx version, state it here.
 #needs_sphinx = '1.0'
 
-# Add any Sphinx extension module names here, as strings. They can be
-# extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
-# ones.
 extensions = [
-    'sphinx.ext.autodoc',
-    'sphinx.ext.todo',
-    'sphinx_paramlinks',
+    'sphinx.ext.autodoc',      # Core library for html generation from docstrings
+    'sphinx.ext.todo',         # To-do notes
+    'sphinx_paramlinks',       # Parameter links
     'sphinx.ext.viewcode',
-    'sphinx.ext.coverage',
-    'sphinx.ext.intersphinx',
-    'sphinx.ext.autosummary',
-    'sphinx.ext.napoleon',
-    'nbsphinx',  # for rendering tutorial notebooks
-    'sphinxcontrib.bibtex'  # for citations
+    'sphinx.ext.coverage',     # Coverage reporting
+    'sphinx.ext.intersphinx',  # Link to other project's documentation, for e.g. NEURON classes as attributes in docstrings
+    'sphinx.ext.autosummary',  # Create neat summary tables
+    'sphinx.ext.napoleon',     # Support for NumPy and Google style docstrings
+    'nbsphinx',                # For rendering tutorial notebooks
+    'sphinxcontrib.bibtex',    # For citations
+    'sphinx.ext.mathjax',      # For math equations
 ]
+
+def skip_member(app, what, name, obj, skip, options):
+    # Check if the member has a docstring
+    if obj.__doc__:
+        # Skip the member if it contains the custom tag ':skip-doc:'
+        if ':skip-doc:' in obj.__doc__:
+            return True
+    return skip
+
+def setup(app):
+    app.connect('autodoc-skip-member', skip_member)
 
 bibtex_bibfiles = ['bibliography.bib']
 
@@ -77,15 +90,10 @@ napoleon_attr_annotations = True
 ## Include Python objects as they appear in source files
 ## Default: alphabetically ('alphabetical')
 # autodoc_member_order = 'bysource'
-## Default flags used by autodoc directives
-autodoc_default_options = {
-    'members': True,
-    'show-inheritance': False,
-}
 
 autoclass_content = 'both'  # document both the class docstring, as well as __init__
 ## Generate autodoc stubs with summaries from code
-autosummary_generate = ['modules.rst']
+autosummary_generate = True
 autosummary_imported_members = False  # do not show all imported modules per module, this is too bloated
 paramlinks_hyperlink_param = 'name'
 
@@ -95,6 +103,8 @@ pygments_style = "python"
 nbsphinx_codecell_lexer = "python"
 
 # Add any paths that contain templates here, relative to this directory.
+# We have custom templates that produce toctrees for modules and classes on module pages,
+# and separate pages for classes
 templates_path = ['_templates']
 
 # The suffix(es) of source filenames.
@@ -139,7 +149,7 @@ todo_include_todos = False
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-html_theme = "furo"
+html_theme = "furo"  # sphinx_immaterial is nice, but requires more config
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the

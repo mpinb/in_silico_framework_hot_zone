@@ -1,3 +1,5 @@
+.. _file_formats:
+
 ============
 File formats
 ============
@@ -8,30 +10,74 @@ File formats
 The Amira proprietary file format. See `here <https://www.csc.kth.se/~weinkauf/notes/amiramesh.html>`_ for more information.
 This flexible format can be used to store 3D scalar meshes, 3D neuron morphology reconstructions, slice image data etc.
 
+Readers:
+
+- :py:mod:`~single_cell_parser.reader.read_scalar_field`
+- :py:mod:`~single_cell_parser.reader.read_landmark_file`
+
 .hx
 ===
 AMIRA proprietary file format for saving AMIRA projects.
 
+.. _hoc_file_format:
+
 .hoc
 ====
 NEURON :cite:`hines2001neuron` file format for neuron morphologies. Documentation can be found `here <https://nrn.readthedocs.io/en/latest/guide/hoc_chapter_11_old_reference.html>`_.
-Used for 3D morphology reconstructions. Can be read with :py:mod:`single_cell_parser.cell_parser`.
+Used for 3D morphology reconstructions.
+
+Readers:
+
+- :py:mod:`~single_cell_parser.cell_parser`
+- :py:meth:`~single_cell_parser.reader.read_hoc_file`
+
+Example::
+
+    {create soma}
+    {access soma}
+    {nseg = 1}
+    {pt3dclear()}
+    {pt3dadd(1.933390,221.367004,-450.045990,12.542000)}
+    {pt3dadd(2.321820,221.046997,-449.989990,13.309400)}
+    ...
+    {pt3dadd(13.961900,210.149002,-447.901001,3.599700)}
+
+    {create BasalDendrite_1_0}
+    {connect BasalDendrite_1_0(0), soma(0.009696)}
+    {access BasalDendrite_1_0}
+    {nseg = 1}
+    {pt3dclear()}
+    {pt3dadd(6.369640, 224.735992, -452.399994, 2.040000)}
+    {pt3dadd(6.341550, 222.962997, -451.906006, 2.040000)}
+    ...
+
+.. _mod_file_format:
 
 .mod
 ====
-NEURON :cite:`hines2001neuron` file format for neuron mechanisms. Documentation can be found `here <https://neuron.yale.edu/neuron/docs/using-nmodl-files>`.
+NEURON :cite:`hines2001neuron` file format for neuron mechanisms. Documentation can be found `here <https://neuron.yale.edu/neuron/docs/using-nmodl-files>`_.
 Used to define channel and synapse dynamics in NEURON simulations.
 See the folder `mechanisms` in the project source.
 
+.. _con_file_format:
+
 .con
 ====
-ISF custom file format to store neuron connection data. To be used in conjunction with an associated `.syn` file and morphology.
+ISF custom file format to store connectivity data. 
+To be used in conjunction with an associated :ref:`syn_file_format` file and morphology :ref:`hoc_file_format` file.
 It numbers each synapse, and links it to its associated presynaptic cell type and ID.
+While a :ref:`syn_file_format` file and :ref:`hoc_file_format` file provide the anatomical realization of a network,
+the addition of a :ref:`con_file_format` file makes it into a functional realization, as it allows linking the synapses to
+their presynaptic cells, which in turn allow cell type specific activation patters (see: :py:meth:`single_cell_parser.network.NetworkMapper`).
+
+Readers:
+
+- :py:mod:`~single_cell_parser.reader.read_functional_realization_map`
 
 Example::
 
     # Anatomical connectivity realization file; only valid with synapse realization:
-    # 86_L5_CDK20041214_nr3L5B_dend_PC_neuron_transform_registered_C2center_synapses_20150504-1611_10389.syn
+    # synapse_ralization_file.syn
     # Type - cell ID - synapse ID
 
     L6cc_A3 0       0
@@ -42,12 +88,26 @@ Example::
     L6cc_A3 4       5
     ...
 
+.. _syn_file_format:
+
 .syn
 ====
-ISF custom file format to store synapse data. To be used in conjunction with an associated `.con` file and morphology.
-For each synapse, it provides the synapse type and location onto the post-synaptic cell.
+ISF custom file format to store synapse locations onto a morphology. 
+This file fully captures an anatomical realization of a network.
+Only valid with an associated morphology :ref:`hoc_file_format` file.
+
+For each synapse, it provides the synapse type and location onto the morphology.
+Each row index corresponds to its synapse ID, providing a backlink to the :ref:`con_file_format` file format.
 The location is encoded as a section ID and x (a normalized distance along the section),
 to be consistent with NEURON syntax.
+
+To create a functional network (i.e., known presynaptic origin), 
+it must be used in conjunction with an associated :ref:`con_file_format` file.
+
+Readers:
+
+- :py:mod:`~single_cell_parser.reader.read_synapse_realization`
+- :py:mod:`~single_cell_parser.reader.read_pruned_synapse_realization`
 
 Example::
 
@@ -63,14 +123,67 @@ Example::
     VPM_E1  11      0.120662910562
     ...
 
+.. _param_file_format:
+
 .param
 ======
 ISF custom file format to save JSON-like ASCII data. These can be read in using :py:mod:`single_cell_parser`.
 Used in a variety of ways, as seen below.
 
+.. _cell_parameters_format:
+
+Cell parameters
+---------------
+
+:ref:`param_file_format` file to store biophysical parameters of a cell.
+Includes the path to the :ref:`hoc_file_format` morphology file, biophysical properties of the cell per cellular structure (i.e. soma, dendrite, axon initial segment ...),
+and basic simulation parameters. Simulation parameters are usually overridden by higher level modules, such as :py:mod:`simrun`.
+
+Example::
+
+    {
+        'info': {...},
+        'neuron': {
+            'filename': 'getting_started/example_data/anatomical_constraints/*.hoc',
+            'Soma': {
+                'properties': {
+                    'Ra': 100.0,
+                    'cm': 1.0,
+                    'ions': {'ek': -85.0, 'ena': 50.0}
+                    },
+                'mechanisms': {
+                    'global': {},
+                    'range': {
+                        'pas': {
+                            'spatial': 'uniform',
+                            'g': 3.26e-05,
+                            'e': -90},
+                        'Ca_LVAst': {
+                            'spatial': 'uniform',
+                            'gCa_LVAstbar': 0.00462},
+                        'Ca_HVA': {...},
+                        ...,}}},
+            'Dendrite': {...},
+            'ApicalDendrite': {...},
+            'AIS': {...},
+            'Myelin': {...},
+            'cell_modify_functions': {
+                'scale_apical': {'scale': 2.1}
+            },
+        'sim': {
+            'Vinit': -75.0,
+            'tStart': 0.0,
+            'tStop': 250.0,
+            'dt': 0.025,
+            'T': 34.0,
+            'recordingSites': ['getting_started/example_data/apical_proximal_distal_rec_sites.landmarkAscii']}
+    }
+
+.. _activity_data_format:
+
 Activity data
 -------------
-The `.param` format is used to store activity data covering spike times and time bins for specific cell types in response to a stimulus, as seen in e.g. getting_started/example_data/functional_constraints/evoked_activity/
+:ref:`param_file_format` files are used to store activity data covering spike times and time bins for specific cell types in response to a stimulus, as seen in e.g. getting_started/example_data/functional_constraints/evoked_activity/
 
 Example::
 
@@ -88,10 +201,36 @@ Example::
     ...
     }
 
+.. _network_parameters_format:
+
 Network parameters
 ------------------
-The `.param` format is used to store network parametrs, containing synapse information and ongoing spike intervals for various cell types in a network.
-Such synapse information contains the receptor type(s), rise and decay time dynamics (if applicable), weights, and release probabilities upon spike.
+The :ref:`param_file_format` format is used to store network parameters, containing information for each cell type in a network.
+For each presynaptic cell type in the network, this following information is provided:
+
+.. list-table:: Network Parameters
+   :header-rows: 1
+
+   * - Parameter
+     - Description
+   * - celltype
+     - Spiking type of the presynaptic cell ("spiketrain", or "pointcell").
+   * - interval
+     - Average interval of the spikes.
+   * - synapses
+     - Additional synapse information (see below)
+   * - releaseProb
+     - Release probability of the synapse upon a spike.
+   * - cellNr
+     - Amount of connected presynaptic cells of this type.
+
+The `synapse` key contains the following information:
+
+- receptor type
+- activation threshold
+- activation delay
+- rise and decay time dynamics (if applicable)
+- weights
         
 Example::
 
@@ -124,8 +263,49 @@ Example::
                     },
                 },
             "releaseProb": 0.6,
+            "cellNr": 1,
+            "noise": 0.0,
+            "start": 0.0,
+            "nspikes": 2,
             },
         },
-        "cell_type_2": {...},
+        "cell_type_2": {
+            "celltype": "pointcell",
+            "distribution": "PSTH"
+            "intervals": [(0, 10), (10, 20), (20, 40), (40, 50)],
+            "probabilities": [0.0, 0.01, 0.05, 0.0],
+            "offset": 0.0,
+        },
         ...
     }
+
+
+Dataframes
+==========
+
+.. _syn_activation_format:
+
+Synapse activation
+------------------
+
+Writers:
+    
+- :py:meth:`single_cell_parser.writer.write_synapse_activation_file`
+
+Example:
+
++-------------+---------------------+-------------+---------------+-------------+----------------+----------------+-------------------+
+| trial index | synapse type        | synapse ID  | soma distance | section ID  | section pt ID  | dendrite label | activation times  |
++=============+=====================+=============+===============+=============+================+================+===================+
+| 0           | presyn_cell_type_1  | 0           | 150.0         | 24          | 0              | 'basal'        | 10.2,80.5,140.8   |
++-------------+---------------------+-------------+---------------+-------------+----------------+----------------+-------------------+
+| 0           | presyn_cell_type_1  | 1           | 200.0         | 112         | 0              | 'apical'       |                   |
++-------------+---------------------+-------------+---------------+-------------+----------------+----------------+-------------------+
+| 0           | presyn_cell_type_2  | 2           | 250.0         | 72          | 0              | 'apical'       | 300.1,553.5       |
++-------------+---------------------+-------------+---------------+-------------+----------------+----------------+-------------------+
+
+.. _spike_times_format:
+
+Spike times
+-----------
+

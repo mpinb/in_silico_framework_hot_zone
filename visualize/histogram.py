@@ -3,18 +3,31 @@ from ._decorators import *
 
 @dask_to_pandas
 @subsequent_calls_per_line
-def histogram(hist_bins,
-              colormap=None,
-              ax=None,
-              label=None,
-              groupby_attribute=None):
-    '''expects a tuple of the format (bins,hist)
+def histogram(
+    hist_bins,
+    colormap=None,
+    ax=None,
+    label=None,
+    groupby_attribute=None):
+    '''Efficiently plot a histogram from bins.
     
-    Supports groups: simply pass a Series of the format.
+    Uses the decorated function :py:meth:`subsequent_calls_per_line` to speed up plotting bins from pandas or dask dataframes.
+    
+    Supports groups: simply pass a Series of the format::
+    
     labelA: (bins,hist)
     labelB: (bins,hist)
-    In this case, the label attribute has no function (to be precise: it is overwritten
-    by the decorator subsequent_calls_per_line)
+    
+    In this case, the label attribute has no function (to be precise: it is overwritten by the decorator subsequent_calls_per_line)
+    
+    Args:
+        hist_bins (tuple): tuple of the format (bins,hist) where bins are the bin edges and hist the bin values. Length of bins needs to be one element longer than hist.
+        colormap (dict): dictionary with labels as keys and colors as values. Default is `None`.
+        ax (Axes): The matplotlib axes object. Default is `None`.
+        label (str): The label of the histogram. Default is `None`.
+        
+    Returns:
+        None
     '''
 
     if ax is None:
@@ -45,8 +58,19 @@ def histogram(hist_bins,
 
 
 def histogram2(hist_bins, color=None, ax=None, label=None, mode='step'):
-    '''hist_bins: tuple of the format (bins,hist) where bins needs to be one element longer than hist
-        bins: bin edges; hist: bin values
+    '''Plot a histogram from bins.
+    
+    Does not use the decorated function :py:meth:`subsequent_calls_per_line` like :py:meth:`histogram`.
+    
+    Args:
+        hist_bins (tuple): tuple of the format (bins,hist) where bins are the bin edges and hist the bin values. Length of bins needs to be one element longer than hist.
+        color (str): The color of the histogram. Default is `None`.
+        ax (Axes): The matplotlib axes object. Default is `None`.
+        label (str): The label of the histogram. Default is `None`.
+        mode (str): The mode of the histogram. Default is `step`. Options: ('step', 'filled').
+        
+    Returns:
+        None
     '''
 
     if ax is None:
@@ -70,8 +94,9 @@ def histogram2(hist_bins, color=None, ax=None, label=None, mode='step'):
     if mode == 'step':
         ax.step(x, y, color=color, label=label)
     elif mode == 'filled':
-        plt.fill_between(x,
-                         y, [0] * len(x),
-                         color=color,
-                         label=label,
-                         linewidth=0)
+        plt.fill_between(
+            x,
+            y, [0] * len(x),
+            color=color,
+            label=label,
+            linewidth=0)

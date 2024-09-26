@@ -1,23 +1,23 @@
-'''
-Cell parser and synapse mapper for single cell simulations.
+'''Cell API for single cell simulations.
 
 This package provides functionality to parse :class:`~single_cell_parser.cell.Cell` objects
-from NEURON hoc files, and to map synapse locations to these cells.
-It is specialized to handle biophysical models of neurons, and to run simulations with these models.
+from NEURON :ref:`hoc_file_format` files, map synapses  onto these cells, and run biophysically 
+detailed NEURON simulations with the resulting neuron-network models.
 
 Attention:
-    This package has similar, but not identical functionality as 
-    :py:mod:`singlecell_input_mapper.singlecell_input_mapper`. 
-    This package is specialized to handle biophysical and electrical properties of neurons,
-    while :py:mod:`singlecell_input_mapper.singlecell_input_mapper` is specialized to handle 
-    morphological and connectivity attributes of single cells. 
+    This package should not be confused with :py:mod:`singlecell_input_mapper`. 
     
-    It is unlikely to confuse the two in practice; the classes and methods from 
-    :py:mod:`singlecell_input_mapper.singlecell_input_mapper` are used by the pipeline method
-    :py:mod:`singlecell_input_mapper.map_singlecell_inputs`, and rarely directly invoked or imported.
-    In addition, the pipeline of creating anatomical realizations is very distinct from the pipeline of 
-    creating biophysical models, and crossover between the two pipelines is unlikely. 
-    Nonetheless, beware of the following classes and methods that are duplicates only in name:
+    This package is specialized to handle biophysical properties of neurons and simulation runs, and
+    provides API access to the NEURON simulator :cite:`hines2001neuron`.
+    It handles (among other things) synaptic activations onto a biophysically detailed neuron model.
+    To assign activity to a network realization (i.e. making it a **functional** network realization),
+    this package implements only basic functionality to generate such network realizations, or activity.
+    
+    :py:mod:`singlecell_input_mapper` provides extensive functionality to generate network realizations and activity,
+    constrained by empirical data. The results of such pipelines can be read in with this package.
+    To use different network models, please familiarize yourself with the :ref:`file_formats`.
+    
+    In any case, beware of the following classes and methods that are duplicates in name, but not in functionality:
     
     .. list-table:: 
         :header-rows: 1
@@ -34,14 +34,14 @@ Attention:
           - :class:`~single_cell_parser.synapse_mapper.SynapseMapper`
         * - :class:`~singlecell_input_mapper.singlecell_input_mapper.scalar_field.ScalarField`
           - :class:`~single_cell_parser.scalar_field.ScalarField`
-        * - :py:class:`~singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper`
-          - :py:class:`~single_cell_parser.network.NetworkMapper`
-        * - :py:meth:`~singlecell_input_mapper.singlecell_input_mapper.cell.Synapse`
-          - :py:meth:`~single_cell_parser.synapse.Synapse`
-        * - :py:meth:`~singlecell_input_mapper.singlecell_input_mapper.reader.read_hoc_file`
-          - :py:meth:`~single_cell_parser.reader.read_hoc_file`
-        * - :py:meth:`~singlecell_input_mapper.singlecell_input_mapper.reader.read_scalar_field`
-          - :py:meth:`~single_cell_parser.reader.read_scalar_field`
+        * - :class:`~singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper`
+          - :class:`~single_cell_parser.network.NetworkMapper`
+        * - :meth:`~singlecell_input_mapper.singlecell_input_mapper.cell.Synapse`
+          - :meth:`~single_cell_parser.synapse.Synapse`
+        * - :meth:`~singlecell_input_mapper.singlecell_input_mapper.reader.read_hoc_file`
+          - :meth:`~single_cell_parser.reader.read_hoc_file`
+        * - :meth:`~singlecell_input_mapper.singlecell_input_mapper.reader.read_scalar_field`
+          - :meth:`~single_cell_parser.reader.read_scalar_field`
 
 '''
 import logging
@@ -83,6 +83,9 @@ import numpy as np
 import warnings
 from data_base.dbopen import dbopen
 
+__author__  = "Robert Egger"
+__credits__ = ["Robert Egger", "Arco Bast"]
+
 
 #------------------------------------------------------------------------------
 # commonly used functions required for running single neuron simulations
@@ -112,8 +115,20 @@ def build_parameters(filename, fast_but_security_risk=True):
 
 
 def load_NMODL_parameters(parameters):
-    '''
-    automatically loads NMODL mechanisms from paths in parameter file
+    '''Load NMODL mechanisms from paths in parameter file.
+
+    Parameters are added to the NEURON namespace by executing string Hoc commands.
+
+    See also: https://www.neuron.yale.edu/neuron/static/new_doc/programming/neuronpython.html#important-names-and-sub-packages
+
+    Args:
+        parameters (NTParameterSet | dict):
+            The neuron parameters to load.
+            Must contain the key `NMODL_mechanisms`.
+            May contain the key `mech_globals`.
+
+    Returns:
+        None. Adds parameters to the NEURON namespace.    
     '''
     for mech in list(parameters.NMODL_mechanisms.values()):
         neuron.load_mechanisms(mech)
@@ -141,53 +156,17 @@ def create_cell(
 
     Args:
         parameters (dict | dict-like):
-            A nested dictionary structure. Should include at least the keys 'filename' and one key per structure present in the `.hoc` file (e.g. "AIS", "Soma" ...). 
-            Optional keys include: 'cell_modify_functions', 'discretization'
+            A nested dictionary structure, read from a :ref:`cell_parameters_format` file. 
+            Should include at least the keys 'filename' and one key per structure present in the :ref:`hoc_file_format` file (e.g. "AIS", "Soma" ...). 
+            Optional keys include: ``cell_modify_functions``, ``discretization``
         scaleFunc (bool): 
             DEPRECATED,  should be specified in the parameters, as described in :meth:`~single_cell_parser.cell_modify_funs`
         allPoints (bool): 
             Whether or not to use all the points in the `.hoc` file, or one point per segment (according to the distance-lambda rule). 
-            Will be passed to ``full``in :meth:`~single_cell_parser.cell_parser.CellParser.determine_nseg`
+            Will be passed to ``full`` in :meth:`~single_cell_parser.cell_parser.CellParser.determine_nseg`
         setUpBiophysics (bool): 
             Whether or not to insert mechanisms corresponding to the biophysical parameters in ``parameters``
         
-    Example:
-    
-        >>> parameters
-        {
-            'info': {...},
-            'neuron': {
-                'filename': 'getting_started/example_data/anatomical_constraints/*.hoc',
-                'Soma': {
-                    'properties': {
-                        'Ra': 100.0,
-                        'cm': 1.0,
-                        'ions': {'ek': -85.0, 'ena': 50.0}
-                        },
-                    'mechanisms': {
-                        'global': {},
-                        'range': {
-                            'pas': {
-                                'spatial': 'uniform',
-                                'g': 3.26e-05,
-                                'e': -90},
-                            'Ca_LVAst': {
-                                'spatial': 'uniform',
-                                'gCa_LVAstbar': 0.00462},
-                            'Ca_HVA': {...},
-                            ...,}}},
-                'Dendrite': {...},
-                'ApicalDendrite': {...},
-                'AIS': {...},
-                'Myelin': {...},
-            'sim': {
-                'Vinit': -75.0,
-                'tStart': 0.0,
-                'tStop': 250.0,
-                'dt': 0.025,
-                'T': 34.0,
-                'recordingSites': ['getting_started/example_data/apical_proximal_distal_rec_sites.landmarkAscii']}
-        }
     '''
     if scaleFunc is not None:
         warnings.warn(
@@ -219,15 +198,26 @@ def create_cell(
 
 
 def init_neuron_run(simparam, vardt=False, *events):
-    '''
-    Default NEURON run with inital parameters
-    according to parameter file.
-    Optional parameters: callable "events" that are
-    passed to Event objects holding a FInitializeHandler.
-    This can be used to implement changes of parameters during
-    the course of the simulation using h.cvode.event(t, "statement")
-    in the supplied callable, where "statement" is another
-    Python callable which may be used to change parameters.
+    '''Default NEURON run with inital parameters according to parameter file.
+
+    Used in :py:mod:`~simrun.run_new_simulations` to set up and run a simulation.
+
+    Args:
+        simparam (dict | dict-like):
+            A dictionary containing the simulation parameters. 
+            Must include the keys 'dt', 'tStop', 'Vinit', 'T'.
+        vardt (bool):
+            Whether or not to use variable time step integration.
+        events (callable, optional):
+            Optional parameters: callable "events" that are
+            passed to Event objects holding a FInitializeHandler.
+            This can be used to implement changes of parameters during
+            the course of the simulation using ``h.cvode.event(t, "statement")``
+            in the supplied callable, where "statement" is another
+            Python callable which may be used to change parameters.
+
+    Returns:
+        None. Runs the NEURON simulation.
     '''
     #    use fixed time step for now
     neuron.h.load_file('stdrun.hoc')
@@ -278,15 +268,17 @@ def sec_distance_to_soma(currentSec):
 
 
 class Event():
-
+    """Class to handle events in NEURON simulations."""
     def __init__(self, func):
         self.callback = func
         self.fih = neuron.h.FInitializeHandler(1, self.callback)
 
 
-def spines_update_synapse_distribution_file(cell, synapse_distribution_file,
-                                            new_synapse_distribution_file):
-    '''Update the .syn file to correctly point to spine heads as excitatory synapse locations. Spines must already exist, so call after create_cell, using the same .syn file that was used to create the cell. new_synfile will be created if it does not already exist.'''
+def spines_update_synapse_distribution_file(
+        cell, 
+        synapse_distribution_file,
+        new_synapse_distribution_file):
+    '''Update the :ref:`syn_file_format` file to correctly point to spine heads as excitatory synapse locations. Spines must already exist, so call after create_cell, using the same :ref:`syn_file_format` file that was used to create the cell. new_synfile will be created if it does not already exist.'''
     ## update the .syn file
     spine_heads = []
     for sec in cell.sections:
@@ -319,9 +311,12 @@ def spines_update_synapse_distribution_file(cell, synapse_distribution_file,
     logger.info("Success: .syn file updated")
 
 
-def spines_update_network_paramfile(new_synapse_distribution_file,
-                                    network_paramfile, new_network_paramfile):
-    '''update the network.param file to point to the new synapse distribution file'''
+def spines_update_network_paramfile(
+    new_synapse_distribution_file,
+    network_paramfile, 
+    new_network_paramfile
+    ):
+    '''Update the network.param file to point to the new synapse distribution file'''
     network_param = build_parameters(network_paramfile)
     for i in list(network_param.network.keys()):
         network_param.network[

@@ -1,10 +1,13 @@
 '''
-Created on Mar 27, 2012
+Implementation of 3D scalar fields based on numpy arrays.
 
-@author: regger
+Note that this class is identical to :class:`single_cell_parser.scalar_field.ScalarField`.
+It is duplicated here for package independence.
 '''
 import numpy as np
 
+__author__ = 'Robert Egger'
+__date__ = '2012-03-27'
 
 class ScalarField(object):
     '''3D scalar fields based on numpy arrays
