@@ -60,9 +60,8 @@ extensions = [
 ]
 
 def skip_member(app, what, name, obj, skip, options):
-    # skip commonly excluded members
-    exclusions = ['__weakref__', '__dict__', '__module__', '__doc__', '__abstractmethods__']
-    if name in exclusions:
+    # skip special members, except __get__ and __set__
+    if name.startswith('__') and name.endswith('__') and name not in ['__get__', '__set__']:
         return True
     
     # Skip if it has the :skip-doc: tag
