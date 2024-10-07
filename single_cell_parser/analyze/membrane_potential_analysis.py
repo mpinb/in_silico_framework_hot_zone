@@ -1,5 +1,5 @@
 '''
-
+Analyze the membrane voltage.
 '''
 
 import numpy as np
