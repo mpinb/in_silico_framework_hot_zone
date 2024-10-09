@@ -1,20 +1,31 @@
 """Multi-objective optimization algorithm.
 
 This code has been adapted from [BluePyOpt](https://github.com/BlueBrain/BluePyOpt) :cite:`Van_Geit_Gevaert_Chindemi_Roessert_Courcol_Muller_Schuermann_Segev_Markram_2016`
+such that:
 
-It has been adapted, such that::
-
-    - a start population can be defined.
-    - such that the optimizations can be organized in a model data base.
-    - to be executed on a distributed system using dask.
-    - to return all objectives, not only the combined ones.
-    
-Note::
-
-    the population needs to be in a special format. 
-    Use methods in biophysics_fitting.population to create a population.
+- a start population can be defined.
+- such that the optimizations can be organized in a data base.
+- to be executed on a distributed system using dask.
+- to return all objectives, not only the combined ones.
 
 The main interface is the function :py:meth:`start_run`.
+
+.. note::
+    
+    Part of this module is licensed under the GNU Lesser General Public License version 3.0 as published by the Free Software Foundation:
+    
+    Copyright (c) 2016, EPFL/Blue Brain Project
+    Part of this file is part of BluePyOpt <https://github.com/BlueBrain/BluePyOpt>
+    This library is free software; you can redistribute it and/or modify it under
+    the terms of the GNU Lesser General Public License version 3.0 as published
+    by the Free Software Foundation.
+    This library is distributed in the hope that it will be useful, but WITHOUT
+    ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+    FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more
+    details.
+    You should have received a copy of the GNU Lesser General Public License
+    along with this library; if not, write to the Free Software Foundation, Inc.,
+    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 """
 import time
 import bluepyopt as bpop
@@ -320,7 +331,7 @@ def eaAlphaMuPlusLambdaCheckpoint(
     r"""This is the :math:`(~\alpha,\mu~,~\lambda)` evolutionary algorithm
     
     Args:
-        population(list of deap Individuals)
+        population (list): list of deap Individuals
         toolbox(deap Toolbox)
         mu (int): Total parent population size of EA
         cxpb (float): Crossover probability
@@ -510,7 +521,7 @@ def start_run(
     Start an optimization run as specified in db_setup.
 
     Args:
-        db_setup (data_base.DataBase): a DataBase containing the setup of the optimization. It must include::
+        db_setup (data_base.DataBase): a DataBase containing the setup of the optimization. It must include:
         
                 - params ... this is a pandas.DataFrame with the parameternames as index and the columns min_ and max_
                 - get_Simulator ... function, that returns a biophysics_fitting.simulator.Simulator object

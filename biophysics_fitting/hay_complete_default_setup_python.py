@@ -39,7 +39,7 @@ def record_bAP(cell, recSite1=None, recSite2=None):
     """Extract the voltage traces from the soma and two apical dendritic locations.
     
     This is used to quantify the voltage trace of a backpropagating AP (bAP)
-    stimulus in a pyramidal neuron. THe two apical recording sites are used
+    stimulus in a pyramidal neuron. The two apical recording sites are used
     to calculate e.g. backpropagating attenuation.
     
     Args:
