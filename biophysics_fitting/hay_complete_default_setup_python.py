@@ -1,5 +1,5 @@
 '''
-A Python translation of the setup for in-silico curernt injection experiments as described in :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011`.
+A Python translation of the setup for in-silico current injection experiments as described in :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011`.
 '''
 from __future__ import absolute_import
 
