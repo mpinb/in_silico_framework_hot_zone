@@ -13,23 +13,12 @@ ISF is a multi-scale simulation environment for the generation, simulation, and 
 .. raw:: html
    :file: ./overview.html
 
-.. for the sidebar
 
-.. toctree::
-   :maxdepth: 2
-   :hidden:
-
-   installation
-   tutorials
-   api_reference
-   file_formats
-   bibliography
-
-.. for the index page
+Contents
+--------
 
 .. toctree::
    :maxdepth: 1
-   :caption: Contents:
 
    installation
    tutorials
@@ -39,7 +28,7 @@ ISF is a multi-scale simulation environment for the generation, simulation, and 
 
 
 Indices and tables
-==================
+------------------
 
 * :doc:`./file_formats`
 * :ref:`genindex`
