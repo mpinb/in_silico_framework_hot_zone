@@ -8,32 +8,22 @@ The In-Silico Framework (ISF)
 
 ISF is a multi-scale simulation environment for the generation, simulation, and analysis of neurobiologically tractable single cell and network-level simulations.
 
+.. the interactive overview
+
 .. raw:: html
    :file: ./overview.html
 
 
-Module list
-=============
+.. toctree::
+   :maxdepth: 2
+   :caption: Contents:
 
-.. autosummary::
-   :toctree: _autosummary
-   :template: custom-module-template.rst
-   :recursive:
+   Installation
+   :ref:`tutorials`
+   :ref:`api_reference`
+   :ref:`file_formats`
+   :ref:`bibliography`
 
-   Interface
-   barrel_cortex
-   biophysics_fitting
-   data_base
-   simrun
-   single_cell_parser
-   singlecell_input_mapper
-   spike_analysis
-   visualize
-
-Tutorials
-=============
-
-.. include:: tutorials.rst
 
 Indices and tables
 ==================
@@ -43,9 +33,3 @@ Indices and tables
 * :ref:`modindex`
 * :ref:`search`
 
-Bibliography
-============
-
-.. bibliography:: bibliography.bib
-   :style: unsrt
-   :cited:

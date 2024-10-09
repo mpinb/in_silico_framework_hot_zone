@@ -1,3 +1,6 @@
+Tutorials
+=========
+
 .. nbgallery::
    :caption: Introduction
    :glob:
