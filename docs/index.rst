@@ -18,11 +18,11 @@ ISF is a multi-scale simulation environment for the generation, simulation, and 
    :maxdepth: 2
    :caption: Contents:
 
-   Installation
-   :ref:`tutorials`
-   :ref:`api_reference`
-   :ref:`file_formats`
-   :ref:`bibliography`
+   installation
+   tutorials
+   api_reference
+   file_formats
+   bibliography
 
 
 Indices and tables
