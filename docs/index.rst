@@ -16,7 +16,7 @@ ISF is a multi-scale simulation environment for the generation, simulation, and 
 .. for the sidebar
 
 .. toctree::
-   :recursive:
+   :maxdepth: 2
    :hidden:
 
    installation
