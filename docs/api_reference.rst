@@ -7,7 +7,6 @@ API reference
    :recursive:
 
    Interface
-   barrel_cortex
    biophysics_fitting
    data_base
    simrun
