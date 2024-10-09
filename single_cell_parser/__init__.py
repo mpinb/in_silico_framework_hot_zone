@@ -1,7 +1,7 @@
 '''Cell API for single cell simulations.
 
 This package provides functionality to parse :class:`~single_cell_parser.cell.Cell` objects
-from NEURON :ref:`hoc_file_format` files, map synapses  onto these cells, and run biophysically 
+from NEURON :ref:`hoc_file_format` files, map synapses onto these cells, and run biophysically 
 detailed NEURON simulations with the resulting neuron-network models.
 
 Attention:

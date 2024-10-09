@@ -23,8 +23,12 @@ AMIRA proprietary file format for saving AMIRA projects.
 
 .hoc
 ====
-NEURON :cite:`hines2001neuron` file format for neuron morphologies. Documentation can be found `here <https://nrn.readthedocs.io/en/latest/guide/hoc_chapter_11_old_reference.html>`_.
-Used for 3D morphology reconstructions.
+NEURON :cite:`hines2001neuron` file format for neuron morphologies. 
+Documentation can be found `here <https://nrn.readthedocs.io/en/latest/guide/hoc_chapter_11_old_reference.html>`_.
+The morphology is specified as a tree structure: the different sections of a neuron 
+(pieces separated between branching points or branches endings) are connected in order. 
+Each section is formed by a set of points, defined by their 3D coordinates and the diameter of the 
+neuron structure at that point ``(pt3dadd -> x, y, z, diameter)``.
 
 Readers:
 
@@ -136,8 +140,15 @@ Cell parameters
 ---------------
 
 :ref:`param_file_format` file to store biophysical parameters of a cell.
-Includes the path to the :ref:`hoc_file_format` morphology file, biophysical properties of the cell per cellular structure (i.e. soma, dendrite, axon initial segment ...),
-and basic simulation parameters. Simulation parameters are usually overridden by higher level modules, such as :py:mod:`simrun`.
+Includes the path to the :ref:`hoc_file_format` morphology file, biophysical properties of the cell per cellular 
+structure (i.e. soma, dendrite, axon initial segment ...),
+and basic simulation parameters. Simulation parameters are usually overridden by higher level modules, 
+such as :py:mod:`simrun`.
+
+To access different structures of a cell::
+
+    >>> cell_parameters.neuron.keys()
+    ['Myelin', 'Soma', 'AIS', 'filename', 'Dendrite', 'ApicalDendrite']
 
 Example::
 
@@ -205,7 +216,9 @@ Example::
 
 Network parameters
 ------------------
-The :ref:`param_file_format` format is used to store network parameters, containing information for each cell type in a network.
+The :ref:`param_file_format` format is used to store network parameters, 
+describing the activation of presynaptic cells and synapses during the scenario we want to simulate. 
+
 For each presynaptic cell type in the network, this following information is provided:
 
 .. list-table:: Network Parameters
@@ -213,24 +226,31 @@ For each presynaptic cell type in the network, this following information is pro
 
    * - Parameter
      - Description
-   * - celltype
+   * - ``celltype``
      - Spiking type of the presynaptic cell ("spiketrain", or "pointcell").
-   * - interval
+   * - ``interval``
      - Average interval of the spikes.
-   * - synapses
-     - Additional synapse information (see below)
-   * - releaseProb
-     - Release probability of the synapse upon a spike.
-   * - cellNr
+   * - ``synapses``
+     - Additional synapse information (see table below)
+   * - ``cellNr``
      - Amount of connected presynaptic cells of this type.
 
-The `synapse` key contains the following information:
+The ``synapse`` key of each presynaptic cell type contains the following information:
 
-- receptor type
-- activation threshold
-- activation delay
-- rise and decay time dynamics (if applicable)
-- weights
+.. list-table:: Synapse parameters
+   :header-rows: 1
+
+   * - Parameter
+     - Description
+   * - ``receptors``
+     - Dictionary of synapse properties per receptor type (e.g. ``gaba_syn``): threshold, delay, weight, reversal potential and time dynamics.
+   * - ``releaseProb``
+     - Release probability of this synapse upon a spike of its associated presynaptic cell. 
+       A synapse is either active or not active, never inbetween.
+   * - ``connectionFile``
+     - Reference to an associated :ref:`con_file_format` file for this cell type's synapses.
+   * - ``distributionFile``
+     - Reference to an associated :ref:`syn_file_format` file for this cell type's synapses.
         
 Example::
 
