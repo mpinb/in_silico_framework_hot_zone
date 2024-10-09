@@ -1,7 +1,7 @@
 Installation
 ============
 
-ISF requires `gcc` and `git` to be installed.
+ISF requires ``gcc`` and ``git`` to be installed.
 
 To install ISF on UNIX systems using the interactive installer, simply run:
 
@@ -18,7 +18,7 @@ The installation will:
 6. Compile all mechanisms in the ``mechanisms`` directory using ``nrnivmodl``.
 
 Tested on:
-==========
+----------
 
 .. list-table::
    :header-rows: 1
@@ -97,12 +97,12 @@ Tested on:
     </details>
 
 Additional installation configuration
-=====================================
+-------------------------------------
 
 It is possible to have an installation that includes nodejs for the Python 3.8 version. The interactive installer will prompt you.
 
 Non-interactive installation
-============================
+----------------------------
 
 To avoid interaction with the installer (for automated installation e.g.), you can also directly invoke the installer script that corresponds to the Python version you want to install:
 
