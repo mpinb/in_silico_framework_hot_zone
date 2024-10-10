@@ -16,6 +16,10 @@ Back to :mod:`{{ parent_module }}`
 
 .. automodule:: {{ fullname }}
    :private-members:
+   :exclude-members: 
+   {%- for item in modules_to_skip if item.startswith(fullname + '.') %}
+   {{ item.split('.')[-1] }}{%- if not loop.last %}, {% endif %}
+   {%- endfor %}
 
    {% block attributes %}
    {% if attributes %}
