@@ -8,8 +8,8 @@
 
 import sys
 import os
-from .parse_notebooks import copy_and_parse_notebooks_to_docs
-from .nodoc import skip_member
+from docs.parse_notebooks import copy_and_parse_notebooks_to_docs
+from docs.nodoc import skip_member
 
 project = 'In-Silico Framework (ISF)'
 copyright = '2023, Arco Bast, Amir Najafgholi, Maria Royo Cano, Rieke Fruengel, Matt Keaton, Bjorge Meulemeester, Omar Valerio'
