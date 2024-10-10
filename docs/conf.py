@@ -51,6 +51,7 @@ extensions = [
 
 modules_to_skip = find_modules_with_tag(project_root, tag=":skip-doc:")
 autosummary_mock_imports = modules_to_skip
+print(f"Skipping documentation for modules with :skip-doc: tag: {modules_to_skip}")
 
 def setup(app):
     # skip members with :skip-doc: tag in their docstrings
