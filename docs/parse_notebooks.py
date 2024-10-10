@@ -17,13 +17,13 @@ def convert_links_to_sphinx(content):
             prefix += '../'
             link = link[3:]
         # Convert the remaining path to the desired format
-        module_doc_path = link.replace('/', '.').replace('.py', '.rst').lstrip('.')
+        module_doc_path = link.replace('/', '.').replace('.py', '').lstrip('.')
         
         text = text.replace('`', '')
         
         # Construct the new link
         new_link = f'{prefix}_autosummary/{module_doc_path}'
-        return f'[{text}]({new_link}.html#module-{new_link})'
+        return f'[{text}]({new_link}.html#module-{module_doc_path})'
     
     return pattern.sub(replace_link, content)
 
