@@ -17,7 +17,7 @@ def convert_links_to_sphinx(content):
             prefix += '../'
             link = link[3:]
         # Convert the remaining path to the desired format
-        module_doc_path = link.replace('/', '.').replace('.py', '').lstrip('.')
+        module_doc_path = link.replace('/', '.').replace('.py', '').lstrip('.').replace('.__init__', '')
         
         text = text.replace('`', '')
         
