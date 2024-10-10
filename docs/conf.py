@@ -57,8 +57,15 @@ def add_modules_to_skip_to_context(app, pagename, templatename, context, doctree
     """Add the list of modules with the :skip-doc: tag to the Jinja context."""
     context['modules_to_skip'] = app.config.modules_to_skip
 
+def on_builder_inited(app):
+    global modules_to_skip
+    modules_to_skip = find_modules_with_tag(project_root, tag=":skip-doc:")
+    app.config.modules_to_skip = modules_to_skip
+    print(f"Skipping documentation for modules with :skip-doc: tag: {modules_to_skip}")
+
 def setup(app):
-    app.add_config_value('modules_to_skip', modules_to_skip, 'env')
+    app.add_config_value('modules_to_skip', [], 'env')
+    app.connect('builder-inited', on_builder_inited)
     app.connect('html-page-context', add_modules_to_skip_to_context)
 
     # skip members with :skip-doc: tag in their docstrings
