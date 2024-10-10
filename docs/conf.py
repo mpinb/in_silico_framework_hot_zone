@@ -144,6 +144,14 @@ html_theme_options = {
     "light_logo": "_images/isf-logo-black.png",
     "dark_logo": "_images/isf-logo-white.png",
     "sidebar_hide_name": True,
+    "light_css_variables": {
+        "color-brand-primary": "#000000",  # black instead of blue
+        "color-foreground-secondary": "#797979",  # slightly more muted than default
+    },
+    "dark_css_variables": {
+        "color-brand-primary": "#fefaee",  # Off-white
+        "color-brand-content": "#FFB000",  # Gold instead of dark blue
+    },
 }
 
 # Add any paths that contain custom themes here, relative to this directory.
