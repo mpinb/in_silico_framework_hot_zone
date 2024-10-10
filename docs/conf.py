@@ -6,10 +6,12 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
+project_root = os.path.join(os.path.abspath(os.pardir))
+sys.path.insert(0, project_root)
 import sys
 import os
-from docs.parse_notebooks import copy_and_parse_notebooks_to_docs
-from docs.nodoc import skip_member
+from .parse_notebooks import copy_and_parse_notebooks_to_docs
+from .nodoc import skip_member
 
 project = 'In-Silico Framework (ISF)'
 copyright = '2023, Arco Bast, Amir Najafgholi, Maria Royo Cano, Rieke Fruengel, Matt Keaton, Bjorge Meulemeester, Omar Valerio'
@@ -17,8 +19,6 @@ author = 'Arco Bast, Amir Najafgholi, Maria Royo Cano, Rieke Fruengel, Matt Keat
 release = '0.2.0-alpha'
 version = '0.2.0-alpha'
 ## Make your modules available in sys.path
-project_root = os.path.join(os.path.abspath(os.pardir))
-sys.path.insert(0, project_root)
 
 # copy over tutorials and convert links to python files to sphinx documentation directives
 copy_and_parse_notebooks_to_docs(
