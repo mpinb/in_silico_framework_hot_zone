@@ -1,4 +1,4 @@
-import json
+import json, re, os, shutil
 
 def convert_links_to_sphinx(content):
     # Regular expression to find Markdown links to Python files
