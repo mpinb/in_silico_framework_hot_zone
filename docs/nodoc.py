@@ -26,14 +26,17 @@ def skip_member(app, what, name, obj, skip, options):
     return skip
 
 def safe_import_module(module_name):
-    """Import a module safely, ignoring sys.exit calls."""
+    """Import a module safely, ignoring sys.exit and KeyError exceptions."""
     try:
         with patch('sys.exit', lambda x: None):
             module = importlib.import_module(module_name)
         return module
     except ImportError:
         print(f"Failed to import module {module_name}")
-        return None
+    except KeyError:
+        print(f"KeyError encountered while importing module {module_name}")
+    return None
+    
 
 def find_modules_with_tag(source_dir, tag=":skip-doc:"):
     """Recursively find all modules with a specific tag in their docstring."""
