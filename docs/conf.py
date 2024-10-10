@@ -84,7 +84,6 @@ paramlinks_hyperlink_param = 'name'
 
 # Don't run notebooks
 nbsphinx_execute = 'never'
-pygments_style = "python"
 nbsphinx_codecell_lexer = "python"
 
 # Add any paths that contain templates here, relative to this directory.
@@ -119,7 +118,9 @@ add_module_names = False  # less verbose for nested packages
 #show_authors = False
 
 # The name of the Pygments (syntax highlighting) style to use.
-pygments_style = 'sphinx'
+sys.path.append(os.path.abspath("./_pygments"))
+pygments_style = 'style.LightStyle'
+pygments_dark_style = 'material'  # furo specific
 
 # A list of ignored prefixes for module index sorting.
 #modindex_common_prefix = []

@@ -5,7 +5,7 @@ from pygments.styles import get_style_by_name
 
 catppuccin_light = get_style_by_name('catppuccin-latte')
 
-class light_style(catppuccin_light):
+class LightStyle(catppuccin_light):
     """
     This style mimics the catppuccin color scheme.
     """
