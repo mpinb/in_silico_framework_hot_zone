@@ -6,10 +6,10 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project_root = os.path.join(os.path.abspath(os.pardir))
-sys.path.insert(0, project_root)
 import sys
 import os
+project_root = os.path.join(os.path.abspath(os.pardir))
+sys.path.insert(0, project_root)
 from .parse_notebooks import copy_and_parse_notebooks_to_docs
 from .nodoc import skip_member
 
