@@ -42,6 +42,7 @@ extensions = [
     'sphinx.ext.autosummary',  # Create neat summary tables
     'sphinx.ext.napoleon',     # Support for NumPy and Google style docstrings
     'nbsphinx',                # For rendering tutorial notebooks
+    'nbsphinx_link',           # For linking to sections in tutorial notebooks
     'sphinxcontrib.bibtex',    # For citations
     'sphinx.ext.mathjax',      # For math equations
 ]
