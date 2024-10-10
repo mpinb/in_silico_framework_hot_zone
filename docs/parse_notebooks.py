@@ -22,8 +22,8 @@ def convert_links_to_sphinx(content):
         text = text.replace('`', '')
         
         # Construct the new link
-        new_link = f'{prefix}_autosummary/{module_doc_path}'
-        return f'```[{text}]({new_link}.html#module-{module_doc_path})```'
+        new_link = f'{prefix}_autosummary/{module_doc_path}.html#module-{module_doc_path}'
+        return f'<a href="{new_link}"><code>{text}</code></a>'  # return as inline code link
     
     return pattern.sub(replace_link, content)
 
