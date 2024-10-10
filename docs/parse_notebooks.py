@@ -23,7 +23,7 @@ def convert_links_to_sphinx(content):
         
         # Construct the new link
         new_link = f'{prefix}_autosummary/{module_doc_path}'
-        return f'[```{text}```]({new_link}.html#module-{module_doc_path})'
+        return f'```[{text}]({new_link}.html#module-{module_doc_path})```'
     
     return pattern.sub(replace_link, content)
 
