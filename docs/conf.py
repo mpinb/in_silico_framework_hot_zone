@@ -56,12 +56,12 @@ print(f"Skipping documentation for modules with :skip-doc: tag: {modules_to_skip
 def setup(app):
     # skip members with :skip-doc: tag in their docstrings
     app.connect('autodoc-skip-member', skip_member)
-    app.add_config_value('modules_to_skip', modules_to_skip, 'env')
+    app.add_config_value('modules_to_skip1', modules_to_skip, 'env')
     app.connect('html-page-context', add_modules_with_skip_doc_to_context)
     
 def add_modules_with_skip_doc_to_context(app, pagename, templatename, context, doctree):
     """Add the list of modules with the :skip-doc: tag to the Jinja context."""
-    context['modules_to_skip'] = app.config.modules_to_skip
+    context['modules_to_skip2'] = app.config.modules_to_skip1
 
 bibtex_bibfiles = ['bibliography.bib']
 
