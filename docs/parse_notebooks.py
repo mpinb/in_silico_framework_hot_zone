@@ -10,6 +10,7 @@ def convert_links_to_sphinx(content):
     def replace_link(match):
         text = match.group(1)  # name of the link
         link = match.group(2)  # path to the Python file
+        
         # Identify the prefix (leading ../)
         prefix = ''
         while link.startswith('../'):
@@ -17,6 +18,8 @@ def convert_links_to_sphinx(content):
             link = link[3:]
         # Convert the remaining path to the desired format
         module_doc_path = link.replace('/', '.').replace('.py', '.rst').lstrip('.')
+        
+        text = text.replace('`', '')
         
         # Construct the new link
         new_link = f'{prefix}_autosummary/{module_doc_path}'
