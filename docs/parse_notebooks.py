@@ -1,5 +1,7 @@
 import json, re, os, shutil
 
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+
 def convert_links_to_sphinx(content):
     # Regular expression to find Markdown links to Python files
     pattern = re.compile(r'\[([^\]]+)\]\(([^)]+\.py)\)')
