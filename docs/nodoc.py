@@ -1,5 +1,7 @@
 """Configure modules, functions, methods, classes and attributes so that they are not documented by Sphinx."""
 import pkgutil, importlib, os
+from unittest.mock import patch
+
 
 def skip_member(app, what, name, obj, skip, options):
     """Skip members if they have the :skip-doc: tag in their docstring."""
@@ -23,25 +25,34 @@ def skip_member(app, what, name, obj, skip, options):
     
     return skip
 
+def safe_import_module(module_name):
+    """Import a module safely, ignoring sys.exit calls."""
+    try:
+        with patch('sys.exit', lambda x: None):
+            module = importlib.import_module(module_name)
+        return module
+    except ImportError:
+        print(f"Failed to import module {module_name}")
+        return None
+
 def find_modules_with_tag(source_dir, tag=":skip-doc:"):
     """Recursively find all modules with a specific tag in their docstring."""
     modules_with_tag = []
 
     def check_module(module_name):
         """Check if a module or any of its submodules has the specific tag in its docstring."""
-        try:
-            module = importlib.import_module(module_name)
-            if module.__doc__ and tag in module.__doc__:
-                modules_with_tag.append(module_name)
-                return True
-            if hasattr(module, '__path__'):  # Check if the module is a package
-                for _, submodule_name, is_pkg in pkgutil.iter_modules(module.__path__):
-                    full_submodule_name = f"{module_name}.{submodule_name}"
-                    if check_module(full_submodule_name):
-                        modules_with_tag.append(full_submodule_name)
-                        return True
-        except ImportError:
-            print(f"Failed to import module {module_name}")
+        module = safe_import_module(module_name)
+        if module is None:
+            return False
+        if module.__doc__ and tag in module.__doc__:
+            modules_with_tag.append(module_name)
+            return True
+        if hasattr(module, '__path__'):  # Check if the module is a package
+            for _, submodule_name, is_pkg in pkgutil.iter_modules(module.__path__):
+                full_submodule_name = f"{module_name}.{submodule_name}"
+                if check_module(full_submodule_name):
+                    modules_with_tag.append(full_submodule_name)
+                    return True
         return False
 
     for root, dirs, files in os.walk(source_dir):
