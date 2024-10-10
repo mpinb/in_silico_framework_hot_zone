@@ -34,11 +34,12 @@ def find_modules_with_tag(source_dir, tag=":skip-doc:"):
             if module.__doc__ and tag in module.__doc__:
                 modules_with_tag.append(module_name)
                 return True
-            for _, submodule_name, is_pkg in pkgutil.iter_modules(module.__path__):
-                full_submodule_name = f"{module_name}.{submodule_name}"
-                if check_module(full_submodule_name):
-                    modules_with_tag.append(full_submodule_name)
-                    return True
+            if hasattr(module, '__path__'):  # Check if the module is a package
+                for _, submodule_name, is_pkg in pkgutil.iter_modules(module.__path__):
+                    full_submodule_name = f"{module_name}.{submodule_name}"
+                    if check_module(full_submodule_name):
+                        modules_with_tag.append(full_submodule_name)
+                        return True
         except ImportError:
             print(f"Failed to import module {module_name}")
         return False
