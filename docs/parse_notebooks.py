@@ -19,7 +19,7 @@ def convert_links_to_sphinx(content):
         module_doc_path = link.replace('/', '.').replace('.py', '.rst').lstrip('.')
         
         # Construct the new link
-        new_link = f'{prefix}_autosummary/{module_doc_path}.rst'
+        new_link = f'{prefix}_autosummary/{module_doc_path}'
         return f'[{text}]({new_link})'
     
     return pattern.sub(replace_link, content)
