@@ -85,7 +85,9 @@ Back to :mod:`{{ parent_module }}`
       :recursive:
 
       {% for item in modules %}
-         {{ item.split('.')[-1] }}
+         {% if item not in modules_to_skip %}
+            {{ item.split('.')[-1] }}
+         {% endif %}
       {%- endfor %}
    {% endif %}
    {% endblock %}
