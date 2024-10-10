@@ -47,7 +47,7 @@ class Cell(object):
             Set by e.g. :py:meth:`~single_cell_parser.cell_modify_functions.synaptic_input.synaptic_input`.
 
     WARNING: 
-        While it contains similar methods, this is not the same class as :class:`~singlecell_input_mapper.cell.Cell`.
+        While it contains similar methods, this is not the same class as :class:`~singlecell_input_mapper.singlecell_input_mapper.cell.Cell`.
         See :py:mod:`single_cell_parser` for more info on the difference.
     '''
 
