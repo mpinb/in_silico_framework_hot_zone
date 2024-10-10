@@ -24,7 +24,7 @@ Tutorials
    :caption: 3. Multiscale models
    :glob:
 
-   tutorials/2. network models/*
+   tutorials/3. multiscale models/*
 
 
 .. nbgallery::
@@ -32,9 +32,3 @@ Tutorials
    :glob:
 
    tutorials/4. reduced models/*
-
-.. nbgallery::
-   :caption: 5. Analysis
-   :glob:
-
-   tutorials/5. analysis/*
