@@ -25,6 +25,24 @@ def skip_member(app, what, name, obj, skip, options):
     
     return skip
 
+import importlib
+import pkgutil
+from sphinx.ext.autosummary import Autosummary
+
+def should_skip_module(module_name):
+    """Check if a module or any of its submodules should be skipped."""
+    try:
+        module = importlib.import_module(module_name)
+        if module.__doc__ and ':skip-doc:' in module.__doc__:
+            return True
+        for _, submodule_name, is_pkg in pkgutil.iter_modules(module.__path__):
+            full_submodule_name = f"{module_name}.{submodule_name}"
+            if should_skip_module(full_submodule_name):
+                return True
+    except ImportError:
+        print(f"Failed to import module {module_name}")
+    return False
+
 class CustomAutosummary(Autosummary):
     """Skip modules
     
@@ -39,8 +57,8 @@ class CustomAutosummary(Autosummary):
         filtered_items = []
         for name, sig, summary, real_name in items:
             module_name = real_name.split('.')[0]
-            module = importlib.import_module(module_name)
-            if module.__doc__ and ':skip-doc:' in module.__doc__:
+            if should_skip_module(module_name):
+                print(f"Skipping module {module_name} and its submodules due to :skip-doc: tag")
                 continue
             filtered_items.append((name, sig, summary, real_name))
         return filtered_items
