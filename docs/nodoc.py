@@ -28,7 +28,7 @@ def skip_member(app, what, name, obj, skip, options):
 class CustomAutosummary(Autosummary):
     """Skip modules
     
-    We use a custom tag :skip-doc: to skip the documentation of members, and skip them using the autodoc-skip-member hook.
+    We use a custom tag :skip-doc: to skip the documentation of members using the autodoc-skip-member hook.
     This hook seems to not work well with the autosummary extension: members that are skipped by autodoc-skip-member still show up in the set of autosummary templates for example.
     This seems to be fixed in https://github.com/sphinx-doc/sphinx/issues/6798
     I dont know if we use this version of sphinx, but it for sure does not work in this project when relying on only the autodoc-skip-member hook.

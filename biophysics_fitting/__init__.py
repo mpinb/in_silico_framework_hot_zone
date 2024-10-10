@@ -1,5 +1,5 @@
 """
-This package contains code to generate and analyze biophysically detailed multi-compartmental models (MCM).
+Generate and analyze biophysically detailed multi-compartmental models (MCM).
 
 It provides two ways to generate mutli-compartmental models:
 
@@ -26,8 +26,8 @@ RANGE_VARS_ALL_CHANNELS = RANGE_VARS_APICAL + [
 
 
 def connected_to_dend_beyond(cell, sec, beyond_dist, n_children_required=2):
-    """
-    Check if a given section is connected to dendrites that reach beyon :paramref:`beyond_dist`.
+    """Check if a given section is connected to dendrites that reach beyon :paramref:`beyond_dist`.
+    
     Given a :class:`~single_cell_parser.cell.Cell` object and section number, 
     this method returns True if at least :paramref:`n_children_required` children 
     of the branchpoint reach beyond :paramref:`dist`.
