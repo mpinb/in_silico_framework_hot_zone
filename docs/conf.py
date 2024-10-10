@@ -11,7 +11,7 @@ import os
 project_root = os.path.join(os.path.abspath(os.pardir))
 sys.path.insert(0, project_root)
 from docs.parse_notebooks import copy_and_parse_notebooks_to_docs
-from docs.nodoc import skip_member
+from docs.nodoc import skip_member, CustomAutosummary
 
 project = 'In-Silico Framework (ISF)'
 copyright = '2023, Arco Bast, Amir Najafgholi, Maria Royo Cano, Rieke Fruengel, Matt Keaton, Bjorge Meulemeester, Omar Valerio'
@@ -50,7 +50,10 @@ extensions = [
 # skipping documentation for certain members
 
 def setup(app):
+    # skip members with :skip-doc: tag in their docstrings
     app.connect('autodoc-skip-member', skip_member)
+    # skip modules with :skip-doc: tag in their docstrings
+    app.add_directive('autosummary', CustomAutosummary)
 
 bibtex_bibfiles = ['bibliography.bib']
 
