@@ -1,7 +1,5 @@
 """Configure modules, functions, methods, classes and attributes so that they are not documented by Sphinx."""
-
-from sphinx.ext.autosummary import Autosummary
-import importlib
+import pkgutil, importlib, os
 
 def skip_member(app, what, name, obj, skip, options):
     """Skip members if they have the :skip-doc: tag in their docstring."""
@@ -25,40 +23,31 @@ def skip_member(app, what, name, obj, skip, options):
     
     return skip
 
-import importlib
-import pkgutil
-from sphinx.ext.autosummary import Autosummary
+def find_modules_with_tag(source_dir, tag=":skip-doc:"):
+    """Recursively find all modules with a specific tag in their docstring."""
+    modules_with_tag = []
 
-def should_skip_module(module_name):
-    """Check if a module or any of its submodules should be skipped."""
-    try:
-        module = importlib.import_module(module_name)
-        if module.__doc__ and ':skip-doc:' in module.__doc__:
-            return True
-        for _, submodule_name, is_pkg in pkgutil.iter_modules(module.__path__):
-            full_submodule_name = f"{module_name}.{submodule_name}"
-            if should_skip_module(full_submodule_name):
+    def check_module(module_name):
+        """Check if a module or any of its submodules has the specific tag in its docstring."""
+        try:
+            module = importlib.import_module(module_name)
+            if module.__doc__ and tag in module.__doc__:
+                modules_with_tag.append(module_name)
                 return True
-    except ImportError:
-        print(f"Failed to import module {module_name}")
-    return False
+            for _, submodule_name, is_pkg in pkgutil.iter_modules(module.__path__):
+                full_submodule_name = f"{module_name}.{submodule_name}"
+                if check_module(full_submodule_name):
+                    modules_with_tag.append(full_submodule_name)
+                    return True
+        except ImportError:
+            print(f"Failed to import module {module_name}")
+        return False
 
-class CustomAutosummary(Autosummary):
-    """Skip modules
-    
-    We use a custom tag :skip-doc: to skip the documentation of members using the autodoc-skip-member hook.
-    This hook seems to not work well with the autosummary extension: members that are skipped by autodoc-skip-member still show up in the set of autosummary templates for example.
-    This seems to be fixed in https://github.com/sphinx-doc/sphinx/issues/6798
-    I dont know if we use this version of sphinx, but it for sure does not work in this project when relying on only the autodoc-skip-member hook.
-    For this reason, we overload the Autosummary get_items method here to filter out members that have the :skip-doc: tag in their docstring.
-    """
-    def get_items(self, names):
-        items = super().get_items(names)
-        filtered_items = []
-        for name, sig, summary, real_name in items:
-            module_name = real_name.split('.')[0]
-            if should_skip_module(module_name):
-                print(f"Skipping module {module_name} and its submodules due to :skip-doc: tag")
-                continue
-            filtered_items.append((name, sig, summary, real_name))
-        return filtered_items
+    for root, dirs, files in os.walk(source_dir):
+        for file in files:
+            if file.endswith(".py"):
+                module_path = os.path.relpath(os.path.join(root, file), source_dir)
+                module_name = module_path.replace(os.sep, ".")[:-3]  # Remove .py extension
+                check_module(module_name)
+
+    return modules_with_tag
