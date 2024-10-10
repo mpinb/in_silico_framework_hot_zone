@@ -8,12 +8,8 @@
 
 import sys
 import os
-from sphinx.jinja2glue import BuiltinTemplateLoader
-# import mock
-
-# MOCK_MODULES = ['neuron', 'cloudpickle', 'tables', 'distributed', 'mechanisms']
-# for mod_name in MOCK_MODULES:
-#     sys.modules[mod_name] = mock.Mock()
+from .parse_notebooks import copy_and_parse_notebooks_to_docs
+from .nodoc import skip_member
 
 project = 'In-Silico Framework (ISF)'
 copyright = '2023, Arco Bast, Amir Najafgholi, Maria Royo Cano, Rieke Fruengel, Matt Keaton, Bjorge Meulemeester, Omar Valerio'
@@ -23,27 +19,18 @@ version = '0.2.0-alpha'
 ## Make your modules available in sys.path
 project_root = os.path.join(os.path.abspath(os.pardir))
 sys.path.insert(0, project_root)
-## copy over tutorials
-import shutil
-shutil.rmtree(os.path.join(project_root, 'docs', 'tutorials'), ignore_errors=True)
-shutil.copytree(os.path.join(project_root, 'getting_started', 'tutorials'),
-                os.path.join(project_root, 'docs', 'tutorials'))
-shutil.copy(os.path.join(project_root, 'getting_started', 'Introduction_to_ISF.ipynb'),
-                os.path.join(project_root, 'docs', 'Introduction_to_ISF.ipynb'))
-# Figures need to be in the _autosummary directory
-if os.path.exists(os.path.join(project_root, 'docs', '_autosummary', '_images')):
-    shutil.rmtree(os.path.join(project_root, 'docs', '_autosummary', '_images'))
-shutil.copytree(os.path.join(project_root, 'docs', '_static', '_images'),
-                os.path.join(project_root, 'docs', '_autosummary', '_images'))
+
+# copy over tutorials and convert links to python files to sphinx documentation directives
+copy_and_parse_notebooks_to_docs(
+    source_dir=os.path.join(project_root, 'getting_started', 'tutorials'),
+    dest_dir=os.path.join(project_root, 'docs', 'tutorials')
+)
 
 from compatibility import init_data_base_compatibility
 init_data_base_compatibility()  # make db importable before running autosummary or autodoc etc...
 
 
 # -- General configuration ------------------------------------------------
-
-# If your documentation needs a minimal Sphinx version, state it here.
-#needs_sphinx = '1.0'
 
 extensions = [
     'sphinx.ext.autodoc',      # Core library for html generation from docstrings
@@ -59,26 +46,7 @@ extensions = [
     'sphinx.ext.mathjax',      # For math equations
 ]
 
-def skip_member(app, what, name, obj, skip, options):
-    # Debug print to check what is being processed
-    print(f"Processing {what}: {name}")
-    
-    # skip special members, except __get__ and __set__
-    if name.startswith('__') and name.endswith('__') and name not in ['__get__', '__set__']:
-        return True
-    
-    # Skip if it has the :skip-doc: tag
-    if obj.__doc__:
-        print(f"Docstring for {name}: {obj.__doc__}")
-        if ':skip-doc:' in obj.__doc__:
-            print(f"Skipping {what}: {name} due to :skip-doc: tag")
-            return True
-    
-    # Skip inherited members
-    if hasattr(obj, '__objclass__') and obj.__objclass__ is not obj.__class__:
-        return True
-    
-    return skip
+# skipping documentation for certain members
 
 def setup(app):
     app.connect('autodoc-skip-member', skip_member)
