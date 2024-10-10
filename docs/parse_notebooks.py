@@ -3,6 +3,7 @@ import shutil, os, re
 
 project_root = os.path.join(os.path.abspath(os.pardir))
 
+
 def convert_links_to_sphinx(content):
     # Regular expression to find Markdown links to Python files
     pattern = re.compile(r'\[([^\]]+)\]\(([^)]+\.py)\)')
@@ -16,6 +17,7 @@ def convert_links_to_sphinx(content):
     
     return pattern.sub(replace_link, content)
 
+
 def process_notebook(file_path):
     with open(file_path, 'r', encoding='utf-8') as f:
         content = f.read()
@@ -25,6 +27,7 @@ def process_notebook(file_path):
     
     with open(file_path, 'w', encoding='utf-8') as f:
         f.write(modified_content)
+
 
 def copy_and_parse_notebooks_to_docs(
     source_dir=os.path.join(project_root, 'getting_started', 'tutorials'),
