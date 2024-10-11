@@ -41,6 +41,7 @@ extensions = [
     'autoapi.extension',      # improvement over autodoc, but still requires autodoc
     'sphinx.ext.napoleon',     # Support for NumPy and Google style docstrings
     'sphinx_paramlinks',       # Parameter links
+    'sphinx.ext.todo',         # To-do notes
     'sphinx.ext.viewcode',
     'sphinx.ext.intersphinx',  # Link to other project's documentation, for e.g. NEURON classes as attributes in docstrings
     'nbsphinx',                # For rendering tutorial notebooks
