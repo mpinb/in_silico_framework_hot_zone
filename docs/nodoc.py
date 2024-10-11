@@ -57,7 +57,11 @@ def get_module_docstring(module_path):
         return None
 
 def find_modules_with_tag(source_dir, tag=":skip-doc:"):
-    """Recursively find all modules with a specific tag in their docstring."""
+    """Recursively find all modules with a specific tag in their docstring.
+    
+    Returns:
+        List of module path glob patterns with the tag.
+    """
     modules_with_tag = []
 
     for root, dirs, files in os.walk(source_dir):
@@ -66,8 +70,10 @@ def find_modules_with_tag(source_dir, tag=":skip-doc:"):
                 module_path = os.path.join(root, f)
                 docstring = get_module_docstring(module_path)
                 if docstring and tag in docstring:
-                    module_name = os.path.relpath(module_path, source_dir).replace(os.sep, ".")[:-3]
-                    modules_with_tag.append(module_name)                
+                    if "__init__" in module_path:
+                        modules_with_tag.append(module_path.rstrip('__init__.py') + "**")
+                    else:
+                        modules_with_tag.append(module_path + "**")                
 
     return modules_with_tag
 
