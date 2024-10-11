@@ -149,7 +149,6 @@ def get_modules_to_skip():
         "**dendrite_thickness**",
         "**mechanisms**",
         "**config**",
-        "**style**",
         "**docs**"] + find_modules_with_tag(project_root, tag=":skip-doc:")
 
 # Use the cached result
