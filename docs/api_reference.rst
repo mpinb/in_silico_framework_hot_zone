@@ -3,8 +3,6 @@
 API reference
 =============
 
-
-{% block api_summary %}
 {{ macros.auto_summary([
    Interface,
    biophysics_fitting,
@@ -15,4 +13,3 @@ API reference
    spike_analysis,
    visualize,
 ] ) }}
-{% endblock %}
