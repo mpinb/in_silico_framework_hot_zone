@@ -142,10 +142,7 @@ def find_modules_with_tag(source_dir, tag=":skip-doc:"):
 
 @lru_cache(maxsize=None)
 def get_modules_to_skip():
-    global _cached_modules_to_skip
-    if not _cached_modules_to_skip:
-        _cached_modules_to_skip = ['**tests**', '**barrel_cortex**', '**installer**', '**__pycache__**'] + find_modules_with_tag(project_root, tag=":skip-doc:")
-    return _cached_modules_to_skip
+    return ['**tests**', '**barrel_cortex**', '**installer**', '**__pycache__**'] + find_modules_with_tag(project_root, tag=":skip-doc:")
 
 # Use the cached result
 modules_to_skip = get_modules_to_skip()
