@@ -62,7 +62,7 @@ def find_modules_with_tag(source_dir, tag=":skip-doc:"):
     for root, dirs, files in os.walk(source_dir):
         for f in files:
             if f.endswith(".py"):
-                module_name = f.replace("/", ".")[:-3]
+                module_name = '.'.join(dirs) + '.' + f.replace("/", ".")[:-3]
                 docstring = get_module_docstring(os.path.join(root, f))
                 if docstring and tag in docstring:
                     modules_with_tag.append(module_name)
