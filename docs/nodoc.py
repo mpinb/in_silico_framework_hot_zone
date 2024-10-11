@@ -5,6 +5,7 @@ from unittest.mock import patch
 project_root = os.path.join(os.path.abspath(os.pardir))
 
 
+
 def skip_member(app, what, name, obj, skip, options):
     """Skip members if they have the :skip-doc: tag in their docstring."""
     # Debug print to check what is being processed
@@ -31,6 +32,7 @@ def skip_member(app, what, name, obj, skip, options):
         return True
     
     return skip
+
 
 def safe_import_module(module_name):
     """Import a module safely, ignoring sys.exit and KeyError exceptions."""
@@ -75,3 +77,5 @@ def find_modules_with_tag(source_dir, tag=":skip-doc:"):
                 check_module(module_name)
 
     return modules_with_tag
+
+modules_to_skip = ['**tests**', '**barrel_cortex**'] + find_modules_with_tag(project_root, tag=":skip-doc:")

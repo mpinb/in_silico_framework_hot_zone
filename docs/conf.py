@@ -11,7 +11,7 @@ import os
 project_root = os.path.join(os.path.abspath(os.pardir))
 sys.path.insert(0, project_root)
 from docs.parse_notebooks import copy_and_parse_notebooks_to_docs
-from docs.nodoc import skip_member, find_modules_with_tag
+from docs.nodoc import skip_member, modules_to_skip
 from docutils.parsers.rst import Directive
 from sphinx.util.docutils import SphinxDirective
 from jinja2 import Template
@@ -64,13 +64,8 @@ rst_prolog = """
 """
 
 # skipping documentation for certain members
-modules_to_skip = find_modules_with_tag(project_root, tag=":skip-doc:")
-# autosummary_mock_imports = modules_to_skip
-# autosummary_context = {
-#     "modules_to_skip": modules_to_skip
-# }
-# print(f"Skipping documentation for modules with :skip-doc: tag: {modules_to_skip}")
-#
+autoapi_ignore = modules_to_skip
+
 
 def contains(seq, item):
     """Jinja test to check if an item is a property (i.e. a class attribute that has __get__ and __set__)
@@ -94,7 +89,6 @@ autoapi_prepare_jinja_env = prepare_jinja_env
 autoapi_generate_api_docs = True  # used in api_reference.rst to generate api stubs for the top-level modules.
 
 
-autoapi_ignore = ['**tests**', '**barrel_cortex**']
 
 bibtex_bibfiles = ['bibliography.bib']
 
