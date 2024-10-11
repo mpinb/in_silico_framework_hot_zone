@@ -48,7 +48,10 @@ def find_modules_with_tag(source_dir, tag=":skip-doc:"):
         if module is None:
             return False
         if module.__doc__ and tag in module.__doc__:
-            modules_with_tag.append(module_name)
+            if module.__name__.endswith('.__init__'):
+                module_name = module.__name__[:-9]
+            else:
+                modules_with_tag.append(module_name)
             return True
         if hasattr(module, '__path__'):  # Check if the module is a package
             for _, submodule_name, is_pkg in pkgutil.iter_modules(module.__path__):
