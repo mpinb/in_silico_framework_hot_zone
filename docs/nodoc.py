@@ -41,8 +41,8 @@ def get_module_docstring(module_path):
             raise FileNotFoundError(f"Module file {module_path} not found")
 
         # Read the module's source code
-        with open(module_path, 'r', encoding='utf-8') as file:
-            source_code = file.read()
+        with open(module_path, 'r', encoding='utf-8') as f:
+            source_code = f.read()
 
         # Parse the source code
         parsed_ast = ast.parse(source_code)
@@ -60,11 +60,10 @@ def find_modules_with_tag(source_dir, tag=":skip-doc:"):
     modules_with_tag = []
 
     for root, dirs, files in os.walk(source_dir):
-        for file in files:
-            if file.endswith(".py"):
-                module_path = os.path.relpath(os.path.join(root, file), source_dir)
-                module_name = module_path.replace("/", ".")[:-3]
-                docstring = get_module_docstring(module_path)
+        for f in files:
+            if f.endswith(".py"):
+                module_name = f.replace("/", ".")[:-3]
+                docstring = get_module_docstring(f)
                 if docstring and tag in docstring:
                     modules_with_tag.append(module_name)
                 
