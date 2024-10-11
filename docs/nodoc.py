@@ -37,6 +37,7 @@ def get_module_docstring(module_path):
     """Get the docstring of a module without importing it."""
     try:
         # Find the module's file path
+        print(f"Getting docstring for module {module_path}")
         if not os.path.isfile(module_path):
             raise FileNotFoundError(f"Module file {module_path} not found")
 
@@ -63,11 +64,11 @@ def find_modules_with_tag(source_dir, tag=":skip-doc:"):
         for f in files:
             if f.endswith(".py"):
                 module_name = f.replace("/", ".")[:-3]
-                docstring = get_module_docstring(f)
+                docstring = get_module_docstring(os.path.join(source_dir, f))
                 if docstring and tag in docstring:
                     modules_with_tag.append(module_name)
                 
 
     return modules_with_tag
 
-modules_to_skip = ['**tests**', '**barrel_cortex**', '**installer**'] + [os.path.join(project_root, e)+"**" for e in find_modules_with_tag(project_root, tag=":skip-doc:")]
+modules_to_skip = ['**tests**', '**barrel_cortex**', '**installer**'] + [find_modules_with_tag(project_root, tag=":skip-doc:")]
