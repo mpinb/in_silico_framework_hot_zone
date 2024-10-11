@@ -47,4 +47,3 @@
 {{ macros.auto_summary(visible_submodules, title="Submodules") }}
 {% endif %}
 {% endblock %}
-{% endif %}
