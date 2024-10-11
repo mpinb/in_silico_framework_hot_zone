@@ -1,7 +1,5 @@
 {% import 'macros.rst' as macros %}
 
-# {{ obj.name }}
-{{ "=" * obj.name|length }}
 {{ obj.name }}
 {{ "=" * obj.name|length }}
 
