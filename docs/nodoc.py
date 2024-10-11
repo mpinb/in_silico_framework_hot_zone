@@ -37,7 +37,6 @@ def get_module_docstring(module_path):
     """Get the docstring of a module without importing it."""
     try:
         # Find the module's file path
-        print(f"Getting docstring for module {module_path}")
         if not os.path.isfile(module_path):
             raise FileNotFoundError(f"Module file {module_path} not found")
 
