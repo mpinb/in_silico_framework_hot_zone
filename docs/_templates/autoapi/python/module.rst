@@ -18,6 +18,8 @@
    visible_children|selectattr("type", "equalto", "exception")|list %}
 {% set visible_submodules =
    visible_children|selectattr("type", "equalto", "module")|list %}
+{% set visible_subpackages = obj.subpackages|selectattr("display")|list %}
+{% set visible_submodules = obj.submodules|selectattr("display")|list %}
 
 
 
@@ -29,45 +31,6 @@
    {{ obj.docstring|indent(3) }}
 
       {% endif %}
-
-      {% block subpackages %}
-         {% set visible_subpackages = obj.subpackages|selectattr("display")|list %}
-         {% if visible_subpackages %}
-Subpackages
------------
-
-.. toctree::
-   :maxdepth: 1
-
-            {% for subpackage in visible_subpackages %}
-   {{ subpackage.include_path }}
-            {% endfor %}
-
-
-         {% endif %}
-      {% endblock %}
-      {% block submodules %}
-         {% set visible_submodules = obj.submodules|selectattr("display")|list %}
-         {% if visible_submodules %}
-Submodules
-----------
-
-.. toctree::
-   :maxdepth: 1
-
-            {% for submodule in visible_submodules %}
-   {{ submodule.include_path }}
-            {% endfor %}
-
-
-         {% endif %}
-      {% endblock %}
-      {% block content %}
-         {% set visible_children = obj.children|selectattr("display")|list %}
-         {% if visible_children %}
-            {% set visible_attributes = visible_children|selectattr("type", "equalto", "data")|list %}
-            {% if visible_attributes %}
-               {% if "attribute" in own_page_types or "show-module-summary" in autoapi_options %}
 
 
 {% if "show-module-summary" in autoapi_options and (visible_classes or visible_functions) %}
@@ -89,3 +52,21 @@ Submodules
 {% endif %}
 {% endblock %}
 {% endif %}
+
+{% block submodules %}
+{% if visible_submodules %}
+{{ macros.auto_summary(visible_submodules, title="Submodules") }}
+{% endif %}
+{% endblock %}
+
+{% block subpackages %}
+{% if visible_subpackages %}
+{{ macros.auto_summary(visible_subpackages, title="Subpackages") }}
+{% endif %}
+{% endblock %}
+
+{% block exceptions %}
+{% if visible_exceptions %}
+{{ macros.auto_summary(visible_exceptions, title="Exceptions") }}
+{% endif %}
+{% endblock %}
