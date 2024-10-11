@@ -54,14 +54,18 @@
 {% endif %}
 
 {% block submodules %}
-{% if visible_submodules %}
-{% for subpackage in visible_subpackages %}
-{{ subpackage.include_path }}
-{% endfor %}
+{% if visible_submodules or visible_subpackages %}
 
-{% for submodule in visible_submodules %}
-{{ submodule.include_path }}
-{% endfor %}
+.. autoapisummary::
+   
+   {% for subpackage in visible_subpackages %}
+   {{ subpackage.include_path }}
+   {% endfor %}
+
+   {% for submodule in visible_submodules %}
+   {{ submodule.include_path }}
+   {% endfor %}
+
 {% endif %}
 {% endblock %}
 
