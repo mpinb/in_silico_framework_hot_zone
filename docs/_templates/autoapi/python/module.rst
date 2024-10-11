@@ -55,13 +55,13 @@
 
 {% block submodules %}
 {% if visible_submodules %}
-{{ macros.auto_summary(visible_submodules, title="Submodules") }}
-{% endif %}
-{% endblock %}
+{% for submodule in visible_subpackages %}
+{{ subpackage.include_path }}
+{% endfor %}
 
-{% block subpackages %}
-{% if visible_subpackages %}
-{{ macros.auto_summary(visible_subpackages, title="Subpackages") }}
+{% for submodule in visible_submodules %}
+{{ submodule.include_path }}
+{% endfor %}
 {% endif %}
 {% endblock %}
 
