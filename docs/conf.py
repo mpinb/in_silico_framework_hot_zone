@@ -8,12 +8,10 @@
 
 import sys
 import os
+import ast, os
 project_root = os.path.join(os.path.abspath(os.pardir))
 sys.path.insert(0, project_root)
 from docs.parse_notebooks import copy_and_parse_notebooks_to_docs
-from docutils.parsers.rst import Directive
-from sphinx.util.docutils import SphinxDirective
-from jinja2 import Template
 from functools import lru_cache
 
 project = 'In-Silico Framework (ISF)'
@@ -64,8 +62,6 @@ rst_prolog = """
 """
 
 """Configure modules, functions, methods, classes and attributes so that they are not documented by Sphinx."""
-import ast, os
-from unittest.mock import patch
 
 project_root = os.path.join(os.path.abspath(os.pardir))
 
@@ -119,6 +115,7 @@ def get_module_docstring(module_path):
         print(f"Error getting docstring for module {module_path}: {e}")
         return None
 
+@lru_cache(maxsize=None)
 def find_modules_with_tag(source_dir, tag=":skip-doc:"):
     """Recursively find all modules with a specific tag in their docstring.
     
