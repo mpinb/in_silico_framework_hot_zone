@@ -2,6 +2,8 @@
 import pkgutil, importlib, os
 from unittest.mock import patch
 
+project_root = os.path.join(os.path.abspath(os.pardir))
+
 
 def skip_member(app, what, name, obj, skip, options):
     """Skip members if they have the :skip-doc: tag in their docstring."""
@@ -21,6 +23,11 @@ def skip_member(app, what, name, obj, skip, options):
     
     # Skip inherited members
     if hasattr(obj, '__objclass__') and obj.__objclass__ is not obj.__class__:
+        return True
+    
+    modules_to_skip = find_modules_with_tag(project_root, tag=":skip-doc:")
+    if name in modules_to_skip:
+        print(f"Skipping {what}: {name} due to :skip-doc: tag in module {obj.__module__}")
         return True
     
     return skip
