@@ -139,9 +139,16 @@ def find_modules_with_tag(source_dir, tag=":skip-doc:"):
 
     return modules_with_tag
 
+def get_modules_to_skip():
+    global _cached_modules_to_skip
+    if not _cached_modules_to_skip:
+        _cached_modules_to_skip = ['**tests**', '**barrel_cortex**', '**installer**', '**__pycache__**'] + find_modules_with_tag(project_root, tag=":skip-doc:")
+    return _cached_modules_to_skip
+
+_cached_modules_to_skip = None
 
 # Use the cached result
-modules_to_skip = ['**tests**', '**barrel_cortex**', '**installer**', '**__pycache__**'] + find_modules_with_tag(project_root, tag=":skip-doc:")
+modules_to_skip = get_modules_to_skip()
 
 # skipping documentation for certain members
 print("ignoring modules: ", modules_to_skip)
@@ -168,8 +175,6 @@ def prepare_jinja_env(jinja_env) -> None:
 autoapi_prepare_jinja_env = prepare_jinja_env
 
 autoapi_generate_api_docs = True  # used in api_reference.rst to generate api stubs for the top-level modules.
-
-
 
 bibtex_bibfiles = ['bibliography.bib']
 
