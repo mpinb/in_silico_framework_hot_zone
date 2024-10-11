@@ -3,6 +3,8 @@ import ast, os
 from unittest.mock import patch
 
 project_root = os.path.join(os.path.abspath(os.pardir))
+# Global variable to cache the result
+_cached_modules_to_skip = None
 
 
 def skip_member(app, what, name, obj, skip, options):
@@ -77,4 +79,13 @@ def find_modules_with_tag(source_dir, tag=":skip-doc:"):
 
     return modules_with_tag
 
-modules_to_skip = ['**tests**', '**barrel_cortex**', '**installer**', '**__pycache__**'] + find_modules_with_tag(project_root, tag=":skip-doc:")
+
+def get_modules_to_skip():
+    global _cached_modules_to_skip
+    if _cached_modules_to_skip is None:
+        project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
+        _cached_modules_to_skip = ['**tests**', '**barrel_cortex**', '**installer**', '**__pycache__**'] + find_modules_with_tag(project_root, tag=":skip-doc:")
+    return _cached_modules_to_skip
+
+# Use the cached result
+modules_to_skip = get_modules_to_skip()
