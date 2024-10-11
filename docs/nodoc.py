@@ -33,16 +33,15 @@ def skip_member(app, what, name, obj, skip, options):
     return skip
     
     
-def get_module_docstring(module_name):
+def get_module_docstring(module_path):
     """Get the docstring of a module without importing it."""
     try:
         # Find the module's file path
-        module_file = module_name.replace('.', '/') + '.py'
-        if not os.path.isfile(module_file):
-            raise FileNotFoundError(f"Module file {module_file} not found")
+        if not os.path.isfile(module_path):
+            raise FileNotFoundError(f"Module file {module_path} not found")
 
         # Read the module's source code
-        with open(module_file, 'r', encoding='utf-8') as file:
+        with open(module_path, 'r', encoding='utf-8') as file:
             source_code = file.read()
 
         # Parse the source code
@@ -53,7 +52,7 @@ def get_module_docstring(module_name):
         return docstring
 
     except Exception as e:
-        print(f"Error getting docstring for module {module_name}: {e}")
+        print(f"Error getting docstring for module {module_path}: {e}")
         return None
 
 def find_modules_with_tag(source_dir, tag=":skip-doc:"):
@@ -65,7 +64,7 @@ def find_modules_with_tag(source_dir, tag=":skip-doc:"):
             if file.endswith(".py"):
                 module_path = os.path.relpath(os.path.join(root, file), source_dir)
                 module_name = module_path.replace("/", ".")[:-3]
-                docstring = get_module_docstring(module_name)
+                docstring = get_module_docstring(module_path)
                 if docstring and tag in docstring:
                     modules_with_tag.append(module_name)
                 
