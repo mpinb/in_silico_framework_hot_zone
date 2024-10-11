@@ -1,9 +1,8 @@
 """Configure modules, functions, methods, classes and attributes so that they are not documented by Sphinx."""
-import pkgutil, importlib, os
+import ast, os
 from unittest.mock import patch
 
 project_root = os.path.join(os.path.abspath(os.pardir))
-
 
 
 def skip_member(app, what, name, obj, skip, options):
@@ -32,39 +31,44 @@ def skip_member(app, what, name, obj, skip, options):
         return True
     
     return skip
-
-
-def safe_import_module(module_name):
-    """Import a module safely, ignoring sys.exit and KeyError exceptions."""
-    try:
-        with patch('sys.exit', lambda x: None):
-            module = importlib.import_module(module_name)
-        return module
-    except ImportError:
-        print(f"Failed to import module {module_name}")
-    except KeyError:
-        print(f"KeyError encountered while importing module {module_name}")
-    return None
     
+    
+def get_module_docstring(module_name):
+    """Get the docstring of a module without importing it."""
+    try:
+        # Find the module's file path
+        module_file = module_name.replace('.', '/') + '.py'
+        if not os.path.isfile(module_file):
+            raise FileNotFoundError(f"Module file {module_file} not found")
+
+        # Read the module's source code
+        with open(module_file, 'r', encoding='utf-8') as file:
+            source_code = file.read()
+
+        # Parse the source code
+        parsed_ast = ast.parse(source_code)
+
+        # Extract the docstring
+        docstring = ast.get_docstring(parsed_ast)
+        return docstring
+
+    except Exception as e:
+        print(f"Error getting docstring for module {module_name}: {e}")
+        return None
 
 def find_modules_with_tag(source_dir, tag=":skip-doc:"):
     """Recursively find all modules with a specific tag in their docstring."""
     modules_with_tag = []
 
-    def check_module(module_name):
-        """Check if a module or any of its submodules has the specific tag in its docstring."""
-        module = safe_import_module(module_name)
-        if module is None:
-            return False
-        if module.__doc__ and tag in module.__doc__:
-            modules_with_tag.append(module_name)
-
     for root, dirs, files in os.walk(source_dir):
         for file in files:
             if file.endswith(".py"):
                 module_path = os.path.relpath(os.path.join(root, file), source_dir)
-                module_name = module_path.replace(os.sep, ".").rstrip('.py')
-                check_module(module_name)
+                module_name = module_path.replace("/", ".")[:-3]
+                docstring = get_module_docstring(module_name)
+                if docstring and tag in docstring:
+                    modules_with_tag.append(module_name)
+                
 
     return modules_with_tag
 
