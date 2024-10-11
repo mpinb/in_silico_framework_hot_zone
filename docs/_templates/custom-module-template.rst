@@ -86,7 +86,11 @@ Back to :mod:`{{ parent_module }}`
 
       {% for item in modules %}
          {% if item not in modules_to_skip %}
+            warning("Documenting module: %s" % item)
+            {{ item }}
             {{ item.split('.')[-1] }}
+         {% else %}
+            warning("Skipping module: %s" % item)
          {% endif %}
       {%- endfor %}
    {% endif %}
