@@ -78,4 +78,4 @@ def find_modules_with_tag(source_dir, tag=":skip-doc:"):
 
     return modules_with_tag
 
-modules_to_skip = ['**tests**', '**barrel_cortex**'] + find_modules_with_tag(project_root, tag=":skip-doc:")
+modules_to_skip = ['**tests**', '**barrel_cortex**'] + [os.path.join(project_root, e) for e in find_modules_with_tag(project_root, tag=":skip-doc:")]
