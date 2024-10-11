@@ -1,3 +1,5 @@
+.. taken from https://bylr.info/articles/2022/05/10/api-doc-with-sphinx-autoapi/#basic-macro-setup
+
 {% macro _render_item_name(obj, sig=False) -%}
 :py:obj:`{{ obj.name }} <{{ obj.id }}>`
      {%- if sig -%}

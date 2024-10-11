@@ -12,6 +12,9 @@ project_root = os.path.join(os.path.abspath(os.pardir))
 sys.path.insert(0, project_root)
 from docs.parse_notebooks import copy_and_parse_notebooks_to_docs
 from docs.nodoc import skip_member, find_modules_with_tag
+from docutils.parsers.rst import Directive
+from sphinx.util.docutils import SphinxDirective
+from jinja2 import Template
 
 project = 'In-Silico Framework (ISF)'
 copyright = '2023, Arco Bast, Amir Najafgholi, Maria Royo Cano, Rieke Fruengel, Matt Keaton, Bjorge Meulemeester, Omar Valerio'
@@ -47,6 +50,7 @@ extensions = [
 ]
 
 autoapi_dirs = [project_root]
+autoapi_type = "python"
 autoapi_keep_files = True
 autoapi_options = [
     "members",
@@ -65,6 +69,7 @@ modules_to_skip = find_modules_with_tag(project_root, tag=":skip-doc:")
 #     "modules_to_skip": modules_to_skip
 # }
 # print(f"Skipping documentation for modules with :skip-doc: tag: {modules_to_skip}")
+#
 
 def contains(seq, item):
     """Jinja test to check if an item is a property (i.e. a class attribute that has __get__ and __set__)
@@ -77,7 +82,7 @@ def setup(app):
 
 def underline(s):
     line = "-"*len(s)
-    return "s\n%s" % line
+    return "{}\n{}".format(s, line)
 
 def prepare_jinja_env(jinja_env) -> None:
     jinja_env.tests["contains"] = contains
@@ -125,7 +130,7 @@ nbsphinx_codecell_lexer = "python"
 # We have custom templates that produce toctrees for modules and classes on module pages,
 # and separate pages for classes
 templates_path = ['_templates']
-autoapi_template_dir = '_templates'
+autoapi_template_dir = '_templates/autoapi'
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
 # source_suffix = ['.rst', '.md']
