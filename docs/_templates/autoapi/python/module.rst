@@ -20,6 +20,56 @@
    visible_children|selectattr("type", "equalto", "module")|list %}
 
 
+
+.. py:module:: {{ obj.name }}
+
+      {% if obj.docstring %}
+.. autoapi-nested-parse::
+
+   {{ obj.docstring|indent(3) }}
+
+      {% endif %}
+
+      {% block subpackages %}
+         {% set visible_subpackages = obj.subpackages|selectattr("display")|list %}
+         {% if visible_subpackages %}
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 1
+
+            {% for subpackage in visible_subpackages %}
+   {{ subpackage.include_path }}
+            {% endfor %}
+
+
+         {% endif %}
+      {% endblock %}
+      {% block submodules %}
+         {% set visible_submodules = obj.submodules|selectattr("display")|list %}
+         {% if visible_submodules %}
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 1
+
+            {% for submodule in visible_submodules %}
+   {{ submodule.include_path }}
+            {% endfor %}
+
+
+         {% endif %}
+      {% endblock %}
+      {% block content %}
+         {% set visible_children = obj.children|selectattr("display")|list %}
+         {% if visible_children %}
+            {% set visible_attributes = visible_children|selectattr("type", "equalto", "data")|list %}
+            {% if visible_attributes %}
+               {% if "attribute" in own_page_types or "show-module-summary" in autoapi_options %}
+
+
 {% if "show-module-summary" in autoapi_options and (visible_classes or visible_functions) %}
 {% block classes scoped %}
 {% if visible_classes %}
@@ -39,9 +89,3 @@
 {% endif %}
 {% endblock %}
 {% endif %}
-
-{% block submodules scoped %}
-{% if visible_submodules %}
-{{ macros.auto_summary(visible_submodules, title="Submodules") }}
-{% endif %}
-{% endblock %}
