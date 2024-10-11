@@ -21,7 +21,6 @@ Contents
    :maxdepth: 1
 
    installation
-   tutorials
    api_reference
    file_formats
    bibliography

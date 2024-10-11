@@ -1,6 +1,6 @@
 .. setup:
 
-{% set parts = fullname.split('.') %}
+{% set parts = obj.id.split('.') %}
 {% set function_name = parts[-1] %}
 {% set module_name = parts[-2] %}
 {% set parent_module = parts[:-2] | join('.') %}
@@ -20,4 +20,4 @@ Back to :py:mod:`{{ full_module_name }}`
 .. content:
 .. note that this is a function (i.e. attribute of a module), not a method (i.e. attribute of a class)
 
-.. autofunction:: {{ function_name }}
+.. autoapifunction:: {{ function_name }}

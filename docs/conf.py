@@ -21,10 +21,10 @@ version = '0.2.0-alpha'
 ## Make your modules available in sys.path
 
 # copy over tutorials and convert links to python files to sphinx documentation directives
-copy_and_parse_notebooks_to_docs(
-    source_dir=os.path.join(project_root, 'getting_started', 'tutorials'),
-    dest_dir=os.path.join(project_root, 'docs', 'tutorials')
-)
+#   copy_and_parse_notebooks_to_docs(
+#       source_dir=os.path.join(project_root, 'getting_started', 'tutorials'),
+#       dest_dir=os.path.join(project_root, 'docs', 'tutorials')
+#   )
 
 from compatibility import init_data_base_compatibility
 init_data_base_compatibility()  # make db importable before running autosummary or autodoc etc...
@@ -34,30 +34,61 @@ init_data_base_compatibility()  # make db importable before running autosummary 
 
 extensions = [
     'sphinx.ext.autodoc',      # Core library for html generation from docstrings
-    'sphinx.ext.todo',         # To-do notes
+    # 'sphinx.ext.autosummary',  # Create neat summary tables
+    'autoapi.extension',      # improvement over autodoc, but still requires autodoc
+    'sphinx.ext.napoleon',     # Support for NumPy and Google style docstrings
     'sphinx_paramlinks',       # Parameter links
     'sphinx.ext.viewcode',
-    'sphinx.ext.coverage',     # Coverage reporting
     'sphinx.ext.intersphinx',  # Link to other project's documentation, for e.g. NEURON classes as attributes in docstrings
-    'sphinx.ext.autosummary',  # Create neat summary tables
-    'sphinx.ext.napoleon',     # Support for NumPy and Google style docstrings
     'nbsphinx',                # For rendering tutorial notebooks
     'nbsphinx_link',           # For linking to sections in tutorial notebooks
     'sphinxcontrib.bibtex',    # For citations
     'sphinx.ext.mathjax',      # For math equations
 ]
 
+autoapi_dirs = [project_root]
+autoapi_keep_files = True
+autoapi_options = [
+    "members",
+    "undoc-members",
+    "show-module-summary",
+]
+
+rst_prolog = """
+.. role:: summarylabel
+"""
+
 # skipping documentation for certain members
 modules_to_skip = find_modules_with_tag(project_root, tag=":skip-doc:")
-autosummary_mock_imports = modules_to_skip
-autosummary_context = {
-    "modules_to_skip": modules_to_skip
-}
-print(f"Skipping documentation for modules with :skip-doc: tag: {modules_to_skip}")
+# autosummary_mock_imports = modules_to_skip
+# autosummary_context = {
+#     "modules_to_skip": modules_to_skip
+# }
+# print(f"Skipping documentation for modules with :skip-doc: tag: {modules_to_skip}")
+
+def contains(seq, item):
+    """Jinja test to check if an item is a property (i.e. a class attribute that has __get__ and __set__)
+    Used in the Jinja templates in _templates"""
+    return item in seq
 
 def setup(app):
     # skip members with :skip-doc: tag in their docstrings
-    app.connect('autodoc-skip-member', skip_member)
+    app.connect('autoapi-skip-member', skip_member)
+
+def underline(s):
+    line = "-"*len(s)
+    return "s\n%s" % line
+
+def prepare_jinja_env(jinja_env) -> None:
+    jinja_env.tests["contains"] = contains
+    jinja_env.filters["underline"] = underline
+
+autoapi_prepare_jinja_env = prepare_jinja_env
+
+autoapi_generate_api_docs = True  # used in api_reference.rst to generate api stubs for the top-level modules.
+
+
+autoapi_ignore = ['**tests**', '**barrel_cortex**']
 
 bibtex_bibfiles = ['bibliography.bib']
 
@@ -80,10 +111,10 @@ napoleon_attr_annotations = True
 ## Default: alphabetically ('alphabetical')
 # autodoc_member_order = 'bysource'
 
-autoclass_content = 'both'  # document both the class docstring, as well as __init__
+# autoclass_content = 'both'  # document both the class docstring, as well as __init__
 ## Generate autodoc stubs with summaries from code
-autosummary_generate = True
-autosummary_imported_members = False  # do not show all imported modules per module, this is too bloated
+# autosummary_generate = True
+# autosummary_imported_members = False  # do not show all imported modules per module, this is too bloated
 paramlinks_hyperlink_param = 'name'
 
 # Don't run notebooks
@@ -94,14 +125,14 @@ nbsphinx_codecell_lexer = "python"
 # We have custom templates that produce toctrees for modules and classes on module pages,
 # and separate pages for classes
 templates_path = ['_templates']
-
+autoapi_template_dir = '_templates'
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
 # source_suffix = ['.rst', '.md']
 source_suffix = '.rst'
 
 # The encoding of source files.
-#source_encoding = 'utf-8-sig'
+source_encoding = 'utf-8-sig'
 
 # The master toctree document.
 master_doc = 'index'
@@ -184,7 +215,8 @@ html_static_path = ['_static']
 html_css_files = [
     'default.css',  # relative to html_static_path defined above
     'style.css',
-    'downarr.svg'
+    'downarr.svg',
+    'css/custom.css'
 ]
 
 html_js_files = [

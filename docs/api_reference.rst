@@ -1,16 +1,18 @@
+{% import 'macros.rst' as macros %}
+
 API reference
 =============
 
-.. autosummary::
-   :toctree: _autosummary
-   :template: custom-module-template.rst
-   :recursive:
 
-   Interface
-   biophysics_fitting
-   data_base
-   simrun
-   single_cell_parser
-   singlecell_input_mapper
-   spike_analysis
-   visualize
+{% block api_summary %}
+{{ macros.auto_summary([
+   Interface,
+   biophysics_fitting,
+   data_base,
+   simrun,
+   single_cell_parser,
+   singlecell_input_mapper,
+   spike_analysis,
+   visualize,
+] ) }}
+{% endblock %}

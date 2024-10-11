@@ -1,6 +1,6 @@
 .. setup:
 
-{% set parts = fullname.split('.') %}
+{% set parts = obj.id.split('.') %}
 {% set method_name = parts[-1] %}
 {% set class_name = parts[-2] %}
 {% set class_dot_method_name = class_name + '.' + method_name %}
@@ -21,4 +21,4 @@ Back to :py:class:`{{ full_class_name }}`
 .. content:
 .. note that this is a method (i.e. attribute of a class), not a function (i.e. attribute of a module)
 
-.. automethod:: {{ full_method_name }}
+.. autoapimethod:: {{ full_method_name }}
