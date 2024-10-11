@@ -57,25 +57,15 @@ def find_modules_with_tag(source_dir, tag=":skip-doc:"):
         if module is None:
             return False
         if module.__doc__ and tag in module.__doc__:
-            if module.__name__.endswith('.__init__'):
-                module_name = module.__name__[:-9]
             modules_with_tag.append(module_name)
-            return True
-        if hasattr(module, '__path__'):  # Check if the module is a package
-            for _, submodule_name, is_pkg in pkgutil.iter_modules(module.__path__):
-                full_submodule_name = f"{module_name}.{submodule_name}"
-                if check_module(full_submodule_name):
-                    modules_with_tag.append(full_submodule_name)
-                    return True
-        return False
 
     for root, dirs, files in os.walk(source_dir):
         for file in files:
             if file.endswith(".py"):
                 module_path = os.path.relpath(os.path.join(root, file), source_dir)
-                module_name = module_path.replace(os.sep, ".")[:-3]  # Remove .py extension
+                module_name = module_path.replace(os.sep, ".").rstrip('.py')
                 check_module(module_name)
 
     return modules_with_tag
 
-modules_to_skip = ['**tests**', '**barrel_cortex**'] + [os.path.join(project_root, e)+"**" for e in find_modules_with_tag(project_root, tag=":skip-doc:")]
+modules_to_skip = ['**tests**', '**barrel_cortex**', '**installer**'] + [os.path.join(project_root, e)+"**" for e in find_modules_with_tag(project_root, tag=":skip-doc:")]
