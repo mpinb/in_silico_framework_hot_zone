@@ -64,6 +64,7 @@ rst_prolog = """
 """
 
 # skipping documentation for certain members
+print("ignoring modules: ", modules_to_skip)
 autoapi_ignore = modules_to_skip
 
 
