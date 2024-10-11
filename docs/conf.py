@@ -58,7 +58,6 @@ print(f"Skipping documentation for modules with :skip-doc: tag: {modules_to_skip
 def setup(app):
     # skip members with :skip-doc: tag in their docstrings
     app.connect('autodoc-skip-member', skip_member)
-    app.connect('autosummary-skip-member', skip_member)
 
 bibtex_bibfiles = ['bibliography.bib']
 
