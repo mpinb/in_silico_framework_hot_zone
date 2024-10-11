@@ -1,7 +1,7 @@
 {% import 'macros.rst' as macros %}
 
 {% set visible_children =
-    object.children|selectattr("display")|rejectattr("imported")|list %}
+    obj.children|selectattr("display")|rejectattr("imported")|list %}
 {% set visible_classes =
     visible_children|selectattr("type", "equalto", "class")|list %}
 {% set property_methods =
