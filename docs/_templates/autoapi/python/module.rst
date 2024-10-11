@@ -1,16 +1,12 @@
 {% import 'macros.rst' as macros %}
 
-{% set visible_subpackages = obj.subpackages|selectattr("display")|list %}
-{% set visible_submodules = obj.submodules|selectattr("display")|list %}
-{% set visible_children = obj.children|selectattr("display")|list %}
-{% if visible_children %}
-   {% set visible_attributes = visible_children|selectattr("type", "equalto", "data")|list %}
-   {% set visible_exceptions = visible_children|selectattr("type", "equalto", "exception")|list %}
-   {% set visible_classes = visible_children|selectattr("type", "equalto", "class")|list %}
-   {% set visible_functions = visible_children|selectattr("type", "equalto", "function")|list %}
-   {% set this_page_children = visible_children|rejectattr("type", "in", own_page_types)|list %}
-{% endif %}
-           
+{% set visible_children =
+    module_object.children|selectattr("display")|rejectattr("imported")|list %}
+{% set visible_classes =
+    visible_children|selectattr("type", "equalto", "class")|list %}
+{% set property_methods =
+    all_methods|selectattr("properties", "contains", "property")|list %}
+
 {% if "show-module-summary" in autoapi_options and (visible_classes or visible_functions) %}
 {% block classes scoped %}
 {% if visible_classes %}
