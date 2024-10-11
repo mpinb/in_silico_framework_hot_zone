@@ -55,7 +55,7 @@
 
 {% block submodules %}
 {% if visible_submodules %}
-{% for submodule in visible_subpackages %}
+{% for subpackage in visible_subpackages %}
 {{ subpackage.include_path }}
 {% endfor %}
 
