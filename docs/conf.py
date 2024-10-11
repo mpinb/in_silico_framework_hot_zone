@@ -14,6 +14,7 @@ from docs.parse_notebooks import copy_and_parse_notebooks_to_docs
 from docutils.parsers.rst import Directive
 from sphinx.util.docutils import SphinxDirective
 from jinja2 import Template
+from functools import lru_cache
 
 project = 'In-Silico Framework (ISF)'
 copyright = '2023, Arco Bast, Amir Najafgholi, Maria Royo Cano, Rieke Fruengel, Matt Keaton, Bjorge Meulemeester, Omar Valerio'
@@ -139,13 +140,12 @@ def find_modules_with_tag(source_dir, tag=":skip-doc:"):
 
     return modules_with_tag
 
+@lru_cache(maxsize=None)
 def get_modules_to_skip():
     global _cached_modules_to_skip
     if not _cached_modules_to_skip:
         _cached_modules_to_skip = ['**tests**', '**barrel_cortex**', '**installer**', '**__pycache__**'] + find_modules_with_tag(project_root, tag=":skip-doc:")
     return _cached_modules_to_skip
-
-_cached_modules_to_skip = None
 
 # Use the cached result
 modules_to_skip = get_modules_to_skip()
