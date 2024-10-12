@@ -168,10 +168,12 @@ autoapi_type = "python"
 autoapi_keep_files = True
 autoapi_prepare_jinja_env = prepare_jinja_env
 autoapi_add_toctree_entry = False  # we use a manual autosummary directive in api_reference.rst thats included in the toctree
-autoapi_generate_api_docs = True  
+autoapi_generate_api_docs = True
+# generate the .rst stub files. The template directives don't do this. 
 autoapi_options = [
     "members",
     "undoc-members",
+    "private-members",
     "show-module-summary",
 ]
 autoapi_own_page_level = 'method'
