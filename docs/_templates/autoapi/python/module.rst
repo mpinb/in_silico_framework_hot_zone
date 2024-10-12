@@ -51,21 +51,16 @@
 {{ macros.auto_summary(visible_attributes, title="Attributes") }}
 {% endif %}
 {% endblock %}
+
+{% block subpackages %}
+{% if visible_subpackages %}
+{{ macros.auto_summary(visible_subpackages, title="Subpackages") }}
 {% endif %}
+{% endblock %}
 
 {% block submodules %}
-{% if visible_submodules or visible_subpackages %}
-
-.. autoapisummary::
-   
-   {% for subpackage in visible_subpackages %}
-   {{ subpackage.include_path }}
-   {% endfor %}
-
-   {% for submodule in visible_submodules %}
-   {{ submodule.include_path }}
-   {% endfor %}
-
+{% if visible_submodules %}
+{{ macros.auto_summary(visible_submodules, title="Submodules") }}
 {% endif %}
 {% endblock %}
 
@@ -74,3 +69,5 @@
 {{ macros.auto_summary(visible_exceptions, title="Exceptions") }}
 {% endif %}
 {% endblock %}
+
+{% endif %}

@@ -48,14 +48,6 @@ extensions = [
     'sphinx.ext.mathjax',      # For math equations
 ]
 
-autoapi_dirs = [project_root]
-autoapi_type = "python"
-autoapi_keep_files = True
-autoapi_options = [
-    "members",
-    "undoc-members",
-    "show-module-summary",
-]
 
 rst_prolog = """
 .. role:: summarylabel
@@ -96,7 +88,6 @@ def get_module_docstring(module_path):
     """Get the docstring of a module without importing it."""
     try:
         # Find the module's file path
-        print("Module path:", module_path)
         if not os.path.isfile(module_path):
             raise FileNotFoundError(f"Module file {module_path} not found")
 
@@ -168,18 +159,22 @@ def setup(app):
     # skip members with :skip-doc: tag in their docstrings
     app.connect('autoapi-skip-member', skip_member)
 
-def underline(s):
-    line = "-"*len(s)
-    return "{}\n{}".format(s, line)
-
 def prepare_jinja_env(jinja_env) -> None:
     jinja_env.tests["contains"] = contains
-    jinja_env.filters["underline"] = underline
 
+
+autoapi_dirs = [project_root]
+autoapi_type = "python"
+autoapi_keep_files = True
 autoapi_prepare_jinja_env = prepare_jinja_env
-
-autoapi_generate_api_docs = True  # used in api_reference.rst to generate api stubs for the top-level modules.
-
+autoapi_add_toctree_entry = False  # we use a manual autosummary directive in api_reference.rst thats included in the toctree
+autoapi_generate_api_docs = True  
+autoapi_options = [
+    "members",
+    "undoc-members",
+    "show-module-summary",
+]
+autoapi_own_page_level = 'method'
 bibtex_bibfiles = ['bibliography.bib']
 
 # Napoleon settings
