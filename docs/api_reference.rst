@@ -4,14 +4,14 @@ API reference
 .. toctree::
    :hidden:
 
-   :py:mod:Interface
-   :py:mod:biophysics_fitting
-   :py:mod:data_base
-   :py:mod:simrun
-   :py:mod:single_cell_parser
-   :py:mod:singlecell_input_mapper
-   :py:mod:spike_analysis
-   :py:mod:visualize
+   autoapi/Interface/index
+   autoapi/biophysics_fitting/index
+   autoapi/data_base/index
+   autoapi/simrun/index
+   autoapi/single_cell_parser/index
+   autoapi/singlecell_input_mapper/index
+   autoapi/spike_analysis/index
+   autoapi/visualize/index
 
 .. autoapisummary::
 

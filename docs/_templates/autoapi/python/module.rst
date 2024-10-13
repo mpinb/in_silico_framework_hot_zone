@@ -13,12 +13,13 @@
 {% set visible_subpackages = obj.subpackages|selectattr("display")|list %}
 
 .. a hidden toctree for the sidebar
+.. Include all visible children, except for attributes
 
 .. toctree::
    :hidden:
 
-   {% for child in visible_children %}
-   :py:{{ child.type }}:{{ child.name }}
+   {% for child in visible_subpackages + visible_submodules + visible_classes + visible_functions + visible_exceptions %}
+   {{ child.name }}
    {% endfor %}
 
 .. py:module:: {{ obj.name }}
