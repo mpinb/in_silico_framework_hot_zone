@@ -53,15 +53,15 @@ Back to :mod:`{{ parent_module }}`
 {% if "show-module-summary" in autoapi_options %}
 {% block classes scoped %}
 {% if visible_classes %}
-
-{{ macros.auto_summary(visible_classes, title="Classes") }}
+{% set public_classes = visible_classes|selectattr('name', 'no_leading_underscore') %}
+{{ macros.auto_summary(public_classes, title="Classes") }}
 {% endif %}
 {% endblock %}
 
 {% block functions scoped %}
 {% if visible_functions %}
-
-{{ macros.auto_summary(visible_functions, title="Functions") }}
+{% set public_functions = visible_functions|selectattr('name', 'no_leading_underscore') %}
+{{ macros.auto_summary(public_functions, title="Functions") }}
 {% endif %}
 {% endblock %}
 
@@ -73,7 +73,8 @@ Back to :mod:`{{ parent_module }}`
 
 {% block subpackages %}
 {% if visible_subs %}
-{{ macros.auto_summary(visible_subs, title="Modules") }}
+{% set public_subs = visible_subs|selectattr('name', 'no_leading_underscore') %}
+{{ macros.auto_summary(public_subs, title="Modules") }}
 {% endif %}
 {% endblock %}
 

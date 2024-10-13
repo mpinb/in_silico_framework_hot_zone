@@ -4,7 +4,7 @@
 {{ "=" * obj.id | length }}
 
    {% endif %}
-.. py:property:: {% if is_own_page %}{{ obj.id}}{% else %}{{ obj.short_name }}{% endif %}
+.. py:property:: {{ obj.short_name }}
    {% if obj.annotation %}
 
    :type: {{ obj.annotation }}

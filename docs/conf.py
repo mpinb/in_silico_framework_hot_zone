@@ -155,12 +155,16 @@ def contains(seq, item):
     Used in the Jinja templates in _templates"""
     return item in seq
 
+def no_leading_underscore(item):
+    return not item.split('.')[-1][0] == "_"
+
 def setup(app):
     # skip members with :skip-doc: tag in their docstrings
     app.connect('autoapi-skip-member', skip_member)
 
 def prepare_jinja_env(jinja_env) -> None:
     jinja_env.tests["contains"] = contains
+    jinja_env.tests["no_leading_underscore"] = no_leading_underscore
 
 
 autoapi_dirs = [project_root]

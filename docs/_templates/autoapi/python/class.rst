@@ -1,6 +1,5 @@
 {% import 'macros.rst' as macros %}
 {% set parent_module = obj.id.split('.')[:-1] | join('.') | escape %}
-{% set shortname = obj.name.split('.')[-1] | escape %}
 
 .. Note that class attributes are rendered within the docstring, as taken care of by Napoleon. They do not need a separate section.
 
@@ -13,8 +12,10 @@
 Back to :mod:`{{ parent_module }}`
 {% endif %}
 
-{{ shortname }}
-{{ "=" * shortname | length }}
+{{ obj.short_name }}
+{{ "=" * obj.short_name | length }}
+
+   {% endif %}
 
 {% set visible_children = obj.children|selectattr("display")|list %}
 {% set own_page_children = visible_children|selectattr("type", "in", own_page_types)|list %}
@@ -26,32 +27,24 @@ Back to :mod:`{{ parent_module }}`
    :hidden:
 
    {% for method in visible_methods %}
-   {{ obj.short_name }}.{{ method.name }}
+   {{ method.name }} <{{ method.id }}>
    {% endfor %}
 
    {% endif %}
 
-.. py:class:: {% if is_own_page %}{{ obj.id }}{% else %}{{ obj.short_name }}{% endif %}{% if obj.args %}({{ obj.args }}){% endif %}
+.. py:class:: {{ obj.id }}{% if obj.args %}({{ obj.args }}){% endif %}
 
+   
    {% for (args, return_annotation) in obj.overloads %}
       {{ " " * (obj.type | length) }}   {{ obj.short_name }}{% if args %}({{ args }}){% endif %}
-
    {% endfor %}
    {% if obj.bases %}
       {% if "show-inheritance" in autoapi_options %}
 
    Bases: {% for base in obj.bases %}{{ base|link_objs }}{% if not loop.last %}, {% endif %}{% endfor %}
       {% endif %}
-
-      {% if "show-inheritance-diagram" in autoapi_options and obj.bases != ["object"] %}
-   .. autoapi-inheritance-diagram:: {{ obj.obj["full_name"] }}
-      :parts: 1
-         {% if "private-members" in autoapi_options %}
-      :private-bases:
-         {% endif %}
-
-      {% endif %}
    {% endif %}
+
    {% if obj.docstring %}
 
    {{ obj.docstring|indent(3) }}
@@ -59,8 +52,7 @@ Back to :mod:`{{ parent_module }}`
    {% if visible_methods %}
 
 .. rubric:: Methods
-
-{{ macros.auto_summary(visible_methods, title="") }}
+{% set public_methods = visible_methods|selectattr('name', 'no_leading_underscore') %}
+{{ macros.auto_summary(public_methods, title="") }}
    {% endif %}
-{% endif %}
 {% endif %}

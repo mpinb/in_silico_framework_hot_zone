@@ -1,6 +1,6 @@
 .. adapted from https://bylr.info/articles/2022/05/10/api-doc-with-sphinx-autoapi/#basic-macro-setup
 
-{% macro _render_item_name(obj, sig=False) -%} :py:obj:`{{ obj.name }} <{{ obj.id }}>`
+{% macro _render_item_name(obj, sig=False) -%} :py:obj:`{{ obj.name.split('.')[-1] }} <{{ obj.id }}>`
      {%- if sig -%}
        \ (
        {%- for arg in obj.obj.args -%}
