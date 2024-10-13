@@ -52,7 +52,7 @@ Back to :mod:`{{ parent_module }}`
    {% if visible_methods %}
 
 .. rubric:: Methods
-{% set public_methods = visible_methods|selectattr('name', 'no_leading_underscore') %}
+{% set public_methods = visible_methods|select('no_leading_underscore') %}
 {{ macros.auto_summary(public_methods, title="") }}
    {% endif %}
 {% endif %}

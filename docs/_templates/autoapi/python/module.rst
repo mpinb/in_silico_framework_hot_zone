@@ -53,34 +53,43 @@ Back to :mod:`{{ parent_module }}`
 {% if "show-module-summary" in autoapi_options %}
 {% block classes scoped %}
 {% if visible_classes %}
-{% set public_classes = visible_classes|selectattr('name', 'no_leading_underscore') %}
-{{ macros.auto_summary(public_classes, title="Classes") }}
+{% set public_classes = visible_classes|select('no_leading_underscore') %}
+{% if public_classes %}
+
+.. rubric:: Classes
+{{ macros.auto_summary(public_classes, title="") }}
+{% endif %}
 {% endif %}
 {% endblock %}
 
 {% block functions scoped %}
 {% if visible_functions %}
-{% set public_functions = visible_functions|selectattr('name', 'no_leading_underscore') %}
-{{ macros.auto_summary(public_functions, title="Functions") }}
-{% endif %}
-{% endblock %}
+{% set public_functions = visible_functions|select('no_leading_underscore') %}
+{% if public_functions %}
 
-{% block attributes scoped %}
-{% if visible_attributes %}
-{{ macros.auto_summary(visible_attributes, title="Attributes") }}
+.. rubric:: Methods
+
+{{ macros.auto_summary(public_functions, title="") }}
+{% endif %}
 {% endif %}
 {% endblock %}
 
 {% block subpackages %}
 {% if visible_subs %}
-{% set public_subs = visible_subs|selectattr('name', 'no_leading_underscore') %}
-{{ macros.auto_summary(public_subs, title="Modules") }}
+{% set public_subs = visible_subs|select('no_leading_underscore') %}
+{% if public_subs%}
+
+.. rubric:: Modules
+{{ macros.auto_summary(public_subs, title="") }}
+{% endif %}
 {% endif %}
 {% endblock %}
 
 {% block exceptions %}
 {% if visible_exceptions %}
-{{ macros.auto_summary(visible_exceptions, title="Exceptions") }}
+
+.. rubric:: Exceptions
+{{ macros.auto_summary(visible_exceptions, title="") }}
 {% endif %}
 {% endblock %}
 
