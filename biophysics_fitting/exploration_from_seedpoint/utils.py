@@ -28,8 +28,8 @@ def evaluation_function_incremental_helper(
     and provides an early stopping criterion if a model is not able to match these objectives.
 
     Args:
-        s (:class:`biophysics_fitting.simulator.Simulator`): Simulator object
-        e (:class:`biophysics_fitting.evaluator.Evaluator`): Evaluator object
+        s (:py:class:`biophysics_fitting.simulator.Simulator`): Simulator object
+        e (:py:class:`biophysics_fitting.evaluator.Evaluator`): Evaluator object
         stim_order ([str] | [(str)]):
             Order in which stimuli are simulated. 
             List consisting of strings and tuples of strings. 

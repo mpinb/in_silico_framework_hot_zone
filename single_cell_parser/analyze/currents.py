@@ -36,7 +36,7 @@ def compute_soma_currents(cell, currents, tVec):
     :skip-doc:
 
     See also:
-        :class:`CurrentAnalysis`       
+        :py:class:`CurrentAnalysis`       
     '''
     #===========================================================================
     # units of axial currents: muS*mV = nA = 10^3 pA

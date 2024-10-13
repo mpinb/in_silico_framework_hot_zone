@@ -12,7 +12,7 @@ def apical_current_injection(
     """Inject a current at a given distance from the soma.
     
     Args:
-        cell (:class:`~single_cell_parser.cell.Cell`): The cell object.
+        cell (:py:class:`~single_cell_parser.cell.Cell`): The cell object.
         amplitude (float): The amplitude of the current (nA).
         delay (float): The delay of the current (ms).
         duration (float): The duration of the current (ms).
@@ -20,7 +20,7 @@ def apical_current_injection(
             For an apical current injection, this should be the distance from the soma to the apical dendrite.
     
     Returns:
-        :class:`~single_cell_parser.cell.Cell`: The cell with the current injection set up.
+        :py:class:`~single_cell_parser.cell.Cell`: The cell with the current injection set up.
 
     See also:
         :py:meth:`biophysics_fitting.setup_stim.setup_soma_step`

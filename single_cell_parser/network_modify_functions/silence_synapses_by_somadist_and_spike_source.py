@@ -12,7 +12,7 @@ def silence_synapses_by_somadist_and_spike_source(
     that are from presynaptic origins **not** listed in :paramref:`spike_sources`.
 
     Args:
-        cell (:class:`single_cell_parser.cell.Cell`): The cell to modify.
+        cell (:py:class:`single_cell_parser.cell.Cell`): The cell to modify.
         soma_dist_ranges (dict): A dictionary with synapse types as keys and
             tuples of minimum and maximum soma distances as values.
         spike_sources (list): A list of spike sources to keep active.

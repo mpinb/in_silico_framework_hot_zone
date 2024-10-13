@@ -14,7 +14,7 @@ class Synapse(object):
     Contains information about pre- and postsynaptic cell type,
     branch ID of postsynaptic cell, branch pt ID,
     and xyz-coordinates of synapse location.
-    Used in :class:`single_cell_parser.cell.Cell` to store synapse information.
+    Used in :py:py:class:`single_cell_parser.cell.Cell` to store synapse information.
 
     Attributes:
         secID (int): ID of attached section in cell.sections
@@ -69,7 +69,7 @@ class Synapse(object):
         stores all mechanisms and NetCons for reference counting.
         
         Args:
-            source (:class:`single_cell_parser.cell.PointCell`): 
+            source (:py:py:class:`single_cell_parser.cell.PointCell`): 
                 Presynaptic cell whose :py:attr:`single_cell_parser.cell.PointCell.spikes` attribute is used as ``source`` in NEURON's NetCon object.
                 Note that in the context of a synapse, ``spikes`` means release times, which is not necessarily the same as the presynaptic spike times.
         '''

@@ -26,12 +26,12 @@ def scale_morphology(cell, scale, target_morphology):
     (ignoring AIS and Myelin), and the points must be in the same order.
     
     Args:
-        cell (:class:`~single_cell_parser.cell.Cell`): The cell to scale.
+        cell (:py:class:`~single_cell_parser.cell.Cell`): The cell to scale.
         scale (float): The scaling factor.
         target_morphology (str): The path to the target morphology file.
         
     Returns:
-        :class:`~single_cell_parser.cell.Cell`: The scaled cell.
+        :py:class:`~single_cell_parser.cell.Cell`: The scaled cell.
     """
     import re
     pattern = r"[-+]?(?:\d*\.*\d+)"  # matches floats

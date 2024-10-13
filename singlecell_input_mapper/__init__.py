@@ -18,18 +18,18 @@ Attention:
 
         * - :py:mod:`singlecell_input_mapper.singlecell_input_mapper`
           - :py:mod:`single_cell_parser`
-        * - :class:`~singlecell_input_mapper.singlecell_input_mapper.cell.Cell`
-          - :class:`~single_cell_parser.cell.Cell`
-        * - :class:`~singlecell_input_mapper.singlecell_input_mapper.cell.CellParser`
-          - :class:`~single_cell_parser.cell_parser.CellParser`
-        * - :class:`~singlecell_input_mapper.singlecell_input_mapper.reader.Edge`
-          - :class:`~single_cell_parser.reader.Edge`
-        * - :class:`~singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseMapper`
-          - :class:`~single_cell_parser.synapse_mapper.SynapseMapper`
-        * - :class:`~singlecell_input_mapper.singlecell_input_mapper.scalar_field.ScalarField`
-          - :class:`~single_cell_parser.scalar_field.ScalarField`
-        * - :class:`~singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper`
-          - :class:`~single_cell_parser.network.NetworkMapper`
+        * - :py:class:`~singlecell_input_mapper.singlecell_input_mapper.cell.Cell`
+          - :py:class:`~single_cell_parser.cell.Cell`
+        * - :py:class:`~singlecell_input_mapper.singlecell_input_mapper.cell.CellParser`
+          - :py:class:`~single_cell_parser.cell_parser.CellParser`
+        * - :py:class:`~singlecell_input_mapper.singlecell_input_mapper.reader.Edge`
+          - :py:class:`~single_cell_parser.reader.Edge`
+        * - :py:class:`~singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseMapper`
+          - :py:class:`~single_cell_parser.synapse_mapper.SynapseMapper`
+        * - :py:class:`~singlecell_input_mapper.singlecell_input_mapper.scalar_field.ScalarField`
+          - :py:class:`~single_cell_parser.scalar_field.ScalarField`
+        * - :py:class:`~singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper`
+          - :py:class:`~single_cell_parser.network.NetworkMapper`
         * - :meth:`~singlecell_input_mapper.singlecell_input_mapper.cell.Synapse`
           - :meth:`~single_cell_parser.synapse.Synapse`
         * - :meth:`~singlecell_input_mapper.singlecell_input_mapper.reader.read_hoc_file`

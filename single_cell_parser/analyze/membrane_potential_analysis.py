@@ -288,11 +288,11 @@ class RecordingSiteManager(object):
 
     Args:
         landmarkFilename (str): Path to the landmark file.
-        cell (:class:`single_cell_parser.cell.Cell`): Cell object associated with the landmarks.
+        cell (:py:class:`single_cell_parser.cell.Cell`): Cell object associated with the landmarks.
 
     Attributes:
         recordingSites (list): List of recording sites.
-        cell (:class:`single_cell_parser.cell.Cell`): Cell object.
+        cell (:py:class:`single_cell_parser.cell.Cell`): Cell object.
     '''
     recordingSites = None
     cell = None
@@ -310,10 +310,10 @@ class RecordingSiteManager(object):
             self.recordingSites.append(newRecSite)
 
     def set_up_recording_site(self, location, ID, filename):
-        '''Set up a :class:`RecordingSite` from a location.
+        '''Set up a :py:class:`RecordingSite` from a location.
         
         Determines the section and segment on the cell corresponding
-        to the recording site location and creates new :class:`RecordingSite`.
+        to the recording site location and creates new :py:class:`RecordingSite`.
 
         Used during initialization.
 
@@ -385,7 +385,7 @@ class RecordingSiteManager(object):
         return newRecSite
 
     def update_recordings(self):
-        '''Add the :class:`~single_cell_parser.cell.Cell`'s recorded voltages to the :paramref:`recordingSites`.
+        '''Add the :py:class:`~single_cell_parser.cell.Cell`'s recorded voltages to the :paramref:`recordingSites`.
         '''
         for recordingSite in self.recordingSites:
             secID = recordingSite.secID
@@ -435,7 +435,7 @@ class RecordingSite(object):
         segID (int): Segment ID of the recording site.
         label (str): Identifier label.
         vRecordings (list): List of recorded voltage vectors.
-            Parsed from the :class:`~single_cell_parser.cell.Cell`.
+            Parsed from the :py:class:`~single_cell_parser.cell.Cell`.
 
     Args:
         secID (int): Section ID of the recording site.
@@ -443,7 +443,7 @@ class RecordingSite(object):
         label (str): Identifier label.
 
     See also:
-        The :class:`~single_cell_parser.analyze.membrane_potential_analysis.RecordingSiteManager`
+        The :py:class:`~single_cell_parser.analyze.membrane_potential_analysis.RecordingSiteManager`
         class for setting up recording sites and parsing their voltage traces.
     '''
     secID = None
@@ -464,7 +464,7 @@ class SpikeInit:
     Can be used to obtain features of spike shape, adaptation etc...
 
     See also:
-        :class:`biophysics_fitting.evaluator.Evaluator` for a more exhaustive analysis of voltage traces.
+        :py:class:`biophysics_fitting.evaluator.Evaluator` for a more exhaustive analysis of voltage traces.
     '''
 
     def __init__(self):
@@ -479,7 +479,7 @@ class SpikeInit:
         This can be used to define a voltage spike threshold at current intensities just below AP initiation.
 
         Args:
-            cell (:class:`~single_cell_parser.cell.Cell`): Cell object.
+            cell (:py:class:`~single_cell_parser.cell.Cell`): Cell object.
             tVec (list): Time vector.
             tStim (float): Start time of stimulation.
             dtStim (float): Duration of stimulation.
@@ -511,7 +511,7 @@ class SpikeInit:
         maximum deflection from the threshold.
 
         Args:
-            cell (:class:`~single_cell_parser.cell.Cell`): Cell object.
+            cell (:py:class:`~single_cell_parser.cell.Cell`): Cell object.
             tVec (list): Time vector.
             thresh (float): Spike threshold.
 

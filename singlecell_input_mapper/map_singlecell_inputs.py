@@ -15,7 +15,7 @@ Inputs:
 - Presynaptic bouton densities of individual axon morphologies,
   sorted by anatomical area and cell type
 
-This module then uses :class:`~singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper`
+This module then uses :py:class:`~singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper`
 to assign synapses to a single post-synaptic cell morphology, based on the inputs mentioned above.
 This happens according to the following pipeline:
 
@@ -34,9 +34,9 @@ This happens according to the following pipeline:
    These collections can be investigated for variability in synapse number and location.
    Alternatively, the realization that is closest to the average is further used in modules like :py:mod:`simrun`.
 
-Density meshes are accessed using :class:`~singlecell_input_mapper.singlecell_input_mapper.scalar_field.ScalarField`.
-:class:`~singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseMapper` makes use of 
-:class:`~singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseDensity` for steps 2, 3 and 4,
+Density meshes are accessed using :py:class:`~singlecell_input_mapper.singlecell_input_mapper.scalar_field.ScalarField`.
+:py:class:`~singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseMapper` makes use of 
+:py:class:`~singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseDensity` for steps 2, 3 and 4,
 and finalizes step 5 by itself.
 
 Outputs:
@@ -126,9 +126,9 @@ def map_singlecell_inputs(
         - For each anatomical area
         - For each presynaptic cell type
         
-    3. Creates a scalar field (:class:`~singlecell_input_mapper.singlecell_input_mapper.scalar_field.ScalarField`)
+    3. Creates a scalar field (:py:class:`~singlecell_input_mapper.singlecell_input_mapper.scalar_field.ScalarField`)
        for each bouton density.
-    4. Creates a :class:`~singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper` object.
+    4. Creates a :py:class:`~singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper` object.
     5. Creates a network embedding for the cell using 
        :py:meth:`~singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper.create_network_embedding`.
     

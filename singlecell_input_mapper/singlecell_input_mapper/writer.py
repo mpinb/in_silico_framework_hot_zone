@@ -1003,7 +1003,7 @@ def write_scalar_field(fname=None, scalarField=None):
     
     Args:
         fname (str): Name of the output file
-        scalarField (:class:`~singlecell_input_mapper.singlecell_input_mapper.scalar_field.ScalarField`): 
+        scalarField (:py:class:`~singlecell_input_mapper.singlecell_input_mapper.scalar_field.ScalarField`): 
             Scalar field to be written to disk
         
     Returns:

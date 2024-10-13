@@ -28,12 +28,12 @@ RANGE_VARS_ALL_CHANNELS = RANGE_VARS_APICAL + [
 def connected_to_dend_beyond(cell, sec, beyond_dist, n_children_required=2):
     """Check if a given section is connected to dendrites that reach beyon :paramref:`beyond_dist`.
     
-    Given a :class:`~single_cell_parser.cell.Cell` object and section number, 
+    Given a :py:class:`~single_cell_parser.cell.Cell` object and section number, 
     this method returns True if at least :paramref:`n_children_required` children 
     of the branchpoint reach beyond :paramref:`dist`.
 
     Args:
-        cell (:class:`~single_cell_parser.cell.Cell`): The Cell object
+        cell (:py:class:`~single_cell_parser.cell.Cell`): The Cell object
         sec (int): Index of Cell section
         beyond_dist (float): Distance threshold
         n_children_required (int, optional): Least amount of children required. Defaults to 2.
@@ -70,13 +70,13 @@ def get_inner_sec_dist_list(
     Useful for filtering out outer terminating dendrites.
         
     Args:
-        cell (:class:`~single_cell_parser.cell.Cell`): The Cell object
+        cell (:py:class:`~single_cell_parser.cell.Cell`): The Cell object
         select (list, optional): Selection of sections to consider, based on their label. Defaults to ['ApicalDendrite', 'Dendrite'].
         connected_to_dend_beyond_distance (int, optional): Distance threshold (in um). Defaults to 1000 um.
         z_offset (int|float, optional): Offset for z-value. Defaults to 706 um (the average pia distance of a rat barrel cortex).
 
     Returns:
-        dict: Dictionary mapping the z-coordinate (float) of each section point to the section (:class:`~single_cell_parser.cell.PySection`) object, including only sections that pass the filter.
+        dict: Dictionary mapping the z-coordinate (float) of each section point to the section (:py:class:`~single_cell_parser.cell.PySection`) object, including only sections that pass the filter.
     """
     #    sec_dist_dict = {cell.distance_to_soma(sec, 1.0): sec
     sec_dist_dict = {
@@ -96,7 +96,7 @@ def get_branching_depth(cell, sec, beyond_dist=1000):
     have no children (that exceed a distance to soma of :paramref:`beyond_dist`).
 
     Args:
-        cell (:class:`~single_cell_parser.cell.Cell`): The Cell object
+        cell (:py:class:`~single_cell_parser.cell.Cell`): The Cell object
         sec (int): The section number
 
     Returns:
@@ -114,10 +114,10 @@ def get_branching_depth_series(
     z_offset=706
     ):
     """
-    Find the branching depth of the inner sections of a :class:`~single_cell_parser.cell.Cell`.
+    Find the branching depth of the inner sections of a :py:class:`~single_cell_parser.cell.Cell`.
         
     Args:
-        cell (:class:`~single_cell_parser.cell.Cell`): The Cell object
+        cell (:py:class:`~single_cell_parser.cell.Cell`): The Cell object
         z_offset (int | float, optional): Z coordinate offset for :py:meth:`get_inner_sec_dist_list`.
             Defaults to 706 um.
 
@@ -148,7 +148,7 @@ def get_main_bifurcation_section(
     This is True for e.g. pyramidal cells with an apical dendrite.
     
     Args:
-        cell (:class:`~single_cell_parser.cell.Cell`): The Cell object for which to find the main bifurcation section.
+        cell (:py:class:`~single_cell_parser.cell.Cell`): The Cell object for which to find the main bifurcation section.
         assert_unique (bool, optional): whether or not to check if this section is unique in the morphology.
             Default: True
             
@@ -156,7 +156,7 @@ def get_main_bifurcation_section(
         AssertionError: If there are multiple sections who are both inner, and have branching depth 1. This means that there is no "main" bifurcation in the morphology.
     
     Returns:
-        :class:`~single_cell_parser.cell.PySection`: The unique section that contains the main bifurcation.
+        :py:class:`~single_cell_parser.cell.PySection`: The unique section that contains the main bifurcation.
     
     """
     sec_dist_list_filtered = get_first_order_bifurcation_sections(cell)
@@ -171,10 +171,10 @@ def get_first_order_bifurcation_sections(
     Find all sections that are both inner sections, and are of branching order 1.
     
     Args:
-        cell (:class:`~single_cell_parser.cell.Cell`): The Cell object for which to find the main bifurcation section.
+        cell (:py:class:`~single_cell_parser.cell.Cell`): The Cell object for which to find the main bifurcation section.
 
     Returns:
-        list: A list of :class:`~single_cell_parser.cell.PySection` sections that are both inner sections, and are of branching order 1. 
+        list: A list of :py:class:`~single_cell_parser.cell.PySection` sections that are both inner sections, and are of branching order 1. 
     """
     sec_dist_list = get_branching_depth_series(cell)
     sec_dist_list_filtered = [depth_sec_tuple[1] for depth_sec_tuple in sec_dist_list if depth_sec_tuple[0] == 1]

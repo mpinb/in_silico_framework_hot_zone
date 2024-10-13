@@ -5,7 +5,7 @@ from . import plt
 def plot_vt(voltage_traces, key='BAC.hay_measure'):
     """Plot voltage traces from simulation results.
     
-    The results of e.g. :class:`biophysics_fitting.simulator.Simulator` are nested dictionaries,
+    The results of e.g. :py:class:`biophysics_fitting.simulator.Simulator` are nested dictionaries,
     containing various voltage traces. NEURON simulation results are NEURON vectors. 
     This is a helper method to extract that data and plot out specific voltage traces from those results.
 
@@ -34,7 +34,7 @@ def plot_vt(voltage_traces, key='BAC.hay_measure'):
 def visualize_vt(vt, fig=None, soma_color='k', dend_color='#f7941d', BAC_select = 295+80):
     """Visualize voltage traces from the Hay stimulus protocols.
 
-    The results of e.g. :class:`biophysics_fitting.simulator.Simulator` are nested dictionaries,
+    The results of e.g. :py:class:`biophysics_fitting.simulator.Simulator` are nested dictionaries,
     containing various voltage traces. NEURON simulation results are NEURON vectors.
     This is a helper method to extract that data and plot out specific voltage traces from those results.
 

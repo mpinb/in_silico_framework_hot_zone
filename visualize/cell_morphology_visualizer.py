@@ -2,8 +2,8 @@
 
 Provides functionality to plot out the cell morphology and its simulation data. 
 This includes the cell morphology, membrane voltage, ion dynamics, and synapse activations. 
-The data is parsed from a :class:`~single_cell_parser.cell.Cell` object to a format that is easier to work with for visualization purposes. 
-The data is then visualized using matplotlib (:class:`CellMorphologyVisualizer`) and plotly (:class:`CellMorphologyInteractiveVisualizer`).
+The data is parsed from a :py:class:`~single_cell_parser.cell.Cell` object to a format that is easier to work with for visualization purposes. 
+The data is then visualized using matplotlib (:py:class:`CellMorphologyVisualizer`) and plotly (:py:class:`CellMorphologyInteractiveVisualizer`).
 """
 
 from biophysics_fitting import get_main_bifurcation_section
@@ -45,12 +45,12 @@ except ImportError as e:
 
 
 class CMVDataParser:
-    """Parse data from a :class:`~single_cell_parser.cell.Cell` object to a format that is easier to work with for visualization purposes.
+    """Parse data from a :py:class:`~single_cell_parser.cell.Cell` object to a format that is easier to work with for visualization purposes.
     
     Attributes:
-        cell (:class:`~single_cell_parser.cell.Cell`): Cell object
+        cell (:py:class:`~single_cell_parser.cell.Cell`): Cell object
         line_pairs (list): Pairs of point indices that define a line, i.e. some cell segment.
-        soma (:class:`~single_cell_parser.cell.Section`): Soma of the cell.
+        soma (:py:class:`~single_cell_parser.cell.Section`): Soma of the cell.
         soma_center (np.ndarray): Center of the soma of the original cell object, unaligned with z-axis.
         parents (dict): Maps sections to their parents. self.parents[10] returns the parent of section 10.
         morphology (pd.DataFrame): 
@@ -101,7 +101,7 @@ class CMVDataParser:
         t_start=None, t_stop=None, t_step=None):
         """
         Args:
-            cell (:class:`~single_cell_parser.cell.Cell`): Cell object
+            cell (:py:class:`~single_cell_parser.cell.Cell`): Cell object
             align_trunk (bool): Whether or not to align the cell trunk with the z-axis.
             t_start (float): Time point where we want to start visualizing. By default, this gets initialized to the start of the simulation.
             t_stop (float): Time point where the visualization of the simulation stops. By default, this gets initialized to the end of the simulation.
@@ -735,7 +735,7 @@ class CellMorphologyVisualizer(CMVDataParser):
         """Initializes the CellMorphologyVisualizer object.
                 
         Args:
-            cell (:class:`~single_cell_parser.cell.Cell`): Cell object
+            cell (:py:class:`~single_cell_parser.cell.Cell`): Cell object
             align_trunk (bool): Whether or not to align the cell trunk with the z-axis.
             t_start (float): start time point of our time series visualization
             t_stop (float): last time point of our time series visualization
@@ -1179,7 +1179,7 @@ class CellMorphologyInteractiveVisualizer(CMVDataParser):
         """Initializes the CellMorphologyInteractiveVisualizer object.
         
         Args:
-            cell (:class:`~single_cell_parser.cell.Cell`): Cell object
+            cell (:py:class:`~single_cell_parser.cell.Cell`): Cell object
             align_trunk (bool): Whether or not to align the cell trunk with the z-axis.
             dash_ip (str): IP address to run dash server on.
             show (bool): set to False for testing
@@ -1456,11 +1456,11 @@ def get_3d_plot_morphology(
     ):
     """Constructs a 3d matplotlib plot of a cell morphology, overlayed with some scalar data.
     
-    This is the main method called by :class:`~CellMorphologyVisualizer` to generate a 3D plot of the cell morphology.
+    This is the main method called by :py:class:`~CellMorphologyVisualizer` to generate a 3D plot of the cell morphology.
     This method Uses LineCollections to plot the morphology, with a round joinstyle. 
-    This method is usually not called directly. Rather, :class:`~CellMorphologyVisualizer` calls this method to generate a plot,
+    This method is usually not called directly. Rather, :py:class:`~CellMorphologyVisualizer` calls this method to generate a plot,
     depending on parameters such as parallellization client, scalar data overlay, viewing angles etc...
-    It is recommended to use the high-level method :class:`~visualize.cell_morphology_visualizer.CellMorphologyVisualizer.plot` instead of trying to use this one directly.
+    It is recommended to use the high-level method :py:class:`~visualize.cell_morphology_visualizer.CellMorphologyVisualizer.plot` instead of trying to use this one directly.
         
     Args:
         lookup_table (pd.DataFrame): 
