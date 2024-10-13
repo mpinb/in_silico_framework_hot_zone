@@ -27,7 +27,7 @@ Back to :mod:`{{ parent_module }}`
    :hidden:
 
    {% for method in visible_methods %}
-   {{ method.name }} <{{ method.id }}>
+   {{ method.short_name }} <{{ obj.short_name }}.{{ method.short_name }}>
    {% endfor %}
 
    {% endif %}

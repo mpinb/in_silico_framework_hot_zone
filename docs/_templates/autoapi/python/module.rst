@@ -67,7 +67,7 @@ Back to :mod:`{{ parent_module }}`
 {% set public_functions = visible_functions|select('no_leading_underscore') %}
 {% if public_functions %}
 
-.. rubric:: Methods
+.. rubric:: Functions
 
 {{ macros.auto_summary(public_functions, title="") }}
 {% endif %}
