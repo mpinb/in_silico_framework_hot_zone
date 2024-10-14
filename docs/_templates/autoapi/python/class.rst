@@ -45,14 +45,15 @@ Back to :mod:`{{ parent_module }}`
       {% endif %}
    {% endif %}
 
-   {% if obj.docstring %}
-
+   {%- if obj.docstring %}
    {{ obj.docstring|indent(3) }}
    {% endif %}
-   {% if visible_methods %}
 
+   {%- if visible_methods %}
+   {%- set public_methods = visible_methods|rejectattr('is_private_member')|list %}
+   {%- if public_methods %}
 .. rubric:: Methods
-{% set public_methods = visible_methods|rejectattr('is_private_member') %}
 {{ macros.auto_summary(public_methods, title="") }}
-   {% endif %}
-{% endif %}
+   {%- endif %}
+   {%- endif %}
+   {%- endif %}
