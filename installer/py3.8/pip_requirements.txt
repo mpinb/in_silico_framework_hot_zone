@@ -76,6 +76,7 @@ sphinx-paramlinks==0.6.0
 sphinxcontrib-bibtex==2.6.3
 furo==2023.9.10
 catppuccin[pygments]
+jinja2==3.0.3  # important, otherwise cant build docs with autoapi
 
 #pip==22.1.1
 #pebble==4.6.3
