@@ -58,29 +58,66 @@ rst_prolog = """
 project_root = os.path.join(os.path.abspath(os.pardir))
 
 def skip_member(app, what, name, obj, skip, options):
-    """Skip members if they have the :skip-doc: tag in their docstring."""
+    """Skip members if they have the :skip-doc: tag in their docstring.
+    
+    Note that the object attributes tested for in this function are only compatible
+    with the sphinx-autoapidoc extension. If you are using a different extension, you
+    may need to modify this function to use e.g. obj.__doc__ instead of obj.docstring.
+    
+    Args:
+        obj (autoapidoc._objects.Python*): 
+            autoapi object containing the following attrs:
+            
+            - name: the name of the object
+            - id: the object's id i.e. the fully qualified name (FQN)
+            - short_name: the object's short name (dropping all prefixes before a .)
+            - display: whether the object should be displayed (this is the attribute that is modified by this function)
+            - docstring: the docstring of the object
+            - type: the type of the object ('method', 'function', 'class', 'data', 'module', 'package')
+            - children: the children of the object
+            - summary: the summary of the object (usually the first sentence/line of the docstring)
+            - url_root: the root of the object's rst filepath relative to this directory (default: /autoapi, which points to the autoapi directory within this directory)
+            - inherited: whether the object is inherited
+            - type: the type of the object
+            - imported: whether the object is imported
+            - include_path: full path to the object's .rst stub.
+            - is_private_member: whether the object is a private member
+            - is_special_member: whether the object is a special member
+            - is_top_level_object: whether the object is a top level object
+            - is_undoc_member: whether the object is an undocumented member
+            - options (list): the options of the object (e.g. 'members', 'undoc-members', 'private-members', 'show-module-summary')
+            - member_order: ??
+            - obj: the object itself in dict format
+                - obj.type: the type of the object ('method', 'function', 'class', 'data', 'module', 'package')
+                - obj.name: the name of the object
+                - obj.qual_name: non-fully qualified name of the object (e.g. class.method)
+                - obj.full_name: FQN
+                - obj.args: ??
+                - obj.doc: the docstring of the object
+                - obj.from_line_no: the line number where the object is defined
+                - obj.to_line_no: the line number where the object ends (the full object, not only the docstring)
+                - obj.return_annotation (bool): whether the object has a return annotation
+    """
     # Debug print to check what is being processed
     # print(f"Processing {what}: {name}")
     
     # skip special members, except __get__ and __set__
     if name.startswith('__') and name.endswith('__') and name not in ['__get__', '__set__']:
-        return True
+        skip = True
     
     # Skip if it has the :skip-doc: tag
-    if obj.__doc__ and ':skip-doc:' in obj.__doc__:
-        if ':skip-doc:' in obj.__doc__:
-            # print(f"Docstring for {name}: {obj.__doc__}")
-            print(f"Skipping {what}: {name} due to :skip-doc: tag")
-            return True
+    if not obj.is_undoc_member and ':skip-doc:' in obj.docstring:
+        # print(f"Docstring for {name}: {obj.__doc__}")
+        print(f"Skipping {what}: {name} due to :skip-doc: tag")
+        skip = True
     
     # Skip inherited members
-    if hasattr(obj, '__objclass__') and obj.__objclass__ is not obj.__class__:
-        return True
+    if obj.inherited:
+        skip = True
     
-    modules_to_skip = find_modules_with_tag(project_root, tag=":skip-doc:")
     if name in modules_to_skip:
-        print(f"Skipping {what}: {name} due to :skip-doc: tag in module {obj.__module__}")
-        return True
+        print(f"Skipping {what}: {name} due to :skip-doc: tag in module {obj.name}")
+        skip = True
     
     return skip
     
@@ -165,7 +202,6 @@ def setup(app):
 
 def prepare_jinja_env(jinja_env) -> None:
     jinja_env.tests["contains"] = contains
-    jinja_env.tests["no_leading_underscore"] = no_leading_underscore
 
 
 autoapi_dirs = [project_root]
