@@ -61,7 +61,7 @@ def skip_member(app, what, name, obj, skip, options):
     """Skip members if they have the :skip-doc: tag in their docstring.
     
     Note that the object attributes tested for in this function are only compatible
-    with the sphinx-autoapidoc extension. If you are using a different extension, you
+    with the sphinx-autoapi extension. If you are using a different extension, you
     may need to modify this function to use e.g. obj.__doc__ instead of obj.docstring.
     
     Args:
