@@ -47,6 +47,8 @@ extensions = [
     'nbsphinx_link',           # For linking to sections in tutorial notebooks
     'sphinxcontrib.bibtex',    # For citations
     'sphinx.ext.mathjax',      # For math equations
+    'sphinx_copybutton',       # For copying code snippets
+    'sphinxext.opengraph',     # For OpenGraph metadata
 ]
 
 # Currently unused, but may be neat in the future
