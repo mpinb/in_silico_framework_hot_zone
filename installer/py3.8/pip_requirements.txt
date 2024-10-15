@@ -77,6 +77,8 @@ sphinxcontrib-bibtex==2.6.3
 furo==2023.9.10
 catppuccin[pygments]
 jinja2==3.0.3  # important, otherwise cant build docs with autoapi
+sphinxext_opengraph==0.9.1  # for search engines to rank the site
+sphinx-copybutton==0.5.2  # neat copy button for code admonitions
 
 #pip==22.1.1
 #pebble==4.6.3
