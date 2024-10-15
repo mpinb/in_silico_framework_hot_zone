@@ -13,7 +13,7 @@ The recommended use is to import it in a jupyter notebook in the following manne
 
     import Interface as I
     
-Take a look at the :ref:'tutorials' for examples on how to use the Interface API.
+Take a look at the :ref:`tutorials` for examples on how to use the Interface API.
 '''
 import matplotlib
 
