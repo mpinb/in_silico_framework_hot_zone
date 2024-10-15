@@ -22,10 +22,10 @@ version = '0.2.0-alpha'
 ## Make your modules available in sys.path
 
 # copy over tutorials and convert links to python files to sphinx documentation directives
-#   copy_and_parse_notebooks_to_docs(
-#       source_dir=os.path.join(project_root, 'getting_started', 'tutorials'),
-#       dest_dir=os.path.join(project_root, 'docs', 'tutorials')
-#   )
+copy_and_parse_notebooks_to_docs(
+    source_dir=os.path.join(project_root, 'getting_started', 'tutorials'),
+    dest_dir=os.path.join(project_root, 'docs', 'tutorials')
+)
 
 from compatibility import init_data_base_compatibility
 init_data_base_compatibility()  # make db importable before running autosummary or autodoc etc...

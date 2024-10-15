@@ -20,8 +20,9 @@ Contents
 .. toctree::
    :maxdepth: 1
 
-   installation
    api_reference
+   tutorials
+   installation
    file_formats
    bibliography
 
