@@ -2,7 +2,7 @@ import json, re, os, shutil
 
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
-def convert_links_to_sphinx(content):
+def convert_links_to_sphinx(content, doc_dir="autoapi"):
     # Regular expression to find Markdown links to Python files
     pattern = re.compile(r'\[([^\]]+)\]\(([^)]+\.py)\)')
     
@@ -22,7 +22,7 @@ def convert_links_to_sphinx(content):
         text = text.replace('`', '')
         
         # Construct the new link
-        new_link = f'{prefix}_autosummary/{module_doc_path}.html#module-{module_doc_path}'
+        new_link = f'{prefix}{doc_dir}/{module_doc_path}{'/index' if doc_dir == 'autoapi' else ''}.html#module-{module_doc_path}'
         return f'[{text}]({new_link})'
     
     return pattern.sub(replace_link, content)
