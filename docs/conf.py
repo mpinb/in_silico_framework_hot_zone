@@ -48,7 +48,7 @@ extensions = [
     'sphinxcontrib.bibtex',    # For citations
     'sphinx.ext.mathjax',      # For math equations
     'sphinx_copybutton',       # For copying code snippets
-    'sphinxext.opengraph',     # For OpenGraph metadata
+    # 'sphinxext.opengraph',     # For OpenGraph metadata, only enable when the site is actually hosted. See https://github.com/wpilibsuite/sphinxext-opengraph for config options when that happens.
 ]
 
 # Currently unused, but may be neat in the future
