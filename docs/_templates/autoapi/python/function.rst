@@ -1,4 +1,4 @@
-{% set parent_module = obj.name.split('.')[:-1] | join('.') | escape %}
+{% set parent_module = obj.id.split('.')[:-1] | join('.') | escape %}
 {% set shortname = obj.name.split('.')[-1] | escape %}
 
 .. backlink:
