@@ -22,7 +22,8 @@ def convert_links_to_sphinx(content, doc_dir="autoapi"):
         text = text.replace('`', '')
         
         # Construct the new link
-        new_link = f'{prefix}{doc_dir}/{module_doc_path}{'/index' if doc_dir == 'autoapi' else ''}.html#module-{module_doc_path}'
+        suffix = '/index' if doc_dir == 'autoapi' else ''
+        new_link = f'{prefix}{doc_dir}/{module_doc_path}{suffix}.html#module-{module_doc_path}'
         return f'[{text}]({new_link})'
     
     return pattern.sub(replace_link, content)
