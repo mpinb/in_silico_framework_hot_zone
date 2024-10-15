@@ -2,28 +2,44 @@ import json, re, os, shutil
 
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
-def convert_links_to_sphinx(content, doc_dir="autoapi"):
+def convert_links_to_sphinx(content, api_extension="autoapi"):
+    """Convert links to files to Sphinx directives in the Python domain
+    
+    Args:
+        content (str): The content to convert. Normally the full html notebook content
+        api_extension (str): The extension used for the API documentation.
+            Used to determine the location of the ref target (i.e. the .rst file, but without the .rst suffix).
+            Options: 'autoapi' or 'autosummary'.
+        
+    """
     # Regular expression to find Markdown links to Python files
     pattern = re.compile(r'\[([^\]]+)\]\(([^)]+\.py)\)')
     
     # Replace Markdown links with Sphinx directives
     def replace_link(match):
-        text = match.group(1)  # name of the link
-        link = match.group(2)  # path to the Python file
+        # example: `[link text](../module/submodule.py)`
+        text = match.group(1)  # name of the link: link text
+        link = match.group(2)  # path to the Python file: ../module/submodule.py
         
         # Identify the prefix (leading ../)
         prefix = ''
         while link.startswith('../'):
             prefix += '../'
-            link = link[3:]
-        # Convert the remaining path to the desired format
-        module_doc_path = link.replace('/', '.').replace('.py', '').lstrip('.').replace('.__init__', '')
-        
-        text = text.replace('`', '')
+            link = link[3:]  # module/submodule.py
+        # remove backticks from text formatting, just in case
+        text = text.replace('`', '')  # module/submodule.py
         
         # Construct the new link
-        suffix = '/index' if doc_dir == 'autoapi' else ''
-        new_link = f'{prefix}{doc_dir}/{module_doc_path}{suffix}.html#module-{module_doc_path}'
+        module_doc_name = link.replace('/', '.').replace('.py', '').lstrip('.')  # module.submodule
+        module_doc_name = module_doc_name.replace('.__init__', '')  # in case the module is actually module.__init__.py
+        if api_extension == 'autoapi':
+            module_doc_relative_path = link.replace('.py', '').lstrip('.').replace('.__init__', '')  # relative within the autoapi directory
+            module_doc_path = f'{prefix}autoapi/{module_doc_relative_path}'
+            new_link = f'{module_doc_path}/index.html#module-{module_doc_name}' # ../autoapi/path/to/file/index.html#module-path/to/file
+        elif api_extension == 'autosummary':
+            new_link = f'{prefix}_autosummary/{module_doc_name}.html#module-{module_doc_name}'
+        else:
+            raise NotImplementedError(f"api_extension '{api_extension}' is not supported. Options are: 'autoapi' or 'autosummary'.")
         return f'[{text}]({new_link})'
     
     return pattern.sub(replace_link, content)
