@@ -33,7 +33,7 @@ def convert_links_to_sphinx(content, api_extension="autoapi"):
         module_doc_name = link.replace('/', '.').replace('.py', '').lstrip('.')  # module.submodule
         module_doc_name = module_doc_name.replace('.__init__', '')  # in case the module is actually module.__init__.py
         if api_extension == 'autoapi':
-            module_doc_relative_path = link.replace('.py', '').lstrip('.').replace('.__init__', '')  # relative within the autoapi directory
+            module_doc_relative_path = link.replace('.py', '').lstrip('.').replace('/__init__', '')  # relative within the autoapi directory
             module_doc_path = f'{prefix}autoapi/{module_doc_relative_path}'
             new_link = f'{module_doc_path}/index.html#module-{module_doc_name}' # ../autoapi/path/to/file/index.html#module-path/to/file
         elif api_extension == 'autosummary':
