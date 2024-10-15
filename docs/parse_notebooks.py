@@ -6,7 +6,7 @@ def convert_links_to_sphinx(content, api_extension="autoapi"):
     """Convert links to files to Sphinx directives in the Python domain
     
     Args:
-        content (str): The content to convert. Normally the full html notebook content
+        content (str): The content to convert. Normally a single line of html
         api_extension (str): The extension used for the API documentation.
             Used to determine the location of the ref target (i.e. the .rst file, but without the .rst suffix).
             Options: 'autoapi' or 'autosummary'.
@@ -44,21 +44,22 @@ def convert_links_to_sphinx(content, api_extension="autoapi"):
     
     return pattern.sub(replace_link, content)
 
-def process_notebook(file_path):
+def process_notebook(file_path, api_extension="autoapi"):
     with open(file_path, 'r', encoding='utf-8') as f:
         notebook_content = json.load(f)
     
     # Process each cell in the notebook
     for cell in notebook_content['cells']:
         if cell['cell_type'] == 'markdown':
-            cell['source'] = [convert_links_to_sphinx(line) for line in cell['source']]
+            cell['source'] = [convert_links_to_sphinx(line, api_extension=api_extension) for line in cell['source']]
     
     with open(file_path, 'w', encoding='utf-8') as f:
         json.dump(notebook_content, f, indent=2)
 
 def copy_and_parse_notebooks_to_docs(
     source_dir=os.path.join(project_root, 'getting_started', 'tutorials'),
-    dest_dir=os.path.join(project_root, 'docs', 'tutorials')
+    dest_dir=os.path.join(project_root, 'docs', 'tutorials'),
+    api_extension="autoapi",
     ):
     if os.path.exists(dest_dir):
         shutil.rmtree(dest_dir)
@@ -68,4 +69,4 @@ def copy_and_parse_notebooks_to_docs(
     for root, _, files in os.walk(dest_dir):
         for f in files:
             if f.endswith('.ipynb'):
-                process_notebook(os.path.join(root, f))
+                process_notebook(os.path.join(root, f), api_extension=api_extension)

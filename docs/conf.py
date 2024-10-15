@@ -24,7 +24,8 @@ version = '0.2.0-alpha'
 # copy over tutorials and convert links to python files to sphinx documentation directives
 copy_and_parse_notebooks_to_docs(
     source_dir=os.path.join(project_root, 'getting_started', 'tutorials'),
-    dest_dir=os.path.join(project_root, 'docs', 'tutorials')
+    dest_dir=os.path.join(project_root, 'docs', 'tutorials'),
+    api_extension="autoapi",  # change this if using autosummary instead of autoapi, it needs to find target dir of .rst files.
 )
 
 from compatibility import init_data_base_compatibility
@@ -48,7 +49,7 @@ extensions = [
     'sphinx.ext.mathjax',      # For math equations
 ]
 
-
+# Currently unused, but may be neat in the future
 rst_prolog = """
 .. role:: summarylabel
 """
