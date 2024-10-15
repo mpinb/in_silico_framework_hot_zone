@@ -187,27 +187,13 @@ modules_to_skip = get_modules_to_skip()
 print("ignoring modules: ", modules_to_skip)
 autoapi_ignore = modules_to_skip
 
-
-def contains(seq, item):
-    """Jinja test to check if an item is a property (i.e. a class attribute that has __get__ and __set__)
-    Used in the Jinja templates in _templates"""
-    return item in seq
-
-def no_leading_underscore(item):
-    return not item.split('.')[-1][0] == "_"
-
 def setup(app):
     # skip members with :skip-doc: tag in their docstrings
     app.connect('autoapi-skip-member', skip_member)
 
-def prepare_jinja_env(jinja_env) -> None:
-    jinja_env.tests["contains"] = contains
-
-
 autoapi_dirs = [project_root]
 autoapi_type = "python"
 autoapi_keep_files = True
-autoapi_prepare_jinja_env = prepare_jinja_env
 autoapi_add_toctree_entry = False  # we use a manual autosummary directive in api_reference.rst thats included in the toctree
 autoapi_generate_api_docs = True
 # generate the .rst stub files. The template directives don't do this. 
