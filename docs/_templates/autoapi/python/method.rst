@@ -1,11 +1,10 @@
-{% set parent_module = obj.id.split('.')[:-1] | join('.') | escape %}
-{% set parent_class = obj.id.split('.')[-2]|escape %}
+{% set parent_class = obj.id.split('.')[:-1] | join('.') | escape %}
 {% set shortname = obj.id.split('.')[-2:]|join('.')|escape %}
 
 .. backlink:
 
-{% if parent_module %}
-Back to :mod:`{{ parent_module }}`
+{% if parent_class %}
+Back to :mod:`{{ parent_class }}`
 {% endif %}
 
 {% if obj.display %}
