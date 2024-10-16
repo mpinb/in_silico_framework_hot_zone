@@ -194,6 +194,7 @@ def setup(app):
     # skip members with :skip-doc: tag in their docstrings
     app.connect('autoapi-skip-member', skip_member)
 
+toc_object_entries_show_parents = 'hide'  # short toc entries
 autoapi_dirs = [project_root]
 autoapi_type = "python"
 autoapi_keep_files = True
