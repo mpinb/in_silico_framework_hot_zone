@@ -52,7 +52,7 @@ Back to :mod:`{{ parent_module }}`
    {%- if visible_methods %}
    {%- set public_methods = visible_methods|rejectattr('is_private_member')|list %}
    {%- if public_methods %}
-{{ macros.auto_summary(public_methods, title="") }}
+{{ macros.auto_summary(public_methods, title="Methods") }}
    {%- endif %}
    {%- endif %}
    {%- endif %}
