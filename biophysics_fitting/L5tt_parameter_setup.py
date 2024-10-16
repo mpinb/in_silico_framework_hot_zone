@@ -59,7 +59,7 @@ def get_L5tt_template():
     
     This method returns a nested dictionary-like object that can be used to set up a L5PT cell for simulations.
     The values of each key are set to None or default values, and need to be filled in with the actual values.
-    This dictionary-like parameter structure is used by e.g. the :class:`~biophysics_fitting.simulator.Simulator` object.
+    This dictionary-like parameter structure is used by e.g. the :py:class:`~biophysics_fitting.simulator.Simulator` object.
     It provides information on:
     
     - For each section label (for an L5PT: Soma, AIS, ApicalDendrite, Dendrite, Myelin):

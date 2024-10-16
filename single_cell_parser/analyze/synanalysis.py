@@ -16,7 +16,7 @@ __date__ = "2012-04-02"
 
 
 def compute_synapse_distances_times(fname, cell, t=None, synTypes=None):
-    """Save a :class:`single_cell_parser.cell.Cell` object's synapse distances and activation times to a ``.csv`` file.
+    """Save a :py:class:`single_cell_parser.cell.Cell` object's synapse distances and activation times to a ``.csv`` file.
     
     The following information is saved:
     
@@ -30,7 +30,7 @@ def compute_synapse_distances_times(fname, cell, t=None, synTypes=None):
         
     Args:
         fname (str): The output file name as a ful path, including the file extension. Preferably unique (see e.g. :py:meth:`~simrun.generate_synapse_activations._evoked_activity` for the generation of unique syapse activation filenames)
-        cell (:class:`single_cell_parser.cell.Cell`): Cell object
+        cell (:py:class:`single_cell_parser.cell.Cell`): Cell object
         synTypes (list): list of synapse types. Default: the keys of the `cell.synapses` dictionary
         
     Returns:
@@ -219,7 +219,7 @@ def compute_syn_distances_2Dprojected(cell, synType, label=None):
     as seen during 2-photon spine imaging.
 
     Args: 
-        cell (:class:`single_cell_parser.cell.Cell`): cell object with attached synapses.
+        cell (:py:class:`single_cell_parser.cell.Cell`): cell object with attached synapses.
         synType (str): presynaptic cell type.
         label (str, optional): dendrite type (e.g. "ApicalDendrite") to compute distances for.
     
@@ -266,12 +266,12 @@ def compute_distance_to_soma(sec, x, cell=None, consider_gap_to_soma=False):
     Used in :py:meth:`compute_syn_distance` and :py:meth:`compute_syn_distances`.
 
     Args:
-        sec (:class:`single_cell_parser.cell.PySection` | int): 
+        sec (:py:class:`single_cell_parser.cell.PySection` | int): 
             Section or section ID of the cell.
             If the section ID is given, :paramref:`cell` must be provided.
         x (float): 
             Relative point on section, from 0 to 1.
-        cell (:class:`single_cell_parser.cell.Cell`, optional): 
+        cell (:py:class:`single_cell_parser.cell.Cell`, optional): 
             Only required if :paramref:`sec` is the section ID.
         consider_gap_to_soma (bool, optional): 
             Accounts for the fact that dendrites don't actually touch the soma, and adds the
@@ -317,8 +317,8 @@ def compute_syn_distance(
     Used in :py:meth:`compute_syn_distances`.
     
     Args:
-        cell (:class:`single_cell_parser.cell.Cell`): cell object with attached synapses.
-        syn (:class:`single_cell_parser.synapse.Synapse`): synapse object.
+        cell (:py:class:`single_cell_parser.cell.Cell`): cell object with attached synapses.
+        syn (:py:class:`single_cell_parser.synapse.Synapse`): synapse object.
         consider_gap_to_soma (bool, optional): 
             Account for the fact that dendrites don't actually touch the soma, and add the 
             distance between the last point of the parent section and the first point of the 
@@ -342,7 +342,7 @@ def compute_syn_distances(
     '''Computes distances (to soma) of all synapses on the dendrite.
     
     Args:
-        cell (:class:`single_cell_parser.cell.Cell`): cell object with attached synapses.
+        cell (:py:class:`single_cell_parser.cell.Cell`): cell object with attached synapses.
         synType (str): presynaptic cell type to compute distances for.
         label (str, optional): 
             dendrite type (e.g. "ApicalDendrite") to compute distances for.

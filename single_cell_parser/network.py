@@ -16,7 +16,7 @@ Creating new network realizations
 ---------------------------------
 Creating a new network realization from scratch can be done using the ``convergence`` parameter in the
 :ref:`network_parameters_format` file.
-Convergence is the probability of a connection existing between the :class:`~single_cell_parser.cell.Cell` and a presynaptic cell.
+Convergence is the probability of a connection existing between the :py:class:`~single_cell_parser.cell.Cell` and a presynaptic cell.
 It is specific for each presynaptic cell type, and depends on the postsynaptic cell type.
 This approach is used by :py:meth:`~single_cell_parser.network_mapper.NetworkMapper.create_functional_realization`
 and :py:meth:`~single_cell_parser.network_mapper.NetworkMapper.create_network`.
@@ -52,20 +52,20 @@ class NetworkMapper:
     Attributes:
         cells (dict): dictionary holding all presynaptic cells ordered by cell type.
         connected_cells (dict): dictionary holding indices of all active presynaptic cells ordered by cell type.
-        postCell (:class:`single_cell_parser.cell.Cell`): reference to postsynaptic (multi-compartment) cell model.
-        nwParam (:class:`sumatra.parameters.NTParameterSet`): network parameter set (see :ref:`network_parameters_format` for more info).
-        nwParam (:class:`sumatra.parameters.NTParameterSet`): network parameter set (see :ref:`network_parameters_format` for more info).
-        simParam (:class:`sumatra.parameters.NTParameterSet`): simulation parameter set.
+        postCell (:py:class:`single_cell_parser.cell.Cell`): reference to postsynaptic (multi-compartment) cell model.
+        nwParam (:py:class:`sumatra.parameters.NTParameterSet`): network parameter set (see :ref:`network_parameters_format` for more info).
+        nwParam (:py:class:`sumatra.parameters.NTParameterSet`): network parameter set (see :ref:`network_parameters_format` for more info).
+        simParam (:py:class:`sumatra.parameters.NTParameterSet`): simulation parameter set.
     '''
 
     def __init__(self, postCell, nwParam, simParam=None):
         '''Initialize NetworkMapper.      
 
         Args:
-            postCell (:class:`single_cell_parser.cell.Cell`): The cell to map synapses onto.
-            nwParam (:class:`sumatra.parameters.NTParameterSet`): The network parameter set (see :ref:`network_parameters_format` for more info).
-            nwParam (:class:`sumatra.parameters.NTParameterSet`): The network parameter set (see :ref:`network_parameters_format` for more info).
-            simParam (:class:`sumatra.parameters.NTParameterSet`): The simulation parameter set. Default: None.
+            postCell (:py:class:`single_cell_parser.cell.Cell`): The cell to map synapses onto.
+            nwParam (:py:class:`sumatra.parameters.NTParameterSet`): The network parameter set (see :ref:`network_parameters_format` for more info).
+            nwParam (:py:class:`sumatra.parameters.NTParameterSet`): The network parameter set (see :ref:`network_parameters_format` for more info).
+            simParam (:py:class:`sumatra.parameters.NTParameterSet`): The simulation parameter set. Default: None.
         '''
         self.cells = {}
         self.connected_cells = {}
@@ -84,7 +84,7 @@ class NetworkMapper:
 
         1. Assign anatomical synapses to postsynaptic cell using :py:meth:`~_assign_anatomical_synapses`.
         2. Create presynaptic cells for these synapses using :py:meth:`~_create_presyn_cells` (multiple synapses can originate from the same presynaptic cell).
-        3. Generate activation patters for each presynaptic cell, depending on whether they are a :class:`PointCell` or :class:`SpikeTrain` using :py:meth:`_activate_presyn_cells`.
+        3. Generate activation patters for each presynaptic cell, depending on whether they are a :py:class:`PointCell` or :py:class:`SpikeTrain` using :py:meth:`_activate_presyn_cells`.
         4. Connect the presynaptic cells to the anatomical synapses using :py:meth:`~_connect_functional_synapses`.
         5. Connect to spike train sources using :py:meth:`_connect_spike_trains`.
 
@@ -125,7 +125,7 @@ class NetworkMapper:
 
         1. Assigns anatomical synapses to postsynaptic cell using :py:meth:`~_assign_anatomical_synapses`.
         2. Creates presynaptic cells for these synapses using :py:meth:`~_create_presyn_cells` (multiple synapses can originate from the same presynaptic cell).
-        3. Generates activation patters for each presynaptic cell, depending on whether they are a :class:`PointCell` or :class:`SpikeTrain` using :py:meth:`_activate_presyn_cells`.
+        3. Generates activation patters for each presynaptic cell, depending on whether they are a :py:class:`PointCell` or :py:class:`SpikeTrain` using :py:meth:`_activate_presyn_cells`.
         4. Connects the presynaptic cells to the anatomical synapses using :py:meth:`~_map_complete_anatomical_realization`.
         5. Applies network modify functions (if any) using :py:meth:`_apply_network_modification_functions`.
 
@@ -383,7 +383,7 @@ class NetworkMapper:
         """Apply network modify functions to the network.
         
         Network modify functions can be found in the module :py:mod:`~single_cell_parser.network_modify_functions`,
-        and always take the arguments :paramref:`postCell` and a :class:`~single_cell_parser.network.NetworkMapper` object.
+        and always take the arguments :paramref:`postCell` and a :py:class:`~single_cell_parser.network.NetworkMapper` object.
         """
         if 'network_modify_functions' in list(self.nwParam.keys()):
             logger.info('***************************')
@@ -402,8 +402,8 @@ class NetworkMapper:
         The synapses should already be created in :py:meth:`_assign_anatomical_synapses` (step 1).
         
         Network parameters contains information on how many presynaptic cells per synapse type there are.
-        This method simply creates these cells as :class:`PointCell`s, but provides no further configuration
-        to these :class:`PointCell`s.
+        This method simply creates these cells as :py:class:`PointCell`s, but provides no further configuration
+        to these :py:class:`PointCell`s.
         '''
         # Check if new cells need to be constructed
         createCells = False
@@ -462,8 +462,8 @@ class NetworkMapper:
         
         Depending on the cell type of a synapse, this method creates activation patterns for each presynaptic cell:
 
-        1. For :class:`PointCell`: see :py:meth:`_create_pointcell_activities`
-        2. For :class:`SpikeTrain`: see :py:meth:`_create_spiketrain_activities`
+        1. For :py:class:`PointCell`: see :py:meth:`_create_pointcell_activities`
+        2. For :py:class:`SpikeTrain`: see :py:meth:`_create_spiketrain_activities`
         '''
         for synType in list(self.nwParam.keys()):  
             # contains list of celltypes in network: 
@@ -638,7 +638,7 @@ class NetworkMapper:
 
         Args:
             preCellType (str): The presynaptic cell type.
-            networkParameters (:class:`sumatra.parameters.NTParameterSet`): The network parameters for the presynaptic cell type.
+            networkParameters (:py:class:`sumatra.parameters.NTParameterSet`): The network parameters for the presynaptic cell type.
 
         Returns:
             None
@@ -1002,7 +1002,7 @@ class NetworkMapper:
 
         1. Assign anatomical synapses to postsynaptic cell using :py:meth:`~_assign_anatomical_synapses`.
         2. Create presynaptic cells for these synapses using :py:meth:`~_create_presyn_cells` (multiple synapses can originate from the same presynaptic cell).
-        3. Generate activation patters for each presynaptic cell, depending on whether they are a :class:`PointCell` or :class:`SpikeTrain` using :py:meth:`_activate_presyn_cells`.
+        3. Generate activation patters for each presynaptic cell, depending on whether they are a :py:class:`PointCell` or :py:class:`SpikeTrain` using :py:meth:`_activate_presyn_cells`.
         4. Connect the presynaptic cells to the anatomical synapses using :py:meth:`~_connect_functional_synapses`.
         5. Connect to spike train sources using :py:meth:`_connect_spike_trains`.
 
@@ -1042,7 +1042,7 @@ class NetworkMapper:
 
         1. Assign anatomical synapses to postsynaptic cell using :py:meth:`~_assign_anatomical_synapses`.
         2. Create presynaptic cells for these synapses using :py:meth:`~_create_presyn_cells` (multiple synapses can originate from the same presynaptic cell).
-        3. Generate activation patters for each presynaptic cell, depending on whether they are a :class:`PointCell` or :class:`SpikeTrain` using :py:meth:`_activate_presyn_cells`.
+        3. Generate activation patters for each presynaptic cell, depending on whether they are a :py:class:`PointCell` or :py:class:`SpikeTrain` using :py:meth:`_activate_presyn_cells`.
         4. Connect the presynaptic cells to the anatomical synapses using :py:meth:`~_map_functional_realization`.
         5. Connect to spike train sources using :py:meth:`_connect_spike_trains`.
 
@@ -1138,7 +1138,7 @@ class NetworkMapper:
     def _create_functional_connectivity_map(self):
         '''Connect functional anatomical synapses based on ``convergence``.
          
-        Synapses are connected here to spike generators (:class:`~PointCell`s) according to physiological
+        Synapses are connected here to spike generators (:py:class:`~PointCell`s) according to physiological
         and/or anatomical constraints on connectivity (i.e., convergence of presynaptic cell type).
         Used to create fixed functional realization.
         Used in :py:meth:`~create_functional_realization`
@@ -1494,7 +1494,7 @@ class NetworkMapper:
 
         1. Assign anatomical synapses to postsynaptic cell using :py:meth:`~_assign_anatomical_synapses`.
         2. Create presynaptic cells for these synapses using :py:meth:`~_create_presyn_cells` (multiple synapses can originate from the same presynaptic cell).
-        3. Generate activation patters for each presynaptic cell, depending on whether they are a :class:`PointCell` or :class:`SpikeTrain` using :py:meth:`_activate_presyn_cells`.
+        3. Generate activation patters for each presynaptic cell, depending on whether they are a :py:class:`PointCell` or :py:class:`SpikeTrain` using :py:meth:`_activate_presyn_cells`.
         4. Connect the presynaptic cells to the anatomical synapses using :py:meth:`~_map_functional_realization`.
         5. Connect to spike train sources using :py:meth:`_connect_spike_trains`.
 
@@ -1564,9 +1564,9 @@ def activate_functional_synapse(
         It can thus not be used in recurrent network models at this point.
         
     Args:
-        syn (:class:`~single_cell_parser.synapse.Synapse`): Synapse object.
-        cell (:class:`~single_cell_parser.cell.Cell`): Postsynaptic cell.
-        preSynCell (:class:`~single_cell_parser.cell.PointCell`): Presynaptic cell.
+        syn (:py:class:`~single_cell_parser.synapse.Synapse`): Synapse object.
+        cell (:py:class:`~single_cell_parser.cell.Cell`): Postsynaptic cell.
+        preSynCell (:py:class:`~single_cell_parser.cell.PointCell`): Presynaptic cell.
         synParameters (dict): Synapse parameters.
         tChange (float): Time at which the synapse parameters change (e.g. the release probability due to a spike).
         synParametersChange (dict): Synapse parameters after change (including e.g. the release probability).

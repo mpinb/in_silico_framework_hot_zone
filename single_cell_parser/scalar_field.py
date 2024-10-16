@@ -1,7 +1,7 @@
 '''
 Implementation of 3D scalar fields based on numpy arrays.
 
-Note that this class is identical to :class:`singlecell_input_mapper.singlecell_input_mapper.scalar_field.ScalarField`.
+Note that this class is identical to :py:class:`singlecell_input_mapper.singlecell_input_mapper.scalar_field.ScalarField`.
 It is duplicated here for package independence.
 '''
 

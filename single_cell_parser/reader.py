@@ -46,7 +46,7 @@ class Edge(object):
 def read_hoc_file(fname=''):
     """Reads a hoc file and returns a list of Edge objects.
     
-    This list of sections is parsed to a :class:`~single_cell_parser.cell_parser.CellParser` object
+    This list of sections is parsed to a :py:class:`~single_cell_parser.cell_parser.CellParser` object
     using :py:meth:`~single_cell_parser.cell_parser.CellParser.spatialgraph_to_cell`.
 
     See :ref:`hoc_file_format` for more information on the hoc file format.
@@ -64,7 +64,7 @@ def read_hoc_file(fname=''):
         IOError: If the input file does not have a `.hoc` or `.HOC` suffix.
 
     Returns:
-        list: A list of :class:`Edge` objects.
+        list: A list of :py:class:`Edge` objects.
 
     Example:
         >>> read_hoc_file(hoc_file)
@@ -222,7 +222,7 @@ def read_hoc_file(fname=''):
 
 
 def read_scalar_field(fname=''):
-    """Read AMIRA scalar fields and return a :class:`~single_cell_parser.scalar_field.ScalarField` object.
+    """Read AMIRA scalar fields and return a :py:class:`~single_cell_parser.scalar_field.ScalarField` object.
     
     Args:
         fname (str): The name of the file to be read.
@@ -231,7 +231,7 @@ def read_scalar_field(fname=''):
         IOError: If the input file does not have a `.am` or `.AM` suffix.
 
     Returns:
-        :class:`~single_cell_parser.scalar_field.ScalarField`: A scalar field object.
+        :py:class:`~single_cell_parser.scalar_field.ScalarField`: A scalar field object.
     """
     if not fname.endswith('.am') and not fname.endswith('.AM'):
         raise IOError('Input file is not an Amira Mesh file!')

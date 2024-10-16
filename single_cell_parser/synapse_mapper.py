@@ -15,27 +15,27 @@ class SynapseMapper(object):
     The synapse distribution can be:
 
     - a previously created synapse realization in dictionary form 
-      (see the :ref:`syn_file_type` file type and :py:meth:`~single_cell_parser.reader.read_synapse_realization` for more info)
-    - a :class:`~single_cell_parser.scalar_field.ScalarField` of synapse densities, in which case the synapses are mapped
+      (see the :ref:`syn_file_format` file type and :py:meth:`~single_cell_parser.reader.read_synapse_realization` for more info)
+    - a :py:class:`~single_cell_parser.scalar_field.ScalarField` of synapse densities, in which case the synapses are mapped
       in the same way as in :py:meth:`~single_cell_parser.synapse_mapper.SynapseMapper.create_synapses`.
     - a list of synapse distances.
     
     Attributes:
-        cell (:class:`~single_cell_parser.cell.Cell`): The cell to map synapses onto.
-        synDist (dict | :class:`single_cell_parser.scalar_field.ScalarField` | list): 
+        cell (:py:class:`~single_cell_parser.cell.Cell`): The cell to map synapses onto.
+        synDist (dict | :py:class:`single_cell_parser.scalar_field.ScalarField` | list): 
             The synapse distribution to map onto the cell.
         isDensity (bool): Flag for distribution type: (1) density or (0) realization.
         voxelEdgeMap (dict): Dictionary that maps voxel edges to (sectionID, pointID) pairs.
     '''
     def __init__(self, cell=None, synDist=None, isDensity=True):
         '''
-        :paramref:`synDist` can be read from a :ref:`syn_file_type` file using :py:meth:`~single_cell_parser.reader.read_synapse_realization`.
+        :paramref:`synDist` can be read from a :ref:`syn_file_format` file using :py:meth:`~single_cell_parser.reader.read_synapse_realization`.
 
         Args:
-            cell (:class:`~single_cell_parser.cell.Cell`): The cell to map synapses onto.
-            synDist (dict | :class:`single_cell_parser.scalar_field.ScalarField`): 
-                Either a previously created synapse realization in dictionary form (see the :ref:`syn_file_type` file type and :py:meth:`~single_cell_parser.reader.read_synapse_realization` for more info)
-                or a :class:`~single_cell_parser.scalar_field.ScalarField` of synapse densities.
+            cell (:py:class:`~single_cell_parser.cell.Cell`): The cell to map synapses onto.
+            synDist (dict | :py:class:`single_cell_parser.scalar_field.ScalarField`): 
+                Either a previously created synapse realization in dictionary form (see the :ref:`syn_file_format` file type and :py:meth:`~single_cell_parser.reader.read_synapse_realization` for more info)
+                or a :py:class:`~single_cell_parser.scalar_field.ScalarField` of synapse densities.
             isDensity (bool): 
                 If True, then the synapse distribution is interpreted as an average density, and the actual number of synapses that will be assigned is drawn from a Poisson distribution. 
                 If False, then the synapse distribution :paramref:`synDist` is interpreted as the actual number of synapses per voxel. 
@@ -57,7 +57,7 @@ class SynapseMapper(object):
         See also:
 
         - :py:meth:`~single_cell_parser.reader.read_synapse_realization`
-        - The :ref:`syn_file_type` file type.
+        - The :ref:`syn_file_format` file type.
         '''
         sections = self.cell.sections
         synDist = self.synDist
@@ -88,7 +88,7 @@ class SynapseMapper(object):
         See also:
 
         - :py:meth:`~single_cell_parser.reader.read_pruned_synapse_realization`
-        - The :ref:`syn_file_type` file type.
+        - The :ref:`syn_file_format` file type.
         '''
         sections = self.cell.sections
         synDist = self.synDist
@@ -166,7 +166,7 @@ class SynapseMapper(object):
     def create_synapses(self, preType='Generic'):
         '''Map synapses onto a morphology based on a synapse distribution.
 
-        In this case, :paramref:`synDist` has to be a :class:`~single_cell_parser.scalar_field.ScalarField` of synapse densities.
+        In this case, :paramref:`synDist` has to be a :py:class:`~single_cell_parser.scalar_field.ScalarField` of synapse densities.
 
         This method is nearly identical to :py:mod:`singlecell_inputmapper`'s
         :py:meth:`~singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseMapper.create_synapses`, 
@@ -288,7 +288,7 @@ class SynapseMapper(object):
         '''Compute the path length to soma from location :paramref:`x` on section :paramref:`sec`
         
         Args:
-            sec (:class:`~single_cell_parser.section.Section`): The section to compute the path length on.
+            sec (:py:class:`~single_cell_parser.section.Section`): The section to compute the path length on.
             x (float): The relative coordinate along the section.
 
         Returns:

@@ -1,6 +1,10 @@
 """Configure modules, functions, methods, classes and attributes so that they are not documented by Sphinx."""
-import pkgutil, importlib, os
+import ast, os
 from unittest.mock import patch
+
+project_root = os.path.join(os.path.abspath(os.pardir))
+# Global variable to cache the result
+_cached_modules_to_skip = None
 
 
 def skip_member(app, what, name, obj, skip, options):
@@ -23,48 +27,65 @@ def skip_member(app, what, name, obj, skip, options):
     if hasattr(obj, '__objclass__') and obj.__objclass__ is not obj.__class__:
         return True
     
-    return skip
-
-def safe_import_module(module_name):
-    """Import a module safely, ignoring sys.exit and KeyError exceptions."""
-    try:
-        with patch('sys.exit', lambda x: None):
-            module = importlib.import_module(module_name)
-        return module
-    except ImportError:
-        print(f"Failed to import module {module_name}")
-    except KeyError:
-        print(f"KeyError encountered while importing module {module_name}")
-    return None
+    modules_to_skip = find_modules_with_tag(project_root, tag=":skip-doc:")
+    if name in modules_to_skip:
+        print(f"Skipping {what}: {name} due to :skip-doc: tag in module {obj.__module__}")
+        return True
     
+    return skip
+    
+    
+def get_module_docstring(module_path):
+    """Get the docstring of a module without importing it."""
+    try:
+        # Find the module's file path
+        print("Module path:", module_path)
+        if not os.path.isfile(module_path):
+            raise FileNotFoundError(f"Module file {module_path} not found")
+
+        # Read the module's source code
+        with open(module_path, 'r', encoding='utf-8') as f:
+            source_code = f.read()
+
+        # Parse the source code
+        parsed_ast = ast.parse(source_code)
+
+        # Extract the docstring
+        docstring = ast.get_docstring(parsed_ast)
+        return docstring
+
+    except Exception as e:
+        print(f"Error getting docstring for module {module_path}: {e}")
+        return None
 
 def find_modules_with_tag(source_dir, tag=":skip-doc:"):
-    """Recursively find all modules with a specific tag in their docstring."""
+    """Recursively find all modules with a specific tag in their docstring.
+    
+    Returns:
+        List of module path glob patterns with the tag.
+    """
     modules_with_tag = []
 
-    def check_module(module_name):
-        """Check if a module or any of its submodules has the specific tag in its docstring."""
-        module = safe_import_module(module_name)
-        if module is None:
-            return False
-        if module.__doc__ and tag in module.__doc__:
-            if module.__name__.endswith('.__init__'):
-                module_name = module.__name__[:-9]
-            modules_with_tag.append(module_name)
-            return True
-        if hasattr(module, '__path__'):  # Check if the module is a package
-            for _, submodule_name, is_pkg in pkgutil.iter_modules(module.__path__):
-                full_submodule_name = f"{module_name}.{submodule_name}"
-                if check_module(full_submodule_name):
-                    modules_with_tag.append(full_submodule_name)
-                    return True
-        return False
-
     for root, dirs, files in os.walk(source_dir):
-        for file in files:
-            if file.endswith(".py"):
-                module_path = os.path.relpath(os.path.join(root, file), source_dir)
-                module_name = module_path.replace(os.sep, ".")[:-3]  # Remove .py extension
-                check_module(module_name)
+        for f in files:
+            if f.endswith(".py"):
+                module_path = os.path.join(root, f)
+                docstring = get_module_docstring(module_path)
+                if docstring and tag in docstring:
+                    if "__init__" in module_path:
+                        modules_with_tag.append(module_path.rstrip('__init__.py') + "**")
+                    else:
+                        modules_with_tag.append(module_path + "**")                
 
     return modules_with_tag
+
+
+def get_modules_to_skip():
+    global _cached_modules_to_skip
+    if _cached_modules_to_skip is None:
+        project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
+        _cached_modules_to_skip = ['**tests**', '**barrel_cortex**', '**installer**', '**__pycache__**'] + find_modules_with_tag(project_root, tag=":skip-doc:")
+    return _cached_modules_to_skip
+
+# Use the cached result
+modules_to_skip = get_modules_to_skip()

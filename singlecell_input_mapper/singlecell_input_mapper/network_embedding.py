@@ -22,7 +22,7 @@ class NetworkMapper:
     '''Connect presynaptic cells to a postsynaptic cell model.
 
     This class is used to create anatomical realizations of connectivity.
-    Given a :class:`~singlecell_input_mapper.singlecell_input_mapper.scalar_field.ScalarField` of boutons, 
+    Given a :py:class:`~singlecell_input_mapper.singlecell_input_mapper.scalar_field.ScalarField` of boutons, 
     it computes all possible synapse densities that have non-zero overlap with every voxel this bouton field.
     These synapse density fields depend on the presence of post-synaptic dendrites in the bouton field,
     which in turn depends on the location and morphology of the post-syanptic neuron.
@@ -36,7 +36,7 @@ class NetworkMapper:
             This attribute is filled by 
             :py:meth:`~singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper._create_presyn_cells`.
         connected_cells (dict): Indices of all active presynaptic cells, ordered by cell type.
-        postCell (:class:`~singlecell_input_mapper.singlecell_input_mapper.cell.Cell`): Reference to postsynaptic (multi-compartment) cell model.
+        postCell (:py:class:`~singlecell_input_mapper.singlecell_input_mapper.cell.Cell`): Reference to postsynaptic (multi-compartment) cell model.
         postCellType (str): Postsynaptic cell type.
     '''
 
@@ -50,7 +50,7 @@ class NetworkMapper:
         inhPST):
         '''        
         Args:
-            postCell (:class:`~singlecell_input_mapper.singlecell_input_mapper.cell.Cell`): The cell object to map synapses onto.
+            postCell (:py:class:`~singlecell_input_mapper.singlecell_input_mapper.cell.Cell`): The cell object to map synapses onto.
             postCellType (str): The type of the postsynaptic cell.
             cellTypeNumbersSpreadsheet (dict): Number of presynaptic cells per cell type and anatomical_area.
         '''
@@ -400,7 +400,7 @@ class NetworkMapper:
         This is the main method for computing synapse/connectivity realization.
         Given one or more pre-computed density fields of synapses (see e.g. 
         :py:meth:`~_precompute_anatomical_area_celltype_synapse_densities`), this method 
-        creates a :class:`~singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseMapper`
+        creates a :py:class:`~singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseMapper`
         from this synapse density field, and assigns synapses.
 
         Returns anatomical connectivity map.

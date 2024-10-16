@@ -8,10 +8,11 @@
 
 import sys
 import os
+import ast, os
 project_root = os.path.join(os.path.abspath(os.pardir))
 sys.path.insert(0, project_root)
 from docs.parse_notebooks import copy_and_parse_notebooks_to_docs
-from docs.nodoc import skip_member, find_modules_with_tag
+from functools import lru_cache
 
 project = 'In-Silico Framework (ISF)'
 copyright = '2023, Arco Bast, Amir Najafgholi, Maria Royo Cano, Rieke Fruengel, Matt Keaton, Bjorge Meulemeester, Omar Valerio'
@@ -23,7 +24,8 @@ version = '0.2.0-alpha'
 # copy over tutorials and convert links to python files to sphinx documentation directives
 copy_and_parse_notebooks_to_docs(
     source_dir=os.path.join(project_root, 'getting_started', 'tutorials'),
-    dest_dir=os.path.join(project_root, 'docs', 'tutorials')
+    dest_dir=os.path.join(project_root, 'docs', 'tutorials'),
+    api_extension="autoapi",  # change this if using autosummary instead of autoapi, it needs to find target dir of .rst files.
 )
 
 from compatibility import init_data_base_compatibility
@@ -34,31 +36,177 @@ init_data_base_compatibility()  # make db importable before running autosummary 
 
 extensions = [
     'sphinx.ext.autodoc',      # Core library for html generation from docstrings
-    'sphinx.ext.todo',         # To-do notes
-    'sphinx_paramlinks',       # Parameter links
-    'sphinx.ext.viewcode',
-    'sphinx.ext.coverage',     # Coverage reporting
-    'sphinx.ext.intersphinx',  # Link to other project's documentation, for e.g. NEURON classes as attributes in docstrings
-    'sphinx.ext.autosummary',  # Create neat summary tables
+    # 'sphinx.ext.autosummary',  # Create neat summary tables
+    'autoapi.extension',      # improvement over autodoc, but still requires autodoc
     'sphinx.ext.napoleon',     # Support for NumPy and Google style docstrings
+    'sphinx_paramlinks',       # Parameter links
+    'sphinx.ext.todo',         # To-do notes
+    'sphinx.ext.viewcode',
+    'sphinx.ext.intersphinx',  # Link to other project's documentation, for e.g. NEURON classes as attributes in docstrings
     'nbsphinx',                # For rendering tutorial notebooks
     'nbsphinx_link',           # For linking to sections in tutorial notebooks
     'sphinxcontrib.bibtex',    # For citations
     'sphinx.ext.mathjax',      # For math equations
+    'sphinx_copybutton',       # For copying code snippets
+    # 'sphinxext.opengraph',     # For OpenGraph metadata, only enable when the site is actually hosted. See https://github.com/wpilibsuite/sphinxext-opengraph for config options when that happens.
 ]
 
+# Currently unused, but may be neat in the future
+rst_prolog = """
+.. role:: summarylabel
+"""
+
+"""Configure modules, functions, methods, classes and attributes so that they are not documented by Sphinx."""
+
+project_root = os.path.join(os.path.abspath(os.pardir))
+
+def skip_member(app, what, name, obj, skip, options):
+    """Skip members if they have the :skip-doc: tag in their docstring.
+    
+    Note that the object attributes tested for in this function are only compatible
+    with the sphinx-autoapi extension. If you are using a different extension, you
+    may need to modify this function to use e.g. obj.__doc__ instead of obj.docstring.
+    
+    Args:
+        obj (autoapidoc._objects.Python*): 
+            autoapi object containing the following attrs:
+            
+            - name: the name of the object
+            - id: the object's id i.e. the fully qualified name (FQN)
+            - short_name: the object's short name (dropping all prefixes before a .)
+            - display: whether the object should be displayed (this is the attribute that is modified by this function)
+            - docstring: the docstring of the object
+            - type: the type of the object ('method', 'function', 'class', 'data', 'module', 'package')
+            - children: the children of the object
+            - summary: the summary of the object (usually the first sentence/line of the docstring)
+            - url_root: the root of the object's rst filepath relative to this directory (default: /autoapi, which points to the autoapi directory within this directory)
+            - inherited: whether the object is inherited
+            - type: the type of the object
+            - imported: whether the object is imported
+            - include_path: full path to the object's .rst stub.
+            - is_private_member: whether the object is a private member
+            - is_special_member: whether the object is a special member
+            - is_top_level_object: whether the object is a top level object
+            - is_undoc_member: whether the object is an undocumented member
+            - options (list): the options of the object (e.g. 'members', 'undoc-members', 'private-members', 'show-module-summary')
+            - member_order: ??
+            - obj: the object itself in dict format
+                - obj.type: the type of the object ('method', 'function', 'class', 'data', 'module', 'package')
+                - obj.name: the name of the object
+                - obj.qual_name: non-fully qualified name of the object (e.g. class.method)
+                - obj.full_name: FQN
+                - obj.args: ??
+                - obj.doc: the docstring of the object
+                - obj.from_line_no: the line number where the object is defined
+                - obj.to_line_no: the line number where the object ends (the full object, not only the docstring)
+                - obj.return_annotation (bool): whether the object has a return annotation
+    """
+    # Debug print to check what is being processed
+    # print(f"Processing {what}: {name}")
+    
+    # skip special members, except __get__ and __set__
+    if name.startswith('__') and name.endswith('__') and name not in ['__get__', '__set__']:
+        skip = True
+    
+    # Skip if it has the :skip-doc: tag
+    if not obj.is_undoc_member and ':skip-doc:' in obj.docstring:
+        # print(f"Docstring for {name}: {obj.__doc__}")
+        print(f"Skipping {what}: {name} due to :skip-doc: tag")
+        skip = True
+    
+    # Skip inherited members
+    if obj.inherited:
+        skip = True
+    
+    if name in modules_to_skip:
+        print(f"Skipping {what}: {name} due to :skip-doc: tag in module {obj.name}")
+        skip = True
+    
+    return skip
+    
+def get_module_docstring(module_path):
+    """Get the docstring of a module without importing it."""
+    try:
+        # Find the module's file path
+        if not os.path.isfile(module_path):
+            raise FileNotFoundError(f"Module file {module_path} not found")
+
+        # Read the module's source code
+        with open(module_path, 'r', encoding='utf-8') as f:
+            source_code = f.read()
+
+        # Parse the source code
+        parsed_ast = ast.parse(source_code)
+
+        # Extract the docstring
+        docstring = ast.get_docstring(parsed_ast)
+        return docstring
+
+    except Exception as e:
+        print(f"Error getting docstring for module {module_path}: {e}")
+        return None
+
+@lru_cache(maxsize=None)
+def find_modules_with_tag(source_dir, tag=":skip-doc:"):
+    """Recursively find all modules with a specific tag in their docstring.
+    
+    Returns:
+        List of module path glob patterns with the tag.
+    """
+    modules_with_tag = []
+
+    for root, dirs, files in os.walk(source_dir):
+        for f in files:
+            if f.endswith(".py"):
+                module_path = os.path.join(root, f)
+                docstring = get_module_docstring(module_path)
+                if docstring and tag in docstring:
+                    if "__init__" in module_path:
+                        modules_with_tag.append(module_path.rstrip('__init__.py') + "**")
+                    else:
+                        modules_with_tag.append(module_path + "**")                
+
+    return modules_with_tag
+
+@lru_cache(maxsize=None)
+def get_modules_to_skip():
+    return [
+        '**tests**', 
+        '**barrel_cortex**', 
+        '**installer**', 
+        '**__pycache__**',
+        "**getting_started**",
+        "**compatibility**",
+        "**dendrite_thickness**",
+        "**mechanisms**",
+        "**config**",
+        "**docs**",
+        "**.ipynb_checkpoints**"] + find_modules_with_tag(project_root, tag=":skip-doc:")
+
+# Use the cached result
+modules_to_skip = get_modules_to_skip()
+
 # skipping documentation for certain members
-modules_to_skip = find_modules_with_tag(project_root, tag=":skip-doc:")
-autosummary_mock_imports = modules_to_skip
-autosummary_context = {
-    "modules_to_skip": modules_to_skip
-}
-print(f"Skipping documentation for modules with :skip-doc: tag: {modules_to_skip}")
+print("ignoring modules: ", modules_to_skip)
+autoapi_ignore = modules_to_skip
 
 def setup(app):
     # skip members with :skip-doc: tag in their docstrings
-    app.connect('autodoc-skip-member', skip_member)
+    app.connect('autoapi-skip-member', skip_member)
 
+autoapi_dirs = [project_root]
+autoapi_type = "python"
+autoapi_keep_files = True
+autoapi_add_toctree_entry = False  # we use a manual autosummary directive in api_reference.rst thats included in the toctree
+autoapi_generate_api_docs = True
+# generate the .rst stub files. The template directives don't do this. 
+autoapi_options = [
+    "members",
+    "undoc-members",
+    "private-members",
+    "show-module-summary",
+]
+autoapi_own_page_level = 'method'
 bibtex_bibfiles = ['bibliography.bib']
 
 # Napoleon settings
@@ -80,10 +228,10 @@ napoleon_attr_annotations = True
 ## Default: alphabetically ('alphabetical')
 # autodoc_member_order = 'bysource'
 
-autoclass_content = 'both'  # document both the class docstring, as well as __init__
+# autoclass_content = 'both'  # document both the class docstring, as well as __init__
 ## Generate autodoc stubs with summaries from code
-autosummary_generate = True
-autosummary_imported_members = False  # do not show all imported modules per module, this is too bloated
+# autosummary_generate = True
+# autosummary_imported_members = False  # do not show all imported modules per module, this is too bloated
 paramlinks_hyperlink_param = 'name'
 
 # Don't run notebooks
@@ -94,14 +242,14 @@ nbsphinx_codecell_lexer = "python"
 # We have custom templates that produce toctrees for modules and classes on module pages,
 # and separate pages for classes
 templates_path = ['_templates']
-
+autoapi_template_dir = '_templates/autoapi'
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
 # source_suffix = ['.rst', '.md']
 source_suffix = '.rst'
 
 # The encoding of source files.
-#source_encoding = 'utf-8-sig'
+source_encoding = 'utf-8-sig'
 
 # The master toctree document.
 master_doc = 'index'
@@ -184,7 +332,8 @@ html_static_path = ['_static']
 html_css_files = [
     'default.css',  # relative to html_static_path defined above
     'style.css',
-    'downarr.svg'
+    'downarr.svg',
+    'css/custom.css'
 ]
 
 html_js_files = [

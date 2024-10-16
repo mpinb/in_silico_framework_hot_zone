@@ -126,14 +126,14 @@ inhibitory = [
 
 def get_cell_object_from_hoc(hocpath, setUpBiophysics=True):
     '''
-    Returns a :class:`~single_cell_parser.cell.Cell` object which allows accessing points of individual branches.
+    Returns a :py:class:`~single_cell_parser.cell.Cell` object which allows accessing points of individual branches.
     
     Args:
         hocpath (str): path to hoc file
         setUpBiophysics (bool): whether to set up biophysics
         
     Returns:
-        :class:`~single_cell_parser.cell.Cell`: cell object
+        :py:class:`~single_cell_parser.cell.Cell`: cell object
     '''
     import single_cell_parser as scp
     # import singlecell_input_mapper.singlecell_input_mapper.cell

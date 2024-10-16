@@ -1,6 +1,6 @@
 '''
-This module provides the :class:`Combiner` class and associated classes and functions.
-The :class:`~biophysics_fitting.combiner.Combiner` class can be used to combine features computed by an :class:`~biophysics_fitting.evaluator.Evaluator` object.
+This module provides the :py:class:`Combiner` class and associated classes and functions.
+The :py:class:`~biophysics_fitting.combiner.Combiner` class can be used to combine features computed by an :py:class:`~biophysics_fitting.evaluator.Evaluator` object.
 '''
 
 __author__ = 'Arco Bast'
@@ -9,7 +9,7 @@ __date__ = '2018-11-08'
 
 class Combiner_Setup:
     """
-    Setup class for the :class:`Combiner` class.
+    Setup class for the :py:class:`Combiner` class.
     Keeps track of feature combinations and their names.
     """
     def __init__(self):
@@ -31,9 +31,9 @@ class Combiner_Setup:
 
 class Combiner:
     '''
-    This class can be used to combine features (usually) computed by an :class:`~biophysics_fitting.evaluator.Evaluator` object.
+    This class can be used to combine features (usually) computed by an :py:class:`~biophysics_fitting.evaluator.Evaluator` object.
     
-    For a :class:`~biophysics_fitting.simulator.Simulator` object `s`, an :class:`~biophysics_fitting.evaluator.Evaluator` object `e`, and a :class:`~biophysics_fitting.combiner.Combiner` object `c`, the typical usecase is:
+    For a :py:class:`~biophysics_fitting.simulator.Simulator` object `s`, an :py:class:`~biophysics_fitting.evaluator.Evaluator` object `e`, and a :py:class:`~biophysics_fitting.combiner.Combiner` object `c`, the typical usecase is:
     
         >>> voltage_traces_dict = s.run(params)
         >>> features = e.evaluate(voltage_traces_dict)

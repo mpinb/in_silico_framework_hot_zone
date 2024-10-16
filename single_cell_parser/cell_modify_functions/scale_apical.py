@@ -8,7 +8,7 @@ def scale_apical(cell, scale=None, compartment='ApicalDendrite'):
     '''Scale the apical dendrite of a cell.
 
     Args:
-        cell (:class:`~single_cell_parser.cell.Cell`): The cell to scale.
+        cell (:py:class:`~single_cell_parser.cell.Cell`): The cell to scale.
         scale (float): The scaling factor.
         compartment (str): The compartment to scale.
             If "ApicalDendrite", the cell is assumed to have sections with label "ApicalDendrite".
@@ -16,7 +16,7 @@ def scale_apical(cell, scale=None, compartment='ApicalDendrite'):
             Currently, only "ApicalDendrite" and "Trunk" are supported compartments.
     
     Returns:
-        :class:`~single_cell_parser.cell.Cell`: The scaled cell.
+        :py:class:`~single_cell_parser.cell.Cell`: The scaled cell.
 
     Raises:
         ValueError: If the compartment is not "ApicalDendrite" or "Trunk".
@@ -35,11 +35,11 @@ def scale_apical_dendrite(cell, scale=None, compartment='ApicalDendrite'):
     If not, nothing gets scaled.
 
     Args:
-        cell (:class:`~single_cell_parser.cell.Cell`): The cell to scale.
+        cell (:py:class:`~single_cell_parser.cell.Cell`): The cell to scale.
         scale (float): The scaling factor.
 
     Returns:
-        :class:`~single_cell_parser.cell.Cell`: The scaled cell.
+        :py:class:`~single_cell_parser.cell.Cell`: The scaled cell.
     '''
 
     # This is the function used to scale the apical dendrite in the following
@@ -75,11 +75,11 @@ def scale_by_detailed_compartment(cell, **kwargs):
         Alternatively, assign them manually with the :py:attr:`biophysics_fitting.cell.Cell.sections.label_detailed` attribute.
 
     Args:
-        cell (:class:`~single_cell_parser.cell.Cell`): The cell to scale.
+        cell (:py:class:`~single_cell_parser.cell.Cell`): The cell to scale.
         **kwargs (dict): Detailed lables with associated scaling factors.
 
     Returns:
-        :class:`~single_cell_parser.cell.Cell`: The scaled cell.
+        :py:class:`~single_cell_parser.cell.Cell`: The scaled cell.
     '''
     # check if detailed labels are available
     try:

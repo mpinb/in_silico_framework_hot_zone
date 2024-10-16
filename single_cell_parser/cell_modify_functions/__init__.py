@@ -20,7 +20,7 @@ Example:
     Scale the apical dendrite of a cell.
 
     Args:
-        cell (:class:`~single_cell_parser.cell.Cell`): The cell to scale.
+        cell (:py:class:`~single_cell_parser.cell.Cell`): The cell to scale.
         scale (float): The scaling factor.
         compartment (str): The compartment to scale.
             If "ApicalDendrite", the cell is assumed to have sections with label "ApicalDendrite".
@@ -28,7 +28,7 @@ Example:
             Currently, only "ApicalDendrite" and "Trunk" are supported compartments.
     
     Returns:
-        :class:`~single_cell_parser.cell.Cell`: The scaled cell.
+        :py:class:`~single_cell_parser.cell.Cell`: The scaled cell.
 
     Raises:
         ValueError: If the compartment is not "ApicalDendrite" or "Trunk".

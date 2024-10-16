@@ -46,7 +46,7 @@ class Edge(object):
 def read_hoc_file(fname=''):
     """Reads a hoc file and returns a list of Edge objects.
     
-    This list of sections is parsed to a :class:`~singlecell_input_mapper.singlecell_input_mapper.cell.CellParser` object
+    This list of sections is parsed to a :py:class:`~singlecell_input_mapper.singlecell_input_mapper.cell.CellParser` object
     using :py:meth:`singlecell_input_mapper.singlecell_input_mapper.cell.CellParser.spatialgraph_to_cell`.
     
     Warning:
@@ -58,7 +58,7 @@ def read_hoc_file(fname=''):
         fname (str): The name of the file to be read.
 
     Returns:
-        list: A list of :class:`Edge` objects.
+        list: A list of :py:class:`Edge` objects.
     """
     #    TODO: skip reading axonal sections! Only interested in dendrites/soma here
     if not fname.endswith('.hoc') and not fname.endswith('.HOC'):
