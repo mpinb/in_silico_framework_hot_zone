@@ -52,7 +52,6 @@ Back to :mod:`{{ parent_module }}`
    {%- if visible_methods %}
    {%- set public_methods = visible_methods|rejectattr('is_private_member')|list %}
    {%- if public_methods %}
-.. rubric:: Methods
 {{ macros.auto_summary(public_methods, title="") }}
    {%- endif %}
    {%- endif %}

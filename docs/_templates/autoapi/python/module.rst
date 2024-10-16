@@ -49,8 +49,7 @@ Back to :mod:`{{ parent_module }}`
 {%- if visible_classes %}
 {%- set public_classes = visible_classes|rejectattr('is_private_member')|list %}
 {%- if public_classes %}
-.. rubric:: Classes
-{{ macros.auto_summary(public_classes, title="") }}
+{{ macros.auto_summary(public_classes, title="Classes") }}
 {%- endif %}
 {%- endif %}
 {%- endblock %}
@@ -59,8 +58,7 @@ Back to :mod:`{{ parent_module }}`
 {%- if visible_functions %}
 {%- set public_functions = visible_functions|rejectattr('is_private_member')|list %}
 {%- if public_functions %}
-.. rubric:: Functions
-{{ macros.auto_summary(public_functions, title="") }}
+{{ macros.auto_summary(public_functions, title="Functions") }}
 {%- endif %}
 {%- endif %}
 {%- endblock %}
@@ -69,16 +67,14 @@ Back to :mod:`{{ parent_module }}`
 {%- if visible_subs %}
 {%- set public_subs = visible_subs|rejectattr('is_private_member')|list %}
 {%- if public_subs%}
-.. rubric:: Modules
-{{ macros.auto_summary(public_subs, title="") }}
+{{ macros.auto_summary(public_subs, title="Modules") }}
 {%- endif %}
 {%- endif %}
 {%- endblock %}
 
 {% block exceptions %}
 {%- if visible_exceptions %}
-.. rubric:: Exceptions
-{{ macros.auto_summary(visible_exceptions, title="") }}
+{{ macros.auto_summary(visible_exceptions, title="Exceptions") }}
 {%- endif %}
 {%- endblock %}
 {% endif %}

@@ -15,29 +15,35 @@
      - {% if label %}:summarylabel:`{{ label }}` {% endif %}{% if obj.summary %}{{ obj.summary }}{% else %}\-{% endif +%}
 {% endmacro %}
 
-{% macro auto_summary(objs, title='') -%}
-.. list-table:: {{ title }}
+{% macro auto_summary(objs, title='', table_title='') -%}
+{% if title %}
+
+.. rst-class:: absolute-paragraph
+
+{{ title }}
+{{ '^' * title|length }}
+
+{% endif %}
+
+.. list-table:: {{ table_title }}
    :header-rows: 0
    :widths: auto
    :class: summarytable
-
-  {% for obj in objs -%}
-    {%- set sig = (obj.type in ['method', 'function'] and not 'property' in obj.properties) -%}
-
-    {%- if 'property' in obj.properties -%}
-      {%- set label = 'prop' -%}
-    {%- elif 'classmethod' in obj.properties -%}
-      {%- set label = 'class' -%}
-    {%- elif 'abstractmethod' in obj.properties -%}
-      {%- set label = 'abc' -%}
-    {%- elif 'staticmethod' in obj.properties -%}
-      {%- set label = 'static' -%}
-    {%- else -%}
-      {%- set label = '' -%}
-    {%- endif -%}
-
-    {{- _item(obj, sig=sig, label=label) -}}
-  {%- endfor -%}
-
+   
+   {% for obj in objs -%}
+       {%- set sig = (obj.type in ['method', 'function'] and not 'property' in obj.properties) -%}
+       {%- if 'property' in obj.properties -%}
+         {%- set label = 'prop' -%}
+       {%- elif 'classmethod' in obj.properties -%}
+         {%- set label = 'class' -%}
+       {%- elif 'abstractmethod' in obj.properties -%}
+         {%- set label = 'abc' -%}
+       {%- elif 'staticmethod' in obj.properties -%}
+         {%- set label = 'static' -%}
+       {%- else -%}
+         {%- set label = '' -%}
+       {%- endif -%}
+       {{- _item(obj, sig=sig, label=label) -}}
+   {%- endfor -%}
 {% endmacro %}
 

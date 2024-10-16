@@ -9,3 +9,5 @@ span.summarylabel {
     padding-bottom: 2px;
     filter: opacity(40%);
 }
+
+.absolute-paragraph h2 {font-size: medium}
