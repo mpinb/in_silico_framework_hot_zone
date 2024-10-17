@@ -32,11 +32,11 @@ class Cell(object):
     Attributes: 
         hoc_path (str): Path to the hoc file containing the cell morphology.
         id (str | int, optional): ID of the cell (often unused).
-        soma (:py:class:`single_cell_parser.cell.PySection`): The soma section of the cell.
+        soma (:py:class:`~single_cell_parser.cell.PySection`): The soma section of the cell.
         tree (neuron.h.SectionList): NEURON SectionList containing all sections of the cell.
         branches (dict): maps the section ID (str) of the root section of each dendritic subtree to its corresponding section list (neuron.h.SectionList).
-        structures (dict): All sections, aggregated by label (e.g. Dendrite, ApicalDendrite, ApicalTuft, Myelin...). Keys are labels (str), values are lists of :py:class:`PySection`s.
-        sections (list): List of all :py:class:`PySection`s. sections[0] is the soma. Each section contains recorded data (if any was recorded, e.g. membrane voltage): a 2D array where axis 0 is segment number, and axis 1 is time.
+        structures (dict): All sections, aggregated by label (e.g. Dendrite, ApicalDendrite, ApicalTuft, Myelin...). Keys are labels (str), values are lists of :py:class:`~single_cell_parser.cell.PySection`s.
+        sections (list): List of all :py:class:`~single_cell_parser.cell.PySection`s. sections[0] is the soma. Each section contains recorded data (if any was recorded, e.g. membrane voltage): a 2D array where axis 0 is segment number, and axis 1 is time.
         synapses (dict): a dictionary of lists of :py:class:`single_cell_parser.synapse.Synapse` objects
         E (float): Default resting membrane potential. Defaults to -70.0
         changeSynParamDict (dict): dictionary of network parameter sets with keys corresponding to time points. Allows automatic update of parameter sets according to their relative timing.
@@ -1045,14 +1045,14 @@ class SynParameterChanger():
     
     Attributes:
         cell (:py:class:`~single_cell_parser.cell.Cell`): The cell object.
-        synParam (dict): The new :ref:`network_parameters_format` as a dictionary or :py:class:`sumatra.NTParameterSet`.
+        synParam (dict): The new :ref:`network_parameters_format` as a dictionary or :py:class:`~sumatra.NTParameterSet`.
         tEvent (float): Time at which the synapse parameters should change.
     """
     def __init__(self, cell, synParam, t):
         """
         Args:
             cell (:py:class:`~single_cell_parser.cell.Cell`): The cell object.
-            synParam (dict): The new :ref:`network_parameters_format` as a dictionary or :py:class:`sumatra.NTParameterSet`.
+            synParam (dict): The new :ref:`network_parameters_format` as a dictionary or :py:class:`~sumatra.NTParameterSet`.
             t (float): Time at which the synapse parameters should change.
         """
         self.cell = cell

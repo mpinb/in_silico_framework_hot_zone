@@ -52,6 +52,10 @@ class Evaluator:
             
     An example set up can be found in :py:meth:`~biophysics_fitting.hay_complete_default_setup.get_Evaluator`.
     
+    Attributes:
+        setup (:py:class:`~biophysics_fitting.evaluator.Evaluator_Setup`): 
+            A Evaluator_Setup object that keeps track of the evaluation functions.
+    
     Example: 
         
         >>> def examplary_evaluate_fun(**kwargs):

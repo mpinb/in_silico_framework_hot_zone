@@ -52,20 +52,20 @@ class NetworkMapper:
     Attributes:
         cells (dict): dictionary holding all presynaptic cells ordered by cell type.
         connected_cells (dict): dictionary holding indices of all active presynaptic cells ordered by cell type.
-        postCell (:py:class:`single_cell_parser.cell.Cell`): reference to postsynaptic (multi-compartment) cell model.
-        nwParam (:py:class:`sumatra.parameters.NTParameterSet`): network parameter set (see :ref:`network_parameters_format` for more info).
-        nwParam (:py:class:`sumatra.parameters.NTParameterSet`): network parameter set (see :ref:`network_parameters_format` for more info).
-        simParam (:py:class:`sumatra.parameters.NTParameterSet`): simulation parameter set.
+        postCell (:py:class:`~single_cell_parser.cell.Cell`): reference to postsynaptic (multi-compartment) cell model.
+        nwParam (:py:class:`~sumatra.parameters.NTParameterSet`): network parameter set (see :ref:`network_parameters_format` for more info).
+        nwParam (:py:class:`~sumatra.parameters.NTParameterSet`): network parameter set (see :ref:`network_parameters_format` for more info).
+        simParam (:py:class:`~sumatra.parameters.NTParameterSet`): simulation parameter set.
     '''
 
     def __init__(self, postCell, nwParam, simParam=None):
         '''Initialize NetworkMapper.      
 
         Args:
-            postCell (:py:class:`single_cell_parser.cell.Cell`): The cell to map synapses onto.
-            nwParam (:py:class:`sumatra.parameters.NTParameterSet`): The network parameter set (see :ref:`network_parameters_format` for more info).
-            nwParam (:py:class:`sumatra.parameters.NTParameterSet`): The network parameter set (see :ref:`network_parameters_format` for more info).
-            simParam (:py:class:`sumatra.parameters.NTParameterSet`): The simulation parameter set. Default: None.
+            postCell (:py:class:`~single_cell_parser.cell.Cell`): The cell to map synapses onto.
+            nwParam (:py:class:`~sumatra.parameters.NTParameterSet`): The network parameter set (see :ref:`network_parameters_format` for more info).
+            nwParam (:py:class:`~sumatra.parameters.NTParameterSet`): The network parameter set (see :ref:`network_parameters_format` for more info).
+            simParam (:py:class:`~sumatra.parameters.NTParameterSet`): The simulation parameter set. Default: None.
         '''
         self.cells = {}
         self.connected_cells = {}
@@ -84,7 +84,7 @@ class NetworkMapper:
 
         1. Assign anatomical synapses to postsynaptic cell using :py:meth:`~_assign_anatomical_synapses`.
         2. Create presynaptic cells for these synapses using :py:meth:`~_create_presyn_cells` (multiple synapses can originate from the same presynaptic cell).
-        3. Generate activation patters for each presynaptic cell, depending on whether they are a :py:class:`PointCell` or :py:class:`SpikeTrain` using :py:meth:`_activate_presyn_cells`.
+        3. Generate activation patters for each presynaptic cell, depending on whether they are a :py:class:`~single_cell_parser.cell.PointCell` or :py:class:`~single_cell_parser.cell.SpikeTrain` using :py:meth:`_activate_presyn_cells`.
         4. Connect the presynaptic cells to the anatomical synapses using :py:meth:`~_connect_functional_synapses`.
         5. Connect to spike train sources using :py:meth:`_connect_spike_trains`.
 
@@ -125,7 +125,7 @@ class NetworkMapper:
 
         1. Assigns anatomical synapses to postsynaptic cell using :py:meth:`~_assign_anatomical_synapses`.
         2. Creates presynaptic cells for these synapses using :py:meth:`~_create_presyn_cells` (multiple synapses can originate from the same presynaptic cell).
-        3. Generates activation patters for each presynaptic cell, depending on whether they are a :py:class:`PointCell` or :py:class:`SpikeTrain` using :py:meth:`_activate_presyn_cells`.
+        3. Generates activation patters for each presynaptic cell, depending on whether they are a :py:class:`~single_cell_parser.cell.PointCell` or :py:class:`~single_cell_parser.cell.SpikeTrain` using :py:meth:`_activate_presyn_cells`.
         4. Connects the presynaptic cells to the anatomical synapses using :py:meth:`~_map_complete_anatomical_realization`.
         5. Applies network modify functions (if any) using :py:meth:`_apply_network_modification_functions`.
 
@@ -402,8 +402,8 @@ class NetworkMapper:
         The synapses should already be created in :py:meth:`_assign_anatomical_synapses` (step 1).
         
         Network parameters contains information on how many presynaptic cells per synapse type there are.
-        This method simply creates these cells as :py:class:`PointCell`s, but provides no further configuration
-        to these :py:class:`PointCell`s.
+        This method simply creates these cells as :py:class:`~single_cell_parser.cell.PointCell`s, but provides no further configuration
+        to these :py:class:`~single_cell_parser.cell.PointCell`s.
         '''
         # Check if new cells need to be constructed
         createCells = False
@@ -462,8 +462,8 @@ class NetworkMapper:
         
         Depending on the cell type of a synapse, this method creates activation patterns for each presynaptic cell:
 
-        1. For :py:class:`PointCell`: see :py:meth:`_create_pointcell_activities`
-        2. For :py:class:`SpikeTrain`: see :py:meth:`_create_spiketrain_activities`
+        1. For :py:class:`~single_cell_parser.cell.PointCell`: see :py:meth:`_create_pointcell_activities`
+        2. For :py:class:`~single_cell_parser.cell.SpikeTrain`: see :py:meth:`_create_spiketrain_activities`
         '''
         for synType in list(self.nwParam.keys()):  
             # contains list of celltypes in network: 
@@ -638,7 +638,7 @@ class NetworkMapper:
 
         Args:
             preCellType (str): The presynaptic cell type.
-            networkParameters (:py:class:`sumatra.parameters.NTParameterSet`): The network parameters for the presynaptic cell type.
+            networkParameters (:py:class:`~sumatra.parameters.NTParameterSet`): The network parameters for the presynaptic cell type.
 
         Returns:
             None
@@ -852,263 +852,30 @@ class NetworkMapper:
         of this method
         '''
         synapses = self.postCell.synapses
-        # previousConnections = {}
-        # previousAnatomicalID = None
-        total_connected_cells = 0
-        total_active_syns = 0
-
         for synType in list(self.nwParam.keys()):
-            # ------------------ 0. Setup
-            connected_cells_synType = set()
-            active_syn = 0
-            
-            if synType == 'network_modify_functions':  # not a synapse type
-                continue
-            if full_network:
-                synapse_counter = 0 # Sequential counter
-            
-            # ------------------ 1. Load .con file for current synapse type
-            funcMapName = self.nwParam[synType].synapses.connectionFile
-            if funcMapName != previousConnectionFile:
-                logger.info('loading anatomical connectivity file {:s}'.format(funcMapName))
-                celltype_synlocation_dict, anatomicalID = reader.read_functional_realization_map(funcMapName)
-                previousConnectionFile = funcMapName
-            else:
-                logger.info('anatomical connectivity file already loaded')
-                # celltype_synlocation_dict, anatomicalID = previousConnections, previousAnatomicalID
-            
-            anatomicalRealizationName = self.nwParam[synType].synapses.distributionFile.split('/')[-1]
-            # if anatomicalID != anatomicalRealizationName:
-                # errstr = 'Functional mapping %s does not correspond to anatomical realization %s' % (anatomicalID, anatomicalRealizationName)
-                # raise RuntimeError(errstr)
-            
-            # ------------------ 2. Connect synapses
-            logger.info('setting up functional connectivity for cell type %s'.format(synType))
-            try:
-                functional_map = celltype_synlocation_dict[synType]
-                logger.info('including {}'.format(synType))
-            except KeyError:  
-                # there are celltypes in the network param file that aren't in the con file
-                logger.info('skipping {}, which occurs in network parameters, but not confile'.format(synType))
-                continue
-            
-            log_cell_count(self.nwParam, self.cells)
-            
-            for con in functional_map:
-                cellType, cellID, synID = con
-                if cellType != synType:
-                    raise RuntimeError(
-                        'Functional map cell type %s does not correspond to synapse type %s' % (cellType, synType))
-
-                if not full_network:
-                    preSynCell = self.cells[synType][cellID]
-                    connected_cells_synType.add(cellID)
-                    syn = synapses[synType][synID]
-                else:
-                    connected_cells_synType.add(cellID)
-                    # Consecutive cell indices
-                    cell_index = len(connected_cells_synType) - 1
-                    preSynCell = self.cells[synType][cell_index]
-                    syn = synapses[synType][synapse_counter]
-                    synapse_counter += 1
-
-                # if cellType not in visTest.keys():
-                #      visTest[cellType] = []
-                #  visTest[cellType].append((cellType, cellID, synID))
-
-                synParameters = self.nwParam[synType].synapses
-                if weights:
-                    syn.weight = weights[synType][synID]
-                else:
-                    for recepStr in list(synParameters.receptors.keys()):
-                        receptor = synParameters.receptors[recepStr]
-                        self._assign_synapse_weights(receptor, recepStr, syn)
-                if preSynCell.is_active():
-                    if not syn.pruned:
-                        activate_functional_synapse(syn, self.postCell,preSynCell, synParameters)
-                    if syn.is_active():
-                        active_syn += 1
-                    preSynCell._add_synapse_pointer(syn)
-            self.connected_cells[synType] = connected_cells_synType
-
-            # previousConnections = celltype_synlocation_dict
-            # previousAnatomicalID = anatomicalID
-            total_connected_cells += len(connected_cells_synType)
-            total_active_syns += active_syn
-            logger.info('    connected cells: {:d}'.format(len(connected_cells_synType)))
-            logger.info('    active {:s} synapses: {:d}'.format(
-                synType, active_syn))
-        logger.info('---------------------------')
-        logger.info('total connected cells: {:d}'.format(total_connected_cells))
-        logger.info('total active synapses: {:d}'.format(total_active_syns))
-        logger.info('---------------------------')
-
-    def _assign_synapse_weights(self, receptor, recepStr, syn):
-        """Assign synapse weights according to distribution specified in network parameters.
-        
-        Args:
-            receptor (dict): Receptor parameters from network parameter file.
-            recepStr (str): Receptor name.
-            syn (Synapse): Synapse object.
-            
-        """
-        if syn.weight is None:
-            syn.weight = {}
-        if recepStr not in syn.weight:
-            syn.weight[recepStr] = []
-        if "weightDistribution" in receptor:
-            if receptor["weightDistribution"] == "lognormal":
-                if isinstance(receptor.weight, Sequence):
-                    for i in range(len(receptor.weight)):
-                        mean = receptor.weight[i]
-                        std = mean**2
-                        sigma = np.sqrt(np.log(1 + std**2 / mean**2))
-                        mu = np.log(mean) - 0.5 * sigma**2
-                        gmax = np.random.lognormal(mu, sigma)
-                        syn.weight[recepStr].append(gmax)
-                        #logger.info '    weight[%d] = %.2f' % (i, syn.weight[recepStr][-1])
-                else:
-                    mean = receptor.weight
-                    std = mean**2
-                    sigma = np.sqrt(np.log(1 + std**2 / mean**2))
-                    mu = np.log(mean) - 0.5 * sigma**2
-                    gmax = np.random.lognormal(mu, sigma)
-                    syn.weight[recepStr].append(gmax)
-                    #logger.info '    weight = %.2f' % (syn.weight[recepStr][-1])
-            else:
-                distStr = receptor["weightDistribution"]
-                errstr = 'Synaptic weight distribution %s not implemented yet!' % distStr
-                raise NotImplementedError(errstr)
-        else:
-            if isinstance(receptor.weight, Sequence):
-                for i in range(len(receptor.weight)):
-                    syn.weight[recepStr].append(receptor.weight[i])
-            else:
-                syn.weight[recepStr].append(receptor.weight)
-                
-    
-    # Deprecated methods -------------------------------------
-    
-    def create_network(self, synWeightName=None, change=None):
-        '''Create a network embedding with activity based on ``convergence`` in the network parameters. 
-        
-        .. deprecated:: 0.1.0
-            Deprecated in favor of a full anatomical reconstruction. 
-            Please use :py:meth:`create_saved_network2` instead.
-        
-        Here, these synapses can then be connected to a multi-compartmental model and activated.
-
-        Steps:
-
-        1. Assign anatomical synapses to postsynaptic cell using :py:meth:`~_assign_anatomical_synapses`.
-        2. Create presynaptic cells for these synapses using :py:meth:`~_create_presyn_cells` (multiple synapses can originate from the same presynaptic cell).
-        3. Generate activation patters for each presynaptic cell, depending on whether they are a :py:class:`PointCell` or :py:class:`SpikeTrain` using :py:meth:`_activate_presyn_cells`.
-        4. Connect the presynaptic cells to the anatomical synapses using :py:meth:`~_connect_functional_synapses`.
-        5. Connect to spike train sources using :py:meth:`_connect_spike_trains`.
-
-        Args:
-            synWeightName (str): Name of the file containing the synapse weights. Default: None.
-            change (float): Change in presynaptic release probability. Default: None.
-        '''
-        logger.info('***************************')
-        logger.info('creating network')
-        logger.info('***************************')
-        self._assign_anatomical_synapses()
-        self._create_presyn_cells()
-        self._activate_presyn_cells()
-        self._connect_functional_synapses()
-        spikeTrainWeights = None
-        if synWeightName:
-            spikeTrainWeights, locations = reader.read_synapse_weight_file(
-                synWeightName)
-        # awkward temporary implementation of prelease change during simulation time window
-        self._connect_spike_trains(spikeTrainWeights, change)
-        logger.info('***************************')
-        logger.info('network complete!')
-        logger.info('***************************')
-
-    def create_saved_network(self, synWeightName=None):
-        '''Recreate a network embedding with activity form an existing anatomical reconstruction.
-
-        .. deprecated:: 0.1.0
-           Please use :py:meth:`create_saved_network2` instead.
-
-        Commonly used to assign synapse locations that have been previously generated
-        with :py:mod:`~singlecell_input_mapper.singlecell_input_mapper.network_embedding`.
-
-        Here, these synapses can then be connected to a multi-compartmental model and activated.
-        
-        Steps:
-
-        1. Assign anatomical synapses to postsynaptic cell using :py:meth:`~_assign_anatomical_synapses`.
-        2. Create presynaptic cells for these synapses using :py:meth:`~_create_presyn_cells` (multiple synapses can originate from the same presynaptic cell).
-        3. Generate activation patters for each presynaptic cell, depending on whether they are a :py:class:`PointCell` or :py:class:`SpikeTrain` using :py:meth:`_activate_presyn_cells`.
-        4. Connect the presynaptic cells to the anatomical synapses using :py:meth:`~_map_functional_realization`.
-        5. Connect to spike train sources using :py:meth:`_connect_spike_trains`.
-
-        Args:
-            synWeightName (str): Name of the file containing the synapse weights. Default: None.
-            full_network (bool): 
-                If True, all synapses are created, even if they were not active. 
-                If False, only recreates the synapses that were active, and re-assigns their IDs to be sequential.
-                Default: False.
-        '''
-        logger.info('***************************')
-        logger.info('creating saved network')
-        logger.info('***************************')
-        self._assign_anatomical_synapses()
-        self._create_presyn_cells()
-        self._activate_presyn_cells()
-        weights = None
-        if synWeightName:
-            weights, locations = reader.read_synapse_weight_file(synWeightName)
-        # These are different from the ones in create_saved_network2
-        self._map_functional_realization(weights)
-        self._connect_spike_trains(weights)
-        logger.info('***************************')
-        logger.info('network complete!')
-        logger.info('***************************')
-
-    def _connect_functional_synapses(self):
-        '''Connect synapses to active presynaptic cells according to the ``convergence`` network parameter.
-         
-        .. deprecated:: 0.1
-           Deprecated in favor of a full anatomical reconstruction.
-           To recreate network embeddings from :py:mod:`singlecell_input_mapper.singlecell_input_mapper`,
-           use :py:meth:`~create_saved_network_2` instead, which connects synapses using :py:meth:`~_map_complete_anatomical_realization` instead
-           of this method
-        
-        Randomly assigns synapses to presynaptic spike generators (PointCells) based on the ``convergence`` parameter.
-        If convergence is e.g. ``0.6``, then each cell has a 60% chance of being connected to the postsynaptic cell.
-
-        Used in :py:meth:`~create_network`. 
-        '''
-        synapses = self.postCell.synapses
-        
-        for synType in list(self.nwParam.keys()):
-            activeSyn = 0
-            connectedCells = set()
-            nrPreCells = len(self.cells[synType])
-            convergence = self.nwParam[synType].convergence
-            
             if synType == 'network_modify_functions':  # not a synapse type
                 continue
             if not self.nwParam[synType].celltype == 'pointcell':
                 continue
-            logger.info('setting up functional connectivity for cell type {:s}'.format(synType))
-            
-            connected = []  # array with indices of presynaptic cells connected to postsynaptic cell
+            logger.info(
+                'setting up functional connectivity for cell type {:s}'.format(
+                    synType))
+            activeSyn = 0
+            connectedCells = set()
+            nrPreCells = len(self.cells[synType])
+            convergence = self.nwParam[synType].convergence
+            # array with indices of presynaptic cells connected to postsynaptic cell
+            connected = []
             # if there are synapses there have to be presynaptic neurons...
             while not len(connected):
-                # array with indices of presynaptic cell assigned to each synapse
-                # each connected presynaptic cell has at least 1 synapse by definition
-                connected, = np.where(np.random.uniform(size=nrPreCells) < convergence)
-                
+                connected, = np.where(
+                    np.random.uniform(size=nrPreCells) < convergence)
+            # array with indices of presynaptic cell assigned to each synapse
+            # each connected presynaptic cell has at least 1 synapse by definition
             if len(synapses[synType]) < len(connected):
                 # this should not be the anatomical reality, but for completeness...
-                connectionIndex = np.random.randint(
-                    len(connected),
-                    size=len(synapses[synType]))
+                connectionIndex = np.random.randint(len(connected),
+                                                    size=len(synapses[synType]))
             else:
                 connectionIndex = list(np.random.permutation(len(connected)))
                 for i in range(len(connected), len(synapses[synType])):
@@ -1156,27 +923,26 @@ class NetworkMapper:
         functionalMap = {}
         synapses = self.postCell.synapses
         for synType in list(self.nwParam.keys()):
-            nrPreCells = len(self.cells[synType])
-            convergence = self.nwParam[synType].convergence
-            
             if synType == 'network_modify_functions':  # not a synapse type
                 continue
             if not self.nwParam[synType].celltype == 'pointcell':
                 continue
-            logger.info('creating functional connectivity map for cell type {:s}'.format(synType))
-            
-            connected = []  # array with indices of presynaptic cells connected to postsynaptic cell
+            logger.info('creating functional connectivity map for cell type {:s}'.
+                     format(synType))
+            nrPreCells = len(self.cells[synType])
+            convergence = self.nwParam[synType].convergence
+            # array with indices of presynaptic cells connected to postsynaptic cell
+            connected = []
             # if there are synapses there have to be presynaptic neurons...
             while not len(connected):
-                # array with indices of presynaptic cell assigned to each synapse
-                # each connected presynaptic cell has at least 1 synapse by definition
-                connected, = np.where(np.random.uniform(size=nrPreCells) < convergence)
-                
+                connected, = np.where(
+                    np.random.uniform(size=nrPreCells) < convergence)
+            # array with indices of presynaptic cell assigned to each synapse
+            # each connected presynaptic cell has at least 1 synapse by definition
             if len(synapses[synType]) < len(connected):
                 # this should not be the anatomical reality, but for completeness...
-                connectionIndex = np.random.randint(
-                    len(connected),
-                    size=len(synapses[synType]))
+                connectionIndex = np.random.randint(len(connected),
+                                                    size=len(synapses[synType]))
             else:
                 connectionIndex = list(np.random.permutation(len(connected)))
                 for i in range(len(connected), len(synapses[synType])):

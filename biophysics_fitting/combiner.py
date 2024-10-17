@@ -1,5 +1,5 @@
 '''
-This module provides the :py:class:`Combiner` class and associated classes and functions.
+This module provides the :py:class:`~biophysics_fitting.combiner.Combiner` class and associated classes and functions.
 The :py:class:`~biophysics_fitting.combiner.Combiner` class can be used to combine features computed by an :py:class:`~biophysics_fitting.evaluator.Evaluator` object.
 '''
 
@@ -9,7 +9,7 @@ __date__ = '2018-11-08'
 
 class Combiner_Setup:
     """
-    Setup class for the :py:class:`Combiner` class.
+    Setup class for the :py:class:`~biophysics_fitting.combiner.Combiner` class.
     Keeps track of feature combinations and their names.
     """
     def __init__(self):
@@ -43,6 +43,9 @@ class Combiner:
     Each combination is specified not only by a name of the combination, 
     but also a list of names of the features that go into that combination. 
     Each list of features is then combined by calling combinefun with that list.
+    
+    Attributes:
+        setup (:py:class:`~biophysics_fitting.combiner.Combiner_Setup`): A Combiner_Setup object that keeps track of the feature combinations.
     
     Example:
     
