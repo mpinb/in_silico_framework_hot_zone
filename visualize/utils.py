@@ -372,16 +372,16 @@ def draw_arrow(
         highlight_x=None,
         highlight_arrow_kwargs=None,
         arrow_size=50):
-    """Highlight a morphology section with an :class:`Arrow3D`.
+    """Highlight a morphology section with an :py:class:`Arrow3D`.
 
-    This method is used by :class:`CellMorphologyVisualizer` to annotate morphology sections.
+    This method is used by :py:class:`CellMorphologyVisualizer` to annotate morphology sections.
     
     Args:
         morphology (pd.DataFrame): The morphology dataframe containing the coordinates of the sections.
         ax (matplotlib.axes.Axes): The matplotlib axes object to draw the arrow on.
         highlight_section (int, optional): The section index to highlight. If None, no section is highlighted. Default is None.
         highlight_x (float, optional): The x-coordinate within the section to place the arrow. If None, the arrow is placed at the section's midpoint. Default is None.
-        highlight_arrow_kwargs (dict, optional): Additional keyword arguments to pass to the :class:`Arrow3D` constructor. Default is None.
+        highlight_arrow_kwargs (dict, optional): Additional keyword arguments to pass to the :py:class:`Arrow3D` constructor. Default is None.
         arrow_size (int, optional): The size of the arrow. Default is 50.
     
     Returns:

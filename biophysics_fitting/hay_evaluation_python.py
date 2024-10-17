@@ -1,13 +1,13 @@
 '''
 A Python translation of the evaluation functions used in :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011`.
 This module provides methods to run Hay's stimulus protocols, and evaluate the resulting voltage traces.
-
-Created on Nov 08, 2018
-
-@author: abast
 '''
 
 import numpy as np
+from .ephys import *
+
+__author__ = 'Arco Bast'
+__date__ = '2018-11-08'
 
 # moved to the bottom to resolve circular import
 # from .hay_complete_default_setup import get_hay_problem_description, get_hay_objective_names, get_hay_params_pdf
@@ -24,8 +24,6 @@ objectives_BAC = [
     'BAC_caSpike_width', 'BAC_spikecount', 'bAP_APheight', 'bAP_APwidth',
     'bAP_att2', 'bAP_att3', 'bAP_spikecount'
 ]  # objectives for the BAC and bAP protocols
-
-from .ephys import *
 
 
 def normalize(raw, mean, std):

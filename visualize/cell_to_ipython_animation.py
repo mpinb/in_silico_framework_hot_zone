@@ -111,7 +111,7 @@ def get_lines(cell, n, range_vars='Vm'):
     This is used to generate videos of membrane voltage vs soma distance.
     
     Args:
-        cell (:class:`single_cell_parser.cell.Cell`): cell object
+        cell (:py:class:`single_cell_parser.cell.Cell`): cell object
         n (int): index of the time vector
         range_vars (str): range variable to plot
         

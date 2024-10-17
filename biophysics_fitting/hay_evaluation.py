@@ -1,17 +1,13 @@
 '''
 This module provides methods to run Hay's stimulus protocols, and evaluate the resulting voltage traces.
-
-Created on Nov 08, 2018
-
-@author: abast
 '''
+
 
 import os
 from collections import defaultdict
 import numpy as np
 import pandas as pd
 import neuron
-
 h = neuron.h
 import warnings
 import sys
@@ -22,6 +18,9 @@ from .utils import StreamToLogger
 logger = logging.getLogger("ISF").getChild(__name__)
 # moved to the bottom to resolve circular import
 # from .hay_complete_default_setup import get_hay_problem_description, get_hay_objective_names, get_hay_params_pdf
+
+__author__ = 'Arco Bast'
+__date__ = '2018-11-08'
 
 neuron_basedir = os.path.join(os.path.dirname(__file__), 'MOEA_EH_minimal')
 

@@ -229,7 +229,7 @@ def write_vtk_skeleton_file(
     Args:
         lookup_table (pd.DataFrame): 
             Lookup table for the neuron morphology.
-            Can be accessed from :class:`visualize.cell_morphology_visualizer.CellMorphologyVisualizer`.
+            Can be accessed from :py:class:`visualize.cell_morphology_visualizer.CellMorphologyVisualizer`.
         out_name (str): Name of the output file.
         out_dir (str): Directory to save the file to.
         point_scalar_data (dict, optional): Dictionary containing scalar data for each point. Defaults to None.

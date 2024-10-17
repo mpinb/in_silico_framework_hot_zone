@@ -5,9 +5,9 @@ __date__ = "2018-11-08"
 
 
 class Evaluator_Setup:
-    '''Setup for an :class:`~Evaluator` object
+    '''Setup for an :py:class:`~Evaluator` object
     
-    This class is an attribute of the :class:`~Evaluator` class, and should only veer be accessed via the :class:`~Evaluator` object.
+    This class is an attribute of the :py:class:`~Evaluator` class, and should only veer be accessed via the :py:class:`~Evaluator` object.
     It takes care of applying evaluation functions to voltage traces, and finalizing the results.
     
     Attributes:
@@ -52,6 +52,10 @@ class Evaluator:
             
     An example set up can be found in :py:meth:`~biophysics_fitting.hay_complete_default_setup.get_Evaluator`.
     
+    Attributes:
+        setup (:py:class:`~biophysics_fitting.evaluator.Evaluator_Setup`): 
+            A Evaluator_Setup object that keeps track of the evaluation functions.
+    
     Example: 
         
         >>> def examplary_evaluate_fun(**kwargs):
@@ -71,7 +75,7 @@ class Evaluator:
         >>> e.setup.finalize_funs.append(finalize_fun)  # corresponds to step (2)
 
     Note: 
-        Combining features to reduce the number of objectives should be done with the :class:`~biophysics_fitting.combiner.Combiner` object.        
+        Combining features to reduce the number of objectives should be done with the :py:class:`~biophysics_fitting.combiner.Combiner` object.        
     '''
     def __init__(self):
         #self.objectives = objectives

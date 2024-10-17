@@ -2,10 +2,6 @@
 This module provides a complete setup for the Hay stimulus protocol on a Layer 5 Pyramidal Tract (L5PT) neuron.
 While :py:mod:`~biophysics_fitting.hay_evaluation` is a direct Python translation of :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011`,
 this module has been adapted to allow for more flexibility and integration with ISF.
-
-Created on Nov 08, 2018
-
-@author: abast
 '''
 from __future__ import absolute_import
 
@@ -29,6 +25,9 @@ from .evaluator import Evaluator
 from toolz.dicttoolz import merge
 
 from .combiner import Combiner
+
+__author__ = 'Arco Bast'
+__date__ = '2018-11-08'
 
 ################################################
 # Simulator
@@ -75,7 +74,7 @@ def record_bAP(cell, recSite1=None, recSite2=None):
     Uses the convenience methods :py:meth:`~biophysics_fitting.utils.vmSoma` and :py:meth:`~biophysics_fitting.utils.vmApical`.
     
     Args:
-        cell (:class:`~single_cell_parser.cell.Cell`): The cell object.
+        cell (:py:class:`~single_cell_parser.cell.Cell`): The cell object.
         recSite1 (float): The distance (um) from the soma to the first recording site.
         recSite2 (float): The distance (um) from the soma to the second recording site.
         
@@ -105,7 +104,7 @@ def record_BAC(cell, recSite=None):
     Uses the convenience methods :py:meth:`~biophysics_fitting.utils.vmSoma` and :py:meth:`~biophysics_fitting.utils.vmApical`.
     
     Args:
-        cell (:class:`~single_cell_parser.cell.Cell`): The cell object.
+        cell (:py:class:`~single_cell_parser.cell.Cell`): The cell object.
         recSite (float): The distance (um) from the soma to the apical recording site.
         
     Returns:
@@ -128,7 +127,7 @@ def record_Step(cell):
     Uses the convenience method :py:meth:`~biophysics_fitting.utils.vmSoma`.
     
     Args:
-        cell (:class:`~single_cell_parser.cell.Cell`): The cell object.
+        cell (:py:class:`~single_cell_parser.cell.Cell`): The cell object.
         
     Returns:
         dict: A dictionary with the voltage traces.
@@ -163,7 +162,7 @@ def get_Simulator(fixed_params, step=False):
         step (bool): Whether to include the step currents in the setup.
         
     Returns:
-        :class:`~biophysics_fitting.simulator.Simulator`: The simulator object, set up for the :cite;t:`Hay_Hill_Schuermann_Markram_Segev_2011` stimulus protocol for a specific L5PT.
+        :py:class:`~biophysics_fitting.simulator.Simulator`: The simulator object, set up for the :cite;t:`Hay_Hill_Schuermann_Markram_Segev_2011` stimulus protocol for a specific L5PT.
         
     
     Note:
@@ -303,7 +302,7 @@ def get_Evaluator(step=False, interpolate_voltage_trace=False):
         interpolate_voltage_trace (bool): Whether to interpolate the voltage traces.
         
     Returns:
-        :class:`~biophysics_fitting.evaluator.Evaluator`: The evaluator object, set up for the Hay :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011` stimulus protocol.
+        :py:class:`~biophysics_fitting.evaluator.Evaluator`: The evaluator object, set up for the Hay :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011` stimulus protocol.
     """
     e = Evaluator()
 
@@ -348,7 +347,7 @@ def get_Combiner(step=False, include_DI3=False):
         include_DI3 (bool): Whether to include the DI3 measurement in the setup.
         
     Returns:
-        :class:`~biophysics_fitting.combiner.Combiner`: The combiner object, set up for the :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011` stimulus protocol.
+        :py:class:`~biophysics_fitting.combiner.Combiner`: The combiner object, set up for the :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011` stimulus protocol.
     """
     #up to 20220325, DI3 has not been included and was not in the fit_features file.
     c = Combiner()

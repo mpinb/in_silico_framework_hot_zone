@@ -22,12 +22,12 @@ class SimControl(object):
     Can still be useful for low-level control with NEURON.
 
     Attributes:
-            cell (:class:`neuron.h.Section`): The cell to simulate.
+            cell (:py:class:`neuron.h.Section`): The cell to simulate.
             simTime (float): Simulation time [ms]. Default: 5 [ms]
             dt (float): Time step [ms]. Default: 0.001 [ms]
             T (float): Temperature [C]. Default
             goAlready (bool): Simulation status
-            h (:class:`neuron.h`): NEURON interface
+            h (:py:class:`neuron.h`): NEURON interface
     
     Example:
 
@@ -41,7 +41,7 @@ class SimControl(object):
     def __init__(self, cell=None, sim_time=5, dt=0.001, T=37):
         '''
         Args:
-            cell (:class:`neuron.h.Section`): The cell to simulate.
+            cell (:py:class:`neuron.h.Section`): The cell to simulate.
             simTime (float): Simulation time (ms). Default: 5
             dt (float): Time step (ms). Default: 0.001
             T (float): Temperature (Celsius). Default: 37

@@ -1,44 +1,42 @@
 '''
 This module concerns itself with setting up a cell with biophysical details and simulation parameters.
 
-The :class:`Simulator_Setup` class is an inherent attribute of the :class:`Simulator` class, and should only be accessed as such.
+The :py:class:`~biophysics_fitting.simulator.Simulator_Setup` class is an inherent attribute of the :py:class:`~biophysics_fitting.simulator.Simulator` class, and should only be accessed as such.
 It takes care of equipping a cell with biophysical details, using convenient pd.Series objects as parameter vectors.
 
-The class :class:`Simulator` is used to transform a parameter vector into simulated voltage traces.
+The class :py:class:`~biophysics_fitting.simulator.Simulator` is used to transform a parameter vector into simulated voltage traces.
 It allows to apply a variety of stimuli to the cell and extract voltage traces.
 
 The results of this module can be used in conjunction with :py:mod:`~biophysics_fitting.evaluator` to iteratively run and evaluate simulations.
-
-Created on Nov 08, 2018
-
-@author: abast
 '''
 
 import single_cell_parser as scp
 from .parameters import param_selector
 import time
 import logging
-
 logger = logging.getLogger("ISF").getChild(__name__)
+
+__author__ = 'Arco Bast'
+__date__ = '2018-11-08'
 
 
 class Simulator_Setup:
     """Class for setting up cells with biophysical details.
     
-    This class is an inherent attribute of the :class:`Simulator` class, and should only be accessed as such.
+    This class is an inherent attribute of the :py:class:`~biophysics_fitting.simulator.Simulator` class, and should only be accessed as such.
     This class concerns with setting up a cell with biophysical details.
     
     Usually, a simulation contains fixed parameters, specific to the cell (e.g. the filename of the morphology)
     and/or stimulus protocol (e.g. recording sites). Such fixed parameters can be defined by adding
     :py:meth:`~biophysics_fitting.parameters.set_fixed_params` to :paramref:`param_modify_funs`. 
     A typical usecase is to use the fixed parameters to specify to soma distance for a voltage trace 
-    of the apical dendrite. Make sure that the :class:`Simulator` :paramref:`stim_run_fun` reads the 
-    parameter :paramref:`recSite` and sets up the stimulus accordingly (see :class:`Simulator`).
+    of the apical dendrite. Make sure that the :py:class:`~biophysics_fitting.simulator.Simulator` :paramref:`stim_run_fun` reads the 
+    parameter :paramref:`recSite` and sets up the stimulus accordingly (see :py:class:`~biophysics_fitting.simulator.Simulator`).
     
     Attributes:
-        cell_param_generator (callable): A function that generates a :class:`NTParameterSet` cell parameter object.
+        cell_param_generator (callable): A function that generates a :py:class:`~sumatra.parameters.NTParameterSet` cell parameter object.
         cell_param_modify_funs (list): list of functions that modify the cell parameters.
-        cell_generator (callable): A function that generates a :class:`~single_cell_parser.cell.Cell` object.
+        cell_generator (callable): A function that generates a :py:class:`~single_cell_parser.cell.Cell` object.
         cell_modify_funs (list): List of functions that modify the cell object.
         stim_setup_funs (list): List of functions that set up the stimulus.
         stim_run_funs (list): List of functions that each run a simulation.
@@ -201,7 +199,7 @@ class Simulator_Setup:
         '''Get the cell parameters as an NTParameterSet from the parameter vector.
         
         This can be used with :py:meth:`single_cell_parser.create_cell` to
-        create a :class:`~single_cell_parser.cell.Cell` object.
+        create a :py:class:`~single_cell_parser.cell.Cell` object.
         This is helpful for inspecting what parameters have effectively been used for the simulation.
         
         Args:
@@ -297,13 +295,16 @@ class Simulator:
     
     This is typically done in two steps:
     
-    1. Set up a cell with biophysics from a parameter vector. See :class:`Simulator_Setup`
+    1. Set up a cell with biophysics from a parameter vector. See :py:class:`~biophysics_fitting.simulator.Simulator_Setup`
     2. Apply a variety of stimuli to the cell and extract voltage traces.    
     
     An examplary specification of such a program flow can be found in the module :py:meth:`~biophysics_fitting.hay_complete_default_setup.get_Simulator`.
         
     The usual application is to specify biophysical parameters in a parameter vector and simulate
     current injection responses depending on these parameters.
+    
+    Attributes:
+        setup (:py:class:`~biophysics_fitting.simulator.Simulator_Setup`): A Simulator_Setup object that keeps track of the simulation setup.
     
     Example:
     
@@ -451,7 +452,7 @@ def run_fun(
         silent (bool): Whether to suppress output.
         
     Returns:
-        :class:`~single_cell_parser.cell.Cell`: The cell object, containing simulation data.
+        :py:class:`~single_cell_parser.cell.Cell`: The cell object, containing simulation data.
     '''
     from sumatra.parameters import NTParameterSet
     sim = {

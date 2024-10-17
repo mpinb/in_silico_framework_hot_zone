@@ -1,20 +1,19 @@
 '''
-This module gives API access to all subpackages and submodules in ISF::
+Interface gives API access to all subpackages and submodules in ISF:
 
-    - :py:mod:`biophysics_fitting`
-    - :py:mod:`data_base`
-    - :py:mod:`dendrite_thickness`
-    - :py:mod:`NEURON mechanisms`
-    - :py:mod:`simrun`
-    - :py:mod:`single_cell_parser`
-    - :py:mod:`singlecell_input_mapper`
-    - :py:mod:`spike_analysis`
-    - :py:mod:`visualize`
+- :py:mod:`biophysics_fitting`
+- :py:mod:`data_base`
+- :py:mod:`simrun`
+- :py:mod:`single_cell_parser`
+- :py:mod:`singlecell_input_mapper`
+- :py:mod:`spike_analysis`
+- :py:mod:`visualize`
 
 The recommended use is to import it in a jupyter notebook in the following manner::
 
     import Interface as I
     
+Take a look at the :ref:`tutorials` for examples on how to use the Interface API.
 '''
 import matplotlib
 

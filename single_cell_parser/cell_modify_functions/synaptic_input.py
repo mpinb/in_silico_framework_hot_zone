@@ -18,7 +18,7 @@ def synaptic_input(
     """Add synaptic activations to the cell from a network.
     
     Args:
-        cell (:class:`~single_cell_parser.cell.Cell`): The cell object.
+        cell (:py:class:`~single_cell_parser.cell.Cell`): The cell object.
         network_param (dict): The :ref:`network_parameters_format`.
         synapse_activation_file (str, optional): 
             The :ref:`syn_activation_format` file with existing synapse activations.
@@ -26,7 +26,7 @@ def synaptic_input(
         tStop (float): The simulation stop time.
 
     Returns:
-        :class:`~single_cell_parser.cell.Cell`: The cell with the synaptic input set up as the ``evokedNW`` attribute.
+        :py:class:`~single_cell_parser.cell.Cell`: The cell with the synaptic input set up as the ``evokedNW`` attribute.
     """
     net = scp.build_parameters(network_param)
     sim = scp.NTParameterSet({'tStop': tStop})

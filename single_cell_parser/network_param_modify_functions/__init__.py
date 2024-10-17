@@ -10,7 +10,7 @@ import barrel_cortex
 def change_ongoing_interval(n, factor=1, pop=None):
     '''Scales the ongoing frequency with a :paramref:`factor`.
 
-    Does so by scaling the time bins of the ongoing activity of the presynaptic :class:`~single_cell_parser.celltypes.Spiketrain` celltype.
+    Does so by scaling the time bins of the ongoing activity of the presynaptic :py:class:`~single_cell_parser.celltypes.Spiketrain` celltype.
     
     Args:
         n (sumatra.parameters.NTParameterSet | dict): The :ref:`network_parameters_format`.
@@ -18,7 +18,7 @@ def change_ongoing_interval(n, factor=1, pop=None):
         pop (list): The celltypes to apply the scaling to.
     
     Raises:
-        AssertionError: If the presynptic :class:`~single_cell_parser.celltypes.PointCell` is not of type ``spiketrain``.
+        AssertionError: If the presynptic :py:class:`~single_cell_parser.celltypes.PointCell` is not of type ``spiketrain``.
 
     Example:
         >>> celltype = 'L6cc_C2'  # layer 6 cortico-cortical cells in column C2
@@ -75,8 +75,8 @@ def change_glutamate_syn_weights(
         param (sumatra.parameters.NTParameterSet | dict): The :ref:`network_parameters_format`.
         g_optimal (pandas.core.series.Series | pandas.core.frame.DataFrame): 
             The optimal values for the glutamate synapse weights.
-            If a :class:`~pandas.core.series.Series` is given, the same value is applied to both the AMPA and NMDA receptors.
-            If a :class:`~pandas.core.frame.DataFrame` is given, the AMPA and NMDA receptors are set to the values in the 'AMPA' and 'NMDA' columns, respectively.
+            If a :py:class:`~pandas.core.series.Series` is given, the same value is applied to both the AMPA and NMDA receptors.
+            If a :py:class:`~pandas.core.frame.DataFrame` is given, the AMPA and NMDA receptors are set to the values in the 'AMPA' and 'NMDA' columns, respectively.
         pop (list): The celltypes to apply the scaling to.
         
     Raises:

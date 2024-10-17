@@ -14,47 +14,64 @@ import glob
 
 
 class RW:
+    """
+    Class to perform RW exploration from a seedpoint.
+    
+    Attributes:
+        df_seeds (pd.DataFrame): individual seed points as rows and the parameters as columns
+        param_ranges (pd.DataFrame): parameters as rows and has a ``min_`` and ``max_`` column denoting range of values this parameter may take
+        params_to_explore (list): list of parameters that should be explored. If None, all parameters are explored.
+        evaluation_function (callable): takes one argument (a new parameter vector), returns inside, evaluation:
+            - inside: boolean that indicates if the parameter vector is within experimental constraits
+                (i.e. results in acceptable physiology) or not.
+            - evaluation: dictionary that will be saved alongside the parameters. For example, this should contain
+                ephys features.
+        MAIN_DIRECTORY (str): output directory in which results are stored.
+        min_step_size (float): minimum step size for the random walk
+        max_step_size (float): maximum step size for the random walk
+        checkpoint_every (int): save the results every n iterations
+        checkpoint_by_time (float): time interval in minutes for checkpointing for using time-based checkpointing. If both
+            checkpoint_every and checkpoint_by_time are set, checkpointing will be done by time.
+        concat_every_n_save (int): number of checkpoints after which the pickle files are concatenated and cleaned
+        n_iterations (int): number of iterations to run the random walk
+        mode (str): Random walk mode. Options: (None, 'expand'). default: None
+            'expand': only propose new points that move further away from seedpoint
+        aim_params (dict): this param will make the exploration algorithm propose only new points such that a set of
+            parameters aims certain values during exploration.
+            Default: {}
+        stop_n_inside_with_aim_params (int): number of successful models / set of parameters inside space with aim_params
+            to find before stopping exploration
+        normalized_aim_params (pd.Series): normalized aim parameters
+    """
     def __init__(self, df_seeds = None, param_ranges = None, 
                 params_to_explore = None, evaluation_function = None, 
                 MAIN_DIRECTORY = None, min_step_size = 0, max_step_size = 0.02, 
                 checkpoint_every = 100, checkpoint_by_time = None, 
                 concat_every_n_save = 60, n_iterations = 60000,
                 mode = None, aim_params=None, stop_n_inside_with_aim_params = -1):
-        '''Class to perform RW exploration from a seedpoint.
-        
-        df_seeds: pandas dataframe which contains the individual seed points as rows and 
-            the parameters as columns
-            
-        param_ranges: pandas dataframe, which contains the parameters as rows and has a 
-            "min_" and "max_" column denoting range of values this parameter may take
-            
-        params_to_explore: list of parameters that should be explored. If None, all parameters are explored.
-            
-        evaluation_function: takes one argument (a new parameter vector), returns 
-            inside, evaluation. 
-                inside: boolean that indicates if the parameter vector is within experimental constraits
-                    (i.e. results in acceptable physiology) or not. 
-                evaluation: dictionary that will be saved alongside the parameters. For example, this should contain
-                    ephys features.
-                    
-        checkpoint_every: save the results every n iterations
-        
-        check_point_by_time: time interval in minutes for checkpointing for using time-based checkpointing. If both
-            checkpoint_every and checkpoint_by_time are set, checkpointing will be done by time.
-
-        concat_every_n_save: number of checkpoints after which the pickle files are concatenated and cleaned
-        
-        mode: None: default random walk. 
-            'expand': only propose new points that move further away from seedpoint
-                    
-        aim_params: this param will make the exploration algorithm propose only new points such that a set of 
-            parameters aims certain values during exploration.
-            Empty dictionary by default. Dictionary with the parameters as keys and their aim values as values.
-        
-        stop_n_inside_with_aim_params: number of successful models / set of parameters inside space with aim_params 
-            to find before stopping exploration
-                    
-        MAIN_DIRECTORY: output directory in which results are stored.'''
+        '''
+        Args:
+            df_seeds (pd.DataFrame): individual seed points as rows and the parameters as columns
+            param_ranges (pd.DataFrame): parameters as rows and has a ``min_`` and ``max_`` column denoting range of values this parameter may take
+            params_to_explore (list): list of parameters that should be explored. If None, all parameters are explored.
+            evaluation_function (callable): takes one argument (a new parameter vector), returns inside, evaluation:
+                    - inside: boolean that indicates if the parameter vector is within experimental constraits
+                        (i.e. results in acceptable physiology) or not. 
+                    - evaluation: dictionary that will be saved alongside the parameters. For example, this should contain
+                        ephys features.
+            checkpoint_every (int): save the results every n iterations
+            check_point_by_time (float): time interval in minutes for checkpointing for using time-based checkpointing. If both
+                checkpoint_every and checkpoint_by_time are set, checkpointing will be done by time.
+            concat_every_n_save (int): number of checkpoints after which the pickle files are concatenated and cleaned
+            mode (str): Random walk mode. Options: (None, 'expand'). default: None
+                'expand': only propose new points that move further away from seedpoint
+            aim_params (dict): this param will make the exploration algorithm propose only new points such that a set of 
+                parameters aims certain values during exploration.
+                Default: {}
+            stop_n_inside_with_aim_params (int): number of successful models / set of parameters inside space with aim_params 
+                to find before stopping exploration
+            MAIN_DIRECTORY (str): output directory in which results are stored.
+        '''
         self.df_seeds = df_seeds
         self.param_ranges = param_ranges
         self.MAIN_DIRECTORY = MAIN_DIRECTORY

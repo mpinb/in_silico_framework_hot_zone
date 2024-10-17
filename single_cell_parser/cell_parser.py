@@ -1,7 +1,5 @@
-'''Read and parse a :class:`single_cell_parser.cell.Cell` object from a NEURON :ref:`hoc_file_format` file.
+'''Read and parse a :py:class:`~single_cell_parser.cell.Cell` object from a NEURON :ref:`hoc_file_format` file.
 '''
-__author__ = 'Robert Egger, Arco Bast'
-__credits__ = ['Robert Egger', 'Arco Bast']
 
 import warnings, traceback
 from neuron import h
@@ -12,7 +10,7 @@ from .cell import PySection, Cell
 from . import cell_modify_functions
 import logging
 
-__author__  = "Robert Egger, Arco Bast"
+__author__  = ["Robert Egger", "Arco Bast"]
 __credits__ = ["Robert Egger", "Arco Bast"]
 __date__    = "2012-03-08"
 
@@ -26,8 +24,8 @@ class CellParser(object):
         hoc_path (str): Path to hoc file
         membraneParams (dict): Membrane parameters
         cell_modify_functions_applied (bool): 
-            Whether or not cell modify functions have already been applied. See: :py:meth:`single_cell_parser.cell_parser.CellParser.apply_cell_modify_functions`
-        cell (:class:`single_cell_parser.cell.Cell`): Cell object.
+            Whether or not cell modify functions have already been applied. See: :py:meth:`~single_cell_parser.cell_parser.CellParser.apply_cell_modify_functions`
+        cell (:py:class:`~single_cell_parser.cell.Cell`): Cell object.
     '''
     #    h = neuron.h
     cell = None
@@ -49,7 +47,7 @@ class CellParser(object):
         self.cell_modify_functions_applied = False
 
     def spatialgraph_to_cell(self, parameters, axon=False, scaleFunc=None):
-        '''Create a :class:`single_cell_parser.cell.Cell` object from an AMIRA spatial graph in :ref:`hoc_file_format` format.
+        '''Create a :py:class:`~single_cell_parser.cell.Cell` object from an AMIRA spatial graph in :ref:`hoc_file_format` format.
         
         Reads cell morphology from Amira hoc file and sets up PySections and Cell object.
         
@@ -272,7 +270,7 @@ class CellParser(object):
             RuntimeError: If cell is not set up.
             
         Returns:
-            :class:`single_cell_parser.cell.Cell`: Cell object.
+            :py:class:`~single_cell_parser.cell.Cell`: Cell object.
         '''
         if self.cell is None:
             raise RuntimeError('Trying to start simulation with empty morphology')

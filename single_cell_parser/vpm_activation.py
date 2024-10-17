@@ -1,6 +1,8 @@
 '''Runfile to test VPM activation of an L5tt cell.
 
 Used by the Oberlaender lab in MPINB, Bonn.
+
+:skip-doc:
 '''
 
 import neuron

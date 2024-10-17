@@ -16,19 +16,19 @@ class Cell(object):
     This class is specialized for use with :py:mod:`single_cell_input_mapper.single_cell_input_mapper.synapse_mapper`.
 
     Warning: 
-        While it contains similar methods, this is not the same class as :class:`single_cell_parser.cell.Cell`.
+        While it contains similar methods, this is not the same class as :py:class:`single_cell_parser.cell.Cell`.
         This class concerns itself with assigning synapses onto a cell morphology.
-        Contrary to :class:`single_cell_parser.cell.Cell`, it does not contain any biophysical details,
+        Contrary to :py:class:`single_cell_parser.cell.Cell`, it does not contain any biophysical details,
         or methods for setting up a NEURON hoc object. This class has no dependency on the 
         NEURON simulator :cite:`hines2001neuron`.
 
     Attributes:
         id (str): Unique identifier for the cell.
-        soma (:class:`~singlecell_input_mapper.singlecell_input_mapper.cell.PySection2`): The soma section.
+        soma (:py:class:`~singlecell_input_mapper.singlecell_input_mapper.cell.PySection2`): The soma section.
         structures (dict): Dictionary mapping section labels (e.g. "Soma", "Dendrite" ...) to a list of corresponding sections.
         sections (list): List of all sections.
         boundingBox (tuple): Bounding box around the cell.
-        synapses (dict): Dictionary mapping presynaptic cell types to a list of :class:`~singlecell_input_mapper.singlecell_input_mapper.cell.Synapse` objects.
+        synapses (dict): Dictionary mapping presynaptic cell types to a list of :py:class:`~singlecell_input_mapper.singlecell_input_mapper.cell.Synapse` objects.
 
     '''
 
@@ -44,7 +44,7 @@ class Cell(object):
         '''Calculate the path length to soma from location :paramref:`x` on section :paramref:`sec`
 
         Args:
-            sec (:class:`~singlecell_input_mapper.singlecell_input_mapper.cell.PySection2`): Section object.
+            sec (:py:class:`~singlecell_input_mapper.singlecell_input_mapper.cell.PySection2`): Section object.
             x (float): Relative position along the section (0-1).
 
         Returns:
@@ -94,7 +94,7 @@ class Cell(object):
         ptx,
         preType='Generic',
         postType='Generic'):
-        """Add a :class:`~singlecell_input_mapper.singlecell_input_mapper.cell.Synapse` to the cell.
+        """Add a :py:class:`~singlecell_input_mapper.singlecell_input_mapper.cell.Synapse` to the cell.
         
         Args:
             secID (int): Section ID.
@@ -104,7 +104,7 @@ class Cell(object):
             postType (str): Postsynaptic cell type. Default: "Generic".
             
         Returns:
-            :class:`~singlecell_input_mapper.singlecell_input_mapper.cell.Synapse`: The newly created synapse.   
+            :py:class:`~singlecell_input_mapper.singlecell_input_mapper.cell.Synapse`: The newly created synapse.   
         """
         if preType not in self.synapses:
             self.synapses[preType] = []
@@ -155,7 +155,7 @@ class PySection2(object):
             Name of the section.
         label (str): 
             Label of the section (e.g. "Soma", "Dendrite", "ApicalDendrite" ...).
-        parent (:class:`~singlecell_input_mapper.singlecell_input_mapper.cell.PySection2`): 
+        parent (:py:class:`~singlecell_input_mapper.singlecell_input_mapper.cell.PySection2`): 
             Parent section.
         parentx (float): 
             Relative position along the parent section (0-1).
@@ -312,16 +312,16 @@ class PointCell(object):
 class Synapse(object):
     '''Synapse base class.
 
-    Synapses are direct attributes of :class:`PySection2` objects, which in term
-    are direct attributes of :class:`Cell` objects.
-    :class:`Cell` objects also contains a dictionary of synapses.
+    Synapses are direct attributes of :py:class:`PySection2` objects, which in term
+    are direct attributes of :py:class:`Cell` objects.
+    :py:class:`Cell` objects also contains a dictionary of synapses.
 
     Attributes:
         secID (int): Section ID.
         ptID (int): Point ID on that section.
         x (float): Relative position along the section (0-1).
         preCellType (str): Presynaptic cell type.
-        preCell (:class:`~singlecell_input_mapper.singlecell_input_mapper.cell.PointCell`): Presynaptic cell.
+        preCell (:py:class:`~singlecell_input_mapper.singlecell_input_mapper.cell.PointCell`): Presynaptic cell.
         postCellType (str): Postsynaptic cell type.
         coordinates (numpy.ndarray): 3D coordinates of the synapse location.
 
@@ -358,12 +358,12 @@ class CellParser(object):
     '''Extract cell morphology from an AMIRA hoc file.
 
     Warning:
-        This class is not the same as :class:`~single_cell_parser.cell_parser.CellParser`.
+        This class is not the same as :py:class:`~single_cell_parser.cell_parser.CellParser`.
         This class is specialized for use with :py:mod:`single_cell_parser.synapse_mapper.SynapseMapper`.
 
     Attributes:
         hoc_fname (str): File name of the hoc file.
-        cell (:class:`~singlecell_input_mapper.singlecell_input_mapper.cell.Cell`): Cell object.
+        cell (:py:class:`~singlecell_input_mapper.singlecell_input_mapper.cell.Cell`): Cell object.
     '''
     cell = None
 
@@ -384,7 +384,7 @@ class CellParser(object):
             This method used to accept a method :paramref:`scaleFunc` as argument
             for scaling dendritic diameters. This has since been deprecated.
             Scaling diameters is now part of specific pipelines, e.g. the
-            :class:`~biophysics_fitting.simulator.Simulator` class.
+            :py:class:`~biophysics_fitting.simulator.Simulator` class.
         '''
         edgeList = reader.read_hoc_file(self.hoc_fname)
         self.hoc_fname = self.hoc_fname.split('/')[-1]
@@ -423,7 +423,7 @@ class CellParser(object):
             RuntimeError: If cell is not set up.
 
         Returns:
-            :class:`~singlecell_input_mapper.singlecell_input_mapper.cell.Cell`: Cell object.
+            :py:class:`~singlecell_input_mapper.singlecell_input_mapper.cell.Cell`: Cell object.
         '''
         if self.cell is None:
             raise RuntimeError(

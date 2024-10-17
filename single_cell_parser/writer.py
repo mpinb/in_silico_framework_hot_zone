@@ -342,7 +342,7 @@ def write_synapse_activation_file(
 
     Args:
         fname (str): The output file name as a ful path, including the file extension. Preferably unique (see e.g. :py:meth:`~simrun.generate_synapse_activations._evoked_activity` for the generation of unique syapse activation filenames)
-        cell (:class:`single_cell_parser.cell.Cell`): Cell object.
+        cell (:py:class:`single_cell_parser.cell.Cell`): Cell object.
         synTypes (list): list of synapse types.
         synDistances (dict): dictionary of synapse distances per synapse type.
         synTimes (dict): dictionary of synapse activation times per synapse type. Values are a list of the activation times for each synapse within that type.
@@ -420,7 +420,7 @@ def write_synapse_weight_file(fname=None, cell=None):
     
     Args:
         fname (str): The name of the file to write to.
-        cell (:class:`single_cell_parser.cell.Cell`): The cell object, containing synapses.
+        cell (:py:class:`single_cell_parser.cell.Cell`): The cell object, containing synapses.
     
     Returns:
         None. Writes out the synapse weight file to :paramref:`fname`.
@@ -611,7 +611,7 @@ def write_cell_simulation(
 
     Args:
         fname (str): The name of the file to write to.
-        cell (:class:`single_cell_parser.cell.Cell`): The cell object.
+        cell (:py:class:`single_cell_parser.cell.Cell`): The cell object.
         traces (list): A list of strings, each representing a recorded quantity.
         tVec (list): A list of time points.
         allPoints (bool): If True, all points of the cell are written to the file.

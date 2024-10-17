@@ -1,9 +1,5 @@
 '''
-A Python translation of the setup for in-silico curernt injection experiments as described in :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011`.
-
-Created on Nov 08, 2018
-
-@author: abast
+A Python translation of the setup for in-silico current injection experiments as described in :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011`.
 '''
 from __future__ import absolute_import
 
@@ -31,6 +27,9 @@ from . import hay_evaluation_python
 from .utils import tVec, vmSoma, vmApical, vmMax
 import numpy as np
 
+__author__ = 'Arco Bast'
+__date__ = '2018-11-08'
+
 ################################################
 # Simulator
 ################################################
@@ -40,11 +39,11 @@ def record_bAP(cell, recSite1=None, recSite2=None):
     """Extract the voltage traces from the soma and two apical dendritic locations.
     
     This is used to quantify the voltage trace of a backpropagating AP (bAP)
-    stimulus in a pyramidal neuron. THe two apical recording sites are used
+    stimulus in a pyramidal neuron. The two apical recording sites are used
     to calculate e.g. backpropagating attenuation.
     
     Args:
-        cell (:class:`~single_cell_parser.cell.Cell`): The cell object.
+        cell (:py:class:`~single_cell_parser.cell.Cell`): The cell object.
         recSite1 (float): The distance (um) from the soma to the first recording site.
         recSite2 (float): The distance (um) from the soma to the second recording site.
         
@@ -68,7 +67,7 @@ def record_BAC(cell, recSite=None):
     This is used to quantify the voltage trace of a bAP-Activated Ca2+ (BAC) stimulus
     
     Args:
-        cell (:class:`~single_cell_parser.cell.Cell`): The cell object.
+        cell (:py:class:`~single_cell_parser.cell.Cell`): The cell object.
         recSite (float): The distance (um) from the soma to the apical recording site.
         
     See also:
@@ -96,7 +95,7 @@ def record_Step(cell):
 
 
 def get_Simulator(fixed_params, step=False, vInit=False):
-    """Get a set up :class:`~biophysics_fitting.simulator.Simulator` object for the Hay protocol.
+    """Get a set up :py:class:`~biophysics_fitting.simulator.Simulator` object for the Hay protocol.
     
     Given cell-specific fixed parameters, set up a simulator object for the Hay protocol,
     including measuring functions for bAP and BAC stimuli (no step currents)
@@ -107,7 +106,7 @@ def get_Simulator(fixed_params, step=False, vInit=False):
         vInit (bool): Whether to include vInit measurements. (not implemented yet)
         
     Returns
-        (:class:`~biophysics_fitting.simulator.Simulator`): A simulator object.
+        (:py:class:`~biophysics_fitting.simulator.Simulator`): A simulator object.
         
     See also:
         See :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011` for more information.    
@@ -182,7 +181,7 @@ def get_Evaluator(
     BAC_kwargs={},
     interpolate_voltage_trace=True
     ):
-    """Get a set up :class:`~biophysics_fitting.evaluator.Evaluator` object for the Hay protocol.
+    """Get a set up :py:class:`~biophysics_fitting.evaluator.Evaluator` object for the Hay protocol.
     
     Sets up an evaluator object for the Hay protocol, including measuring functions for bAP and BAC stimuli.
     
@@ -194,7 +193,7 @@ def get_Evaluator(
         interpolate_voltage_trace (bool): Whether to interpolate the voltage trace to a fixed time interval.
         
     Returns:
-        (:class:`~biophysics_fitting.evaluator.Evaluator`): An evaluator object.
+        (:py:class:`~biophysics_fitting.evaluator.Evaluator`): An evaluator object.
         
     Raises:
         NotImplementedError: If :paramref:step or :paramref:vInit are set to True.
@@ -231,13 +230,13 @@ def get_Evaluator(
 
 
 def get_Combiner(step=False):
-    """Get a set up :class:`~biophysics_fitting.combiner.Combiner` object for the Hay protocol.
+    """Get a set up :py:class:`~biophysics_fitting.combiner.Combiner` object for the Hay protocol.
     
     Args:
         step (bool): Whether to include step current measurements.
         
     Returns:
-        (:class:`~biophysics_fitting.combiner.Combiner`): A combiner object.
+        (:py:class:`~biophysics_fitting.combiner.Combiner`): A combiner object.
         
     See also:
         See :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011` for more information.

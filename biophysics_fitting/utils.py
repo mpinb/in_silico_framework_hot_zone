@@ -1,11 +1,16 @@
-'''
-Created on Nov 01, 2018
+'''Utility functions for biophysics fitting.
 
-@author: abast
+This module contains utilities and convenience methods for:
+- Selection sections
+- Reading out Vm at a section
+- Multiprocessing
 '''
 
 import numpy as np
 from functools import partial
+
+__author__ = 'Arco Bast'
+__date__ = '2018-11-01'
 
 
 ####################################
@@ -18,12 +23,12 @@ def connected_to_structure_beyond(
     beyond_struct=['ApicalDendrite'],
     n_children_required=1
     ):
-    '''Checks if a :class:`~single_cell_parser.cell.Cell` section is connected to a structure
+    '''Checks if a :py:class:`~single_cell_parser.cell.Cell` section is connected to a structure
     at a soma distance larger than :paramref:`beyond_dist`. 
     
     Args:
-        cell (:class:`~single_cell_parser.cell.Cell`): The cell object.
-        sec (:class:`~single_cell_parser.section.Section`): The section to check.
+        cell (:py:class:`~single_cell_parser.cell.Cell`): The cell object.
+        sec (:py:class:`~single_cell_parser.section.Section`): The section to check.
         beyond_dist (float): The distance from the soma to check.
         beyond_struct (list): The labels of the structures to check.
         n_children_required (int): The minimum number of children required to have a connection.
@@ -58,7 +63,7 @@ def get_inner_sec_dist_dict(
     This is useful to get sections of the apical trunk of an L5PT, filtering out oblique dendrites.
     
     Args:
-        cell (:class:`~single_cell_parser.cell.Cell`): The cell object.
+        cell (:py:class:`~single_cell_parser.cell.Cell`): The cell object.
         beyond_dist (float): The minimum distance from the soma (um).
         beyond_struct (list): The labels of the structures to check.
         n_children_required (int): The minimum number of children required to have a connection.
@@ -94,7 +99,7 @@ def get_inner_section_at_distance(
     This is useful to get sections of the apical trunk of an L5PT, filtering out oblique dendrites.
     
     Args:
-        cell (:class:`~single_cell_parser.cell.Cell`): The cell object.
+        cell (:py:class:`~single_cell_parser.cell.Cell`): The cell object.
         dist (float): The distance from the soma (um).
         beyond_dist (float): The minimum distance from the soma (um).
         beyond_struct (list): The labels of the structures to check.
@@ -124,10 +129,10 @@ def get_main_bifurcation_section(cell):
         - (optional) whose children are beyond a certain distance (default: 1000 um). See :py:meth:`~get_inner_sec_dist_dict` for more information.
         
     Args:
-        cell (:class:`~single_cell_parser.cell.Cell`): The cell object.
+        cell (:py:class:`~single_cell_parser.cell.Cell`): The cell object.
         
     Returns:
-        :class:`~single_cell_parser.section.Section`: The main bifurcation section.
+        :py:class:`~single_cell_parser.section.Section`: The main bifurcation section.
     '''
     two_children_connected_list = get_inner_sec_dist_dict(cell, n_children_required = 2)
     two_children_connected_list = list(two_children_connected_list.values())
@@ -142,7 +147,7 @@ def augment_cell_with_detailed_labels(cell):
     Assigning these labels to section.label_detailed
     
     Args:
-        cell (:class:`~single_cell_parser.cell.Cell`): The cell object.
+        cell (:py:class:`~single_cell_parser.cell.Cell`): The cell object.
     
     Returns: 
         None
@@ -197,7 +202,7 @@ def _get_apical_sec_and_i_at_distance(cell, dist):
     """Get the apical section at a certain distance from the soma.
     
     Args:
-        cell (:class:`~single_cell_parser.cell.Cell`): The cell object.
+        cell (:py:class:`~single_cell_parser.cell.Cell`): The cell object.
         dist (float): The distance from the soma (um).
         
     Returns:
@@ -217,7 +222,7 @@ def _get_apical_sec_and_i_at_distance(cell, dist):
 def vmApical(cell, dist=None):
     """Fetch the membrane voltage of the apical dendrite at a certain distance from the soma.
     
-    Assumes that the :class:`~single_cell_parser.cell.Cell` object has an apical dendrite::
+    Assumes that the :py:class:`~single_cell_parser.cell.Cell` object has an apical dendrite::
     
         - It contains at least one section with the label "ApicalDendrite"
         - Such section exists at :paramref:`~dist` distance from the soma

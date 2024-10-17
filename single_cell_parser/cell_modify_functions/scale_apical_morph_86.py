@@ -1,4 +1,8 @@
 """
+Scale the apical dendrite of morphology 86.
+
+This is used by the Oberlaender lab in Bonn, and is unlikely to be needed by anyone else.
+
 :skip-doc:
 """
 

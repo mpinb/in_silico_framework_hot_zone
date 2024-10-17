@@ -1,7 +1,6 @@
 '''
-Created 2017
-@author: arco
 '''
+
 import time
 import numpy as np
 import dask
@@ -18,6 +17,9 @@ import socket
 import logging
 
 logger = logging.getLogger("ISF").getChild(__name__)
+
+__author__ = 'Arco Bast'
+__date__ = '2017'
 
 
 def _evoked_activity(

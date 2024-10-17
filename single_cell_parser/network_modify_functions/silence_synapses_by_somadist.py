@@ -6,7 +6,7 @@ def silence_synapses_by_somadist(cell, evokedNW, soma_dist_ranges=None):
     Silence synapses at a certain soma distance.
     
     Args:
-        cell (:class:`single_cell_parser.cell.Cell`): The cell to modify.
+        cell (:py:class:`single_cell_parser.cell.Cell`): The cell to modify.
         soma_dist_ranges (dict): Dictionary with synapse types as keys (e.g. L5tt_C2) and the range 
             in which it should be silenced as value. 
             
