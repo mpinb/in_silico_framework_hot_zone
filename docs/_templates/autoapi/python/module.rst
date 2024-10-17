@@ -3,8 +3,7 @@
 {%- set shortname = obj.id.split('.')[-1] | escape %}
 
 .. backlink:
-
-{%- if parent_module %}
+{% if parent_module %}
 Back to :mod:`{{ parent_module }}`
 {%- endif %}
 
