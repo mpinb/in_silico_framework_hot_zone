@@ -5,7 +5,7 @@
 .. backlink:
 {% if parent_module %}
 Back to :mod:`{{ parent_module }}`
-{%- endif %}
+{% endif %}
 
 .. title:
 
