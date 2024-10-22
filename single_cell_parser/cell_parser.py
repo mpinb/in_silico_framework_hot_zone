@@ -57,7 +57,7 @@ class CellParser(object):
             scaleFunc (callable, optional): Optional function object that scales dendritic diameters.
                 **Deprecated**: This argument is deprecated and will be removed in a future version.
         
-        .. deprecated:: 1.0
+        .. deprecated:: 0.1.0
             The `scaleFunc` argument is deprecated and will be removed in a future version.
             To ensure reproducability, scaleFunc should be specified in the parameters, as 
             described in :py:mod:`~single_cell_parser.cell_modify_funs`

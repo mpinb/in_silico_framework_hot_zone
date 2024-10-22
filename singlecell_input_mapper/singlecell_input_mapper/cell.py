@@ -379,12 +379,11 @@ class CellParser(object):
         
         Reads cell morphology from Amira hoc file
         and sets up PySections and Cell object.
-        
-        Info:
-            This method used to accept a method :paramref:`scaleFunc` as argument
-            for scaling dendritic diameters. This has since been deprecated.
-            Scaling diameters is now part of specific pipelines, e.g. the
-            :py:class:`~biophysics_fitting.simulator.Simulator` class.
+            
+        .. deprecated:: 1.0
+            The `scaleFunc` argument is deprecated and will be removed in a future version.
+            To ensure reproducability, scaleFunc should be specified in the cell parameters, as 
+            described in :py:mod:`~single_cell_parser.cell_modify_funs`
         '''
         edgeList = reader.read_hoc_file(self.hoc_fname)
         self.hoc_fname = self.hoc_fname.split('/')[-1]
