@@ -1,5 +1,11 @@
 """
-Wrapper class that decides whether or not a database is legacy ModelDataBase, or the new ISFDataBase.
+Modular data base system switcher.
+
+This module decides which data base system is used. it provides the :py:class:`~data_base.DataBase` class which initializes the correct
+DataBase object depending on the provided path.
+
+Newly created databases automatically use the newest data base system: :py:mod:`~data_base.isf_data_base`.
+If the path points to a database that has been created with an older database system, this module returns the corresponding database object, with associated writers, readers, and file format readers.
 """
 from .model_data_base.model_data_base import ModelDataBase
 from .isf_data_base.isf_data_base import ISFDataBase
@@ -39,6 +45,7 @@ class DataBase(object):
             return db
         
         else:
+            # return newest data base system
             return ISFDataBase(basedir, readonly=readonly, nocreate=nocreate)
 
 def get_db_by_unique_id(unique_id):
@@ -49,6 +56,6 @@ def get_db_by_unique_id(unique_id):
 
 def is_model_data_base(path):
     """
-    Checks if a given path is a ModelDataBase, containing data that has been saved with model_data_base.IO.LoaderDumper.some_module.
+    Checks if a given path is a ModelDataBase, containing data that has been saved with ``model_data_base.IO.LoaderDumper.some_module``.
     """
     return os.path.exists(os.path.join(path, 'sqlitedict.db'))

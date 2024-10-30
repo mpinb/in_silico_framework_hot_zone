@@ -22,10 +22,11 @@ class CelltypeSpecificSynapticWeights:
     def __init__(self):
         self._celltype_to_syn_weight = {}
 
-    def init_with_network_param(self,
-                                n,
-                                select_celltypes=None,
-                                use_default_weight=None):
+    def init_with_network_param(
+        self,
+        n,
+        select_celltypes=None,
+        use_default_weight=None):
         out = self._celltype_to_syn_weight
         for celltype in n.network:
             if select_celltypes is not None:

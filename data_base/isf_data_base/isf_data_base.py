@@ -13,6 +13,7 @@ logger = logging.getLogger("ISF").getChild(__name__)
 
 __author__ = ['Arco Bast', 'Bjorge Meulemeester']
 __date__ = '2023-10-01'
+
 class LoaderWrapper:
     '''This is a pointer to data, which is stored elsewhere.
     
@@ -209,7 +210,7 @@ class ISFDataBase:
             if nocreate:
                 raise db_exceptions.DataBaseException(errstr.format(mode = 'nocreate'))
             if readonly:
-                raise db_exceptions.DataBaseException(errstr.format(mode = 'readonly'))                
+                raise db_exceptions.DataBaseException(errstr.format(mode = 'readonly'))
             self._initialize()
             
         if self.readonly == False:

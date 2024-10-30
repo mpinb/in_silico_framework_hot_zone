@@ -1,3 +1,9 @@
+"""
+Configuration for file locking servers
+
+Checks the environment variable ``ISF_DISTRIBUTED_LOCK_CONFIG`` for a path to a ``.yml`` file providing file locking configuration.
+"""
+
 import distributed
 
 # import fasteners
@@ -29,6 +35,9 @@ else:
 
 
 def get_client():
+    """
+    Get the file locking client object, depending on the global file locking configuration.
+    """ 
     if 'ISF_DISTRIBUTED_LOCK_BLOCK' in os.environ:
         return None, None
     for server in config:

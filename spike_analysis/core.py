@@ -1,3 +1,7 @@
+"""
+Read and analyze electrophysiological data.
+"""
+
 import neo, json, tempfile, shutil, os
 from PyPDF2 import PdfFileWriter, PdfFileReader
 import json
