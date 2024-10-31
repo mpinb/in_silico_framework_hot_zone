@@ -25,7 +25,7 @@ import dask
 import pandas as pd
 from . import parent_classes
 import glob
-from data_base.utils import chunkIt, myrepartition 
+from data_base.utils import chunkIt, myrepartition, convertible_to_int 
 import six
 import numpy as np
 from pandas_msgpack import to_msgpack, read_msgpack
@@ -355,7 +355,7 @@ def dump(
 
 
     with open(os.path.join(savedir, 'Loader.json'), 'w') as f:
-        divisions_serializable = [int(e) for e in obj.divisions]
+        divisions_serializable = [int(e) if convertible_to_int(e) else e for e in obj.divisions]
         json.dump({
             'Loader': __name__,
             'index_name': index_name,

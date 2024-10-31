@@ -5,7 +5,7 @@ import pandas as pd
 import dask
 import json
 from . import parent_classes
-from data_base.utils import df_colnames_to_str, chunkIt
+from data_base.utils import df_colnames_to_str, chunkIt, convertible_to_int
 from .utils import save_object_meta, set_object_meta
 import logging
 logger = logging.getLogger("ISF")
@@ -139,7 +139,7 @@ def dump(obj, savedir, schema=None, client=None, repartition = 10000):
     client.gather(futures)
     
     if obj.divisions is not None:
-        divisions_serializable = [int(e) for e in obj.divisions]
+        divisions_serializable = [int(e) if convertible_to_int(e) else e for e in obj.divisions]
         with open(os.path.join(savedir, 'divisions.json'), 'w') as f:
             json.dump(divisions_serializable, f)
     #obj.to_parquet(os.path.join(savedir, 'pandas_to_parquet.parquet'), schema = schema)
