@@ -355,10 +355,11 @@ def dump(
 
 
     with open(os.path.join(savedir, 'Loader.json'), 'w') as f:
+        divisions_serializable = [int(e) for e in obj.divisions]
         json.dump({
             'Loader': __name__,
             'index_name': index_name,
-            'divisions': divisions},
+            'divisions': divisions_serializable},
             f)
     
     save_object_meta(obj, savedir)
