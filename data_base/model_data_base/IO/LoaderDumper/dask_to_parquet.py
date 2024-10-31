@@ -139,8 +139,9 @@ def dump(obj, savedir, schema=None, client=None, repartition = 10000):
     client.gather(futures)
     
     if obj.divisions is not None:
+        divisions_serializable = [int(e) for e in obj.divisions]
         with open(os.path.join(savedir, 'divisions.json'), 'w') as f:
-            json.dump(obj.divisions, f)
+            json.dump(divisions_serializable, f)
     #obj.to_parquet(os.path.join(savedir, 'pandas_to_parquet.parquet'), schema = schema)
     compatibility.cloudpickle_fun(Loader(),
                                   os.path.join(savedir, 'Loader.pickle'))
