@@ -1,0 +1,2 @@
+numpy==1.19.2  # needs typeDict for msgpack, also needed for building seaborn in setup.py
+setuptools==50.3.1
