@@ -25,6 +25,7 @@ echo "Script directory: ${SCRIPT_DIR}"
 INSTALL_PATH=""
 INSTALL_NODE=false
 MINIFORGE="Miniforge3-$(uname)-$(uname -m).sh"
+ENV_NAME="isf38"
 
 # ---------- Read command line options ----------#
 set_cli_args "$@"
@@ -54,7 +55,7 @@ setup_conda_in_shell ${INSTALL_PATH}
 source ${INSTALL_PATH}/etc/profile.d/conda.sh
 source ${INSTALL_PATH}/etc/profile.d/mamba.sh 
 
-echo "Creating environment isf38"
+echo "Creating environment $ENV_NAME"
 # activate base env
 source ${INSTALL_PATH}/bin/activate base
 
@@ -62,26 +63,18 @@ source ${INSTALL_PATH}/bin/activate base
 # -------------------- 2. Creating ISF environment -------------------- #
 print_title "2/5. Creating ISF environment"
 # create new env from base
-mamba create -n isf38 -y python=3.8.5
-mamba activate isf38
+mamba create -n $ENV_NAME -y python=3.8.5
+mamba activate $ENV_NAME
 mamba info
 # install base packages
-python -m pip --no-cache-dir download --no-deps -r $SCRIPT_DIR/pip_base_requirements.txt -d $SCRIPT_DIR/downloads/pip_packages
-python -m pip --no-cache-dir install --no-deps -r $SCRIPT_DIR/pip_base_requirements.txt --no-index --find-links $SCRIPT_DIR/downloads/pip_packages
+python -m pip --no-cache-dir install --no-deps -r $SCRIPT_DIR/pip_base_requirements.txt
 # -- Installing nodejs if necessary
 if [ "$INSTALL_NODE" = true ]; then
     echo "Installing nodejs"
     mamba install -y nodejs -c conda-forge --repodata-fn=repodata.json
 fi
-# -- Downloading In-Silico-Framework pip dependencies 
-if [ "${download_pip_packages_flag}" == "true" ]; then
-    echo "Downloading In-Silico-Framework pip dependencies."
-    python -m pip --no-cache-dir download --no-deps -r $SCRIPT_DIR/pip_requirements.txt -d $SCRIPT_DIR/downloads/pip_packages
-    echo "Download pip packages completed."
-fi
-# -- Installing In-Silico-Framework pip dependencies.
-echo "Installing In-Silico-Framework pip dependencies."
-python -m pip --no-cache-dir install --no-deps -r $SCRIPT_DIR/pip_requirements.txt --no-index --find-links $SCRIPT_DIR/downloads/pip_packages
+
+mamba env update -n $ENV_NAME -f $SCRIPT_DIR/environment.yml
 
 # -------------------- 3. Patching pandas-msgpack -------------------- #
 print_title "3/5. Installing & patching pandas-msgpack"
@@ -90,7 +83,7 @@ patch_pandas_msgpack $SCRIPT_DIR
 
 # -------------------- 4. installing the ipykernel -------------------- #
 print_title "4/5. Installing the ipykernel"
-python -m ipykernel install --name base --user --display-name isf38
+python -m ipykernel install --name base --user --display-name $ENV_NAME
 
 # -------------------- 5. Compiling NEURON mechanisms -------------------- #
 print_title "5/5. Compiling NEURON mechanisms"
