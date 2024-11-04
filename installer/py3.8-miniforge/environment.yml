@@ -11,32 +11,33 @@ channels:
   - conda-forge
 dependencies:
   - python=3.8
-  - pyyaml==5.3.1  # Doesn't require Loader arg for yaml.load(). Sumatra doeesnt specify this arg.
   - pip        
   - pip:
     - pandas==1.1.3  # for compatibility with pandas msgpack patch (to be depractaed in the near future)
-    - numpy==1.19.2  # needs typeDict for msgpack
     - distributed==2.30.0     
     - dask==2.30.0 # otherwise incompatible with pandas==1.1.3. note that pip/anaconda is not the same (pip version has numpy.int64 divisions, anaconda has json-serializable int)
     - dask[dataframe]==2.30.0
     - flask==1.1.4  # newer flask assumes click.ParameterSource exists (it doesnt). This pins down flask & click to a working combination
     - markupsafe==2.0.1  # flask==1.1.4 ships with a jinja2 version that thinks markupsafe.soft_unicode exists (it doesnt)
-    - pytest
-    - pytest-xdist
+    - pytest==7.4.0
+    - pytest-xdist==3.3.1
+    - pyyaml==5.3.1  # Doesn't require Loader arg for yaml.load(). Sumatra doeesnt specify this arg.
     - neuron==7.8.2  # newer neuron has reproducability error of 0.3% compared to our old simulations (truncation/rounding error)
-    - matplotlib
-    - scipy
-    - redis
-    - tables
-    - jupyter
-    - sumatra  # this requires us to pin down pyyaml - why do we use sumatra?
-    - scikit-learn
-    - seaborn
-    - scandir  # a "better" os.walk()
+    - matplotlib==3.3.2
+    - scipy==1.5.2
+    - redis==3.5.3
+    - kazoo==2.8.0
+    - tables==3.6.1
+    - jupyter==1.0.0
+    - sumatra==0.7.4  # this requires us to pin down pyyaml - why do we use sumatra?
+    - scikit-learn==0.23.2
+    - seaborn==0.1.0
+    - scandir==1.10.0  # a "better" os.walk()
     - bluepyopt==1.9.126  # we currently still use an older version
-    - mock
-    - pypdf2
-    - SimpleITK
-    - pyarrow  # for parquet data format
-    - blosc  # compression algorithm
-    - dash
+    - mock==4.0.2
+    - pypdf2==1.26.0
+    - SimpleITK==2.0.2
+    - pyarrow==12.0.1  # for parquet data format
+    - blosc==1.10.2  # compression algorithm
+    - dash==2.9.3
+    - torch==1.8.1
