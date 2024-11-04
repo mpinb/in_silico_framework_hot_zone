@@ -17,7 +17,7 @@ import numpy as np
 import dask
 from data_base.analyze import excitatory, inhibitory
 from data_base.analyze.temporal_binning import universal as temporal_binning
-from data_base.isf_data_base.IO.LoaderDumper import numpy_to_msgpack as numpy_to_msgpack
+from data_base.isf_data_base.IO.LoaderDumper import numpy_to_npz as numpy_to_npz
 
 
 def prefun(df):
@@ -179,7 +179,7 @@ def save_groupby(db, result, groupby):
         pass
     sub_db = db.create_sub_db(identifier)
     for key in result:
-        sub_db.set(key, result[key], dumper=numpy_to_msgpack)
+        sub_db.set(key, result[key], dumper=numpy_to_npz)
 
 
 def init(db,
