@@ -19,7 +19,6 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/backcall-0.2.0-pyh9f0ad1d_0.tar.bz2
       - conda: https://conda.anaconda.org/conda-forge/noarch/beautifulsoup4-4.12.3-pyha770c72_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/bleach-6.1.0-pyhd8ed1ab_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-64/blosc-1.21.6-hef167b5_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/bokeh-2.4.3-pyhd8ed1ab_3.tar.bz2
       - conda: https://conda.anaconda.org/conda-forge/linux-64/brotli-1.1.0-hb9d3cd8_2.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/brotli-bin-1.1.0-hb9d3cd8_2.conda
@@ -244,7 +243,6 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/linux-64/simpleitk-2.4.0-py38ha2c1711_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/sip-6.7.12-py38h17151c0_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/six-1.16.0-pyh6c4a22f_0.tar.bz2
-      - conda: https://conda.anaconda.org/conda-forge/linux-64/snappy-1.2.1-ha2e4443_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/sniffio-1.3.1-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/sortedcontainers-2.4.0-pyhd8ed1ab_0.tar.bz2
       - conda: https://conda.anaconda.org/conda-forge/noarch/soupsieve-2.5-pyhd8ed1ab_1.conda
@@ -297,6 +295,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/linux-64/zlib-1.3.1-hb9d3cd8_2.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/zstd-1.5.6-ha6fb4c9_0.conda
       - pypi: https://files.pythonhosted.org/packages/f3/df/32887f4a54676cf151301faed0261fbae969284cd673744371da67452967/async_timeout-5.0.0-py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/3e/8e/a736c622da08ab7b205dfcf2a1f7a05e0213a28af38dcec0dcc668ddd7dd/blosc-1.11.1-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
       - pypi: https://files.pythonhosted.org/packages/a6/dd/7e214303c2acb0807fd1ad86d78112456c0fc9397f565ab86ebd147f2a9b/blosc2-2.0.0-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
       - pypi: https://files.pythonhosted.org/packages/07/ba/88492eae3bdadc1f11cef7bf6be95919ea57789a055611a29d555af21bb9/bluepyopt-1.9.126.tar.gz
       - pypi: https://files.pythonhosted.org/packages/b2/52/eda119f98071ccde04a9a1c9c9a18fd6def025651c9d0cd01ad51d0dba36/Cython-3.0.11-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
@@ -341,7 +340,6 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/backcall-0.2.0-pyh9f0ad1d_0.tar.bz2
       - conda: https://conda.anaconda.org/conda-forge/noarch/beautifulsoup4-4.12.3-pyha770c72_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/bleach-6.1.0-pyhd8ed1ab_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-64/blosc-1.21.6-hef167b5_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/bokeh-2.4.3-pyhd8ed1ab_3.tar.bz2
       - conda: https://conda.anaconda.org/conda-forge/linux-64/brotli-1.1.0-hb9d3cd8_2.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/brotli-bin-1.1.0-hb9d3cd8_2.conda
@@ -566,7 +564,6 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/linux-64/simpleitk-2.4.0-py38ha2c1711_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/sip-6.7.12-py38h17151c0_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/six-1.16.0-pyh6c4a22f_0.tar.bz2
-      - conda: https://conda.anaconda.org/conda-forge/linux-64/snappy-1.2.1-ha2e4443_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/sniffio-1.3.1-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/sortedcontainers-2.4.0-pyhd8ed1ab_0.tar.bz2
       - conda: https://conda.anaconda.org/conda-forge/noarch/soupsieve-2.5-pyhd8ed1ab_1.conda
@@ -622,6 +619,7 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/80/96/b32bbbb46170a1c8b8b1f28c794202e25cfe743565e9d3469b8eb1e0cc05/astroid-3.2.4-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/f3/df/32887f4a54676cf151301faed0261fbae969284cd673744371da67452967/async_timeout-5.0.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/ed/20/bc79bc575ba2e2a7f70e8a1155618bb1301eaa5132a8271373a6903f73f8/babel-2.16.0-py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/3e/8e/a736c622da08ab7b205dfcf2a1f7a05e0213a28af38dcec0dcc668ddd7dd/blosc-1.11.1-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
       - pypi: https://files.pythonhosted.org/packages/a6/dd/7e214303c2acb0807fd1ad86d78112456c0fc9397f565ab86ebd147f2a9b/blosc2-2.0.0-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
       - pypi: https://files.pythonhosted.org/packages/07/ba/88492eae3bdadc1f11cef7bf6be95919ea57789a055611a29d555af21bb9/bluepyopt-1.9.126.tar.gz
       - pypi: https://files.pythonhosted.org/packages/51/80/3c7ca06b74bd61595ed8f43ee45918e9d81907f4791c4cba30a057804b35/catppuccin-2.2.0-py3-none-any.whl
@@ -693,7 +691,6 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/backcall-0.2.0-pyh9f0ad1d_0.tar.bz2
       - conda: https://conda.anaconda.org/conda-forge/noarch/beautifulsoup4-4.12.3-pyha770c72_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/bleach-6.1.0-pyhd8ed1ab_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-64/blosc-1.21.6-hef167b5_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/bokeh-2.4.3-pyhd8ed1ab_3.tar.bz2
       - conda: https://conda.anaconda.org/conda-forge/linux-64/brotli-1.1.0-hb9d3cd8_2.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/brotli-bin-1.1.0-hb9d3cd8_2.conda
@@ -918,7 +915,6 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/linux-64/simpleitk-2.4.0-py38ha2c1711_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/sip-6.7.12-py38h17151c0_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/six-1.16.0-pyh6c4a22f_0.tar.bz2
-      - conda: https://conda.anaconda.org/conda-forge/linux-64/snappy-1.2.1-ha2e4443_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/sniffio-1.3.1-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/sortedcontainers-2.4.0-pyhd8ed1ab_0.tar.bz2
       - conda: https://conda.anaconda.org/conda-forge/noarch/soupsieve-2.5-pyhd8ed1ab_1.conda
@@ -971,6 +967,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/linux-64/zlib-1.3.1-hb9d3cd8_2.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/zstd-1.5.6-ha6fb4c9_0.conda
       - pypi: https://files.pythonhosted.org/packages/f3/df/32887f4a54676cf151301faed0261fbae969284cd673744371da67452967/async_timeout-5.0.0-py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/3e/8e/a736c622da08ab7b205dfcf2a1f7a05e0213a28af38dcec0dcc668ddd7dd/blosc-1.11.1-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
       - pypi: https://files.pythonhosted.org/packages/a6/dd/7e214303c2acb0807fd1ad86d78112456c0fc9397f565ab86ebd147f2a9b/blosc2-2.0.0-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
       - pypi: https://files.pythonhosted.org/packages/07/ba/88492eae3bdadc1f11cef7bf6be95919ea57789a055611a29d555af21bb9/bluepyopt-1.9.126.tar.gz
       - pypi: https://files.pythonhosted.org/packages/b2/52/eda119f98071ccde04a9a1c9c9a18fd6def025651c9d0cd01ad51d0dba36/Cython-3.0.11-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
@@ -1250,26 +1247,12 @@ packages:
   - pkg:pypi/bleach?source=hash-mapping
   size: 131220
   timestamp: 1696630354218
-- kind: conda
+- kind: pypi
   name: blosc
-  version: 1.21.6
-  build: hef167b5_0
-  subdir: linux-64
-  url: https://conda.anaconda.org/conda-forge/linux-64/blosc-1.21.6-hef167b5_0.conda
-  sha256: 6cc260f9c6d32c5e728a2099a52fdd7ee69a782fff7b400d0606fcd32e0f5fd1
-  md5: 54fe76ab3d0189acaef95156874db7f9
-  depends:
-  - libgcc-ng >=12
-  - libstdcxx-ng >=12
-  - libzlib >=1.3.1,<2.0a0
-  - lz4-c >=1.9.3,<1.10.0a0
-  - snappy >=1.2.0,<1.3.0a0
-  - zstd >=1.5.6,<1.6.0a0
-  license: BSD-3-Clause
-  license_family: BSD
-  purls: []
-  size: 48842
-  timestamp: 1719266029046
+  version: 1.11.1
+  url: https://files.pythonhosted.org/packages/3e/8e/a736c622da08ab7b205dfcf2a1f7a05e0213a28af38dcec0dcc668ddd7dd/blosc-1.11.1-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+  sha256: 8e2283eb29c5938bfc63ae4091e0b3df5ef0492f83b9ffffa184532d1e5e7f8c
+  requires_python: '>=3.8'
 - kind: pypi
   name: blosc2
   version: 2.0.0
@@ -2414,13 +2397,14 @@ packages:
   name: in-silico-framework
   version: 0.1.0
   path: .
-  sha256: c0c4945dd689659e54dce6eb6660910f46c88b758626c6510e554f1164c21fb4
+  sha256: 340e4cfad5ef0e7f76dc841023076630b24e565b4d9abdeb1c0d5ce70697e342
   requires_dist:
   - bluepyopt==1.9.126
   - sumatra==0.7.4
   - tables>=3.8.0,<4
   - redis>=5.2.0,<6
   - pyarrow==12.0.1
+  - blosc>=1.11.1,<2
   - sphinx ; extra == 'doc'
   - nbsphinx ; extra == 'doc'
   - jinja2 ; extra == 'doc'
@@ -6058,22 +6042,6 @@ packages:
   - pkg:pypi/six?source=hash-mapping
   size: 14259
   timestamp: 1620240338595
-- kind: conda
-  name: snappy
-  version: 1.2.1
-  build: ha2e4443_0
-  subdir: linux-64
-  url: https://conda.anaconda.org/conda-forge/linux-64/snappy-1.2.1-ha2e4443_0.conda
-  sha256: dc7c8e0e8c3e8702aae81c52d940bfaabe756953ee51b1f1757e891bab62cf7f
-  md5: 6b7dcc7349efd123d493d2dbe85a045f
-  depends:
-  - libgcc-ng >=12
-  - libstdcxx-ng >=12
-  license: BSD-3-Clause
-  license_family: BSD
-  purls: []
-  size: 42465
-  timestamp: 1720003704360
 - kind: conda
   name: sniffio
   version: 1.3.1
