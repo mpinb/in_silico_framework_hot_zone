@@ -32,6 +32,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/cloudpickle-3.1.0-pyhd8ed1ab_1.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/comm-0.2.2-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/cycler-0.12.1-pyhd8ed1ab_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-64/cython-3.0.11-py38h6d02427_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/cytoolz-0.12.3-py38h01eb140_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/dask-2.30.0-py_0.tar.bz2
       - conda: https://conda.anaconda.org/conda-forge/noarch/dask-core-2.30.0-py_0.tar.bz2
@@ -298,7 +299,6 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/3e/8e/a736c622da08ab7b205dfcf2a1f7a05e0213a28af38dcec0dcc668ddd7dd/blosc-1.11.1-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
       - pypi: https://files.pythonhosted.org/packages/a6/dd/7e214303c2acb0807fd1ad86d78112456c0fc9397f565ab86ebd147f2a9b/blosc2-2.0.0-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
       - pypi: https://files.pythonhosted.org/packages/07/ba/88492eae3bdadc1f11cef7bf6be95919ea57789a055611a29d555af21bb9/bluepyopt-1.9.126.tar.gz
-      - pypi: https://files.pythonhosted.org/packages/b2/52/eda119f98071ccde04a9a1c9c9a18fd6def025651c9d0cd01ad51d0dba36/Cython-3.0.11-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
       - pypi: https://files.pythonhosted.org/packages/36/43/b591031b0600d31134d4e8d0abd6533be0c004f2ed3b195c9953f3cd5572/deap-1.4.1-cp38-cp38-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl
       - pypi: https://files.pythonhosted.org/packages/96/b9/b4108da1275dc2ac1bba1e87739cb31b3d44339affb83b0e949fb09c2bef/Django-1.8.19-py2.py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/84/26/5f9eb215feda7465627dc0902611e27075b526e2072f03fd29302c9a44fb/django_tagging-0.5.0-py3-none-any.whl
@@ -308,6 +308,7 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/a7/25/de419a2b22fa6e18ce3b2a5adb01d33ec7b2784530f76fa36ba43d8f0fac/greenlet-3.1.1-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
       - pypi: https://files.pythonhosted.org/packages/a8/6c/d2fbdaaa5959339d53ba38e94c123e4e84b8fbc4b84beb0e70d7c1608486/httplib2-0.22.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/5b/11/0dc00c1f8452a9ee4daa5f19baf767e5ed1d79d552dd8d5d43afddfc82e1/ipyparallel-8.8.0-py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/fc/8d/a8e2a149bb93f6801fb4a016079c49c45c9b7d60e0b0218e151f4107cc80/isf-pandas-msgpack-0.1.11.tar.gz
       - pypi: https://files.pythonhosted.org/packages/47/7f/51deed26600013c9fb6d3c0129a32a1b1b3aa1e2ea8163cfaad647fc8501/neo-0.11.1.tar.gz
       - pypi: https://files.pythonhosted.org/packages/0d/47/a2ede0e136a8ddc288b447c260aa035f3e75251f808aa61f6454b16dfd04/numexpr-2.8.6-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
       - pypi: https://files.pythonhosted.org/packages/40/f1/083c2f2ee6066c39fbdc65d2b0b9669091244852edf8fc5b1399f051ca5b/parameters-0.2.1.tar.gz
@@ -320,7 +321,6 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/81/e0/8ceeee0b439efe6d7993054215a24ef2b837c5a9fdcf4ddc30527526f3d1/Sumatra-0.7.4.tar.gz
       - pypi: https://files.pythonhosted.org/packages/05/49/e392c92132b950c3a8bdbb66c687a82e808edd89024e73358084bf96e044/tables-3.8.0-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
       - pypi: https://files.pythonhosted.org/packages/41/73/02342de9c2d20922115f787e101527b831c0cffd2105c946c4a4826bcfd4/tqdm-4.66.6-py3-none-any.whl
-      - pypi: .
   doc:
     channels:
     - url: https://conda.anaconda.org/conda-forge/
@@ -353,6 +353,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/cloudpickle-3.1.0-pyhd8ed1ab_1.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/comm-0.2.2-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/cycler-0.12.1-pyhd8ed1ab_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-64/cython-3.0.11-py38h6d02427_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/cytoolz-0.12.3-py38h01eb140_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/dask-2.30.0-py_0.tar.bz2
       - conda: https://conda.anaconda.org/conda-forge/noarch/dask-core-2.30.0-py_0.tar.bz2
@@ -624,7 +625,6 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/07/ba/88492eae3bdadc1f11cef7bf6be95919ea57789a055611a29d555af21bb9/bluepyopt-1.9.126.tar.gz
       - pypi: https://files.pythonhosted.org/packages/51/80/3c7ca06b74bd61595ed8f43ee45918e9d81907f4791c4cba30a057804b35/catppuccin-2.2.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/32/c8/0bc558f7260db6ffca991ed7166494a7da4fda5983ee0b0bfc8ed2ac6ff9/charset_normalizer-3.4.0-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
-      - pypi: https://files.pythonhosted.org/packages/b2/52/eda119f98071ccde04a9a1c9c9a18fd6def025651c9d0cd01ad51d0dba36/Cython-3.0.11-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
       - pypi: https://files.pythonhosted.org/packages/36/43/b591031b0600d31134d4e8d0abd6533be0c004f2ed3b195c9953f3cd5572/deap-1.4.1-cp38-cp38-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl
       - pypi: https://files.pythonhosted.org/packages/96/b9/b4108da1275dc2ac1bba1e87739cb31b3d44339affb83b0e949fb09c2bef/Django-1.8.19-py2.py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/84/26/5f9eb215feda7465627dc0902611e27075b526e2072f03fd29302c9a44fb/django_tagging-0.5.0-py3-none-any.whl
@@ -637,6 +637,7 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/ff/62/85c4c919272577931d407be5ba5d71c20f0b616d31a0befe0ae45bb79abd/imagesize-1.4.1-py2.py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/a0/d9/a1e041c5e7caa9a05c925f4bdbdfb7f006d1f74996af53467bc394c97be7/importlib_metadata-8.5.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/5b/11/0dc00c1f8452a9ee4daa5f19baf767e5ed1d79d552dd8d5d43afddfc82e1/ipyparallel-8.8.0-py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/fc/8d/a8e2a149bb93f6801fb4a016079c49c45c9b7d60e0b0218e151f4107cc80/isf-pandas-msgpack-0.1.11.tar.gz
       - pypi: https://files.pythonhosted.org/packages/b0/bf/ea8887e9f31a8f93ca306699d11909c6140151393a4216f0d9f85a004077/latexcodec-3.0.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/ae/8a/5a1e56efa95e2038de5646e2bc5c0abe18678ae5d167e267c0fbaa17a372/nbsphinx-0.9.5-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/47/7f/51deed26600013c9fb6d3c0129a32a1b1b3aa1e2ea8163cfaad647fc8501/neo-0.11.1.tar.gz
@@ -671,7 +672,6 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/41/73/02342de9c2d20922115f787e101527b831c0cffd2105c946c4a4826bcfd4/tqdm-4.66.6-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/84/b7/6ec57841fb67c98f52fc8e4a2d96df60059637cba077edc569a302a8ffc7/Unidecode-1.3.8-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/ce/d9/5f4c13cecde62396b0d3fe530a50ccea91e7dfc1ccf0e09c228841bb5ba8/urllib3-2.2.3-py3-none-any.whl
-      - pypi: .
   test:
     channels:
     - url: https://conda.anaconda.org/conda-forge/
@@ -704,6 +704,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/cloudpickle-3.1.0-pyhd8ed1ab_1.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/comm-0.2.2-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/cycler-0.12.1-pyhd8ed1ab_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-64/cython-3.0.11-py38h6d02427_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/cytoolz-0.12.3-py38h01eb140_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/dask-2.30.0-py_0.tar.bz2
       - conda: https://conda.anaconda.org/conda-forge/noarch/dask-core-2.30.0-py_0.tar.bz2
@@ -970,7 +971,6 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/3e/8e/a736c622da08ab7b205dfcf2a1f7a05e0213a28af38dcec0dcc668ddd7dd/blosc-1.11.1-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
       - pypi: https://files.pythonhosted.org/packages/a6/dd/7e214303c2acb0807fd1ad86d78112456c0fc9397f565ab86ebd147f2a9b/blosc2-2.0.0-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
       - pypi: https://files.pythonhosted.org/packages/07/ba/88492eae3bdadc1f11cef7bf6be95919ea57789a055611a29d555af21bb9/bluepyopt-1.9.126.tar.gz
-      - pypi: https://files.pythonhosted.org/packages/b2/52/eda119f98071ccde04a9a1c9c9a18fd6def025651c9d0cd01ad51d0dba36/Cython-3.0.11-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
       - pypi: https://files.pythonhosted.org/packages/36/43/b591031b0600d31134d4e8d0abd6533be0c004f2ed3b195c9953f3cd5572/deap-1.4.1-cp38-cp38-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl
       - pypi: https://files.pythonhosted.org/packages/96/b9/b4108da1275dc2ac1bba1e87739cb31b3d44339affb83b0e949fb09c2bef/Django-1.8.19-py2.py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/84/26/5f9eb215feda7465627dc0902611e27075b526e2072f03fd29302c9a44fb/django_tagging-0.5.0-py3-none-any.whl
@@ -982,6 +982,7 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/a8/6c/d2fbdaaa5959339d53ba38e94c123e4e84b8fbc4b84beb0e70d7c1608486/httplib2-0.22.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/ef/a6/62565a6e1cf69e10f5727360368e451d4b7f58beeac6173dc9db836a5b46/iniconfig-2.0.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/5b/11/0dc00c1f8452a9ee4daa5f19baf767e5ed1d79d552dd8d5d43afddfc82e1/ipyparallel-8.8.0-py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/fc/8d/a8e2a149bb93f6801fb4a016079c49c45c9b7d60e0b0218e151f4107cc80/isf-pandas-msgpack-0.1.11.tar.gz
       - pypi: https://files.pythonhosted.org/packages/47/7f/51deed26600013c9fb6d3c0129a32a1b1b3aa1e2ea8163cfaad647fc8501/neo-0.11.1.tar.gz
       - pypi: https://files.pythonhosted.org/packages/0d/47/a2ede0e136a8ddc288b447c260aa035f3e75251f808aa61f6454b16dfd04/numexpr-2.8.6-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
       - pypi: https://files.pythonhosted.org/packages/40/f1/083c2f2ee6066c39fbdc65d2b0b9669091244852edf8fc5b1399f051ca5b/parameters-0.2.1.tar.gz
@@ -997,7 +998,6 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/81/e0/8ceeee0b439efe6d7993054215a24ef2b837c5a9fdcf4ddc30527526f3d1/Sumatra-0.7.4.tar.gz
       - pypi: https://files.pythonhosted.org/packages/05/49/e392c92132b950c3a8bdbb66c687a82e808edd89024e73358084bf96e044/tables-3.8.0-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
       - pypi: https://files.pythonhosted.org/packages/41/73/02342de9c2d20922115f787e101527b831c0cffd2105c946c4a4826bcfd4/tqdm-4.66.6-py3-none-any.whl
-      - pypi: .
 packages:
 - kind: conda
   name: _libgcc_mutex
@@ -1541,12 +1541,26 @@ packages:
   - pkg:pypi/cycler?source=hash-mapping
   size: 13458
   timestamp: 1696677888423
-- kind: pypi
+- kind: conda
   name: cython
   version: 3.0.11
-  url: https://files.pythonhosted.org/packages/b2/52/eda119f98071ccde04a9a1c9c9a18fd6def025651c9d0cd01ad51d0dba36/Cython-3.0.11-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
-  sha256: 52205347e916dd65d2400b977df4c697390c3aae0e96275a438cc4ae85dadc08
-  requires_python: '>=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*'
+  build: py38h6d02427_0
+  subdir: linux-64
+  url: https://conda.anaconda.org/conda-forge/linux-64/cython-3.0.11-py38h6d02427_0.conda
+  sha256: f82998c7d5c7dacbb58c0f17bf0a43b043c5a4a063885cd1793af56060b5ce14
+  md5: 059d04ecdddcf5a05b371711b3a75056
+  depends:
+  - __glibc >=2.17,<3.0.a0
+  - libgcc-ng >=12
+  - libstdcxx-ng >=12
+  - python >=3.8,<3.9.0a0
+  - python_abi 3.8.* *_cp38
+  license: Apache-2.0
+  license_family: APACHE
+  purls:
+  - pkg:pypi/cython?source=hash-mapping
+  size: 3285069
+  timestamp: 1722872664891
 - kind: conda
   name: cytoolz
   version: 0.12.3
@@ -2394,32 +2408,6 @@ packages:
   size: 32725
   timestamp: 1725921462405
 - kind: pypi
-  name: in-silico-framework
-  version: 0.1.0
-  path: .
-  sha256: 340e4cfad5ef0e7f76dc841023076630b24e565b4d9abdeb1c0d5ce70697e342
-  requires_dist:
-  - bluepyopt==1.9.126
-  - sumatra==0.7.4
-  - tables>=3.8.0,<4
-  - redis>=5.2.0,<6
-  - pyarrow==12.0.1
-  - blosc>=1.11.1,<2
-  - sphinx ; extra == 'doc'
-  - nbsphinx ; extra == 'doc'
-  - jinja2 ; extra == 'doc'
-  - sphinx-autoapi ; extra == 'doc'
-  - sphinx-paramlinks ; extra == 'doc'
-  - sphinxcontrib-bibtex ; extra == 'doc'
-  - furo ; extra == 'doc'
-  - catppuccin[pygments] ; extra == 'doc'
-  - sphinxext-opengraph ; extra == 'doc'
-  - sphinx-copybutton ; extra == 'doc'
-  - pytest ; extra == 'test'
-  - pytest-xdist ; extra == 'test'
-  requires_python: '>=3.8,<3.10'
-  editable: true
-- kind: pypi
   name: iniconfig
   version: 2.0.0
   url: https://files.pythonhosted.org/packages/ef/a6/62565a6e1cf69e10f5727360368e451d4b7f58beeac6173dc9db836a5b46/iniconfig-2.0.0-py3-none-any.whl
@@ -2555,6 +2543,13 @@ packages:
   - pkg:pypi/ipywidgets?source=hash-mapping
   size: 113497
   timestamp: 1724334989324
+- kind: pypi
+  name: isf-pandas-msgpack
+  version: 0.1.11
+  url: https://files.pythonhosted.org/packages/fc/8d/a8e2a149bb93f6801fb4a016079c49c45c9b7d60e0b0218e151f4107cc80/isf-pandas-msgpack-0.1.11.tar.gz
+  sha256: ff2428a77b289829d7db5039d93d14420f0acd99669a088da85f16f935bceb4c
+  requires_dist:
+  - pandas
 - kind: conda
   name: itsdangerous
   version: 1.1.0
