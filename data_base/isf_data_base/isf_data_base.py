@@ -52,7 +52,15 @@ class MetadataAccessor:
         >>> db = ISFDataBase('path')
         >>> db.metadata
         <class 'data_base.isf_data_base.MetadataAccessor'>
-        >>> db['somekey'].metadata['some_metadata_key'] = 'some_value'
+        >>> db['somekey']
+        "somevalue"
+        >>> db.metadata['somekey']
+        {
+            'dumper': 'to_cloudpickle', 
+            'time': <date-time>, 
+            'metadata_creation_time': 'post_hoc', 
+            'version': <git commit hash>
+        }
     
     It does not have a set method, as the metadata is set automatically when a key is set.
     Upon accidental metadata removal, the DataBase will try to estimate the metadata itself using :py:meth:`~data_base.isf_data_base.ISFDataBase._update_metadata_if_necessary`.
@@ -215,9 +223,11 @@ class ISFDataBase:
         _suppress_errors (bool): If True, errors will be suppressed and raised as warnings instead. Use with caution.
         _db_state_fn (str): 
             The path to the database state file. Contains information on:
+            
             - ``_registeredDumpers``: A list of all registered dumpers.
             - ``_unique_id``: A unique identifier for this database.
             - ``_registered_to_path``: The path that this database has been registered to on the current filesystem.
+            
         _forbidden_keys (list): A list of keys that are not allowed to be used: ``["Loader.json", "metadata.db.lock", "sqlitedict.db.lock", "db_state.json"]``
         _is_initialized (bool): True if the database has been initialized. This should happen during the initialization.
         _basedir (Path): :py:class:`pathlib.Path` object of :paramref:`basedir`, to use internally.
