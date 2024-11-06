@@ -54,8 +54,6 @@ EOF
 function check_downloads {
     local_downloads_dir=$1
     
-    print_title "0/6. Preliminary checks"
-    
     # Check if the downloads directory exists
     if [ ! -d "$local_downloads_dir" ]; then
         echo "No downloads directory found. Created one to download packages in."
