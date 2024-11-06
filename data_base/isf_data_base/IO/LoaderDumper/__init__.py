@@ -1,9 +1,10 @@
 '''Read and write data in various formats.
 
-This package provides IO modules that always contain two interfaces:
+This package provides IO modules that always contain three components:
 
-1. A ``dump()`` function
-2. A ``Loader`` class
+1. A ``dump()`` function to write out the data, and its corresponding ``Loader`` object.
+2. A ``Loader`` class that can load the data back into memory.
+3. a ``check()`` method that checks whether the object can be saved with this dumper.
 
 To save an object, the dump method is called::
 
