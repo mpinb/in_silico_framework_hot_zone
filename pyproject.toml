@@ -1,6 +1,6 @@
 [project]
 authors = [{name = "Bjorge Meulemeester", email = "bjorge.meulemeester@mpinb.mpg.de"}]
-dependencies = ["bluepyopt==1.9.126", "sumatra==0.7.4", "tables>=3.8.0,<4", "redis>=5.2.0,<6", "pyarrow==12.0.1", "blosc>=1.11.1,<2", "isf-pandas-msgpack>=0.1.11,<0.2"]
+dependencies = ["bluepyopt==1.9.126", "sumatra==0.7.4", "tables>=3.8.0,<4", "redis>=5.2.0,<6", "pyarrow==12.0.1", "blosc>=1.11.1,<2", "pandas-msgpack @ file:///gpfs/soma_fs/scratch/meulemeester/project_src/in_silico_framework/installer/py3.8-pixi/pandas-msgpack/dist/pandas_msgpack-0.1.4+14.gfcb0471.dirty-cp38-cp38-linux_x86_64.whl"]
 description = "Add a short description here"
 name = "in_silico_framework"
 requires-python = ">=3.8, <3.10"
@@ -44,7 +44,14 @@ seaborn = ">=0.12.2,<0.13"
 pyyaml = "==5.3.1"
 plotly = ">=5.24.1,<6"
 cython = ">=3.0.11,<4"
+pytest = ">=8.3.3,<9"
+pytest-xdist = ">=3.6.1,<4"
 
 [tool.pixi.environments]
 doc = { features = ["doc"], solve-group = "default" }
 test = { features = ["test"], solve-group = "default" }
+
+[tool.pixi.tasks]
+install-pandas-msgpack = {cmd=[
+	"python setup.py build_ext --inplace --force install"
+], cwd="installer/py3.8-pixi/pandas-msgpack"}
