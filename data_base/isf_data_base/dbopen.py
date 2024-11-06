@@ -131,7 +131,7 @@ def create_db_path(path):
 
 
 class dbopen:
-    '''context manager to open files in databases
+    '''Context manager to open files in databases
     
     This explicitly calls Python's ``open()`` method on a file.
     This is generally not recommended, as the content of databases
