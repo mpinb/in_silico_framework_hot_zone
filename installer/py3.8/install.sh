@@ -108,10 +108,10 @@ if [ ! -d "$SCRIPT_DIR/downloads/conda_packages" ]; then
     mkdir $SCRIPT_DIR/downloads/conda_packages # conda packages download directory
     download_conda_packages_flag="true"
 elif [ ! "$(ls -A $SCRIPT_DIR/downloads/conda_packages)" ]; then
-    echo "No conda packages found in downloads/conda_packages. They will be downloaded."
+    echo "No conda packages found in $SCRIPT_DIR/downloads/conda_packages. They will be downloaded."
     download_conda_packages_flag="true"
 else
-    echo "Warning: found conda packages in downloads/conda_packages. They will not be redownloaded. If you have changed the conda_requirements.txt file, you should remove this folder or its contents before attemtping a reinstall."
+    echo "Warning: found conda packages in $SCRIPT_DIR/downloads/conda_packages. They will not be redownloaded. If you have changed the conda_requirements.txt file, you should remove this folder or its contents before attemtping a reinstall."
     download_conda_packages_flag="false"
 fi
 

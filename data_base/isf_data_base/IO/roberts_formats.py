@@ -1,3 +1,8 @@
+"""
+Robert had a (seemingly) somewhat chaotic approach to file formats. This module provides functions to read, write and convert files in the format he used.
+:skip-doc:
+"""
+
 import os
 #from six import BytesIO
 #from StringIO import StringIO as BytesIO - commented by Rieke during python 2to3 transition, looks weird so I keep it here for reference in case something breaks

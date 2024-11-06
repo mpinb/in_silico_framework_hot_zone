@@ -485,7 +485,7 @@ def synchronous_ddf_concat(ddf_path, meta, N, n, scheduler=None):
     return pdf
 
 def myrepartition(ddf, N):
-    '''Repartition without generating more tasks
+    '''Repartition a dask dataframe without generating more tasks.
     
     Args:
         ddf (dask.DataFrame): the dataframe to be repartitioned
