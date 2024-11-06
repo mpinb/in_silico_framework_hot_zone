@@ -1,4 +1,6 @@
-"""Database base class for storing and retrieving data in a robust and efficient way.
+"""Database base for storing and retrieving data in a robust and efficient way.
+
+The main purpose of this module is to provide the :py:class:`~data_base.isf_data_base.ISFDataBase` class.
 """
 
 
@@ -152,8 +154,7 @@ def get_dumper_from_folder(folder, return_ = 'module'):
         return importlib.import_module("data_base.IO.LoaderDumper.{}".format(dumper_string))
 
 class ISFDataBase:
-    '''Class responsible for robustly storing and retrieving information.
-        
+    '''Main database class.
     
     Saved elements can be written and accessed using dictionary syntax::
     
@@ -169,22 +170,22 @@ class ISFDataBase:
     information to initialize the Loader. The following metadata is saved:
     
     .. list-table:: Metadata Associated with Saved Elements
-    :header-rows: 1
+       :header-rows: 1
 
-    * - Metadata
-        - Description
-    * - ``dumper``
-        - Which data dumper was used to save this result. Its corresponding Loader can always be found in the same file. See :py:mod:`~data_base.isf_data_base.IO.LoaderDumper` for all dumpers and loaders.
-    * - ``time``
-        - Time at which this results was saved.
-    * - ``conda_list``
-        - A full list of all modules installed in the conda environment that was used to produce this result.
-    * - ``module_versions``
-        - The versions of all modules in the environment that was used to produce this result. See also: :py:mod:`~data_base._module_versions.Versions_cached.get_module_versions`.
-    * - ``history``
-        - The history of the code that was used to produce this result. Only supported if the code was run using IPython (e.g. from within a Jupyter Notebook). See also: :py:mod:`~data_base._module_versions.Versions_cached.get_history`.
-    * - ``hostname``
-        - Name of the machine the code was run on.
+       * - Metadata
+           - Description
+       * - ``dumper``
+           - Which data dumper was used to save this result. Its corresponding Loader can always be found in the same file. See :py:mod:`~data_base.isf_data_base.IO.LoaderDumper` for all dumpers and loaders.
+       * - ``time``
+           - Time at which this results was saved.
+       * - ``conda_list``
+           - A full list of all modules installed in the conda environment that was used to produce this result.
+       * - ``module_versions``
+           - The versions of all modules in the environment that was used to produce this result. See also: :py:mod:`~data_base._module_versions.Versions_cached.get_module_versions`.
+       * - ``history``
+           - The history of the code that was used to produce this result. Only supported if the code was run using IPython (e.g. from within a Jupyter Notebook). See also: :py:mod:`~data_base._module_versions.Versions_cached.get_history`.
+       * - ``hostname``
+           - Name of the machine the code was run on.
 
     
     If the dask backends are used to save the data, it will be saved out-of-memory, 
@@ -352,6 +353,7 @@ class ISFDataBase:
         """Initialize the database.
         
         Sets the following attributes:
+        
         - _unique_id
         - _registeredDumpers
         - _registered_to_path
@@ -554,6 +556,7 @@ class ISFDataBase:
         '''Saves the data which defines the state of this database to ``db_state.json``
         
         A database state contains the following information:
+        
         - ``_registeredDumpers``: A list of all registered dumpers.
         - ``_unique_id``: A unique identifier for this database.
         - ``_registered_to_path``: The path that this database has been registered to on the current filesystem.
@@ -573,6 +576,7 @@ class ISFDataBase:
         '''Sets the state of the database according to ``db_state.json``
         
         The database state contains the following information:
+        
         - ``_registeredDumpers``: A list of all registered dumpers.
         - ``_unique_id``: A unique identifier for this database.
         - ``_registered_to_path``: The path that this database has been registered to on the current filesystem.
