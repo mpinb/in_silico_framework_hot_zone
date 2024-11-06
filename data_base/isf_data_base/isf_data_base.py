@@ -58,7 +58,7 @@ class MetadataAccessor:
     Upon accidental metadata removal, the DataBase will try to estimate the metadata itself using :py:meth:`~data_base.isf_data_base.ISFDataBase._update_metadata_if_necessary`.
     
     Args:
-        db (:py:class:`ISFDataBase`): The database to access the metadata of.
+        db (:py:class:`~data_base.isf_data_base.isf_data_base.ISFDataBase`): The database to access the metadata of.
     """
     def __init__(self, db):
         self.db = db
@@ -173,19 +173,19 @@ class ISFDataBase:
        :header-rows: 1
 
        * - Metadata
-           - Description
+         - Description
        * - ``dumper``
-           - Which data dumper was used to save this result. Its corresponding Loader can always be found in the same file. See :py:mod:`~data_base.isf_data_base.IO.LoaderDumper` for all dumpers and loaders.
+         - Which data dumper was used to save this result. Its corresponding Loader can always be found in the same file. See :py:mod:`~data_base.isf_data_base.IO.LoaderDumper` for all dumpers and loaders.
        * - ``time``
-           - Time at which this results was saved.
+         - Time at which this results was saved.
        * - ``conda_list``
-           - A full list of all modules installed in the conda environment that was used to produce this result.
+         - A full list of all modules installed in the conda environment that was used to produce this result.
        * - ``module_versions``
-           - The versions of all modules in the environment that was used to produce this result. See also: :py:mod:`~data_base._module_versions.Versions_cached.get_module_versions`.
+         - The versions of all modules in the environment that was used to produce this result. See also: :py:mod:`~data_base._module_versions.Versions_cached.get_module_versions`.
        * - ``history``
-           - The history of the code that was used to produce this result. Only supported if the code was run using IPython (e.g. from within a Jupyter Notebook). See also: :py:mod:`~data_base._module_versions.Versions_cached.get_history`.
+         - The history of the code that was used to produce this result. Only supported if the code was run using IPython (e.g. from within a Jupyter Notebook). See also: :py:mod:`~data_base._module_versions.Versions_cached.get_history`.
        * - ``hostname``
-           - Name of the machine the code was run on.
+         - Name of the machine the code was run on.
 
     
     If the dask backends are used to save the data, it will be saved out-of-memory, 
@@ -206,7 +206,7 @@ class ISFDataBase:
         basedir (str): The directory in which the database will be created, or read from.
         readonly (bool): If True, the database will be read-only.
         nocreate (bool): If True, a new database will not be created if it does not exist.
-        metadata (dict): A dictionary containing metadata for the database. See also: :py:class:`MetadataAccessor`.
+        metadata (dict): A dictionary containing metadata for the database. See also: :py:class:`~data_base.isf_data_base.isf_data_base.MetadataAccessor`.
         parend_db (ISFDataBase): The parent database, if this is a sub-database. Default: None.
         _unique_id (str): A unique identifier for this database.
         _registered_to_path (str): The path that this database has been registered to on the current filesystem.
