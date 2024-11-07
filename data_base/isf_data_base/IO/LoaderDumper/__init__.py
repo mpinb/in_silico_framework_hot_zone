@@ -97,7 +97,7 @@ def generic_to_specific_databases_module_name(module_path):
     Example::
     
         >>> dumper = 'data_base.IO.LoaderDumper.my_dumper'
-        >>> relative_to_absolute_module_path(dumper)
+        >>> generic_to_specific_database_module_name(dumper)
         'data_base.isf_data_base.IO.LoaderDumper.my_dumper
     
     Args:
