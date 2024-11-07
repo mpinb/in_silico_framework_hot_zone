@@ -22,7 +22,7 @@ def get_numpy_dtype_as_str(obj):
     Args:
         obj: The object to get the numpy dtype of.
         
-    Returns
+    Returns:
         str: The numpy dtype of the object.
     """
     if (isinstance(obj, six.text_type) or isinstance(obj, str)):  # Check if obj is a string

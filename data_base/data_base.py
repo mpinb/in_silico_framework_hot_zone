@@ -29,7 +29,7 @@ class DataBase(object):
         readonly (bool): If True, the database is read-only.
         nocreate (bool): If True, the database is not created if it does not exist.
 
-    Returns
+    Returns:
         :py:class:`~data_base.isf_datata_base.ISFDataBase` | :py:class:`~data_base.model_data_base.ModelDataBase`: The correct database object.
     """
     def __new__(cls, basedir, readonly=False, nocreate=False):

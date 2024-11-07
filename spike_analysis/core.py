@@ -806,7 +806,7 @@ class SpikeDetectionCreastTrough(object):
         (i.e. creasts and troughs exceeding the limit but which do not qualify to 
         be a spike)
         
-        Args
+        Args:
             show_stim_times: Show the stimulus times in addition to the detected spikes.
             show_trough_candidates: Show trough candidates in addition to the detected spikes.
         
