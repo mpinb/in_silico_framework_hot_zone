@@ -1,11 +1,64 @@
-'''Parse and load simulation data generated with the :py:mod:`simrun` module into a database.
+'''Parse simulation data generated with :py:mod:`simrun`.
 
-The output format of :py:mod:`simrun` is a nested folder structure containing the simulation results.
-This module provides functions to parse this data in more convenient and efficient data formats: pandas and dask dataframes.
-Each dataframe also provides consistend trial indices, so that data can be easily compared across different simulations and trials.
+The output format of :py:mod:`simrun` is a nested folder structure with ``.csv`` and/or ``.npz`` files.
+The voltage traces are written to a single ``.csv`` file (since the amount of timesteps is known in advance),
+but the synapse and cell activation data is written to a separate file for each simulation trial (the amount 
+of spikes and synapse activations is not known in advance).
+
+This module provides functions to gather and parse this data in efficient data formats, namely pandas and dask dataframes.
+After running :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general.init`, a database is created containing
+the following parsed data:
+
+.. list-table::
+    :header-rows: 1
+
+    * - Key
+      - Description
+    * - ``simresult_path``
+      - Filepath to the raw simulation output of :py:mod:`simrun`
+    * - ``filelist``
+      - List containing paths to all soma voltage trace files
+    * - ``sim_trial_index``
+      - The simulation trial indices as a pandas Series.
+    * - ``metadata``
+      - A metadata dataframe out of sim_trial_indices
+    * - ``voltage_traces``
+      - Dask dataframe containing the somatic voltage traces
+    * - ``parameterfiles_cell_folder``
+      - A :py:class:`~data_base.isf_data_base.IO.LoaderDumper.just_create_folder.ManagedFolder` 
+        containing the :ref:`cell_parameters_format` file, renamed to its file hash.
+    * - ``parameterfiles_network_folder``
+      - A :py:class:`~data_base.isf_data_base.IO.LoaderDumper.just_create_folder.ManagedFolder`
+        containing the :ref:`network_parameters_format` file, renamed to its file hash.
+    * - ``parameterfiles``
+      - A pandas dataframe containing the original paths of the parameter files and their hashes.
+    * - ``synapse_activation``
+      - Dask dataframe containing the parsed :ref:`synapse_activation_format` data.
+    * - ``cell_activation``
+      - Dask dataframe containing the parsed :ref:`spike_times_format`.
+    * - ``dendritic_recordings``
+      - Subdatabase containing the membrane voltage at the recording sites specified in the 
+        :ref:`cell_parameters_format` as a dask dataframe.
+    * - ``dendritic_spike_times``
+      - Subdatabase containing the spike times at the recording sites specified in the 
+        :ref:`cell_parameters_format` as a dask dataframe.
+    * - ``spike_times``
+      - Dask dataframe containing the spike times of the postsynaptic cell for all trials.
+
+After initialization, you can access the data from the data_base in the following manner::
+
+    >>> db['synapse_activation']
+    <synapse activation dataframe>
+    >>> db['cell_activation']
+    <cell activation dataframe>
+    >>> db['voltage_traces']
+    <voltage traces dataframe>
+    >>> db['spike_times']
+    <spike times dataframe>
 
 See also:
     :py:meth:`simrun.run_new_simulations._evoked_activity` for more information on the raw output format of :py:mod:`simrun`.
+    :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general.init` for the initialization of the database.
 '''
 
 import os, glob, shutil, fnmatch, hashlib, six, dask, compatibility, scandir, warnings
@@ -34,17 +87,28 @@ from data_base.utils import mkdtemp, chunkIt, unique, silence_stdout
 import logging
 logger = logging.getLogger("ISF").getChild(__name__)
 
+DEFAULT_DUMPER = to_cloudpickle
+OPTIMIZED_PANDAS_DUMPER = pandas_to_parquet
+OPTIMIZED_DASK_DUMPER = dask_to_parquet
+
 #-----------------------------------------------------------------------------------------
 # 1: Create filelist containing paths to all soma voltage trace files
 #-----------------------------------------------------------------------------------------
 
 def make_filelist(directory, suffix='vm_all_traces.csv'):
-    """Generate a list of all soma voltage trace files in the specified directory.
+    """Generate a list of all files with :paramref:`suffix` in the specified directory.
+    
+    Simulation results from :py:mod:`simrun` are stored in a nested folder structure, and spread
+    across multiple files. The first step towards parsing them is to generate a list of all files
+    containing the data we are interested in.
     
     Args:
         directory (str): 
             Path to the directory containing the simulation results.
             In general, this directory will contain a nested subdirectory structure.
+        suffix (str):
+            The suffix of the data files.
+            Default is ``'vm_all_traces.csv'`` for somatic voltage traces.
         
     Returns:
         list: List of all soma voltage trace files in the specified directory.
@@ -72,7 +136,11 @@ def make_filelist(directory, suffix='vm_all_traces.csv'):
 
 @dask.delayed
 def read_voltage_traces_from_files_pandas(prefix, fnames):
-    """Reads a list of voltage trace files and returns a pandas dataframe.
+    """Reads a list of **multiple** voltage trace files and parses it to a single pandas dataframe.
+    
+    The delayed version of this method is used to construct a dask dataframe containing the voltage traces
+    in :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general.read_voltage_traces_by_filenames`.
+    Each singular file is read using :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general.read_voltage_traces_from_file`.
     
     Args:
         prefix (str): Path to the directory containing the simulation results.
@@ -80,16 +148,40 @@ def read_voltage_traces_from_files_pandas(prefix, fnames):
         
     Returns:
         pandas.DataFrame: A pandas dataframe containing the voltage traces.
+        
+    See also:
+        :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general.read_voltage_traces_by_filenames`.
     """
     dfs = [read_voltage_traces_from_file(prefix, fname) for fname in fnames]
     return pd.concat(dfs, axis=0)
 
 
 def read_voltage_traces_from_file(prefix, fname):
-    '''Reads a single voltage traces file as generated by the simrun package.
+    '''Reads a **single** voltage traces file as generated by the simrun package.
     
-    Infers the data format of the voltage traces file from the file extension.
-    Reads them in and parses it to a pandas dataframe.
+    Infers the data format of the voltage traces file from the file extension (either ``.csv`` or ``.npz``).
+    Reads them in and parses it to a pandas datafram, containing the original path and simulation trial as an index.
+    
+    Example:
+
+        >>> simrun_result_fn = 'path/to/sim_result/vm_all_traces.csv'
+        >>> with open(simrun_result_fn, 'r') as file: print(file.read())
+        # This is an example for a .csv file (so not .npz)
+        t	Vm run 00	Vm run 01	
+        100.0	-61.4607218758	-55.1366909604
+        100.025	-61.4665809176	-55.1294343391
+        100.05	-61.4735021526	-55.1223216173
+        ...
+        >>> read_voltage_traces_from_file(prefix="path/to/sim_result", v_fn)
+        sim_trial_index                         100.0         100.025          ...
+        path/to/sim_result/000000    -61.4607218758 -61.4665809176   ...
+        path/to/sim_result/000001    -55.1366909604 -55.1294343391   ...
+        ...
+    
+    Important:
+        The simulation trial index is inferred from the filename of the voltage traces file.
+        Ideally, this path should contain a unique identifier, containing e.g. the date, 
+        seed and/or the PID of the simulation run.
     
     Args:
         prefix (str): Path to the directory containing the simulation results.
@@ -99,9 +191,7 @@ def read_voltage_traces_from_file(prefix, fname):
         pd.DataFrame: A pandas dataframe containing the voltage traces.
         
     See also:
-        :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general.read_voltage_traces_from_csv`
-    
-    See also:
+        :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general.read_voltage_traces_from_csv` and
         :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general.read_voltage_traces_from_npz`
     '''
     if fname.endswith('.csv'):
@@ -115,7 +205,8 @@ read_voltage_traces_from_file_delayed = dask.delayed(
 
 
 def read_voltage_traces_from_csv(prefix, fname):
-    '''Reads a single voltage traces ``.csv`` file as generated by the simrun package.
+    '''Reads a single :ref:`voltage_traces_csv_format` file as generated by the :py:mod:`simrun` package.
+    
     
     Args:
         prefix (str): Path to the directory containing the simulation results.
@@ -148,7 +239,7 @@ def read_voltage_traces_from_csv(prefix, fname):
 
 
 def read_voltage_traces_from_npz(prefix, fname):
-    '''Reads a single voltage traces ``.npz`` file as generated by the simrun package.
+    '''Reads a single :ref:`voltage_traces_npz_format` file as generated by the simrun package.
     
     Args:
         prefix (str): Path to the directory containing the simulation results.
@@ -183,16 +274,24 @@ def read_voltage_traces_by_filenames(
     fnames,
     divisions=None,
     repartition=None):
-    '''Reads a list of voltage trace files and parses it to a dask dataframe.
+    '''Reads a list of **multiple** voltage trace files and parses it to a dask dataframe.
+    
+    Also sets the database key ``sim_trial_index`` to contain the paths of the simulation trials.
+    This is the default way of constructing a dask dataframe containing the voltage traces.
     
     Args:
         prefix (str): Path to the directory containing the simulation results.
         fnames (list): list of filenames pointing to voltage trace files
-        divisions (list): list of divisions for the dask dataframe
+        divisions (list): list of divisions for the dask dataframe. Default is None, letting Dask handle it.
         repartition (bool): If True, the dask dataframe is repartitioned to $5000$ partitions (only if it contains over $10000$ entries).
     
     Returns: 
         dask.DataFrame: A dask dataframe containing the voltage traces.
+        
+    See also:
+        :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general.read_voltage_traces_from_file`
+        is used to read in each single voltage trace file. Consult this method for more information on how the data format
+        is parsed.
     '''
     assert repartition is not None
     fnames = sorted(fnames)
@@ -215,7 +314,11 @@ def read_voltage_traces_by_filenames(
 
 
 def get_voltage_traces_divisions_by_metadata(metadata, repartition=None):
-    """Generate divisions for the voltage traces dataframe.
+    """Find the division indices based on the metadata.
+    
+    The trial numbers always augment, so for each partition, the lowest trial number is
+    the first entry of that partition. This way, the division indices can be inferred
+    by simply finding the lowest trial number in each partition.
     
     Args:
         metadata (pd.DataFrame): Metadata dataframe containing the simulation trial indices.
@@ -245,13 +348,18 @@ def get_voltage_traces_divisions_by_metadata(metadata, repartition=None):
 
 @dask.delayed
 def create_metadata_parallelization_helper(sim_trial_index, simresult_path):
-    """Generate metadata out of a pd.Series containing the sim_trial_index.
+    """Parallelize creating metadata across multiple simulation trials.
     
-    Expands the sim_trial_index to a pandas Series containing the path, trial number, and filename of the voltage traces file.
+    See also:
+        This is used in 
+        :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general.create_metadata`.
     
     Args:
         sim_trial_index (pd.Series): A pandas series containing the sim_trial_index.
         simresult_path (str): Path to the simulation results folder.
+        
+    Returns:
+        pd.DataFrame: A pandas dataframe containing the metadata.
     """
 
     def determine_zfill_used_in_simulation(globstring):
@@ -340,9 +448,18 @@ def create_metadata_parallelization_helper(sim_trial_index, simresult_path):
 
 
 def create_metadata(db):
-    '''Generates metadata out of a pd.Series containing the sim_trial_indices.
+    """Generate metadata out of a pd.Series containing the sim_trial_index.
     
-    '''
+    Expands the sim_trial_index to a pandas Series containing the path, trial number, 
+    and filename of the voltage traces file.
+    
+    Args:
+        sim_trial_index (pd.Series): A pandas series containing the sim_trial_index.
+        simresult_path (str): Path to the simulation results folder.
+        
+    Returns:
+        pd.DataFrame: A pandas dataframe containing the metadata.
+    """
     simresult_path = db['simresult_path']
     sim_trial_index = list(db['sim_trial_index'])
     sim_trial_index = pd.DataFrame(dict(sim_trial_index=list(sim_trial_index)))
@@ -366,9 +483,22 @@ def create_metadata(db):
 
 from data_base.IO.roberts_formats import _max_commas
 
-
 def get_max_commas(paths):
-
+    """Get the maximum amount of delimiters across many files.
+    
+    Some data formats have a varying amount of commas in the synapse and cell 
+    activation files, reflecting e.g. different amounts of spikes per cell.
+    This can not be padded during simulation, since it is not known what the maximum
+    amount of e.g. spikes will be.
+    This function determines the maximum amount of delimiters across all files post-hoc,
+    so that the data can be padded out and read in.
+    
+    Args:
+        paths (list): List of paths to the synapse and cell activation files.
+        
+    Returns:
+        int: The maximum amount of delimiters across all files.
+    """
     @dask.delayed
     def max_commas_in_chunk(filepaths):
         '''determine maximum number of delimiters (\t or ,) in files
@@ -395,6 +525,26 @@ def load_dendritic_voltage_traces_helper(
     suffix,
     divisions=None,
     repartition=None):
+    """Read the dendritic voltage traces of a single recording site across multiple simulation trials.
+    
+    This method constructs a list of all filenames corresponding to a single recording site and reads them in
+    using :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general.read_voltage_traces_by_filenames`.
+    
+    Args:
+        db (:py:class:`~data_base.isf_data_base.isf_data_base.ISFDataBase`): 
+            The target database that should contain the parsed simulation results.
+        suffix (str):
+            The suffix of the dendritic voltage trace files.
+            This suffix is used to construct the filenames of the dendritic voltage trace files.
+        divisions (list):
+            List of divisions for the dask dataframe.
+            Default is None, letting Dask handle it.
+        repartition (bool):
+            If True, the dask dataframe is repartitioned to $5000$ partitions (only if it contains over $10000$ entries).
+            
+    Returns:
+        dask.DataFrame: A dask dataframe containing the dendritic voltage traces.
+    """
     assert repartition is not None
     m = db['metadata']
     if not suffix.endswith('.csv'):
@@ -446,13 +596,36 @@ def load_dendritic_voltage_traces_helper(
 
 
 def load_dendritic_voltage_traces(db, suffix_key_dict, repartition=None):
+    """Load the voltage traces from dendritic recording sites.
+    
+    Dendritic recording sites are defined in the cell :ref:`` files
+    (under the key ``sim.recordingSites``).
+    The voltage traces for each recording site are read with 
+    :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general.load_dendritic_voltage_traces_helper`.
+    
+    Args:
+        db (:py:class:`~data_base.isf_data_base.isf_data_base.ISFDataBase`):
+            The target database that should contain the parsed simulation results.
+        suffix_key_dict (dict):
+            Dictionary containing the suffixes of the dendritic voltage trace files.
+            The keys are the labels of the recording sites, and the values are the suffixes of the dendritic voltage trace files.
+        repartition (bool):
+            If True, the dask dataframe is repartitioned to $5000$ partitions (only if it contains over $10000$ entries).
+            
+    Returns:
+        dict: Dictionary containing the dask dataframes of the dendritic voltage traces.
+    
+    """
     out = {}
     divisions = db['voltage_traces'].divisions
+    # suffix_key_dict is of form: {recSite.label:  recSite.label + '_vm_dend_traces.csv'}
     for key in suffix_key_dict:
-        out[key] = load_dendritic_voltage_traces_helper(db,
-                                                        suffix_key_dict[key],
-                                                        divisions=divisions,
-                                                        repartition=repartition)
+        out[key] = \
+            load_dendritic_voltage_traces_helper(
+                db,
+                suffix_key_dict[key],
+                divisions=divisions,
+                repartition=repartition)
     return out
 
 
@@ -460,7 +633,21 @@ def load_dendritic_voltage_traces(db, suffix_key_dict, repartition=None):
 # 7: load parameterfiles
 #-----------------------------------------------------------------------------------------
 def get_file(self, suffix):
-    '''if folder only contains one file of specified suffix, this file is returned'''
+    """Get the unique file in the current directory with the specified suffix.
+    
+    This method does not recurse into subdirectories.
+    
+    Args:
+        self (str): Path to the directory.
+        suffix (str): Suffix of the files to be found.
+        
+    Returns:
+        str: Path to the file with the specified suffix.
+        
+    Raises:
+        ValueError: If no file with the specified suffix is found.
+        ValueError: If multiple files with the specified suffix are found.
+    """
     l = [f for f in os.listdir(self) if f.endswith(suffix)]
     if len(l) == 0:
         raise ValueError(
@@ -475,7 +662,7 @@ def get_file(self, suffix):
 
 
 def generate_param_file_hashes(simresult_path, sim_trial_index):
-    """Generate a DataFrame containing the paths to the parameter files and their hashes.
+    """Generate a DataFrame containing the paths and hashes of :ref:`cell_parameters_format` and :ref:`network_parameters_format` files.
     
     Args:
         simresult_path (str): Path to the simulation results folder.
@@ -528,6 +715,7 @@ from ..dbopen import create_db_path
 
 
 def create_db_path_print(path, replace_dict={}):
+    """skip-doc"""
     ## replace_dict: todo
     try:
         return create_db_path(path), True
@@ -537,6 +725,12 @@ def create_db_path_print(path, replace_dict={}):
 
 
 def cell_param_to_dbpath(neuron):
+    """
+    skip-doc
+    
+    Used as a :paramref:`transform_fun` in 
+    :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general.write_param_files_to_folder`.
+    """
     flag = True
     neuron['neuron']['filename'], flag_ = create_db_path_print(
         neuron['neuron']['filename'])
@@ -554,6 +748,9 @@ def cell_param_to_dbpath(neuron):
 
 
 def network_param_to_dbpath(network):
+    """
+    skip-doc
+    """
     flag = True
     network['NMODL_mechanisms']['VecStim'], flag_ = create_db_path_print(
         network['NMODL_mechanisms']['VecStim'])
@@ -577,13 +774,12 @@ def network_param_to_dbpath(network):
 
 @dask.delayed
 def parallel_copy_helper(df, transform_fun=None):
+    """:skip-doc"""
     for name, value in df.iterrows():
         param = scp.build_parameters(value.from_)
         #         print 'ready to transform'
         transform_fun(param)
         param.save(value.to_)
-
-
 
         # if transform_fun is None:
         #     shutil.copy(value.from_, value.to_)
@@ -600,13 +796,30 @@ def write_param_files_to_folder(
     path_column,
     hash_column,
     transform_fun=None):
+    """Write the parameter files to a specified folder.
+    
+    Given a dataframe containing filepaths and their respective hashes,
+    this method copies the files to the specified :paramref:`folder`.
+    The files will be copied to the folder and renamed according to their hash.
+    
+    Args:
+        df (pd.DataFrame): DataFrame containing the filepaths and hashes.
+        folder (str): Path to the folder where the files should be copied to.
+        path_column (str): Name of the column containing the filepaths.
+        hash_column (str): Name of the column containing the hashes.
+        transform_fun (function): Function to transform the parameter files.
+        
+    Returns:
+        list: List of dask.delayed objects to copy the files.
+    """
     logging.info("move parameterfiles")
     df = df.drop_duplicates(subset=hash_column)
     logging.info('number of parameterfiles: {}'.format(len(df)))
     df2 = pd.DataFrame()
     df2['from_'] = df[path_column]
-    df2['to_'] = df.apply(lambda x: os.path.join(folder, x[hash_column]),
-                          axis=1)
+    df2['to_'] = df.apply(
+        lambda x: os.path.join(folder, x[hash_column]),
+        axis=1)
     ddf = dd.from_pandas(df2, npartitions=200).to_delayed()
     return [parallel_copy_helper(d, transform_fun=transform_fun) for d in ddf]
 
@@ -615,12 +828,22 @@ def write_param_files_to_folder(
 # Build database using the helper functions above
 ###########################################################################################
 def _build_core(db, repartition=None, metadata_dumper=pandas_to_parquet):
-    """Parse the essential simulation results.
+    """Parse the essential simulation results and add it to :paramref:`db`.
     
-    The following data is added to the database: filelist, somatic voltage traces, simulation trial index, and metadata.
+    The following data is parsed and added to the database: 
+    
+    - filelist
+    - somatic voltage traces
+    - simulation trial index
+    - metadata
     
     Args:
         db (:py:class:`~data_base.isf_data_base.isf_data_base.ISFDataBase`): The database to which the data should be added.
+        repartition (bool): If True, the dask dataframe is repartitioned to $5000$ partitions (only if it contains over $10000$ entries).
+        metadata_dumper (function): Function to dump the metadata to disk. Default is :py:mod:`~data_base.isf_data_base.IO.LoaderDumper.pandas_to_parquet`.
+        
+    Returns:
+        None
     """
     assert repartition is not None
     logging.info('---building data base core---')
@@ -640,7 +863,7 @@ def _build_core(db, repartition=None, metadata_dumper=pandas_to_parquet):
         db['simresult_path'], 
         filelist,
         repartition=repartition)
-    db.set('voltage_traces', vt, dumper=to_cloudpickle)
+    db.set('voltage_traces', vt, dumper=DEFAULT_DUMPER)
     
     # 3. Read out the sim_trial_index from the soma voltage traces dask dataframe
     logging.info('generate index ...')
@@ -653,11 +876,22 @@ def _build_core(db, repartition=None, metadata_dumper=pandas_to_parquet):
     logging.info('add divisions to voltage traces dataframe')
     vt.divisions = get_voltage_traces_divisions_by_metadata(
         db['metadata'], repartition=repartition)
-    db.set('voltage_traces', vt, dumper=to_cloudpickle)
+    db.set('voltage_traces', vt, dumper=DEFAULT_DUMPER)
 
     
 def _build_synapse_activation(db, repartition=False, n_chunks=5000):
-    """Parse the synapse and cell activation data.
+    """Parse the :ref:`syn_activation_format` and :ref:`spike_times_format` data.
+    
+    The synapse and presynaptic spike times data is added to the database under the keys 
+    ``synapse_activation`` and ``cell_activation`` respectively.
+    
+    Args:
+        db (:py:class:`~data_base.isf_data_base.isf_data_base.ISFDataBase`): The database to which the data should be added.
+        repartition (bool): If True, the dask dataframe is repartitioned to $5000$ partitions (only if it contains over $10000$ entries).
+        n_chunks (int): Number of chunks to split the data into. Default is $5000$.
+        
+    Returns:
+        None
     """
     def template(key, paths, file_reader_fun, dumper):
         logging.info('counting commas')
@@ -696,15 +930,29 @@ def _build_synapse_activation(db, repartition=False, n_chunks=5000):
         logging.info('---building synapse activation dataframe---')
         paths = list(simresult_path + '/' + m.path + '/' + m.synapses_file_name)
         template('synapse_activation', paths,
-                 dask.delayed(read_sa, traverse=False), to_cloudpickle)
+                 dask.delayed(read_sa, traverse=False), DEFAULT_DUMPER)
     if 'cells_file_name' in m.columns:
         logging.info('---building cell activation dataframe---')
         paths = list(simresult_path + '/' + m.path + '/' + m.cells_file_name)
         template('cell_activation', paths,
-                 dask.delayed(read_ca, traverse=False), to_cloudpickle)
+                 dask.delayed(read_ca, traverse=False), DEFAULT_DUMPER)
 
 
 def _get_rec_site_managers(db):
+    """Get the recording sites from the cell parameter files.
+    
+    Recording sites are locations onto the postsynaptic membrane where the voltage traces are recorded.
+    This is used for recording the membrane voltage at non-somatic locations.
+    
+    Args:
+        db (:py:class:`~data_base.isf_data_base.isf_data_base.ISFDataBase`): The database to which the data should be added.
+        
+    Returns:
+        dict: Dictionary containing the recording sites. It maps the label of the recording site to the suffix of the dendritic voltage trace files.
+        
+    Raises:
+        NotImplementedError: If the cell parameter files of the simulation specify different recording sites for different trials.
+    """
     param_files = glob.glob(os.path.join(db['parameterfiles_cell_folder'],
                                          '*'))
     param_files = [p for p in param_files if not p.endswith('Loader.pickle') \
@@ -719,8 +967,9 @@ def _get_rec_site_managers(db):
     rec_sites = set(rec_sites)
     #print param_files
     if len(rec_sites) > 1:
-        raise NotImplementedError("Cannot initialize database with dendritic recordings if"\
-                                  +"the cell parameter files differ in the landmarks they specify for the recording sites.")
+        raise NotImplementedError(
+            "Cannot initialize database with dendritic recordings if"\
+            +" the cell parameter files differ in the landmarks they specify for the recording sites.")
     #############
     # the following code is adapted from simrun
     #############
@@ -739,10 +988,16 @@ def _get_rec_site_managers(db):
 
 
 def _build_dendritic_voltage_traces(db, suffix_dict=None, repartition=None):
-    """Load dendritic voltage traces
+    """Load dendritic voltage traces and add them to the database under the key ``dendritic_recordings``.
     
-    Parses and adds the dendritic voltage traces to the database under the key ``dendritic_recordings``.
-    6. Load dendritic voltage traces
+    Args:
+        db (:py:class:`~data_base.isf_data_base.isf_data_base.ISFDataBase`): The database to which the data should be added.
+        suffix_dict (dict): Dictionary containing the suffixes of the dendritic voltage trace files. 
+            Default is None, and they are inferred from the cell parameter files.
+        repartition (bool): If True, the dask dataframe is repartitioned to $5000$ partitions (only if it contains over $10000$ entries).
+        
+    Returns:
+        None    
     """
     assert repartition is not None
     logging.info('---building dendritic voltage traces dataframes---')
@@ -760,20 +1015,33 @@ def _build_dendritic_voltage_traces(db, suffix_dict=None, repartition=None):
     sub_db = db['dendritic_recordings']
 
     for recSiteLabel in list(suffix_dict.keys()):
-        sub_db.set(recSiteLabel, out[recSiteLabel], dumper=to_cloudpickle)
-    #db.set('dendritic_voltage_traces_keys', out.keys(), dumper = to_cloudpickle)
+        sub_db.set(recSiteLabel, out[recSiteLabel], dumper=DEFAULT_DUMPER)
+    #db.set('dendritic_voltage_traces_keys', out.keys(), dumper = DEFAULT_DUMPER)
 
 
 def _build_param_files(db, client):
     """Parse parameterfiles and add them to the database.
     
+    Paremeterfiles are the files containing the parameters of the cell and network models.
+    These files are copied to the database in the subdirectories ``"parameterfiles_cell_folder"`` 
+    and ``"parameterfiles_network_folder"`` and renamed to their hash.
     
-    7. Load parameterfiles
-        7.1 Replace paths in param files with relative dbpaths
+    Args:
+        db (:py:class:`~data_base.isf_data_base.isf_data_base.ISFDataBase`): 
+            The database to which the parameterfiles should be added.
+        client (:py:class:`~dask.distributed.client.Client`): The Dask client to use for parallel computation.
+        
+    Returns:
+        None. Sets the keys ``parameterfiles_cell_folder`` and ``parameterfiles_network_folder`` in the database.
+    
+    See also:
+        The :ref:`cell_parameters_format` and :ref:`network_parameters_format` formats.
     """
     logging.info('---moving parameter files---')
-    ds = generate_param_file_hashes(db['simresult_path'],
-                                    db['sim_trial_index'])
+    ds = generate_param_file_hashes(
+        db['simresult_path'],   # Exists when calling init, since that needs to know which simulations to init
+        db['sim_trial_index']  # parsed from voltage traces during read_voltage_traces*()
+        )
     futures = client.compute(ds)
     result = client.gather(futures)
     df = pd.concat(result)
@@ -782,6 +1050,7 @@ def _build_param_files(db, client):
         del db['parameterfiles_cell_folder']
     if 'parameterfiles_network_folder' in list(db.keys()):
         del db['parameterfiles_network_folder']
+    
     ds = write_param_files_to_folder(
         df,
         db.create_managed_folder('parameterfiles_cell_folder'),
@@ -789,9 +1058,13 @@ def _build_param_files(db, client):
         'hash_neuron',
         transform_fun=cell_param_to_dbpath)
     client.gather(client.compute(ds))
+    
     ds = write_param_files_to_folder(
-        df, db.create_managed_folder('parameterfiles_network_folder'),
-        'path_network', 'hash_network', network_param_to_dbpath)
+        df, 
+        db.create_managed_folder('parameterfiles_network_folder'),
+        'path_network', 
+        'hash_network', 
+        network_param_to_dbpath)
     client.gather(client.compute(ds))
 
     db['parameterfiles'] = df
@@ -814,70 +1087,36 @@ def init(
         dendritic_spike_times_threshold = -30.,
         client = None, 
         n_chunks = 5000, 
-        dumper = pandas_to_parquet):
+        dumper = OPTIMIZED_PANDAS_DUMPER):
     '''Initialize a database with simulation data.
     
     Use this function to load simulation data generated with the simrun module 
-    into a DataBase. 
-    
-    After initialization, you can access the data from the data_base in the following manner::
-    
-        >>> db['synapse_activation']
-        <synapse activation dataframe>
-        >>> db['cell_activation']
-        >>> db['voltage_traces']
-        >>> db['spike_times']
-        
-    If ``core=True`` (default), the following keys are added to the database:
-    (see :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general._build_core`):
-    
-    .. list-table::
-       :header-rows: 1
-
-       * - Key
-         - Description
-         - Requires
-       * - ``filelist``
-         - List containing paths to all soma voltage trace files
-         - ``core=True`` (default)
-       * - ``voltage_traces``
-         - Dask dataframe containing the voltagetraces
-         - ``core=True`` (default)
-       * - ``sim_trial_index``
-         - sim_trial_index from the soma voltage traces dask dataframe
-         - ``core=True`` (default)
-       * - ``metadata``
-         - Generate metadata dataframe out of sim_trial_indices
-         - ``core=True`` (default)
-       * - ``synapse_activation``
-         - Dask dataframe containing the synapse activation data
-         - ``synapse_activation=True`` (default)
-       * - ``dendritic_recordings``
-         - Dask dataframes containing the dendritic voltage traces
-         - ``denritic_voltage_traces=True`` (default)
-       * - ``parameterfiles``
-         - DataFrame containing the paths to the parameter files
-         - ``parameterfiles=True`` (default)
-         
-    If ``parameterfiles=True`` (default), the following keys are added to the database:
-            
-         
-    
-    Note that the database does not contain the actual data, instead it contains links 
-    to the original / external data.
+    into a :py:class:`data_base.isf_data_base.isf_data_base.ISFDataBase`.
     
     Args:
         core (bool, optional):
-            If True (default): the core data is loaded into the database: voltage traces, metadata, sim_trial_index and filelist.
+            Parse and write the core data to the database: voltage traces, metadata, sim_trial_index and filelist.
             See also: :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general._build_core`
         voltage_traces (bool, optional):
-            If True (default): the voltage traces are loaded into the database.
-        synapse_activation (bool, optional):
-            If True (default): the synapse activation data is loaded into the database.
-            See also: :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general._build_synapse_activation`
+            Parse and write the somatic voltage traces to the database.
+        spike_times (bool, optional):
+            Parse and write the spike times into the database.
+            See also: :py:meth:`data_base.analyze.spike_detection.spike_detection`
         dendritic_voltage_traces (bool, optional):
-            If True (default): the dendritic voltage traces are loaded into the database.
+            Parse and write the dendritic voltage traces to the database.
             See also: :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general._build_dendritic_voltage_traces`
+        dendritic_spike_times (bool, optional):
+            Parse and write the dendritic spike times to the database.
+            See also: :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general.add_dendritic_spike_times`
+        dendritic_spike_times_threshold (float, optional):
+            Threshold for the dendritic spike times in $mV$. Default is $-30$.
+            See also: :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general.add_dendritic_spike_times`
+        synapse_activation (bool, optional):
+            Parse and write the synapse activation data to the database.
+            See also: :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general._build_synapse_activation`
+        parameterfiles (bool, optional):
+            Parse and write the parameterfiles to the database.
+            See also: :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general._build_param_files`
         rewrite_in_optimized_format (bool, optional): 
             If True (default): data is converted to a high performance binary 
             format and makes unpickling more robust against version changes of third party libraries. 
@@ -887,8 +1126,23 @@ def init(
             If False: the db only contains links to the actual simulation data folder 
             and will not work if the data folder is deleted or moved or transferred to another machine 
             where the same absolute paths are not valid.
-    
-    client: dask distributed Client object.
+        repartition (bool, optional):
+            If True, the dask dataframe is repartitioned to $5000$ partitions (only if it contains over $10000$ entries).
+        n_chunks (int, optional):
+            Number of chunks to split the :ref:`syn_activation_format` and :ref:`spike_times_format` dataframes into. 
+            Default is $5000$.
+        client (distributed.Client, optional): 
+            Distributed Client object for parallel parsing of anything that isn't a dask dataframe.
+        scheduler (*.get, optional)
+            Scheduler to use for parallellized parsing of dask dataframes. 
+            can e.g. be simply the ``distributed.Client.get`` method.
+            Default is None.
+        dumper (module, optional):
+            Dumper to use for saving pandas dataframes.
+            Default is :py:mod:`~data_base.isf_data_base.IO.LoaderDumper.pandas_to_parquet`.
+            
+    .. deprecated:: 0.2.0
+        The :paramref:`burst_times` argument is deprecated and will be removed in a future version.
     '''
     assert dumper.__name__.endswith('.IO.LoaderDumper.pandas_to_msgpack') or dumper.__name__.endswith('.IO.LoaderDumper.pandas_to_parquet'), \
             "Please use a pandas-compatible dumper. You used {}.".format(dumper)
@@ -903,44 +1157,57 @@ def init(
         assert client is not None
         scheduler = client
 
-
     # get = compatibility.multiprocessing_scheduler if get is None else get
     # with dask.set_options(scheduler=scheduler):
     # with get_progress_bar_function()():
     db['simresult_path'] = simresult_path
+    
     if core:
-        # Build 
         _build_core(db, repartition=repartition, metadata_dumper=dumper)
         if rewrite_in_optimized_format:
-            optimize(db,
-                     select=['voltage_traces'],
-                     repartition=False,
-                     scheduler=scheduler,
-                     client=client)
+            optimize(
+                db,
+                select=['voltage_traces'],
+                repartition=False,
+                scheduler=scheduler,
+                client=client)
+    
     if parameterfiles:
         _build_param_files(db, client=client)
+    
     if synapse_activation:
-        _build_synapse_activation(db,
-                                  repartition=repartition,
-                                  n_chunks=n_chunks)
+        _build_synapse_activation(
+            db,
+            repartition=repartition,
+            n_chunks=n_chunks)
         if rewrite_in_optimized_format:
-            optimize(db,
-                     select=['cell_activation', 'synapse_activation'],
-                     repartition=False,
-                     scheduler=scheduler,
-                     client=client,
-                     dumper=dumper)
+            optimize(
+                db,
+                select=['cell_activation', 'synapse_activation'],
+                repartition=False,
+                scheduler=scheduler,
+                client=client,
+                dumper=dumper)
+    
     if dendritic_voltage_traces:
-        add_dendritic_voltage_traces(db, rewrite_in_optimized_format,
-                                     dendritic_spike_times, repartition,
-                                     dendritic_spike_times_threshold, scheduler,
-                                     client, dumper=dumper)
+        add_dendritic_voltage_traces(
+            db, 
+            rewrite_in_optimized_format,
+            dendritic_spike_times, 
+            repartition,
+            dendritic_spike_times_threshold, 
+            scheduler,
+            client, 
+            dumper=dumper)
+    
     if spike_times:
         logging.info("---spike times---")
         vt = db['voltage_traces']
-        db.set('spike_times',
-                    spike_detection(vt),
-                    dumper=dumper)
+        db.set(
+            'spike_times',
+            spike_detection(vt),
+            dumper=dumper)
+    
     logging.info('Initialization succesful.')
 
 
@@ -953,11 +1220,31 @@ def add_dendritic_voltage_traces(
         scheduler=None,
         client=None,
         dumper=None):
-    """Add dendritic voltage traces to the database post-hoc. 
+    """Add dendritic voltage traces to the database. 
     
-    This function is useful if you have already initialized the database and now want to add
-    dendritic voltage traces.
+    Used in :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general.init` to read, parse
+    and write the membrane voltage of recorded sites to the database.
     
+    Args:
+        db (:py:class:`~data_base.isf_data_base.isf_data_base.ISFDataBase`): 
+            The database to which the data should be added.
+        rewrite_in_optimized_format (bool, optional):
+            If True, the data is converted to a high performance format.
+            Default is True.
+        dendritic_spike_times (bool, optional):
+            If True, the dendritic spike times are added to the database.
+            Default is True.
+        repartition (bool, optional):
+            If True, the dask dataframe is repartitioned to $5000$ partitions (only if it contains over $10000$ entries).
+            Default is True.
+        dendritic_spike_times_threshold (float, optional):
+            Threshold for the dendritic spike times in $mV$. Default is $-30$.
+            See also: :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general.add_dendritic_spike_times`
+        client (:py:class:`~dask.distributed.client.Client`, optional):
+            Distributed Client object for parallel computation.
+        dumper (module, optional):
+            Dumper to use for :py:meth:`~data_base.isf_data_base.load_simrun_general.optimize` if :paramref:`optimize` is ``True``.
+            Default is :py:mod:`~data_base.isf_data_base.IO.LoaderDumper.pandas_to_msgpack`. 
     """
     _build_dendritic_voltage_traces(db, repartition=repartition)
     if rewrite_in_optimized_format:
@@ -970,22 +1257,46 @@ def add_dendritic_voltage_traces(
     if dendritic_spike_times:
         add_dendritic_spike_times(db, dendritic_spike_times_threshold)
 
+
 def add_dendritic_spike_times(db, dendritic_spike_times_threshold=-30.):
+    """Add dendritic spike times to the database.
+    
+    Args:
+        db (:py:class:`~data_base.isf_data_base.isf_data_base.ISFDataBase`):
+            The database to which the data should be added.
+        dendritic_spike_times_threshold (float, optional):
+            Threshold for the dendritic spike times in $mV$. Default is $-30$.
+            See also: :py:meth:`~data_base.analyze.spike_detection`
+    """
     m = db.create_sub_db('dendritic_spike_times')
     for kk in list(db['dendritic_recordings'].keys()):
         vt = db['dendritic_recordings'][kk]
         st = spike_detection(vt, threshold=dendritic_spike_times_threshold)
-        m.set(kk + '_' + str(dendritic_spike_times_threshold),
-                  st,
-                  dumper=pandas_to_parquet)
+        m.set(
+            kk + '_' + str(dendritic_spike_times_threshold),
+            st,
+            dumper=OPTIMIZED_PANDAS_DUMPER)
 
 
 def _get_dumper(value):
-    '''tries to automatically infer the best dumper for each table'''
+    '''Infer the best dumper for a dataframe.
+    
+    Infers the correct parquet dumper for either a pandas or dask dataframe.
+    
+    Args:
+        value (pd.DataFrame or dd.DataFrame): Dataframe to infer the dumper for.
+        
+    Returns:
+        module: Dumper module to use for the dataframe.
+        
+    Raises:
+        NotImplementedError: If the dataframe is not a pandas or dask dataframe.
+    '''
+    # For the legacy py2.7 version, it still uses the msgpack dumper
     if isinstance(value, pd.DataFrame):
-        return pandas_to_parquet if six.PY3 else pandas_to_msgpack
+        return OPTIMIZED_PANDAS_DUMPER if six.PY3 else pandas_to_msgpack
     elif isinstance(value, dd.DataFrame):
-        return dask_to_parquet if six.PY3 else dask_to_msgpack
+        return OPTIMIZED_DASK_DUMPER if six.PY3 else dask_to_msgpack
     else:
         raise NotImplementedError()
 
@@ -997,32 +1308,28 @@ def optimize(
     scheduler=None,
     repartition=False,
     client=None):
-    '''
-    DEPRECATED; this step is now already done in a more coherent way by the init function if 
-    rewrite_in_optimized_format is set to True.
+    '''Rewrite existing data with a new dumper.
     
-    This function speeds up the access to simulation data and makes the database
-    self-containing and more robust. It can only be used after initializing the database (do so 
-    by using the init method in this module).
+    It also repartitions dataframes such that they contain $5000$ partitions at maximum.
     
-    After calling init, the database contains references to the external 
-    folder in which the simulation results are stored. The references 
-    point to csv files, which is a slow format. The reference itself is stored
-    using pickle in this database. If you update an underlying library (dask, pandas, numpy),
-    it is not assured that you can stil unpickle the data.
+    This method is useful to convert older databases that were created with an older 
+    (less efficient) dumper.
     
-    This function deals with these drawbacks. It will save the data in subfolders of the 
-    specified data_base dircetory using an optimized format, which is much faster than csv
-    (it categorizes the data and saves each partition using the pandas msgpack extension,
-    using blosc compression). 
-    It also repartitions dataframes such that they contain 5000 partitions at maximum.
-    The references to the data is then saved using pickle, but in a way that we only depend
-    on the public api of third party libraries but not their internal structure.
+    Args:
+        db (:py:class:`~data_base.isf_data_base.isf_data_base.ISFDataBase`): 
+            The database to optimize.
+        dumper (module):
+            Dumper to use for re-saving the data in a new format.
+            Default is None, and the dumper is inferred from the data type.
+            See also: :py:meth:`~data_base.isf_data_base.db_initializers._get_dumper`
+        select (list, optional):
+            List of keys to optimize. Default is None, and all data is optimized: 
+            ``['synapse_activation', 'cell_activation', 'voltage_traces', 'dendritic_recordings']``.
+        client (distributed.Client, optional):
+            Distributed Client object for parallel computation.
 
-    select: If None, all data will be converted. You can specify a list of items that
-    should be optimized, if only a subset should be optimized.
-    
-    scheduler: scheduler for task execution. Can be a Client object, or a string: [distributed, multiprocessing, processes, single-threaded, sync, synchronous, threading, threads]
+    Returns:
+        None
     '''
     keys = list(db.keys())
     keys_for_rewrite = select if select is not None else \
@@ -1047,9 +1354,23 @@ def optimize(
                 if isinstance(value, dd.DataFrame):
                     db.set(key, value, dumper = dumper, client = client)
                 else:
+                    # used for *to_msgpack dumpers, but there they seem unused?
+                    # also, msgpack is deprecated
                     db.set(key, value, dumper = dumper, scheduler=scheduler)
 
+
 def load_param_files_from_db(db, sti):
+    """Load the :ref:``cell_parameters_format`` and :ref:``network_parameters_format`` files from the database.
+    
+    Args:
+        db (:py:class:`~data_base.isf_data_base.isf_data_base.ISFDataBase`):
+            The database containing the parsed simulation results.
+        sti (str):
+            For which simulation trial index to load the parameter files.
+            
+    Returns:
+        tuple: The :py:class:`~sumatra.parameters.NTParameterSet` objects for the cell and network.
+    """
     import single_cell_parser as scp
     x = db['parameterfiles'].loc[sti]
     x_neu, x_net = x['hash_neuron'], x['hash_network']
@@ -1063,6 +1384,31 @@ def load_initialized_cell_and_evokedNW_from_db(
         sti,
         allPoints=False,
         reconnect_synapses=True):
+    """Load and set up the cell and network from the database.
+    
+    The cell and network are set up using the parameter files from the database.
+    These can then be used to inspect the parameters for each, or to re-run simulations.
+    
+    Args:
+        db (:py:class:`~data_base.isf_data_base.isf_data_base.ISFDataBase`):
+            The database containing the parsed simulation results.
+        sti (str):
+            For which simulation trial index to load the parameter files.
+        allPoints (bool, optional):
+            If True, all points of the cell are used. Default is False.
+            See also: :py:meth:`single_cell_parser.create_cell`
+        reconnect_synapses (bool, optional):
+            If True, the synapses are reconnected to the cell. Default is True.
+            See also: :py:meth:`single_cell_parser.NetworkMapper.reconnect_saved_synapses`
+    
+    See also:
+        :py:meth:`simrun.rerun_db.rerun_db` for the recommended high-level method
+        of re-running simulations from a database.
+        
+    Returns:
+        tuple: The re-initialized :py:class:`single_cell_parser.cell.Cell` and the :py:class:`single_cell_parser.NetworkMapper` objects.
+    
+    """
     import dask
     from data_base.IO.roberts_formats import write_pandas_synapse_activation_to_roberts_format
     neup, netp = load_param_files_from_db(db, sti)
@@ -1080,5 +1426,9 @@ def load_initialized_cell_and_evokedNW_from_db(
     return cell, evokedNW
 
 def convert_df_columns_to_str(df):
+    """Convenience method to convert all columns of a dataframe to strings.
+    
+    :skip-doc:
+    """
     df = df.rename(columns={col: '{}'.format(col) for col in df.columns if type(col)!=str})
     return df
