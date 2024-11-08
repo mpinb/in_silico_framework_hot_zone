@@ -301,7 +301,7 @@ Dataframes
 
 The output format of various simulation pipelines are usually a dataframe. below, you find common formats used throughout ISF.
 
-The :py:mod:`simrun` module produces output files in ``.csv`` or ``.npz`` format. many of these files
+The :py:mod:`simrun` package produces output files in ``.csv`` or ``.npz`` format. many of these files
 need to be created for each individual simulation trial. 
 These raw output files are usually parsed into single dataframes for further analysis using a ``db_initializers`` submodule (see e.g. 
 :py:mod:`~data_base.isf_data_base.db_initializers.load_simrun_general`).
@@ -312,7 +312,7 @@ These raw output files are usually parsed into single dataframes for further ana
 Synapse activation
 ------------------
 
-The raw output of the :py:mod:`simrun` module contains ``.csv`` files containing the synaptic activations onto a post-synaptic cell 
+The raw output of the :py:mod:`simrun` package contains ``.csv`` files containing the synaptic activations onto a post-synaptic cell 
 for each individual simulation trial. Each file contains the following information for each synapse during a particular simulation trial:
 
 - type
@@ -344,9 +344,9 @@ An example of the format is shown below:
       - 24
       - 0
       - 'basal'
-      - 10.2, 80.5, 140.8
-      - 
-      - 
+      - 10.2
+      - 80.5
+      - 140.8
     * - presyn_cell_type_1
       - 1
       - 200.0
@@ -362,8 +362,8 @@ An example of the format is shown below:
       - 72
       - 0
       - 'apical'
-      - 300.1, 553.5
-      - 
+      - 300.1
+      - 553.5
       - 
 
 These individual files are usually gathered and parsed into a single dataframe containing all trials for further analysis:
@@ -390,46 +390,56 @@ These individual files are usually gathered and parsed into a single dataframe c
       - 24
       - 0
       - 'basal'
-      - 10.2, 80.5, 140.8
-      - 
-      - 
+      - 10.2
+      - 80.5
+      - 140.8
     * - 0
-      - presyn_cell_type_1
+      - presyn_cell_type_2
       - 1
       - 200.0
       - 112
       - 0
       - 'apical'
+      - 100.2
       - 
       - 
+    * - 1
+      - presyn_cell_type_1
+      - 0
+      - 150.0
+      - 24
+      - 0
+      - 'basal'
+      - 10.2
+      - 140.8
       - 
-    * - 0
+    * - 1
       - presyn_cell_type_2
-      - 2
-      - 250.0
-      - 72
+      - 1
+      - 200.0
+      - 112
       - 0
       - 'apical'
-      - 300.1, 553.5
+      - 100.2
+      - 138.4
       - 
-      - 
-
 Writers:
     
 - :py:meth:`~single_cell_parser.writer.write_synapse_activation_file` is used by :py:mod:`simrun` and :py:mod:`~single_cell_parser.analyze.synanalysis`
    to write raw output data.
-- :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general.init` parses these files into a pandas dataframe.
+- :py:meth:`data_base.isf_data_base.db_initializers.load_simrun_general.init` parses these files into a pandas dataframe.
 
-Attention:
-    Not every spike of a presynaptic cell necessarily induces a synapse activation. Each synapse has a specific release
-    probability and delay (see :ref:`network_parameters_format`).
-    For this reason, the spike times of the presynaptic cells is saved separately (see :ref:`spike_times_format`).
+.. attention::
+
+   Not every spike of a presynaptic cell necessarily induces a synapse activation. Each synapse has a specific release
+   probability and delay (see :ref:`network_parameters_format`).
+   For this reason, the spike times of the presynaptic cells is saved separately (see :ref:`spike_times_format`).
 
 .. _spike_times_format:
 
-Spike times
------------
-The raw output of the :py:mod:`simrun` module contains ``.csv`` files containing the spike times of presynaptic cells 
+Presynaptic spike times
+-----------------------
+The raw output of the :py:mod:`simrun` package contains ``.csv`` files containing the spike times of presynaptic cells 
 for each individual simulation trial. Each file contains the following information for each synapse during a particular simulation trial:
 
 - type
@@ -502,18 +512,22 @@ Writers:
    to write raw output data.
 - :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general.init` parses these files into a pandas dataframe.
 
-Attention:
-    Not every spike of a presynaptic cell necessarily induces a synapse activation. Each synapse has a specific release
-    probability and delay (see :ref:`network_parameters_format`).
-    For this reason, the synapse activations are saved separately (see :ref:`syn_activation_format`).
+.. attention::
+
+   Not every spike of a presynaptic cell necessarily induces a synapse activation. Each synapse has a specific release
+   probability and delay (see :ref:`network_parameters_format`).
+   For this reason, the synapse activations are saved separately (see :ref:`syn_activation_format`).
 
 Voltage traces
 --------------
 
-The raw output of the :py:mod:`simrun` module contains ``.npz`` or ``.csv`` files containing the voltage traces of the postsynaptic cells.
+The raw output of the :py:mod:`simrun` package contains ``.npz`` or ``.csv`` files containing the voltage traces of the postsynaptic cells.
 Unlike the synapse activations and spike times, it is possible for one such file to contain multiple trials.
 
 .. _voltage_traces_csv_format:
+
+Voltage trace ``.csv``
+""""""""""""""""""""""
 
 .. list-table:: ``vm_all_traces.csv``
     :header-rows: 1
@@ -540,6 +554,9 @@ Unlike the synapse activations and spike times, it is possible for one such file
       - -67.1279980017
 
 .. _voltage_traces_npz_format:
+
+Voltage trace ``.npz``
+""""""""""""""""""""""
 
 ``vm_all_traces.npz``::
 
