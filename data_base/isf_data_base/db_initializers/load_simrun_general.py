@@ -283,7 +283,7 @@ def read_voltage_traces_by_filenames(
         prefix (str): Path to the directory containing the simulation results.
         fnames (list): list of filenames pointing to voltage trace files
         divisions (list): list of divisions for the dask dataframe. Default is None, letting Dask handle it.
-        repartition (bool): If True, the dask dataframe is repartitioned to $5000$ partitions (only if it contains over $10000$ entries).
+        repartition (bool): If True, the dask dataframe is repartitioned to 5000 partitions (only if it contains over $10000$ entries).
     
     Returns: 
         dask.DataFrame: A dask dataframe containing the voltage traces.
@@ -322,7 +322,7 @@ def get_voltage_traces_divisions_by_metadata(metadata, repartition=None):
     
     Args:
         metadata (pd.DataFrame): Metadata dataframe containing the simulation trial indices.
-        repartition (bool): If True, the dask dataframe is repartitioned to $5000$ partitions (only if it contains over $10000$ entries).
+        repartition (bool): If True, the dask dataframe is repartitioned to 5000 partitions (only if it contains over $10000$ entries).
         
     Returns:
         tuple: Tuple containing the divisions for the voltage traces dataframe.
@@ -540,7 +540,7 @@ def load_dendritic_voltage_traces_helper(
             List of divisions for the dask dataframe.
             Default is None, letting Dask handle it.
         repartition (bool):
-            If True, the dask dataframe is repartitioned to $5000$ partitions (only if it contains over $10000$ entries).
+            If True, the dask dataframe is repartitioned to 5000 partitions (only if it contains over $10000$ entries).
             
     Returns:
         dask.DataFrame: A dask dataframe containing the dendritic voltage traces.
@@ -610,7 +610,7 @@ def load_dendritic_voltage_traces(db, suffix_key_dict, repartition=None):
             Dictionary containing the suffixes of the dendritic voltage trace files.
             The keys are the labels of the recording sites, and the values are the suffixes of the dendritic voltage trace files.
         repartition (bool):
-            If True, the dask dataframe is repartitioned to $5000$ partitions (only if it contains over $10000$ entries).
+            If True, the dask dataframe is repartitioned to 5000 partitions (only if it contains over $10000$ entries).
             
     Returns:
         dict: Dictionary containing the dask dataframes of the dendritic voltage traces.
@@ -839,7 +839,7 @@ def _build_core(db, repartition=None, metadata_dumper=pandas_to_parquet):
     
     Args:
         db (:py:class:`~data_base.isf_data_base.isf_data_base.ISFDataBase`): The database to which the data should be added.
-        repartition (bool): If True, the dask dataframe is repartitioned to $5000$ partitions (only if it contains over $10000$ entries).
+        repartition (bool): If True, the dask dataframe is repartitioned to 5000 partitions (only if it contains over $10000$ entries).
         metadata_dumper (function): Function to dump the metadata to disk. Default is :py:mod:`~data_base.isf_data_base.IO.LoaderDumper.pandas_to_parquet`.
         
     Returns:
@@ -887,8 +887,8 @@ def _build_synapse_activation(db, repartition=False, n_chunks=5000):
     
     Args:
         db (:py:class:`~data_base.isf_data_base.isf_data_base.ISFDataBase`): The database to which the data should be added.
-        repartition (bool): If True, the dask dataframe is repartitioned to $5000$ partitions (only if it contains over $10000$ entries).
-        n_chunks (int): Number of chunks to split the data into. Default is $5000$.
+        repartition (bool): If True, the dask dataframe is repartitioned to 5000 partitions (only if it contains over $10000$ entries).
+        n_chunks (int): Number of chunks to split the data into. Default is 5000.
         
     Returns:
         None
@@ -994,7 +994,7 @@ def _build_dendritic_voltage_traces(db, suffix_dict=None, repartition=None):
         db (:py:class:`~data_base.isf_data_base.isf_data_base.ISFDataBase`): The database to which the data should be added.
         suffix_dict (dict): Dictionary containing the suffixes of the dendritic voltage trace files. 
             Default is None, and they are inferred from the cell parameter files.
-        repartition (bool): If True, the dask dataframe is repartitioned to $5000$ partitions (only if it contains over $10000$ entries).
+        repartition (bool): If True, the dask dataframe is repartitioned to 5000 partitions (only if it contains over $10000$ entries).
         
     Returns:
         None    
@@ -1091,7 +1091,7 @@ def init(
     '''Initialize a database with simulation data.
     
     Use this function to load simulation data generated with the simrun module 
-    into a :py:class:`data_base.isf_data_base.isf_data_base.ISFDataBase`.
+    into a :py:class:`~data_base.isf_data_base.isf_data_base.ISFDataBase`.
     
     Args:
         core (bool, optional):
@@ -1109,7 +1109,7 @@ def init(
             Parse and write the dendritic spike times to the database.
             See also: :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general.add_dendritic_spike_times`
         dendritic_spike_times_threshold (float, optional):
-            Threshold for the dendritic spike times in $mV$. Default is $-30$.
+            Threshold for the dendritic spike times in mV. Default is $-30$.
             See also: :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general.add_dendritic_spike_times`
         synapse_activation (bool, optional):
             Parse and write the synapse activation data to the database.
@@ -1127,10 +1127,10 @@ def init(
             and will not work if the data folder is deleted or moved or transferred to another machine 
             where the same absolute paths are not valid.
         repartition (bool, optional):
-            If True, the dask dataframe is repartitioned to $5000$ partitions (only if it contains over $10000$ entries).
+            If True, the dask dataframe is repartitioned to 5000 partitions (only if it contains over $10000$ entries).
         n_chunks (int, optional):
             Number of chunks to split the :ref:`syn_activation_format` and :ref:`spike_times_format` dataframes into. 
-            Default is $5000$.
+            Default is 5000.
         client (distributed.Client, optional): 
             Distributed Client object for parallel parsing of anything that isn't a dask dataframe.
         scheduler (*.get, optional)
@@ -1235,10 +1235,10 @@ def add_dendritic_voltage_traces(
             If True, the dendritic spike times are added to the database.
             Default is True.
         repartition (bool, optional):
-            If True, the dask dataframe is repartitioned to $5000$ partitions (only if it contains over $10000$ entries).
+            If True, the dask dataframe is repartitioned to 5000 partitions (only if it contains over $10000$ entries).
             Default is True.
         dendritic_spike_times_threshold (float, optional):
-            Threshold for the dendritic spike times in $mV$. Default is $-30$.
+            Threshold for the dendritic spike times in mV. Default is $-30$.
             See also: :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general.add_dendritic_spike_times`
         client (:py:class:`~dask.distributed.client.Client`, optional):
             Distributed Client object for parallel computation.
@@ -1265,7 +1265,7 @@ def add_dendritic_spike_times(db, dendritic_spike_times_threshold=-30.):
         db (:py:class:`~data_base.isf_data_base.isf_data_base.ISFDataBase`):
             The database to which the data should be added.
         dendritic_spike_times_threshold (float, optional):
-            Threshold for the dendritic spike times in $mV$. Default is $-30$.
+            Threshold for the dendritic spike times in mV. Default is $-30$.
             See also: :py:meth:`~data_base.analyze.spike_detection`
     """
     m = db.create_sub_db('dendritic_spike_times')
@@ -1310,7 +1310,7 @@ def optimize(
     client=None):
     '''Rewrite existing data with a new dumper.
     
-    It also repartitions dataframes such that they contain $5000$ partitions at maximum.
+    It also repartitions dataframes such that they contain 5000 partitions at maximum.
     
     This method is useful to convert older databases that were created with an older 
     (less efficient) dumper.
