@@ -327,101 +327,20 @@ An example of the format is shown below:
 
 .. tab:: Raw :py:mod:`simrun` output
 
-    .. list-table:: ``simulation_run<sim_trial>_synapses.csv``
-        :header-rows: 1
-
-        * - synapse type
-        - synapse ID
-        - soma distance
-        - section ID
-        - section pt ID
-        - dendrite label
-        - activation times
-        - 
-        - 
-        * - presyn_cell_type_1
-        - 0
-        - 150.0
-        - 24
-        - 0
-        - 'basal'
-        - 10.2
-        - 80.5
-        - 140.8
-        * - presyn_cell_type_1
-        - 1
-        - 200.0
-        - 112
-        - 0
-        - 'apical'
-        - 
-        - 
-        - 
-        * - presyn_cell_type_2
-        - 2
-        - 250.0
-        - 72
-        - 0
-        - 'apical'
-        - 300.1
-        - 553.5
-        - 
+    | synapse type       | synapse ID | soma distance | section ID | section pt ID | dendrite label | activation times |     |     |
+    |--------------------|------------|---------------|------------|---------------|----------------|------------------|-----|-----|
+    | presyn_cell_type_1 | 0          | 150.0         | 24         | 0             | 'basal'        | 10.2             | 80.5| 140.8|
+    | presyn_cell_type_1 | 1          | 200.0         | 112        | 0             | 'apical'       |                  |     |     |
+    | presyn_cell_type_2 | 2          | 250.0         | 72         | 0             | 'apical'       | 300.1            | 553.5|     |
 
 .. tab:: Parsed dataframe
 
-    .. list-table::
-        :header-rows: 1
-
-        * - trial index
-        - synapse type
-        - synapse ID
-        - soma distance
-        - section ID
-        - section pt ID
-        - dendrite label
-        - activation times
-        - 
-        - 
-        * - 0
-        - presyn_cell_type_1
-        - 0
-        - 150.0
-        - 24
-        - 0
-        - 'basal'
-        - 10.2
-        - 80.5
-        - 140.8
-        * - 0
-        - presyn_cell_type_2
-        - 1
-        - 200.0
-        - 112
-        - 0
-        - 'apical'
-        - 100.2
-        - 
-        - 
-        * - 1
-        - presyn_cell_type_1
-        - 0
-        - 150.0
-        - 24
-        - 0
-        - 'basal'
-        - 10.2
-        - 140.8
-        - 
-        * - 1
-        - presyn_cell_type_2
-        - 1
-        - 200.0
-        - 112
-        - 0
-        - 'apical'
-        - 100.2
-        - 138.4
-        - 
+    | trial index | synapse type       | synapse ID | soma distance | section ID | section pt ID | dendrite label | activation times |     |     |
+    |-------------|--------------------|------------|---------------|------------|---------------|----------------|------------------|-----|-----|
+    | 0           | presyn_cell_type_1 | 0          | 150.0         | 24         | 0             | 'basal'        | 10.2             | 80.5| 140.8|
+    | 0           | presyn_cell_type_2 | 1          | 200.0         | 112        | 0             | 'apical'       | 100.2            |     |     |
+    | 1           | presyn_cell_type_1 | 0          | 150.0         | 24         | 0             | 'basal'        | 10.2             | 140.8|     |
+    | 1           | presyn_cell_type_2 | 1          | 200.0         | 112        | 0             | 'apical'       | 100.2            | 138.4|     |
 
 Writers:
     
