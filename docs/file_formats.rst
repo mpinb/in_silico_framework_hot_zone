@@ -451,7 +451,7 @@ These individual files are usually gathered and parsed into a single dataframe c
 An example of the format is shown below:
 
 Raw :py:mod:`simrun` output
-'''''''''''''''''''''''''''
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. list-table:: Presynaptic spike times
     :header-rows: 1
@@ -479,7 +479,7 @@ Raw :py:mod:`simrun` output
 
 
 Parsed dataframe
-'''''''''''''''''
+~~~~~~~~~~~~~~~~
 
 .. list-table:: Presynaptic spike times
     :header-rows: 1
@@ -530,7 +530,7 @@ Unlike the synapse activations and spike times, it is possible for one such file
 .. _voltage_traces_csv_format:
 
 Voltage trace ``.csv``
-""""""""""""""""""""""
+~~~~~~~~~~~~~~~~~~~~~~
 
 .. list-table:: ``vm_all_traces.csv``
     :header-rows: 1
@@ -559,7 +559,7 @@ Voltage trace ``.csv``
 .. _voltage_traces_npz_format:
 
 Voltage trace ``.npz``
-""""""""""""""""""""""
+~~~~~~~~~~~~~~~~~~~~~~
 
 ``vm_all_traces.npz``::
 
