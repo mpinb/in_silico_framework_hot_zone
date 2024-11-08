@@ -324,23 +324,24 @@ for each individual simulation trial. Each file contains the following informati
 These individual files are usually gathered and parsed into a single dataframe containing all trials for further analysis:
 An example of the format is shown below:
 
+Raw :py:mod:`simrun` output
+'''''''''''''''''''''''''''
 
-.. tab:: Raw :py:mod:`simrun` output
+| synapse type       | synapse ID | soma distance | section ID | section pt ID | dendrite label | activation times |     |     |
+|--------------------|------------|---------------|------------|---------------|----------------|------------------|-----|-----|
+| presyn_cell_type_1 | 0          | 150.0         | 24         | 0             | 'basal'        | 10.2             | 80.5| 140.8|
+| presyn_cell_type_1 | 1          | 200.0         | 112        | 0             | 'apical'       |                  |     |     |
+| presyn_cell_type_2 | 2          | 250.0         | 72         | 0             | 'apical'       | 300.1            | 553.5|     |
 
-    | synapse type       | synapse ID | soma distance | section ID | section pt ID | dendrite label | activation times |     |     |
-    |--------------------|------------|---------------|------------|---------------|----------------|------------------|-----|-----|
-    | presyn_cell_type_1 | 0          | 150.0         | 24         | 0             | 'basal'        | 10.2             | 80.5| 140.8|
-    | presyn_cell_type_1 | 1          | 200.0         | 112        | 0             | 'apical'       |                  |     |     |
-    | presyn_cell_type_2 | 2          | 250.0         | 72         | 0             | 'apical'       | 300.1            | 553.5|     |
+Parsed dataframe
+'''''''''''''''''
 
-.. tab:: Parsed dataframe
-
-    | trial index | synapse type       | synapse ID | soma distance | section ID | section pt ID | dendrite label | activation times |     |     |
-    |-------------|--------------------|------------|---------------|------------|---------------|----------------|------------------|-----|-----|
-    | 0           | presyn_cell_type_1 | 0          | 150.0         | 24         | 0             | 'basal'        | 10.2             | 80.5| 140.8|
-    | 0           | presyn_cell_type_2 | 1          | 200.0         | 112        | 0             | 'apical'       | 100.2            |     |     |
-    | 1           | presyn_cell_type_1 | 0          | 150.0         | 24         | 0             | 'basal'        | 10.2             | 140.8|     |
-    | 1           | presyn_cell_type_2 | 1          | 200.0         | 112        | 0             | 'apical'       | 100.2            | 138.4|     |
+| trial index | synapse type       | synapse ID | soma distance | section ID | section pt ID | dendrite label | activation times |     |     |
+|-------------|--------------------|------------|---------------|------------|---------------|----------------|------------------|-----|-----|
+| 0           | presyn_cell_type_1 | 0          | 150.0         | 24         | 0             | 'basal'        | 10.2             | 80.5| 140.8|
+| 0           | presyn_cell_type_2 | 1          | 200.0         | 112        | 0             | 'apical'       | 100.2            |     |     |
+| 1           | presyn_cell_type_1 | 0          | 150.0         | 24         | 0             | 'basal'        | 10.2             | 140.8|     |
+| 1           | presyn_cell_type_2 | 1          | 200.0         | 112        | 0             | 'apical'       | 100.2            | 138.4|     |
 
 Writers:
     
@@ -368,22 +369,24 @@ for each individual simulation trial. Each file contains the following informati
 These individual files are usually gathered and parsed into a single dataframe containing all trials for further analysis
 An example of the format is shown below:
 
-.. tab:: Raw :py:mod:`simrun` output
+Raw :py:mod:`simrun` output
+'''''''''''''''''''''''''''
 
-    | cell type           | cell ID | activation times |     |     |
-    |---------------------|---------|------------------|-----|-----|
-    | presyn_cell_type_1  | 0       | 10.2             | 80.5| 140.8|
-    | presyn_cell_type_1  | 1       | 300.1            | 553.5|     |
-    | presyn_cell_type_2  | 2       | 100.2            | 200.5| 300.8|
+| cell type           | cell ID | activation times |     |     |
+|---------------------|---------|------------------|-----|-----|
+| presyn_cell_type_1  | 0       | 10.2             | 80.5| 140.8|
+| presyn_cell_type_1  | 1       | 300.1            | 553.5|     |
+| presyn_cell_type_2  | 2       | 100.2            | 200.5| 300.8|
 
 
-.. tab:: Parsed dataframe
+Parsed dataframe
+'''''''''''''''''
 
-    | trial index | cell type           | cell ID | activation times |     |     |
-    |-------------|---------------------|---------|------------------|-----|-----|
-    | 0           | presyn_cell_type_1  | 0       | 10.2             | 80.5| 140.8|
-    | 0           | presyn_cell_type_1  | 1       | 300.1            | 553.5|     |
-    | 0           | presyn_cell_type_2  | 2       | 100.2            | 200.5| 300.8|
+| trial index | cell type           | cell ID | activation times |     |     |
+|-------------|---------------------|---------|------------------|-----|-----|
+| 0           | presyn_cell_type_1  | 0       | 10.2             | 80.5| 140.8|
+| 0           | presyn_cell_type_1  | 1       | 300.1            | 553.5|     |
+| 0           | presyn_cell_type_2  | 2       | 100.2            | 200.5| 300.8|
 
 Writers:
 
