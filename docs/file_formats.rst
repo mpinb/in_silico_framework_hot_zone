@@ -370,60 +370,20 @@ An example of the format is shown below:
 
 .. tab:: Raw :py:mod:`simrun` output
 
-    .. list-table:: ``simulation_run<sim_trial>presynaptic_cells.csv``
-        :header-rows: 1
-
-    * - cell type
-    - cell ID
-    - activation times
-    - 
-    - 
-    * - presyn_cell_type_1
-    - 0
-    - 10.2
-    - 80.5
-    - 140.8
-    * - presyn_cell_type_1
-    - 1
-    - 300.1
-    - 553.5
-    - 
-    * - presyn_cell_type_2
-    - 2
-    - 100.2
-    - 200.5
-    - 300.8
+    | cell type           | cell ID | activation times |     |     |
+    |---------------------|---------|------------------|-----|-----|
+    | presyn_cell_type_1  | 0       | 10.2             | 80.5| 140.8|
+    | presyn_cell_type_1  | 1       | 300.1            | 553.5|     |
+    | presyn_cell_type_2  | 2       | 100.2            | 200.5| 300.8|
 
 
 .. tab:: Parsed dataframe
 
-    .. list-table::
-        :header-rows: 1
-
-        * - trial index
-        - cell type
-        - cell ID
-        - activation times
-        - 
-        - 
-        * - 0
-        - presyn_cell_type_1
-        - 0
-        - 10.2
-        - 80.5
-        - 140.8
-        * - 0
-        - presyn_cell_type_1
-        - 1
-        - 300.1
-        - 553.5
-        - 
-        * - 0
-        - presyn_cell_type_2
-        - 2
-        - 100.2
-        - 200.5
-        - 300.8
+    | trial index | cell type           | cell ID | activation times |     |     |
+    |-------------|---------------------|---------|------------------|-----|-----|
+    | 0           | presyn_cell_type_1  | 0       | 10.2             | 80.5| 140.8|
+    | 0           | presyn_cell_type_1  | 1       | 300.1            | 553.5|     |
+    | 0           | presyn_cell_type_2  | 2       | 100.2            | 200.5| 300.8|
 
 Writers:
 
