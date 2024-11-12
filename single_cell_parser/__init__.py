@@ -319,7 +319,6 @@ def spines_update_network_paramfile(
     '''Update the network.param file to point to the new synapse distribution file'''
     network_param = build_parameters(network_paramfile)
     for i in list(network_param.network.keys()):
-        network_param.network[
-            i].synapses.distributionFile = new_synapse_distribution_file
+        network_param.network[i].synapses.distributionFile = new_synapse_distribution_file
     network_param.save(new_network_paramfile)
     logger.info("Success: network.param file updated")
