@@ -1,4 +1,4 @@
-'''Parse simulation data generated with :py:mod:`simrun`.
+'''Parse simulation data generated with :py:mod:`simrun` for general purposes.
 
 The output format of :py:mod:`simrun` is a nested folder structure with ``.csv`` and/or ``.npz`` files.
 The voltage traces are written to a single ``.csv`` file (since the amount of timesteps is known in advance),
@@ -33,7 +33,7 @@ the following parsed data:
     * - ``parameterfiles``
       - A pandas dataframe containing the original paths of the parameter files and their hashes.
     * - ``synapse_activation``
-      - Dask dataframe containing the parsed :ref:`synapse_activation_format` data.
+      - Dask dataframe containing the parsed :ref:`syn_activation_format` data.
     * - ``cell_activation``
       - Dask dataframe containing the parsed :ref:`spike_times_format`.
     * - ``dendritic_recordings``
