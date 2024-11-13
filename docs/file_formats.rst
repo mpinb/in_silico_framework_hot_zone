@@ -322,7 +322,7 @@ for each individual simulation trial. Each file contains the following informati
 - activation times
 
 These individual files are usually gathered and parsed into a single dataframe containing all trials for further analysis:
-An example of the format is shown below:
+An example of the raw and parsed format is shown below:
 
 Raw :py:mod:`simrun` output
 '''''''''''''''''''''''''''
@@ -380,9 +380,9 @@ Parsed dataframe
       - section ID
       - section pt ID
       - dendrite label
-      - activation times
-      - 
-      - 
+      - 1
+      - 2
+      - 3
     * - 0
       - presyn_cell_type_1
       - 0
@@ -448,7 +448,7 @@ for each individual simulation trial. Each file contains the following informati
 - activation times
 
 These individual files are usually gathered and parsed into a single dataframe containing all trials for further analysis
-An example of the format is shown below:
+An example of the raw and parsed format is shown below:
 
 Raw :py:mod:`simrun` output
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
