@@ -521,6 +521,8 @@ Writers:
    probability and delay (see :ref:`network_parameters_format`).
    For this reason, the synapse activations are saved separately (see :ref:`syn_activation_format`).
 
+.. _voltage_traces_format:
+
 Voltage traces
 --------------
 
@@ -567,3 +569,32 @@ Voltage trace ``.npz``
            [-61.4607218758, -61.4665809176, -61.4735021526, -61.4814187507],
            [-55.1366909604, -55.1294343391, -55.1223216173, -55.1153403448],
            [-67.1747143695, -67.1580037786, -67.1424366078, -67.1279980017]])
+
+.. _voltage_traces_df_format:
+
+Voltage trace dataframe
+~~~~~~~~~~~~~~~~~~~~~~~
+
+The parsed dataframe is usually created by the :py:meth:`data_base.isf_data_base.db_initializers.load_simrun_general.init` function.
+
+.. list-table:: ``voltage trace dataframe``
+   :header-rows: 1
+
+    * - ``sim_trial_index``
+      - 0.000
+      - 0.025
+      - 0.050
+      - 0.075
+      - ...
+    * - trial_0
+      - -75.0 
+      - -75.017715 
+      - -75.033995 
+      - -75.04979
+      - ...
+    * - trial_1
+      - -75.0
+      - -75.017722
+      - -75.034002
+      - -75.049797
+      - ...

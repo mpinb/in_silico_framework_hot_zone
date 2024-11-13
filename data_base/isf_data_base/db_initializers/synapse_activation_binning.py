@@ -48,8 +48,7 @@ def prefun(df):
     dummy = df.synapse_type.str.split('_')
     df['celltype'] = dummy.str[0]
     df['presynaptic_column'] = dummy.str[1]
-    df['proximal'] = (df.soma_distance
-                      < 500).replace(True, 'prox').replace(False, 'dist')
+    df['proximal'] = (df.soma_distance < 500).replace(True, 'prox').replace(False, 'dist')
     df['EI'] = df['celltype'].isin(excitatory).replace(True, 'EXC').replace(
         False, 'INH')
     bs = 50
@@ -117,12 +116,14 @@ def synapse_activation_postprocess_pandas(
     Args:
         pdf (:py:class:`pandas.DataFrame`): synapse activation dask dataframe
         groupby (str): species for which subgroups the bins should be calculated. Available values include:
+        
           - ``celltype``
           - ``presynaptic_column``
           - ``proximal`` (soma distance < 500 um)
           - ``EI`` (Lumping the EXC / INH celltypes together)
           - ``binned_somadist``: synapse counts for all 50 microns
           - any column in the specified dataframe.
+        
         db (DataBase): if specified, the result will be computed immediately and saved in the database immediately.
         get (dask scheduler): Specify a dask scheduler for the computation (e.g. :py:func:`dask.distributed.Client.get`)
         prefun (callable):
@@ -346,6 +347,7 @@ def init(
             Must contain the key ``synapse_activation``.
         groupby (str):
             Aggregation key for the synapse activation bins. Available values include:
+            
             - ``celltype``
             - ``presynaptic_column``
             - ``proximal`` (soma distance < 500 um)
@@ -353,6 +355,7 @@ def init(
             - ``binned_somadist``: synapse counts for all 50 microns
             - any column in the specified dataframe.
             - Can be a list, if "sub-subgroups" should be calculated.
+        
         scheduler (dask scheduler):
             A dask scheduler for the comptation (e.g. :py:func:`dask.distributed.Client.get`)
         prefun (callable):

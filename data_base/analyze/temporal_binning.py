@@ -1,3 +1,9 @@
+"""Bin :ref:`spike_times_format` and :ref:`synapse_activation_format` dataframes by time.
+
+This is used in :py:mod:`data_base.isf_data_base.db_initializers.synapse_activation_binning` to bin
+synapse activations.
+"""
+
 from .spatiotemporal_binning import time_list_from_pd
 import pandas as pd
 import numpy as np
