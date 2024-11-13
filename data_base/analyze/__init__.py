@@ -32,7 +32,7 @@ def split_synapse_activation(
         inhibitory (list): List of inhibitory cell types.
         
     Returns:
-        tuple: a :py:class:`~pandas.DataFrame`with excitatory synapse activations, and one for inhibitory synapse activations.
+        tuple: a :py:class:`~pandas.DataFrame` with excitatory synapse activations, and one for inhibitory synapse activations.
     '''
     if selfcheck:
         celltypes = sa.apply(
