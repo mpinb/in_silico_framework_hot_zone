@@ -487,9 +487,9 @@ Parsed dataframe
     * - trial index
       - cell type
       - cell ID
-      - activation times
-      - 
-      - 
+      - 1
+      - 2
+      - 3
     * - 0
       - presyn_cell_type_1
       - 0

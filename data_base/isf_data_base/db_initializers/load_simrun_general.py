@@ -1209,6 +1209,7 @@ def init(
             dumper=dumper)
     
     if spike_times:
+        # spike times are numbered after this
         logging.info("---spike times---")
         vt = db['voltage_traces']
         db.set(
