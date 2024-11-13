@@ -2,8 +2,12 @@ import numpy as np
 from data_base.utils import silence_stdout
 import single_cell_parser as scp
 import single_cell_parser.analyze as sca
-from data_base.analyze import excitatory, inhibitory
-
+import logging
+logger = logging.getLogger("ISF").getChild(__name__)
+try:
+    from barrel_cortex import excitatory, inhibitory
+except ImportError:
+    logger.warning("Could not import excitatory/inhibitory celltypes from barrel_cortex. Is the module available?")
 # import Interface as I # moved to bottom becose auf circular import
 
 
