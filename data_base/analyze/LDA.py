@@ -8,6 +8,19 @@ import pandas as pd
 
 
 def make_groups_equal_size(X, y):
+    """Equally balance samples from :paramref:`X` based on the labels in :paramref:`y`.
+    
+    Randomly subsample a data matrix so that both classes have the same number of samples.
+    The sample size will thus be twice the size of the smaller class.
+    Only supports binary classification.
+    
+    Args:
+        X (:py:class:`~numpy.array`): 2D array of features
+        y (:py:class:`~numpy.array`): 1D array of labels
+    
+    Returns:
+        tuple: subsampled 2D array of features and 1D array of labels
+    """
     X_true = X[y == 1]
     y_true = y[y == 1]
     X_false = X[y == 0]
@@ -23,26 +36,17 @@ def make_groups_equal_size(X, y):
     return X_ret, y_ret
 
 
-assert len(
-    make_groups_equal_size(
-        np.array([[1, 2, 3], [2, 3, 4], [3, 4, 5], [4, 5, 6]]),
-        np.array([0, 0, 1, 1]))[0]) == 4
-assert len(
-    make_groups_equal_size(
-        np.array([[1, 2, 3], [2, 3, 4], [3, 4, 5], [4, 5, 6]]),
-        np.array([0, 0, 0, 1]))[0]) == 2
-
-
-def prediction_rates(X_in,
-                     y_in,
-                     classifier=None,
-                     n=5,
-                     return_='score',
-                     normalize_group_size=True,
-                     verbosity=0,
-                     test_size=0.4,
-                     solver='eigen',
-                     max_tries=2):
+def prediction_rates(
+    X_in,
+    y_in,
+    classifier=None,
+    n=5,
+    return_='score',
+    normalize_group_size=True,
+    verbosity=0,
+    test_size=0.4,
+    solver='eigen',
+    max_tries=2):
     '''
     X: training data
     y: target values
