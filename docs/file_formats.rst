@@ -580,21 +580,21 @@ The parsed dataframe is usually created by the :py:meth:`data_base.isf_data_base
 .. list-table:: ``voltage trace dataframe``
    :header-rows: 1
 
-    * - ``sim_trial_index``
-      - 0.000
-      - 0.025
-      - 0.050
-      - 0.075
-      - ...
-    * - trial_0
-      - -75.0 
-      - -75.017715 
-      - -75.033995 
-      - -75.04979
-      - ...
-    * - trial_1
-      - -75.0
-      - -75.017722
-      - -75.034002
-      - -75.049797
-      - ...
+   * - ``sim_trial_index``
+     - 0.000
+     - 0.025
+     - 0.050
+     - 0.075
+     - ...
+   * - trial_0
+     - -75.0 
+     - -75.017715 
+     - -75.033995 
+     - -75.04979
+     - ...
+   * - trial_1
+     - -75.0
+     - -75.017722
+     - -75.034002
+     - -75.049797
+     - ...
