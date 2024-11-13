@@ -1,5 +1,8 @@
-'''This module contains methods to compare the result of the SingleCellInputMapper to
-the neuronet population.'''
+'''Compare the result of the :py:mod:`singlecell_input_mapper` to
+the neuronet population.
+
+:skip-doc:
+'''
 
 import glob
 import pandas as pd
