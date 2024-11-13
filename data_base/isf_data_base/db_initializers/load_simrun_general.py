@@ -7,7 +7,7 @@ of spikes and synapse activations is not known in advance).
 
 This module provides functions to gather and parse this data in efficient data formats, namely pandas and dask dataframes.
 After running :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general.init`, a database is created containing
-the following parsed data:
+the following keys:
 
 .. list-table::
     :header-rows: 1
@@ -55,6 +55,14 @@ After initialization, you can access the data from the data_base in the followin
     <voltage traces dataframe>
     >>> db['spike_times']
     <spike times dataframe>
+    
+If you intialize the database with ``rewrite_in_optimized_format=True`` (default), the keys are written as dask dataframes to the parquet format.
+If ``rewrite_in_optimized_format=False`` instead, these keys are pickled dask dataframes, containing relative links to the
+original ``.csv`` files. In essence, the dask dataframes contain the insturctions to build the dataframe, not the data itself.
+This is useful for fast intermediate analysis. It is not intended and strongly discouraged for long term storage. 
+Individual keys can afterwards be set to permanent, self-contained and efficient dask dataframes by calling 
+:py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general.load_simrun_general.optimize` on specific database
+keys.
 
 See also:
     :py:meth:`simrun.run_new_simulations._evoked_activity` for more information on the raw output format of :py:mod:`simrun`.
@@ -1424,6 +1432,7 @@ def load_initialized_cell_and_evokedNW_from_db(
     else:
         evokedNW.create_saved_network2()
     return cell, evokedNW
+
 
 def convert_df_columns_to_str(df):
     """Convenience method to convert all columns of a dataframe to strings.

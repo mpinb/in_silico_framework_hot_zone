@@ -1019,6 +1019,12 @@ def init(
 ):
     '''Construct delayeds to parse a simrun-initialized database to binned voltage traces ready for ANN training.
     
+    Args:
+        db (:py:class:`~data_base.isf_data_base.isf_data_base.ISFDataBase`):
+            The simrun-initialized database
+        db_target (:py:class:`~data_base.isf_data_base.isf_data_base.ISFDataBase`):
+            The target database. Defaults to None, which initializes the ANN batches in the same database as :paramref:`db`.
+    
     Attention:
         Still in development. See issue #75.
     
