@@ -22,6 +22,7 @@ The following locking servers/types are supported:
 
 
 If no such file exists, or the environment variable is not set, a default configuration is used, which uses (in order of decreasing precedence):
+
 1. A redis server running on ``spock`` at port ``8885``
 2. A redis server running on ``localhost`` at port ``6379``
 3. File-based locking.
