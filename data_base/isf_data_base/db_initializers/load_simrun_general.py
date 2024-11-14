@@ -722,7 +722,7 @@ from ..dbopen import create_db_path
 
 
 def create_db_path_print(path, replace_dict={}):
-    """skip-doc"""
+    """:skip-doc:"""
     ## replace_dict: todo
     try:
         return create_db_path(path), True
@@ -733,7 +733,7 @@ def create_db_path_print(path, replace_dict={}):
 
 def cell_param_to_dbpath(neuron):
     """
-    skip-doc
+    :skip-doc:
     
     Used as a :paramref:`transform_fun` in 
     :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general.write_param_files_to_folder`.
@@ -756,7 +756,7 @@ def cell_param_to_dbpath(neuron):
 
 def network_param_to_dbpath(network):
     """
-    skip-doc
+    :skip-doc:
     """
     flag = True
     network['NMODL_mechanisms']['VecStim'], flag_ = create_db_path_print(
@@ -781,7 +781,7 @@ def network_param_to_dbpath(network):
 
 @dask.delayed
 def parallel_copy_helper(df, transform_fun=None):
-    """:skip-doc"""
+    """:skip-doc:"""
     for name, value in df.iterrows():
         param = scp.build_parameters(value.from_)
         #         print 'ready to transform'
@@ -1369,7 +1369,7 @@ def optimize(
 
 
 def load_param_files_from_db(db, sti):
-    """Load the :ref:``cell_parameters_format`` and :ref:``network_parameters_format`` files from the database.
+    """Load the :ref:`cell_parameters_format` and :ref:`network_parameters_format` files from the database.
     
     Args:
         db (:py:class:`~data_base.isf_data_base.isf_data_base.ISFDataBase`):
