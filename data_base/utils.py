@@ -166,9 +166,11 @@ def pandas_to_array(pdf, x_component_fun, y_component_fun, value_fun):
         x_2_y_2     0
         x_3_y_2    -1
     
-        >>> pandas_to_array(pdf, lambda index, values: index.split('_')[1], \
-                         lambda index, values: index.split('_')[-1], \
-                         lambda index, values: values.bla)
+        >>> pandas_to_array(
+        ...    pdf, 
+        ...    lambda index, values: index.split('_')[1],
+        ...    lambda index, values: index.split('_')[-1],
+        ...    lambda index, values: values.bla)
             1    2    3
         1    10   15    7
         2     2    0   -1
