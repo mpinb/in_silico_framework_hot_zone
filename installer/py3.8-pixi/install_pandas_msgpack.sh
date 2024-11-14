@@ -8,6 +8,6 @@ if [ ! -d "${PD_MSGPACK_HOME}" ]; then
     git clone https://github.com/abast/pandas-msgpack.git
     git -C $SCRIPT_DIR/pandas-msgpack apply $SCRIPT_DIR/pandas_msgpack.patch
 fi
-cd $PD_MSGPACK_HOME; python setup.py build_ext --inplace --force install
-pip list | grep pandas
+cd $PD_MSGPACK_HOME; python setup.py build_ext
+pixi add $PD_MSGPACK_HOME/dist/*.whl
 popd
