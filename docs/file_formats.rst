@@ -59,6 +59,36 @@ NEURON :cite:`hines2001neuron` file format for neuron mechanisms. Documentation 
 Used to define channel and synapse dynamics in NEURON simulations.
 See the folder `mechanisms` in the project source.
 
+.. _syn_file_format:
+
+.syn
+====
+ISF custom file format to store synapse locations onto a morphology. 
+This file fully captures an anatomical realization of a network.
+Only valid with an associated morphology :ref:`hoc_file_format` file.
+
+For each synapse, it provides the synapse type and location onto the morphology.
+Each row index corresponds to its synapse ID, providing a link to a corresponding :ref:`con_file_format` file.
+The location is encoded as a section ID and x (a normalized distance along the section),
+to be consistent with NEURON syntax.
+
+To create a functional network (i.e., known presynaptic origin), 
+it must be used in conjunction with an associated :ref:`con_file_format` file.
+
+Example::
+
+    # Synapse distribution file
+    # corresponding to cell: morphology.hoc
+    # Type - section - section.x
+
+    VPM_E1  112     0.138046479525
+    VPM_E1  130     0.305058053119
+    VPM_E1  130     0.190509288017
+    VPM_E1  9       0.368760777084
+    VPM_E1  110     0.0
+    VPM_E1  11      0.120662910562
+    ...
+
 .. _con_file_format:
 
 .con
@@ -67,12 +97,9 @@ ISF custom file format to store connectivity data.
 To be used in conjunction with an associated :ref:`syn_file_format` file and morphology :ref:`hoc_file_format` file.
 It numbers each synapse, and links it to its associated presynaptic cell type and ID.
 While a :ref:`syn_file_format` file and :ref:`hoc_file_format` file provide the anatomical realization of a network,
-the addition of a :ref:`con_file_format` file makes it into a functional realization, as it allows linking the synapses to
-their presynaptic cells, which in turn allow cell type specific activation patters (see: :py:meth:`single_cell_parser.network.NetworkMapper`).
-
-Readers:
-
-- :py:mod:`~single_cell_parser.reader.read_functional_realization_map`
+the addition of a :ref:`con_file_format` file makes possible to construct a functional realization, as it allows linking the synapses to
+presynaptic cells of a dense connectome model, which in turn allows to assign cell type specific activation patterns 
+to each synapse. ISF's workflow is designed to create these files in tandem, so they always co-exist.
 
 Example::
 
@@ -88,48 +115,13 @@ Example::
     L6cc_A3 4       5
     ...
 
-.. _syn_file_format:
-
-.syn
-====
-ISF custom file format to store synapse locations onto a morphology. 
-This file fully captures an anatomical realization of a network.
-Only valid with an associated morphology :ref:`hoc_file_format` file.
-
-For each synapse, it provides the synapse type and location onto the morphology.
-Each row index corresponds to its synapse ID, providing a backlink to the :ref:`con_file_format` file format.
-The location is encoded as a section ID and x (a normalized distance along the section),
-to be consistent with NEURON syntax.
-
-To create a functional network (i.e., known presynaptic origin), 
-it must be used in conjunction with an associated :ref:`con_file_format` file.
-
-Readers:
-
-- :py:mod:`~single_cell_parser.reader.read_synapse_realization`
-- :py:mod:`~single_cell_parser.reader.read_pruned_synapse_realization`
-
-Example::
-
-    # Synapse distribution file
-    # corresponding to cell: 86_L5_86_L5_CDK20041214_nr3L5B_dend_PC_neuron_transform_registered_C2center
-    # Type - section - section.x
-
-    VPM_E1  112     0.138046479525
-    VPM_E1  130     0.305058053119
-    VPM_E1  130     0.190509288017
-    VPM_E1  9       0.368760777084
-    VPM_E1  110     0.0
-    VPM_E1  11      0.120662910562
-    ...
-
 .. _param_file_format:
 
 .param
 ======
 ISF custom file format to save JSON-like ASCII data for cell parameters, network parameters, and activity data.
 Cell parameters can be read and written using :py:mod:`single_cell_parser`.
-Both the :ref:`_cell_parameters_format` and the :ref:`network_parameters_format` are used as inputs for multi-scale simulations using :py:mod:`simrun`.
+Both the :ref:`cell_parameters_format` and the :ref:`network_parameters_format` are used as inputs for multi-scale simulations using :py:mod:`simrun`.
 
 .. _cell_parameters_format:
 
