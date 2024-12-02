@@ -1888,7 +1888,7 @@ class AnalyzeFile:
         
         periods: requires '1onset' as key for plot_n_onset function.
         '''
-        smr_reader = SmrReader(path,
+        smr_reader = ReaderSmr(path,
                                analogsignal_id=analogsignal_id,
                                stim_times_channel=stim_times_channel)
         self.sdct = SpikeDetectionCreastTrough(smr_reader,
@@ -1899,7 +1899,7 @@ class AnalyzeFile:
 
         # run event_analysis
 
-        self.ea = EventAnalysis(st)
+        self.ea = SpikeTimesAnalysis(self.sdct)
         df = self.ea.event_db['burst_analysis_2']
         df['experiment'] = cellid
         df['period'] = df.apply(
