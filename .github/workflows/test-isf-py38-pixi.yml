@@ -37,7 +37,7 @@ jobs:
           fi
 
           echo "------------ Setting up environment -------------"
-          curl -fsSL https://pixi.sh/install.sh | bash
+          curl -fsSL https://pixi.sh/install.sh | bash &&
           . ~/.bash_profile
           . ~/.bashrc
           which pixi
