@@ -26,14 +26,6 @@ jobs:
     name: Test Py3.8-pixi
     runs-on: ubuntu-latest
     steps:
-      - name: Set up Pixi
-        uses: prefix-dev/setup-pixi@v0.8.0
-        with:
-          pixi-version: v0.39.0
-          cache: true
-          auth-host: prefix.dev
-          auth-token: ${{ secrets.PREFIX_DEV_TOKEN }}
-
       - name: Test in-silico-framework for Python 3.8 (pixi)
         run: |
           echo "------------ Preliminary setup for tests -------------"
@@ -45,11 +37,8 @@ jobs:
           fi
 
           echo "------------ Setting up environment -------------"
-          CONDA_TARGET_DIR="$HOME/anaconda_isf3.8"
-          source $CONDA_TARGET_DIR/bin/activate
-          echo "Using Python: $(which python)"
-          export PYTHONPATH=$(pwd):$HOME
-          echo $PYTHONPATH
+          curl -fsSL https://pixi.sh/install.sh | bash
+          pixi install
 
           echo "------------ Configuring Dask -------------"
           name=${{ runner.name }}
