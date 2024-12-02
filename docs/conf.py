@@ -6,9 +6,7 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-import sys
-import os
-import ast, os
+import sys, os, fnmatch, ast
 project_root = os.path.join(os.path.abspath(os.pardir))
 sys.path.insert(0, project_root)
 from docs.parse_notebooks import copy_and_parse_notebooks_to_docs
@@ -147,6 +145,21 @@ def get_module_docstring(module_path):
         print(f"Error getting docstring for module {module_path}: {e}")
         return None
 
+modules_to_skip = [
+    '**tests**', 
+    '**barrel_cortex**', 
+    '**installer**', 
+    '**__pycache__**',
+    "**getting_started**",
+    "**compatibility**",
+    "**.pixi**",
+    "**dendrite_thickness**",
+    "**mechanisms**",
+    "**config**",
+    "**docs**",
+    "**.ipynb_checkpoints**"
+]
+
 @lru_cache(maxsize=None)
 def find_modules_with_tag(source_dir, tag=":skip-doc:"):
     """Recursively find all modules with a specific tag in their docstring.
@@ -157,6 +170,13 @@ def find_modules_with_tag(source_dir, tag=":skip-doc:"):
     modules_with_tag = []
 
     for root, dirs, files in os.walk(source_dir):
+        for d in dirs.copy():
+            if any([
+                fnmatch.fnmatch(
+                    os.path.join(root, d), skip) 
+                for skip in modules_to_skip
+            ]):
+                dirs.remove(d)
         for f in files:
             if f.endswith(".py"):
                 module_path = os.path.join(root, f)
@@ -169,24 +189,9 @@ def find_modules_with_tag(source_dir, tag=":skip-doc:"):
 
     return modules_with_tag
 
-@lru_cache(maxsize=None)
-def get_modules_to_skip():
-    return [
-        '**tests**', 
-        '**barrel_cortex**', 
-        '**installer**', 
-        '**__pycache__**',
-        "**getting_started**",
-        "**compatibility**",
-        "**dendrite_thickness**",
-        "**mechanisms**",
-        "**config**",
-        "**docs**",
-        "**.ipynb_checkpoints**"] + find_modules_with_tag(project_root, tag=":skip-doc:")
 
-# Use the cached result
-modules_to_skip = get_modules_to_skip()
 
+modules_to_skip = modules_to_skip + find_modules_with_tag(project_root)
 # skipping documentation for certain members
 print("ignoring modules: ", modules_to_skip)
 autoapi_ignore = modules_to_skip
