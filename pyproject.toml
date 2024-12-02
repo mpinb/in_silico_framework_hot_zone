@@ -27,8 +27,6 @@ doc = [
   "sphinxext-opengraph", 
   "sphinx-copybutton"
   ]
-test = [
-  "pytest", "pytest-xdist", "pytest-cov>=5.0.0,<6"]
 
 [build-system]
 build-backend = "hatchling.build"
@@ -68,10 +66,7 @@ pytest = ">=8.3.3,<9"
 pytest-xdist = ">=3.6.1,<4"
 wheel = ">=0.45.1,<0.46"
 dash = ">=2.18.1,<3"
-
-[tool.pixi.environments]
-doc = { features = ["doc"], solve-group = "default" }
-test = { features = ["test"], solve-group = "default" }
+pytest-cov = ">=5.0.0,<6"
 
 [tool.pixi.pypi-options]
 no-build-isolation = ["pandas-msgpack"]
