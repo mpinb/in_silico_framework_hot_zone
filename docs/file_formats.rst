@@ -127,8 +127,9 @@ Example::
 
 .param
 ======
-ISF custom file format to save JSON-like ASCII data. These can be read in using :py:mod:`single_cell_parser`.
-Used in a variety of ways, as seen below.
+ISF custom file format to save JSON-like ASCII data for cell parameters, network parameters, and activity data.
+Cell parameters can be read and written using :py:mod:`single_cell_parser`.
+Both the :ref:`_cell_parameters_format` and the :ref:`network_parameters_format` are used as inputs for multi-scale simulations using :py:mod:`simrun`.
 
 .. _cell_parameters_format:
 
@@ -136,8 +137,9 @@ Cell parameters
 ---------------
 
 :ref:`param_file_format` file to store biophysical parameters of a cell.
-Includes the path to the :ref:`hoc_file_format` morphology file, biophysical properties of the cell per cellular 
-structure (i.e. soma, dendrite, axon initial segment ...),
+Only valied with a corresponding :ref:`hoc_file_format` morphology file.
+Includes a reference to a :ref:`hoc_file_format` morphology file, 
+biophysical properties of the cell per cellular structure (i.e. soma, dendrite, axon initial segment ...),
 and basic simulation parameters. Simulation parameters are usually overridden by higher level modules, 
 such as :py:mod:`simrun`.
 
@@ -186,34 +188,14 @@ Example::
             'recordingSites': ['getting_started/example_data/apical_proximal_distal_rec_sites.landmarkAscii']}
     }
 
-.. _activity_data_format:
-
-Activity data
--------------
-:ref:`param_file_format` files are used to store activity data covering spike times and time bins for specific cell types in response to a stimulus, as seen in e.g. getting_started/example_data/functional_constraints/evoked_activity/
-
-Example::
-
-    {
-    "L4ss_B1": {
-    "distribution": "PSTH",
-    "intervals": [(0.0,1.0),(1.0,2.0),(2.0,3.0),(3.0,4.0),(4.0,5.0),(5.0,6.0),(6.0,7.0),(7.0,8.0),(8.0,9.0),(9.0,10.0),(10.0,11.0),(11.0,12.0),(12.0,13.0),(13.0,14.0),(14.0,15.0),(15.0,16.0),(16.0,17.0),(17.0,18.0),(18.0,19.0),(19.0,20.0),(20.0,21.0),(21.0,22.0),(22.0,23.0),(23.0,24.0),(24.0,25.0),(25.0,26.0),(26.0,27.0),(27.0,28.0),(28.0,29.0),(29.0,30.0),(30.0,31.0),(31.0,32.0),(32.0,33.0),(33.0,34.0),(34.0,35.0),(35.0,36.0),(36.0,37.0),(37.0,38.0),(38.0,39.0),(39.0,40.0),(40.0,41.0),(41.0,42.0),(42.0,43.0),(43.0,44.0),(44.0,45.0),(45.0,46.0),(46.0,47.0),(47.0,48.0),(48.0,49.0),(49.0,50.0)],
-    "probabilities": [-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,0.0062,0.0062,-0.0004,0.0129,0.0062,-0.0004,-0.0004,0.0062,-0.0004,-0.0004,-0.0004,0.0062,0.0062,-0.0004,-0.0004,-0.0004],
-    },
-    "L4ss_B2": {
-    "distribution": "PSTH",
-    "intervals": [(0.0,1.0),(1.0,2.0),(2.0,3.0),(3.0,4.0),(4.0,5.0),(5.0,6.0),(6.0,7.0),(7.0,8.0),(8.0,9.0),(9.0,10.0),(10.0,11.0),(11.0,12.0),(12.0,13.0),(13.0,14.0),(14.0,15.0),(15.0,16.0),(16.0,17.0),(17.0,18.0),(18.0,19.0),(19.0,20.0),(20.0,21.0),(21.0,22.0),(22.0,23.0),(23.0,24.0),(24.0,25.0),(25.0,26.0),(26.0,27.0),(27.0,28.0),(28.0,29.0),(29.0,30.0),(30.0,31.0),(31.0,32.0),(32.0,33.0),(33.0,34.0),(34.0,35.0),(35.0,36.0),(36.0,37.0),(37.0,38.0),(38.0,39.0),(39.0,40.0),(40.0,41.0),(41.0,42.0),(42.0,43.0),(43.0,44.0),(44.0,45.0),(45.0,46.0),(46.0,47.0),(47.0,48.0),(48.0,49.0),(49.0,50.0)],
-    "probabilities": [-0.0004,0.0062,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,0.0062,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,0.0062,-0.0004,-0.0004,0.0129,0.0062,0.0062,-0.0004,-0.0004,-0.0004,-0.0004,0.0062,-0.0004,-0.0004,0.0062,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004],
-    },
-    ...
-    }
 
 .. _network_parameters_format:
 
 Network parameters
 ------------------
 The :ref:`param_file_format` format is used to store network parameters, 
-describing the activation of presynaptic cells and synapses during the scenario we want to simulate. 
+describing the presynaptic cells and their synaptic activations.
+Only valid with an associated :ref:`hoc_file_format` morphology file, :ref:`syn_file_format` file, and :ref:`con_file_format` file.
 
 For each presynaptic cell type in the network, this following information is provided:
 
@@ -224,8 +206,6 @@ For each presynaptic cell type in the network, this following information is pro
      - Description
    * - ``celltype``
      - Spiking type of the presynaptic cell ("spiketrain", or "pointcell").
-   * - ``interval``
-     - Average interval of the spikes.
    * - ``synapses``
      - Additional synapse information (see table below)
    * - ``cellNr``
@@ -252,49 +232,68 @@ Example::
 
     {
     "info": {
-        "date": "11Feb2015",
-        "name": "evoked_activity",
-        "author": "name",
+      "date": "11Feb2015",
+      "name": "evoked_activity",
+      "author": "name",
     },
     "network": {
-        "cell_type_1": {
-            "celltype": "spiketrain",
-            "interval": 2173.9,
-            "synapses": {
-                "receptors": {
-                    "glutamate_syn": {
-                        "threshold": 0.0,
-                        "delay": 0.0,
-                            "parameter": {
-                            "tau1": 26.0,
-                            "tau2": 2.0,
-                            "tau3": 2.0,
-                            "tau4": 0.1,
-                            "decayampa": 1.0,
-                            "decaynmda": 1.0,
-                            "facilampa": 0.0,
-                            "facilnmda": 0.0,
-                            },
-                        "weight": [1.47, 1.47],
-                    },
-                },
-            "releaseProb": 0.6,
-            "cellNr": 1,
-            "noise": 0.0,
-            "start": 0.0,
-            "nspikes": 2,
-            },
+      "cell_type_1": {
+        "cellNr": 20
+        "celltype": {
+          'pointcell': {
+            'distribution': 'PSTH_poissontrain', 
+            'intervals': [(0, 274.7), (274.7, 295), (295, 945), (945, 1145)], 
+            'offset': 0.0, 
+            'rates': [1.4357770278148136, 1.0890981376857083, 1.7588271630292192, 1.4357770278148136]
+          }
         },
-        "cell_type_2": {
-            "celltype": "pointcell",
-            "distribution": "PSTH"
-            "intervals": [(0, 10), (10, 20), (20, 40), (40, 50)],
-            "probabilities": [0.0, 0.01, 0.05, 0.0],
-            "offset": 0.0,
-        },
-        ...
+        "synapses": {
+          "receptors": {
+            'glutamate_syn': {
+              'delay': 0.0, 
+              'parameter': {
+                'decayampa': 1.0, 
+                'decaynmda': 1.0, 
+                'facilampa': 0.0, 
+                'facilnmda': 0.0, 
+                'tau1': 26.0, 
+                'tau2': 2.0, 
+                'tau3': 2.0, 
+                'tau4': 0.1}, 
+              'threshold': 0.0, 
+              'weight': [1.5480934081344324, 1.5480934081344324]
+              }
+          },
+          "releaseProb": 0.5,
+          "connectionFile": "presyn_cells.con",
+          "distributionFile": "syn_locations.syn"
+        }
+      },
+      "cell_type_2": {...},
+      ...
     }
 
+.. _activity_data_format:
+
+Activity data
+-------------
+:ref:`param_file_format` files are used to store activity data covering spike times and time bins for specific cell types in response to a stimulus, as seen in e.g. getting_started/example_data/functional_constraints/evoked_activity/
+
+Example::
+
+    {
+    "L4ss_B1": {
+    "distribution": "PSTH",
+    "intervals": [(0.0,1.0),(1.0,2.0),(2.0,3.0),(3.0,4.0),(4.0,5.0),(5.0,6.0),(6.0,7.0),(7.0,8.0),(8.0,9.0),(9.0,10.0),(10.0,11.0),(11.0,12.0),(12.0,13.0),(13.0,14.0),(14.0,15.0),(15.0,16.0),(16.0,17.0),(17.0,18.0),(18.0,19.0),(19.0,20.0),(20.0,21.0),(21.0,22.0),(22.0,23.0),(23.0,24.0),(24.0,25.0),(25.0,26.0),(26.0,27.0),(27.0,28.0),(28.0,29.0),(29.0,30.0),(30.0,31.0),(31.0,32.0),(32.0,33.0),(33.0,34.0),(34.0,35.0),(35.0,36.0),(36.0,37.0),(37.0,38.0),(38.0,39.0),(39.0,40.0),(40.0,41.0),(41.0,42.0),(42.0,43.0),(43.0,44.0),(44.0,45.0),(45.0,46.0),(46.0,47.0),(47.0,48.0),(48.0,49.0),(49.0,50.0)],
+    "probabilities": [-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,0.0062,0.0062,-0.0004,0.0129,0.0062,-0.0004,-0.0004,0.0062,-0.0004,-0.0004,-0.0004,0.0062,0.0062,-0.0004,-0.0004,-0.0004],
+    },
+    "L4ss_B2": {
+    "distribution": "PSTH",
+    "intervals": [(0.0,1.0),(1.0,2.0),(2.0,3.0),(3.0,4.0),(4.0,5.0),(5.0,6.0),(6.0,7.0),(7.0,8.0),(8.0,9.0),(9.0,10.0),(10.0,11.0),(11.0,12.0),(12.0,13.0),(13.0,14.0),(14.0,15.0),(15.0,16.0),(16.0,17.0),(17.0,18.0),(18.0,19.0),(19.0,20.0),(20.0,21.0),(21.0,22.0),(22.0,23.0),(23.0,24.0),(24.0,25.0),(25.0,26.0),(26.0,27.0),(27.0,28.0),(28.0,29.0),(29.0,30.0),(30.0,31.0),(31.0,32.0),(32.0,33.0),(33.0,34.0),(34.0,35.0),(35.0,36.0),(36.0,37.0),(37.0,38.0),(38.0,39.0),(39.0,40.0),(40.0,41.0),(41.0,42.0),(42.0,43.0),(43.0,44.0),(44.0,45.0),(45.0,46.0),(46.0,47.0),(47.0,48.0),(48.0,49.0),(49.0,50.0)],
+    "probabilities": [-0.0004,0.0062,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,0.0062,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004,0.0062,-0.0004,-0.0004,0.0129,0.0062,0.0062,-0.0004,-0.0004,-0.0004,-0.0004,0.0062,-0.0004,-0.0004,0.0062,-0.0004,-0.0004,-0.0004,-0.0004,-0.0004],
+    },
+    ...
+    }
 
 Dataframes
 ==========
