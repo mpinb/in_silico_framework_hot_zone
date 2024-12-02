@@ -38,6 +38,7 @@ jobs:
 
           echo "------------ Setting up environment -------------"
           curl -fsSL https://pixi.sh/install.sh | bash
+          . ~/.bashrc
           pixi install
 
           echo "------------ Configuring Dask -------------"
