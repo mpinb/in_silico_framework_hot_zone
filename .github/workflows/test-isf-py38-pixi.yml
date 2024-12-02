@@ -30,7 +30,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      - name: Test in-silico-framework for Python 3.8 (pixi)
+      - name: Setup pixi
         uses: prefix-dev/setup-pixi@v0.8.0
         with:
           pixi-version: v0.39.0
@@ -38,29 +38,19 @@ jobs:
           auth-host: prefix.dev
           auth-token: ${{ secrets.PREFIX_DEV_TOKEN }}
           manifest-path: pyproject.toml
-      - run: |
+      - name: Test
+        run: |
           echo "------------ Preliminary setup for tests -------------"
           echo "Creating tests/logs/ directory..."
           mkdir -p ./tests/logs/
-          if [ -f .coverage.${{ runner.name }}.* ]; then
-            echo "Removing previous coverage files..."
-            rm .coverage.${{ runner.name }}.*
-          fi
 
           echo "------------ Configuring Dask -------------"
           name=${{ runner.name }}
           runner_number=$( echo $name | grep -Eo '[0-9]+$' )
           port_number=387${runner_number: -1}6
           bokeh_port=387${runner_number: -1}7
-          echo "Killing all dask processes on ${{ runner.name }} for user $USER (if they exist)"
-          pkill -U $USER dask-worker
-          pkill -U $USER dask-scheduler
-          echo "Killing all processes on ports $port_number and $bokeh_port"
-          fuser -n tcp -k $port_number 
-          fuser -n tcp -k $bokeh_port 
           echo "Launching Dask server on $name"
           echo "Using port $port_number and bokeh port $bokeh_port"
-
           export DASK_CONFIG=./config/dask_config.yml
 
           echo "------------ Running tests -------------"
@@ -72,15 +62,8 @@ jobs:
           (pixi run dask-scheduler --port=$port_number --bokeh-port=$bokeh_port --host=localhost --preload="import mechanisms, compatibility"> ./tests/logs/dask_scheduler_${{ github.run_id }}.log 2>&1) & \
           (pixi run dask-worker localhost:$port_number --nthreads 1 --nprocs 10 --memory-limit=100e15 --local-directory="." > ./tests/logs/dask_workers_${{ github.run_id }}.log 2>&1) & \
           pixi run pytest -n 5 -rsx -vv --color=yes --durations=15 --cov-report xml:tests/logs/report_py38.xml --cov=. --dask_server_port $port_number tests || exit 1;
-          rm -rf $TMPDIR
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Cleanup dask orphan processes
-        if: ${{ always() }}
-        run: |
-          pkill -U $USER dask-scheduler
-          pkill -U $USER dask-worker
 
       - name: Save test logs as artifacts
         uses: actions/upload-artifact@v3
