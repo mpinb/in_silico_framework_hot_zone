@@ -45,11 +45,10 @@ jobs:
           mkdir -p ./tests/logs/
 
           echo "------------ Configuring Dask -------------"
-          name=${{ runner.name }}
           runner_number=$( echo $name | grep -Eo '[0-9]+$' )
           port_number=38786
           bokeh_port=38787
-          echo "Launching Dask server on $name"
+          echo "Launching Dask server"
           echo "Using port $port_number and bokeh port $bokeh_port"
           export DASK_CONFIG=./config/dask_config.yml
 
