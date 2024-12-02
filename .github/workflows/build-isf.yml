@@ -26,7 +26,7 @@ jobs:
     - id: prev_commit
       run: echo "prev_commit=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
 
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@755da8c3cf115ac066823e79a1e1788f8940201b  # v3.2, still uses node16
       id: checkout
 
     - name: Check changes with previous commit
