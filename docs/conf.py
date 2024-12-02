@@ -156,6 +156,8 @@ def find_modules_with_tag(source_dir, tag=":skip-doc:"):
     modules_with_tag = []
 
     for root, dirs, files in os.walk(source_dir):
+        for exc in exclude_patterns:
+            dirs[:] = [e for e in dirs if not e.startswith(exc)]
         for f in files:
             if f.endswith(".py"):
                 module_path = os.path.join(root, f)
@@ -164,9 +166,12 @@ def find_modules_with_tag(source_dir, tag=":skip-doc:"):
                     if "__init__" in module_path:
                         modules_with_tag.append(module_path.rstrip('__init__.py') + "**")
                     else:
-                        modules_with_tag.append(module_path + "**")                
-
+                        modules_with_tag.append(module_path + "**")
     return modules_with_tag
+
+# List of patterns, relative to source directory, that match files and
+# directories to ignore when looking for source files.
+exclude_patterns = ['_build', '.pixi']
 
 @lru_cache(maxsize=None)
 def get_modules_to_skip():
@@ -176,6 +181,7 @@ def get_modules_to_skip():
         '**installer**', 
         '**__pycache__**',
         "**getting_started**",
+        "**.pixi**",
         "**compatibility**",
         "**dendrite_thickness**",
         "**mechanisms**",
@@ -185,7 +191,6 @@ def get_modules_to_skip():
 
 # Use the cached result
 modules_to_skip = get_modules_to_skip()
-
 # skipping documentation for certain members
 print("ignoring modules: ", modules_to_skip)
 autoapi_ignore = modules_to_skip
@@ -255,9 +260,6 @@ source_encoding = 'utf-8-sig'
 # The master toctree document.
 master_doc = 'index'
 
-# List of patterns, relative to source directory, that match files and
-# directories to ignore when looking for source files.
-exclude_patterns = ['_build']
 
 # If true, '()' will be appended to :func: etc. cross-reference text.
 #add_function_parentheses = True
