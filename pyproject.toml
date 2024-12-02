@@ -15,8 +15,20 @@ requires-python = ">=3.8, <3.10"
 version = "0.1.0"
 
 [project.optional-dependencies]
-doc = ["sphinx", "nbsphinx", "jinja2", "sphinx-autoapi", "sphinx-paramlinks", "sphinxcontrib-bibtex", "furo", "catppuccin[pygments]", "sphinxext-opengraph", "sphinx-copybutton"]
-test = ["pytest", "pytest-xdist"]
+doc = [
+  "sphinx", 
+  "nbsphinx", 
+  "jinja2", 
+  "sphinx-autoapi", 
+  "sphinx-paramlinks", 
+  "sphinxcontrib-bibtex", 
+  "furo", 
+  "catppuccin[pygments]", 
+  "sphinxext-opengraph", 
+  "sphinx-copybutton"
+  ]
+test = [
+  "pytest", "pytest-xdist", "pytest-cov>=5.0.0,<6"]
 
 [build-system]
 build-backend = "hatchling.build"
