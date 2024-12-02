@@ -45,7 +45,6 @@ jobs:
           mkdir -p ./tests/logs/
 
           echo "------------ Configuring Dask -------------"
-          runner_number=$( echo $name | grep -Eo '[0-9]+$' )
           port_number=38786
           bokeh_port=38787
           echo "Launching Dask server"
