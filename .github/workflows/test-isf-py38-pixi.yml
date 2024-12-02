@@ -27,7 +27,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Test in-silico-framework for Python 3.8 (pixi)
-        run: |
+        uses: prefix-dev/setup-pixi@v0.8.0
+        with:
+          pixi-version: v0.39.0
+          cache: true
+          auth-host: prefix.dev
+          auth-token: ${{ secrets.PREFIX_DEV_TOKEN }}
+      - run: |
           echo "------------ Preliminary setup for tests -------------"
           echo "Creating tests/logs/ directory..."
           mkdir -p ./tests/logs/
