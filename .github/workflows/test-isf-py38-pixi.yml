@@ -32,7 +32,7 @@ jobs:
           pixi-version: v0.39.0
           cache: true
           auth-host: prefix.dev
-          auth-token: ${{ secrets.PREFIX_DEV_TOKEN }}
+          auth-token: ${{ secrets.PREFIX_DEV_TOKEN }} 
       - run: |
           echo "------------ Preliminary setup for tests -------------"
           echo "Creating tests/logs/ directory..."
