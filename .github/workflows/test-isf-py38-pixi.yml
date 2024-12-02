@@ -42,10 +42,6 @@ jobs:
             rm .coverage.${{ runner.name }}.*
           fi
 
-          echo "------------ Setting up environment -------------"
-          curl -fsSL https://pixi.sh/install.sh | bash
-          export PATH="~/.pixi/bin:$PATH"
-
           echo "------------ Configuring Dask -------------"
           name=${{ runner.name }}
           runner_number=$( echo $name | grep -Eo '[0-9]+$' )
