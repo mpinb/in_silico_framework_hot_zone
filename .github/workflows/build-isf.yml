@@ -26,7 +26,7 @@ jobs:
     - id: prev_commit
       run: echo "prev_commit=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
 
-    - uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8  # v3.1, still uses node16
+    - uses: taiki-e/checkout-action@v1  # github actions checkout uses node20, which needs GLIBC2.28 (which we don't have)
       id: checkout
 
     - name: Check changes with previous commit
