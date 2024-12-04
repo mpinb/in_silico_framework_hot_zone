@@ -28,8 +28,6 @@ jobs:
     steps:
       - name: Checkout
         uses: taiki-e/checkout-action@v1  # github actions/checkout@v* uses node20, which needs GLIBC2.28 (which we don't have)
-        with:
-          fetch-depth: 0
       - name: Install & setup environment
         uses: prefix-dev/setup-pixi@v0.8.0
         with:
