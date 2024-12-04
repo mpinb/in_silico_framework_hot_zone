@@ -1,25 +1,25 @@
 name: Py 3.8
 on:
-  pull_request:  # run on the PR base to check if the changes work before merging.
-    # Note that this will also run upon any activity in the PR
-    types: [opened, synchronize]
-    paths-ignore:
-      - README.md  # don't run workflow when README changes
-      - CHANGELOG.md # Should never be edited anyway
-      - .gitignore
-      - .github/**
-  pull_request_target:  # run on PR target after closing the PR
-    types:
-      - closed
-    paths-ignore:
-        - README.md  # don't run workflow when README changes
-        - CHANGELOG.md # Should never be edited anyway
-        - .gitignore
-        - .github/**
-  push:
-    branches:
-      - testing
-      - installer
+  # pull_request:  # run on the PR base to check if the changes work before merging.
+  #   # Note that this will also run upon any activity in the PR
+  #   types: [opened, synchronize]
+  #   paths-ignore:
+  #     - README.md  # don't run workflow when README changes
+  #     - CHANGELOG.md # Should never be edited anyway
+  #     - .gitignore
+  #     - .github/**
+  # pull_request_target:  # run on PR target after closing the PR
+  #   types:
+  #     - closed
+  #   paths-ignore:
+  #       - README.md  # don't run workflow when README changes
+  #       - CHANGELOG.md # Should never be edited anyway
+  #       - .gitignore
+  #       - .github/**
+  # push:
+  #   branches:
+  #     - testing
+  #     - installer
   workflow_dispatch:
 
 jobs:

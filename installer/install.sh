@@ -100,12 +100,19 @@ if [ "$DOWNLOAD_BC_MODEL" == "yes" ]; then
 fi
 
 echo -e <<EOF
-\e[1;32m*****************************************************************\e[0m
-\e[1;32m*                                                               *\e[0m
-\e[1;32m*   Succesfully installed In-Silico-Framework for Python 2.7.   *\e[0m
-\e[1;32m*                                                               *\e[0m
-\e[1;32m*****************************************************************\e[0m
+                  ___           ___   
+                 /\__\         /\__\  
+    ___         /:/ _/_       /:/ _/_ 
+   /\__\       /:/ /\  \     /:/ /\__\
+  /:/__/      /:/ /::\  \   /:/ /:/  /
+ /::\  \     /:/_/:/\:\__\ /:/_/:/  / 
+ \/\:\  \__  \:\/:/ /:/  / \:\/:/  /  
+  ~~\:\/\__\  \::/ /:/  /   \::/__/   
+     \::/  /   \/_/:/  /     \:\  \   
+     /:/  /      /:/  /       \:\__\  
+     \/__/       \/__/         \/__/  
 
-You are now ready to use ISF. Start by activating the ISF conda environment: \"source ${INSTALL_DIR}/bin/activate\"
+Successfully install ISF for Python ${{PYTHON_VERSION}}. 
+Start by activating the ISF conda environment: \"source ${INSTALL_DIR}/bin/activate\"
 For a general introduction to ISF, please refer to $(realpath $(dirname $SCRIPT_DIR))/getting_started/Introduction_to_ISF.ipynb
 EOF

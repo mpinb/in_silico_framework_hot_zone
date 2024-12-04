@@ -99,3 +99,7 @@ installer/py*.*/downloads/**
 **node_modules**
 docs/_build/**
 docs/_autosummary/**
+
+# pixi environments
+.pixi
+*.egg-info
