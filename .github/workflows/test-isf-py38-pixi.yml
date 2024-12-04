@@ -24,7 +24,7 @@ on:
 jobs:
   test:
     name: Test Py3.8-pixi
-    runs-on: [ self-hosted, ibs3005 , "py3.8" ]
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: taiki-e/checkout-action@v1  # github actions/checkout@v* uses node20, which needs GLIBC2.28 (which we don't have)
