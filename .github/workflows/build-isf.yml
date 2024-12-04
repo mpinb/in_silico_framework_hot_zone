@@ -86,7 +86,7 @@ jobs:
         shell: bash -l {0}
     steps:
     - name: checkout
-      uses: taiki-e/checkout-action@v1  # github actions checkout uses node20, which needs GLIBC2.28 (which we don't have)
+      uses: actions/checkout@v4
     - name: Build ISF
     # steps:
     # - name: (re)build ISF
