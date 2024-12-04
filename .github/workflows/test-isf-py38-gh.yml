@@ -52,23 +52,15 @@ jobs:
       - name: Test in-silico-framework for Python 3.8
         run: |
           echo "------------ Setting up environment -------------"
-          CONDA_TARGET_DIR="$HOME/anaconda_isf3.8"
+          CONDA_TARGET_DIR="${{ runner.tool_cache }}/anaconda_isf3.8"
           source $CONDA_TARGET_DIR/bin/activate
           echo "Using Python: $(which python)"
           export PYTHONPATH=$(pwd):$HOME
           echo $PYTHONPATH
 
           echo "------------ Configuring Dask -------------"
-          name=${{ runner.name }}
-          runner_number=$( echo $name | grep -Eo '[0-9]+$' )
-          port_number=387${runner_number: -1}6
-          bokeh_port=387${runner_number: -1}7
-          echo "Killing all dask processes on ${{ runner.name }} for user $USER (if they exist)"
-          pkill -U $USER dask-worker
-          pkill -U $USER dask-scheduler
-          echo "Killing all processes on ports $port_number and $bokeh_port"
-          fuser -n tcp -k $port_number 
-          fuser -n tcp -k $bokeh_port 
+          port_number=38786
+          bokeh_port=38787
           echo "Launching Dask server on $name"
           echo "Using port $port_number and bokeh port $bokeh_port"
 
@@ -83,7 +75,6 @@ jobs:
           (dask-scheduler --port=$port_number --bokeh-port=$bokeh_port --host=localhost --preload="import mechanisms, compatibility"> ./tests/logs/dask_scheduler_${{ github.run_id }}.log 2>&1) & \
           (dask-worker localhost:$port_number --nthreads 1 --nprocs 10 --memory-limit=100e15 --local-directory="." > ./tests/logs/dask_workers_${{ github.run_id }}.log 2>&1) & \
           pytest -n 5 -rsx -vv --color=yes --durations=15 --cov-report xml:tests/logs/report_py38.xml --cov=. --dask_server_port $port_number tests || exit 1;
-          rm -rf $TMPDIR
 
       - name: Cleanup dask orphan processes
         if: ${{ always() }}
