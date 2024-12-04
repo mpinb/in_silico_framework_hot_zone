@@ -40,16 +40,17 @@ jobs:
         shell: bash -l {0}
 
     steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      - name: Restore cache for Anaconda environment
+        uses: actions/cache@v3
+        with:
+          path: ${{ runner.tool_cache }}/anaconda_isf3.8
+          key: ${{ runner.os }}-anaconda-3.8-${{ hashFiles('**/environment.yml') }}
+          restore-keys: |
+            ${{ runner.os }}-anaconda-3.8-
       - name: Test in-silico-framework for Python 3.8
         run: |
-          echo "------------ Preliminary setup for tests -------------"
-          echo "Creating tests/logs/ directory..."
-          mkdir -p ./tests/logs/
-          if [ -f .coverage.${{ runner.name }}.* ]; then
-            echo "Removing previous coverage files..."
-            rm .coverage.${{ runner.name }}.*
-          fi
-
           echo "------------ Setting up environment -------------"
           CONDA_TARGET_DIR="$HOME/anaconda_isf3.8"
           source $CONDA_TARGET_DIR/bin/activate
