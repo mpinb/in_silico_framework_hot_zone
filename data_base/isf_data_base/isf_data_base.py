@@ -722,6 +722,7 @@ class ISFDataBase:
         Args:
             key (str): The key to get from the database.
             lock (Lock, optional): If you use file locking, provide the lock that grants access. Defaults to None.
+            **kwargs: Additional arguments to pass to the Loader.
 
         Returns:
             object: The object saved under ``db[key]``
@@ -732,10 +733,16 @@ class ISFDataBase:
         key = self._convert_key_to_path(key)
         if not Path.exists(key):
             raise KeyError("Key {} not found in keys of db. Keys found: {}".format(key.name, self.keys()))
+        if Path.exists(key/'db'):
+            # The key is a sub_db
+            # inherit parent db init args if not explicitly set
+            kwargs['readonly'] = kwargs.get('readonly', self.readonly)
+            kwargs['suppress_errors'] = kwargs.get('suppress_errors', self._suppress_errors)
+            kwargs['nocreate'] = kwargs.get('nocreate', self.nocreate)
         if lock:
             lock.acquire()
         try:
-            return_ = LoaderDumper.load(str(key), **kwargs)
+            return_ = LoaderDumper.load(str(key), loader_kwargs=kwargs)
         except EnvironmentError as e:
             if e.errno == errno.ENOENT:
                 self.ls(all_files = True)
