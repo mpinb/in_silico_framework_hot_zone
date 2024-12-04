@@ -715,11 +715,10 @@ def generate_param_file_hashes(simresult_path, sim_trial_index):
     return delayeds  # dask.delayed(delayeds)
 
 
-#-----------------------------------------------------------------------------------------
-# 7.1: replace paths in param files with relative dbpaths
-#-----------------------------------------------------------------------------------------
-from ..dbopen import create_db_path
-
+#####################################
+# step seven point one: replace paths in param files with relative dbpaths
+#####################################
+from data_base.dbopen import create_db_path
 
 def create_db_path_print(path, replace_dict={}):
     """:skip-doc:"""
@@ -962,9 +961,7 @@ def _get_rec_site_managers(db):
     """
     param_files = glob.glob(os.path.join(db['parameterfiles_cell_folder'],
                                          '*'))
-    param_files = [p for p in param_files if not p.endswith('Loader.pickle') \
-        and not p.endswith("Loader.json") \
-            and not p.endswith('metadata.json')]
+    param_files = [p for p in param_files if not p.endswith(('Loader.pickle', 'Loader.json', 'metadata.json'))]
     logging.info(len(param_files))
     rec_sites = []
     for param_file in param_files:
@@ -1046,9 +1043,8 @@ def _build_param_files(db, client):
     """
     logging.info('---moving parameter files---')
     ds = generate_param_file_hashes(
-        db['simresult_path'],   # Exists when calling init, since that needs to know which simulations to init
-        db['sim_trial_index']  # parsed from voltage traces during read_voltage_traces*()
-        )
+        db['simresult_path'],
+        db['sim_trial_index'])
     futures = client.compute(ds)
     result = client.gather(futures)
     df = pd.concat(result)
@@ -1074,7 +1070,7 @@ def _build_param_files(db, client):
         network_param_to_dbpath)
     client.gather(client.compute(ds))
 
-    db['parameterfiles'] = df
+    db.set('parameterfiles', df, dumper=pandas_to_parquet)
 
 
 def init(

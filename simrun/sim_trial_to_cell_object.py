@@ -75,12 +75,6 @@ def simtrial_to_cell_object(
         sys.stdout = open(os.devnull, "w")
 
     try:
-        metadata = db['metadata']
-        if 'sim_trail_index' in metadata:  # for compatibility
-            metadata.sim_trial_index = metadata.sim_trail_index
-        metadata = metadata[metadata.sim_trial_index == sim_trial_index]
-        assert len(metadata) == 1
-        m = metadata.iloc[0]
         parameter_table = db['parameterfiles']
         cellName = parameter_table.loc[sim_trial_index].hash_neuron
         cellName = os.path.join(db['parameterfiles_cell_folder'], cellName)
@@ -88,18 +82,19 @@ def simtrial_to_cell_object(
         networkName = os.path.join(db['parameterfiles_network_folder'],
                                    networkName)
         sa = db['synapse_activation'].loc[sim_trial_index].compute()
-        dummy =  trial_to_cell_object(cellName = cellName, \
-                                    networkName = networkName, \
-                                    synapse_activation_file = sa, \
-                                    range_vars = range_vars,
-                                    scale_apical = scale_apical,
-                                    allPoints = allPoints,
-                                    compute = compute,
-                                    tStop = tStop,
-                                    neuron_param_modify_functions = neuron_param_modify_functions,
-                                    network_param_modify_functions = network_param_modify_functions,
-                                    synapse_activation_modify_functions = synapse_activation_modify_functions,
-                                    additional_network_params = additional_network_params)
+        dummy =  trial_to_cell_object(
+            cellName = cellName, \
+            networkName = networkName, \
+            synapse_activation_file = sa, \
+            range_vars = range_vars,
+            scale_apical = scale_apical,
+            allPoints = allPoints,
+            compute = compute,
+            tStop = tStop,
+            neuron_param_modify_functions = neuron_param_modify_functions,
+            network_param_modify_functions = network_param_modify_functions,
+            synapse_activation_modify_functions = synapse_activation_modify_functions,
+            additional_network_params = additional_network_params)
     finally:
         if silent == True:
             sys.stdout = stdout_bak
@@ -165,8 +160,10 @@ def trial_to_cell_object(name = None, cellName = None, networkName = None, synap
         nRun = 0
         synParametersEvoked = paramEvokedUp
         startTime = time.time()
-        evokedNW = scp.NetworkMapper(cell, synParametersEvoked,
-                                     neuronParameters.sim)
+        evokedNW = scp.NetworkMapper(
+            cell, 
+            synParametersEvoked,
+            neuronParameters.sim)
         evokedNW.re_init_network()
         evokedNW.reconnect_saved_synapses(synfile)
 
