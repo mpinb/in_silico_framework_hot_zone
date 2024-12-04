@@ -6,8 +6,8 @@
 # 3. Patches pandas-msgpack and saves it as a local package
 # 4. Compiles NEURON mechanisms
 
-set -eE
-set -o pipefail
+# set -eE
+# set -o pipefail
 
 # Check if git is available
 if ! command -v git &> /dev/null; then
@@ -244,8 +244,6 @@ do
         fi
     fi
 done
-
-
 
 
 # -------------------- Cleanup -------------------- #

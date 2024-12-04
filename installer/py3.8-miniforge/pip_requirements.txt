@@ -34,6 +34,7 @@ redis==3.5.3
 ## single_cell_parser dependencies
 neuron==7.8.2
 sumatra==0.7.4
+tables==3.8.0
 
 ## biophysics fitting dependencies
 deap==1.3.1
@@ -51,7 +52,6 @@ coverage==7.3.0
 pytest-xdist==3.3.1
 execnet==2.0.2  # for pytest-xdist
 exceptiongroup==1.1.2
-tomli==2.0.2
 
 ## misc
 chart-studio==1.1.0
