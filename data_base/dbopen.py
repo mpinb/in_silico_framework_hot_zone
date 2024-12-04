@@ -123,16 +123,11 @@ def create_db_path(path):
         raise KeyError(
             "Found a Database at {}. However, there is no key pointing to the subfolder {} in it.".format(
                 db._basedir, path_minus_db_basedir.split('/')[0]))
-<<<<<<< HEAD:data_base/isf_data_base/dbopen.py
     return os.path.join(
         'db://', 
         db.get_id(), 
         key,
         os.path.relpath(path, db[key]))
-=======
-    return os.path.join('mdb://', db.get_id(), key,
-                        os.path.relpath(path, db[key]))
->>>>>>> develop:data_base/dbopen.py
 
 
 class dbopen:
