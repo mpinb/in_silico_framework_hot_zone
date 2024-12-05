@@ -98,7 +98,12 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/jupyter-1.0.0-pyhd8ed1ab_10.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/jupyter_client-7.3.4-pyhd8ed1ab_0.tar.bz2
       - conda: https://conda.anaconda.org/conda-forge/noarch/jupyter_console-6.6.3-pyhd8ed1ab_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/noarch/jupyter_contrib_core-0.4.0-pyhd8ed1ab_0.tar.bz2
+      - conda: https://conda.anaconda.org/conda-forge/noarch/jupyter_contrib_nbextensions-0.7.0-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/jupyter_core-5.7.2-pyh31011fe_1.conda
+      - conda: https://conda.anaconda.org/conda-forge/noarch/jupyter_highlight_selected_word-0.2.0-pyhd8ed1ab_1006.conda
+      - conda: https://conda.anaconda.org/conda-forge/noarch/jupyter_latex_envs-1.4.6-pyhd8ed1ab_1002.tar.bz2
+      - conda: https://conda.anaconda.org/conda-forge/noarch/jupyter_nbextensions_configurator-0.6.1-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/jupyter_server-1.24.0-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/jupyterlab-3.5.3-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/jupyterlab_pygments-0.3.0-pyhd8ed1ab_0.conda
@@ -177,8 +182,10 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/linux-64/libxcrypt-4.4.36-hd590300_1.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/libxkbcommon-1.7.0-h2c5496b_1.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/libxml2-2.13.4-hb346dea_2.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-64/libxslt-1.1.39-h76b75d6_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/libzlib-1.3.1-hb9d3cd8_2.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/locket-1.0.0-pyhd8ed1ab_0.tar.bz2
+      - conda: https://conda.anaconda.org/conda-forge/linux-64/lxml-5.3.0-py38hd8ce619_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/lz4-c-1.9.4-hcb278e6_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/markupsafe-2.0.1-py38h497a2fe_1.tar.bz2
       - conda: https://conda.anaconda.org/conda-forge/linux-64/matplotlib-3.5.1-py38h578d9bd_0.tar.bz2
@@ -2232,6 +2239,57 @@ packages:
   size: 26484
   timestamp: 1678118234022
 - kind: conda
+  name: jupyter_contrib_core
+  version: 0.4.0
+  build: pyhd8ed1ab_0
+  subdir: noarch
+  noarch: python
+  url: https://conda.anaconda.org/conda-forge/noarch/jupyter_contrib_core-0.4.0-pyhd8ed1ab_0.tar.bz2
+  sha256: b8d6b20123189bb13a2f8085bd50452c1401af99812b77395e9a55a4ee4fb48b
+  md5: 411e592d362f923fac66550b9c3ce25e
+  depends:
+  - jupyter_core
+  - notebook >=4.0
+  - python >=3.6
+  - setuptools
+  - tornado
+  - traitlets
+  license: BSD-3-Clause
+  license_family: BSD
+  purls:
+  - pkg:pypi/jupyter-contrib-core?source=hash-mapping
+  size: 18077
+  timestamp: 1657548632393
+- kind: conda
+  name: jupyter_contrib_nbextensions
+  version: 0.7.0
+  build: pyhd8ed1ab_0
+  subdir: noarch
+  noarch: python
+  url: https://conda.anaconda.org/conda-forge/noarch/jupyter_contrib_nbextensions-0.7.0-pyhd8ed1ab_0.conda
+  sha256: 736c338c621d6015c1497581d34217bc1885af55d6e8720d5411edca2fc43fc6
+  md5: e172ca934d0aa08617c87c5954574bbf
+  depends:
+  - ipython_genutils
+  - jupyter_contrib_core >=0.3.3
+  - jupyter_core
+  - jupyter_highlight_selected_word >=0.1.1
+  - jupyter_latex_envs >=1.3.8
+  - jupyter_nbextensions_configurator >=0.4.0
+  - lxml
+  - nbconvert >=4.2
+  - notebook >=4.0
+  - python >=2.7
+  - pyyaml
+  - tornado
+  - traitlets >=4.1
+  license: BSD-3-Clause
+  license_family: BSD
+  purls:
+  - pkg:pypi/jupyter-contrib-nbextensions?source=hash-mapping
+  size: 21371319
+  timestamp: 1670068917549
+- kind: conda
   name: jupyter_core
   version: 5.7.2
   build: pyh31011fe_1
@@ -2252,6 +2310,74 @@ packages:
   - pkg:pypi/jupyter-core?source=hash-mapping
   size: 57671
   timestamp: 1727163547058
+- kind: conda
+  name: jupyter_highlight_selected_word
+  version: 0.2.0
+  build: pyhd8ed1ab_1006
+  build_number: 1006
+  subdir: noarch
+  noarch: python
+  url: https://conda.anaconda.org/conda-forge/noarch/jupyter_highlight_selected_word-0.2.0-pyhd8ed1ab_1006.conda
+  sha256: 92b5807f4be85581138bacc6cafcc1d395180f254e9cf3ead805fdfbe1df2861
+  md5: 61fc0eb3b6533815398f4025c336b2de
+  depends:
+  - jupyter_contrib_core >=0.3
+  - notebook >=4.0,<7
+  - python >=3.7
+  - setuptools
+  license: BSD-3-Clause
+  license_family: BSD
+  purls:
+  - pkg:pypi/jupyter-highlight-selected-word?source=hash-mapping
+  size: 17153
+  timestamp: 1695322547350
+- kind: conda
+  name: jupyter_latex_envs
+  version: 1.4.6
+  build: pyhd8ed1ab_1002
+  build_number: 1002
+  subdir: noarch
+  noarch: python
+  url: https://conda.anaconda.org/conda-forge/noarch/jupyter_latex_envs-1.4.6-pyhd8ed1ab_1002.tar.bz2
+  sha256: 4927e74b5878011771cbaebc2a119bb1066a41ceca0609e9b15dfd4c11969ba2
+  md5: 4b888fd7d6b4cdb6736878b2cf8ea951
+  depends:
+  - ipython
+  - jupyter_contrib_core >=0.3
+  - nbconvert
+  - notebook >=4.0
+  - python >=2.7
+  - setuptools
+  - traitlets >=4.1
+  license: BSD-3-Clause
+  license_family: BSD
+  purls:
+  - pkg:pypi/jupyter-latex-envs?source=hash-mapping
+  size: 752235
+  timestamp: 1614852344783
+- kind: conda
+  name: jupyter_nbextensions_configurator
+  version: 0.6.1
+  build: pyhd8ed1ab_0
+  subdir: noarch
+  noarch: python
+  url: https://conda.anaconda.org/conda-forge/noarch/jupyter_nbextensions_configurator-0.6.1-pyhd8ed1ab_0.conda
+  sha256: 027fa24402a5fab42658dc4e98a0294800b59c388c7ff6d77a6b55670e73c07e
+  md5: 7fc02dc73038b4c3cb0cf2f4a5e94f0f
+  depends:
+  - jupyter_contrib_core >=0.3.3
+  - jupyter_core
+  - notebook >=6.0
+  - python >=3.6
+  - pyyaml
+  - tornado
+  - traitlets
+  license: BSD-3-Clause
+  license_family: BSD
+  purls:
+  - pkg:pypi/jupyter-nbextensions-configurator?source=hash-mapping
+  size: 461142
+  timestamp: 1670793882838
 - kind: conda
   name: jupyter_server
   version: 1.24.0
@@ -3672,6 +3798,22 @@ packages:
   size: 690019
   timestamp: 1730355770718
 - kind: conda
+  name: libxslt
+  version: 1.1.39
+  build: h76b75d6_0
+  subdir: linux-64
+  url: https://conda.anaconda.org/conda-forge/linux-64/libxslt-1.1.39-h76b75d6_0.conda
+  sha256: 684e9b67ef7b9ca0ca993762eeb39705ec58e2e7f958555c758da7ef416db9f3
+  md5: e71f31f8cfb0a91439f2086fc8aa0461
+  depends:
+  - libgcc-ng >=12
+  - libxml2 >=2.12.1,<3.0.0a0
+  license: MIT
+  license_family: MIT
+  purls: []
+  size: 254297
+  timestamp: 1701628814990
+- kind: conda
   name: libzlib
   version: 1.3.1
   build: hb9d3cd8_2
@@ -3707,6 +3849,27 @@ packages:
   - pkg:pypi/locket?source=hash-mapping
   size: 8250
   timestamp: 1650660473123
+- kind: conda
+  name: lxml
+  version: 5.3.0
+  build: py38hd8ce619_0
+  subdir: linux-64
+  url: https://conda.anaconda.org/conda-forge/linux-64/lxml-5.3.0-py38hd8ce619_0.conda
+  sha256: a101028eba79605e0ba5cab522394f922326a818631f9cbb18fdc14b6eff831b
+  md5: 4ed026bd905461cde4c81909babe0bb8
+  depends:
+  - __glibc >=2.17,<3.0.a0
+  - libgcc-ng >=12
+  - libxml2 >=2.12.7,<3.0a0
+  - libxslt >=1.1.39,<2.0a0
+  - libzlib >=1.3.1,<2.0a0
+  - python >=3.8,<3.9.0a0
+  - python_abi 3.8.* *_cp38
+  license: BSD-3-Clause and MIT-CMU
+  purls:
+  - pkg:pypi/lxml?source=hash-mapping
+  size: 1372225
+  timestamp: 1723458547236
 - kind: conda
   name: lz4-c
   version: 1.9.4
