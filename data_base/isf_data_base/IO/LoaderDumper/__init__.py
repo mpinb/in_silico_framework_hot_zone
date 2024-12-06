@@ -87,7 +87,7 @@ def get_dumper_string_by_dumper_module(dumper_module):
     return name[len(prefix):]
 
 
-def generic_to_specific_databases_module_name(module_path):
+def generic_to_specific_databases_module_name(module_name):
     """Convert a relative module path to an absolute one.
     
     Internally, ISF does not specify which database system to use,
@@ -106,12 +106,12 @@ def generic_to_specific_databases_module_name(module_path):
     Returns:
         str: The absolute module path.
     """
-    if not module_path.startswith('data_base.isf_data_base.') and module_path.startswith('data_base.'):
+    if not module_name.startswith('data_base.isf_data_base.') and module_name.startswith('data_base.'):
         # In case it is used as data_base.IO module
-        name = name.split('.')
-        name.insert(1, 'isf_data_base')
-        name = '.'.join(name)
-    return module_path
+        module_name = module_name.split('.')
+        module_name.insert(1, 'isf_data_base')
+        module_name = '.'.join(module_name)
+    return module_name
 
 
 def get_dumper_string_by_savedir(savedir):
