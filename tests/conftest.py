@@ -3,7 +3,7 @@
 # useful to setup whatever needs to be done before the actual testing or test discovery
 # for setting environment variables, use pytest.ini or .env instead
 import os, logging, socket, dask, six, sys
-from Interface import logger as isf_logger
+from config.isf_logging import logger as isf_logger
 # --- Import fixtures
 from .fixtures import client
 from .fixtures.dataframe_fixtures import pdf, ddf
@@ -28,6 +28,7 @@ from .context import TEST_DATA_FOLDER, CURRENT_DIR
 def import_worker_requirements():
     import compatibility
     import mechanisms
+    from config.isf_logging import logger
 
 def ensure_workers_have_imported_requirements(client):
     """
@@ -104,6 +105,7 @@ def pytest_configure(config):
     matplotlib.use('agg')
     import matplotlib.pyplot as plt
     plt.switch_backend('agg')
+    from config.isf_logging import logger as isf_logger
 
     output_thickness = os.path.join(CURRENT_DIR, 'test_dendrite_thickness',
                                     'test_files', 'output')
@@ -112,11 +114,9 @@ def pytest_configure(config):
 
     # --------------- Setup logging output -------------------
     # only log warnings or worse
-    isf_logger.setLevel(
-        logging.WARNING)  # set logging level of ISF logger to WARNING
+    isf_logger.setLevel(logging.WARNING)  # set logging level of ISF logger to WARNING
     # Suppress logs from verbose modules so they don't show in stdout
-    isf_logger.addFilter(
-        ModuleFilter(suppress_modules_list))  # suppress logs from this module
+    isf_logger.addFilter(ModuleFilter(suppress_modules_list))  # suppress logs from this module
     # redirect test ouput to log file with more verbose output
     if not os.path.exists(os.path.join(CURRENT_DIR, "logs")):
         os.mkdir(os.path.join(CURRENT_DIR, "logs"))
