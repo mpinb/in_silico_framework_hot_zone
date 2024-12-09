@@ -195,8 +195,6 @@ modules_to_skip = modules_to_skip + find_modules_with_tag(project_root)
 print("ignoring modules: ", modules_to_skip)
 autoapi_ignore = modules_to_skip
 
-global N_MEMBERS
-global N_DOC_MEMBERS
 N_MEMBERS = 0
 N_DOC_MEMBERS = 0
 
@@ -207,6 +205,9 @@ def count_documented_members(app, what, name, obj, skip, options):
         obj (autoapidoc._objects.Python*): 
             autoapi object containing the attrs as described in :py:meth:`skip_member`
     """
+    
+    global N_MEMBERS
+    global N_DOC_MEMBERS
     
     # Do not count if it has the :skip-doc: tag
     if not obj.is_undoc_member and ':skip-doc:' in obj.docstring:
