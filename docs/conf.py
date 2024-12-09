@@ -197,17 +197,16 @@ autoapi_ignore = modules_to_skip
 
 global N_MEMBERS
 global N_DOC_MEMBERS
+N_MEMBERS = 0
+N_DOC_MEMBERS = 0
 
-def log_documented_members(app, what, name, obj, skip, options):
+def count_documented_members(app, what, name, obj, skip, options):
     """Count the number of documented members.
     
     Args:
         obj (autoapidoc._objects.Python*): 
             autoapi object containing the attrs as described in :py:meth:`skip_member`
     """
-    
-    N_MEMBERS = 0
-    N_DOC_MEMBERS = 0
     
     # Do not count if it has the :skip-doc: tag
     if not obj.is_undoc_member and ':skip-doc:' in obj.docstring:
@@ -229,12 +228,16 @@ def log_documented_members(app, what, name, obj, skip, options):
             N_DOC_MEMBERS += 1
     
     print(f"Documented members: {N_DOC_MEMBERS}/{N_MEMBERS}")
+    
+def log_documented_members(app, doctree):
+    """Log the number of documented members."""
+    print(f"Documented members: {N_DOC_MEMBERS}/{N_MEMBERS}")
 
 
 def setup(app):
     # skip members with :skip-doc: tag in their docstrings
     app.connect('autoapi-skip-member', skip_member)
-    app.connect('autoapi-skip-member', log_documented_members)
+    app.connect('autoapi-skip-member', count_documented_members)
     app.connect('doctree-read', log_documented_members)
 
 toc_object_entries_show_parents = 'hide'  # short toc entries
