@@ -232,6 +232,8 @@ def count_documented_members(app, what, name, obj, skip, options):
     
 def log_documented_members(app, doctree):
     """Log the number of documented members."""
+    global N_MEMBERS
+    global N_DOC_MEMBERS
     print(f"Documented members: {N_DOC_MEMBERS}/{N_MEMBERS}")
 
 
