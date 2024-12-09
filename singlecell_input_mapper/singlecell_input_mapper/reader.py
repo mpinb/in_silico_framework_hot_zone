@@ -8,7 +8,7 @@ from data_base.dbopen import dbopen
 __author__ = 'Robert Egger'
 __date__ = '2012-03-08'
 
-class Edge(object):
+class _Edge(object):
     '''Convenience class around NEURON's section objects.
 
     Used during reading of hoc files.
@@ -179,7 +179,7 @@ def read_hoc_file(fname=''):
                                                   thisNrOfEdgePts]
                 ptListIndex += thisNrOfEdgePts
                 # create edge
-                segment = Edge()
+                segment = _Edge()
                 segment.label = thisSegmentID
                 segment.hocLabel = tmpHocLabelList[n]
                 segment.edgePts = thisSegmentPtList

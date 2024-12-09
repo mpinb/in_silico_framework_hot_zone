@@ -13,11 +13,13 @@ __date__    = '2012-03-08'
 logger = logging.getLogger("ISF").getChild(__name__)
 
 
-class Edge(object):
-    '''Edge class for NEURON segments.
+class _Edge(object):
+    '''Convenience class for NEURON segments.
 
-    Used in :py:meth:`~single_cell_parser.reader.read_hoc_file` to store information about a segment.
-    Note that attributes are not set here, but in the :py:meth:`~single_cell_parser.reader.read_hoc_file` method.
+    Used in :py:meth:`~single_cell_parser.reader.read_hoc_file` to store information about a single morphological segment spanning from point to point.
+    These edges loosely match NEURON segments if full segmentation is used. If :math:`d-\lambda` segmentation is used, these edges are **not** comparable to NEURON segments.
+    The purpose of this class is for private use in reading in hoc files - it should not be used directly.
+    Attributes are not set here, but in the :py:meth:`~single_cell_parser.reader.read_hoc_file` method.
 
     Attributes:
         label (str): label and ID of the segment (e.g. "Dendrite_1_0_0").
@@ -27,6 +29,9 @@ class Edge(object):
         parentID (int): label and ID of the parent segment.
         parentConnect (float): How far along the parent section the connection is (i.e. the `x`-coordinate).
         valid (bool): Flag indicating if the segment is valid.
+        
+    See also:
+        :py:meth:`~single_cell_parser.cell_parser.CellParser.determine_nseg` for determining the number of segments in a section.
     '''
 
     def is_valid(self):
@@ -51,8 +56,8 @@ def read_hoc_file(fname=''):
 
     See :ref:`hoc_file_format` for more information on the hoc file format.
     
-    Attention:
-        The module :py:mod:`singlecell_input_mapper` also conains a method
+    See also:
+        The module :py:mod:`singlecell_input_mapper` also contains a method
         :py:meth:`~singlecell_input_mapper.singlecell_input_mapper.reader.read_hoc_file`.
         A notable **difference** is that this method reads in axon sections,
         while the :py:mod:`singlecell_input_mapper` variant does not.
@@ -69,12 +74,12 @@ def read_hoc_file(fname=''):
     Example:
         >>> read_hoc_file(hoc_file)
         [
-            Edge(
+            _Edge(
                 label='Soma', 
                 hocLabel='soma', 
                 edgePts=[(1.93339, 221.367004, -450.04599), ... , (13.9619, 210.149002, -447.901001)], 
                 diameterList=[12.542, 13.3094, ... , 3.5997), parentID=None, parentConnect=None),
-            Edge(
+            _Edge(
                 label='BasalDendrite_1_0', 
                 hocLabel='BasalDendrite_1_0', 
                 edgePts=[(6.36964, 224.735992, -452.399994), (6.34155, 222.962997, -451.906006), ...], 
@@ -200,7 +205,7 @@ def read_hoc_file(fname=''):
                                                   thisNrOfEdgePts]
                 ptListIndex += thisNrOfEdgePts
                 #                create edge
-                segment = Edge()
+                segment = _Edge()
                 segment.label = thisSegmentID
                 segment.hocLabel = tmpHocLabelList[n]
                 segment.edgePts = thisSegmentPtList
