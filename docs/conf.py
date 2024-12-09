@@ -223,7 +223,7 @@ def count_documented_members(app, what, name, obj, skip, options):
         print(f"Skipping {what}: {name} due to :skip-doc: tag in module {obj.name}")
         pass
     
-    else:
+    elif obj.type in ['method', 'function', 'class', 'module']:
         N_MEMBERS += 1
         if obj.docstring:
             N_DOC_MEMBERS += 1
