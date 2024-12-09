@@ -208,9 +208,11 @@ def count_documented_members(app, what, name, obj, skip, options):
     
     global N_MEMBERS
     global N_DOC_MEMBERS
-    
+    # skip special members, except __get__ and __set__
+    if name.startswith('__') and name.endswith('__') and name not in ['__get__', '__set__']:
+        pass
     # Do not count if it has the :skip-doc: tag
-    if not obj.is_undoc_member and ':skip-doc:' in obj.docstring:
+    elif not obj.is_undoc_member and ':skip-doc:' in obj.docstring:
         pass
     # Skip inherited members
     elif obj.inherited:
