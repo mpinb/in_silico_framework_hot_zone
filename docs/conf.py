@@ -198,6 +198,7 @@ autoapi_ignore = modules_to_skip
 
 N_MEMBERS = 0
 N_DOC_MEMBERS = 0
+LAST_PARENT_TO_SKIP = ""
 
 def count_documented_members(app, what, name, obj, skip, options):
     """Count the number of documented members.
@@ -209,18 +210,22 @@ def count_documented_members(app, what, name, obj, skip, options):
     
     global N_MEMBERS
     global N_DOC_MEMBERS
+    global LAST_CLASS_TO_SKIP
     # skip special members, except __get__ and __set__
     short_name = name.rsplit('.', 1)[-1]
     if short_name.startswith('__') and short_name.endswith('__') and name not in ['__get__', '__set__']:
-        pass
+        return
     # Do not count if it has the :skip-doc: tag
     elif not obj.is_undoc_member and ':skip-doc:' in obj.docstring:
-        pass
+        LAST_PARENT_TO_SKIP = obj.name
+        return
     # Skip inherited members
     elif obj.inherited:
-        pass
+        return
     elif name in modules_to_skip:
-        pass
+        return
+    elif LAST_PARENT_TO_SKIP in obj.name:
+        return
     
     elif obj.type in ['method', 'function', 'class', 'module']:
         N_MEMBERS += 1
@@ -228,8 +233,9 @@ def count_documented_members(app, what, name, obj, skip, options):
             N_DOC_MEMBERS += 1
         else:
             print(f"Undocumented member: {what}: {name}")
+    return
     
-def log_documented_members(app, doctree):
+def log_documented_members(app, env):
     """Log the number of documented members."""
     global N_MEMBERS
     global N_DOC_MEMBERS
@@ -240,7 +246,7 @@ def setup(app):
     # skip members with :skip-doc: tag in their docstrings
     app.connect('autoapi-skip-member', skip_member)
     app.connect('autoapi-skip-member', count_documented_members)
-    app.connect('doctree-read', log_documented_members)
+    app.connect('env-get-updated', log_documented_members)
 
 toc_object_entries_show_parents = 'hide'  # short toc entries
 autoapi_dirs = [project_root]
