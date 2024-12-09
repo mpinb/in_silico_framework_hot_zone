@@ -211,22 +211,19 @@ def count_documented_members(app, what, name, obj, skip, options):
     
     # Do not count if it has the :skip-doc: tag
     if not obj.is_undoc_member and ':skip-doc:' in obj.docstring:
-        # print(f"Docstring for {name}: {obj.__doc__}")
-        print(f"Skipping {what}: {name} due to :skip-doc: tag")
         pass
-    
     # Skip inherited members
     elif obj.inherited:
         pass
-    
     elif name in modules_to_skip:
-        print(f"Skipping {what}: {name} due to :skip-doc: tag in module {obj.name}")
         pass
     
     elif obj.type in ['method', 'function', 'class', 'module']:
         N_MEMBERS += 1
         if obj.docstring:
             N_DOC_MEMBERS += 1
+        else:
+            print(f"Undocumented member: {what}: {name}")
     
     print(f"Documented members: {N_DOC_MEMBERS}/{N_MEMBERS}")
     
