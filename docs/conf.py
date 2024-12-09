@@ -225,8 +225,6 @@ def count_documented_members(app, what, name, obj, skip, options):
         else:
             print(f"Undocumented member: {what}: {name}")
     
-    print(f"Documented members: {N_DOC_MEMBERS}/{N_MEMBERS}")
-    
 def log_documented_members(app, doctree):
     """Log the number of documented members."""
     global N_MEMBERS
