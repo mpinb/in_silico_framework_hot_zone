@@ -235,7 +235,7 @@ def setup(app):
     # skip members with :skip-doc: tag in their docstrings
     app.connect('autoapi-skip-member', skip_member)
     app.connect('autoapi-skip-member', log_documented_members)
-    app.connect('doctree-read')
+    app.connect('doctree-read', log_documented_members)
 
 toc_object_entries_show_parents = 'hide'  # short toc entries
 autoapi_dirs = [project_root]
