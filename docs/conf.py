@@ -218,6 +218,7 @@ def count_documented_members(app, what, name, obj, skip, options):
     # Do not count if it has the :skip-doc: tag
     elif not obj.is_undoc_member and ':skip-doc:' in obj.docstring:
         LAST_PARENT_TO_SKIP = obj.name
+        print("Ignoring empty docstrings for children of ", obj.name)
         return
     # Skip inherited members
     elif obj.inherited:
