@@ -12,8 +12,9 @@ sys.path.insert(0, project_root)
 from docs.parse_notebooks import copy_and_parse_notebooks_to_docs
 from functools import lru_cache
 from config.isf_logging import logger as isf_logger
-isf_logger.setLevel("INFO")
+# isf_logger.setLevel("INFO")
 logger = isf_logger.getChild("DOCS")
+logger.setLevel("INFO")
 
 project = 'In-Silico Framework (ISF)'
 copyright = '2023, Arco Bast, Amir Najafgholi, Maria Royo Cano, Rieke Fruengel, Matt Keaton, Bjorge Meulemeester, Omar Valerio'
