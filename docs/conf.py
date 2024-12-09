@@ -210,7 +210,7 @@ def count_documented_members(app, what, name, obj, skip, options):
     
     global N_MEMBERS
     global N_DOC_MEMBERS
-    global LAST_CLASS_TO_SKIP
+    global LAST_PARENT_TO_SKIP
     # skip special members, except __get__ and __set__
     short_name = name.rsplit('.', 1)[-1]
     if short_name.startswith('__') and short_name.endswith('__') and name not in ['__get__', '__set__']:
