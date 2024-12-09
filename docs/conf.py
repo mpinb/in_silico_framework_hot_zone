@@ -217,15 +217,14 @@ def count_documented_members(app, what, name, obj, skip, options):
         return
     # Do not count if it has the :skip-doc: tag
     elif not obj.is_undoc_member and ':skip-doc:' in obj.docstring:
-        LAST_PARENT_TO_SKIP = obj.name
-        print("Ignoring empty docstrings for children of ", obj.name)
+        LAST_PARENT_TO_SKIP = obj.id
+        print("Ignoring empty docstrings for children of", obj.id)
         return
-    # Skip inherited members
     elif obj.inherited:
         return
     elif name in modules_to_skip:
         return
-    elif LAST_PARENT_TO_SKIP in obj.name:
+    elif LAST_PARENT_TO_SKIP in obj.id:
         return
     
     elif obj.type in ['method', 'function', 'class', 'module']:
