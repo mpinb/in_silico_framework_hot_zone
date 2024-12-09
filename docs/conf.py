@@ -197,7 +197,7 @@ def find_modules_with_tag(source_dir, tag=":skip-doc:"):
 
 modules_to_skip = modules_to_skip + find_modules_with_tag(project_root)
 # skipping documentation for certain members
-logger.info("ignoring modules: ", modules_to_skip)
+logger.info("ignoring modules: {}".format(modules_to_skip))
 autoapi_ignore = modules_to_skip
 
 N_MEMBERS = 0
