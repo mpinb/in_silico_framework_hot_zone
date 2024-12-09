@@ -16,10 +16,11 @@ logger = logging.getLogger("ISF").getChild(__name__)
 class _Edge(object):
     '''Convenience class for NEURON segments.
 
-    Used in :py:meth:`~single_cell_parser.reader.read_hoc_file` to store information about a single morphological segment spanning from point to point.
-    These edges loosely match NEURON segments if full segmentation is used. If :math:`d-\lambda` segmentation is used, these edges are **not** comparable to NEURON segments.
-    The purpose of this class is for private use in reading in hoc files - it should not be used directly.
-    Attributes are not set here, but in the :py:meth:`~single_cell_parser.reader.read_hoc_file` method.
+    Private class used in :py:meth:`~single_cell_parser.reader.read_hoc_file` to store information about a single morphological segment spanning from point to point.
+    These edges are loosely similar to NEURON segments if full segmentation is used, but should not be used as API to neuron segments.
+    If :math:`d-\lambda` segmentation is used, these edges are **not** comparable to NEURON segments.
+    
+    The purpose of this class is for private use in reading in hoc files: it should not be invoked directly.
 
     Attributes:
         label (str): label and ID of the segment (e.g. "Dendrite_1_0_0").
@@ -31,7 +32,12 @@ class _Edge(object):
         valid (bool): Flag indicating if the segment is valid.
         
     See also:
-        :py:meth:`~single_cell_parser.cell_parser.CellParser.determine_nseg` for determining the number of segments in a section.
+        :py:meth:`~single_cell_parser.cell_parser.CellParser.determine_nseg` for determining the number of segments in a section, and API
+        access to NEURON segments.
+        
+    See also:
+        :py:class:`singlecell_input_mapper.singlecell_input_mapper.reader._Edge` for a similar class 
+        that is used in the :py:mod:`singlecell_input_mapper` module.
     '''
 
     def is_valid(self):
@@ -227,7 +233,7 @@ def read_hoc_file(fname=''):
 
 
 def read_scalar_field(fname=''):
-    """Read AMIRA scalar fields and return a :py:class:`~single_cell_parser.scalar_field.ScalarField` object.
+    """Read AMIRA scalar fields.
     
     Args:
         fname (str): The name of the file to be read.

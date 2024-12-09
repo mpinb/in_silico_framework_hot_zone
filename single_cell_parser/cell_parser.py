@@ -20,6 +20,10 @@ logger = logging.getLogger("ISF").getChild(__name__)
 class CellParser(object):
     '''Set up a morphology from a NEURON hoc object
     
+    See also:
+        This is not the same class as :py:class:`singlecell_input_mapper.singlecell_input_mapper.cell.CellParser`.
+        This class provides biophysical details, such as segmentation, channel mechanisms, and membrane properties.
+    
     Attributes:
         hoc_path (str): Path to hoc file
         membraneParams (dict): Membrane parameters
