@@ -104,7 +104,8 @@ def skip_member(app, what, name, obj, skip, options):
     # print(f"Processing {what}: {name}")
     
     # skip special members, except __get__ and __set__
-    if name.startswith('__') and name.endswith('__') and name not in ['__get__', '__set__']:
+    short_name = name.rsplit('.', 1)[-1]
+    if short_name.startswith('__') and short_name.endswith('__') and name not in ['__get__', '__set__']:
         skip = True
     
     # Skip if it has the :skip-doc: tag
@@ -209,7 +210,8 @@ def count_documented_members(app, what, name, obj, skip, options):
     global N_MEMBERS
     global N_DOC_MEMBERS
     # skip special members, except __get__ and __set__
-    if name.startswith('__') and name.endswith('__') and name not in ['__get__', '__set__']:
+    short_name = name.rsplit('.', 1)[-1]
+    if short_name.startswith('__') and short_name.endswith('__') and name not in ['__get__', '__set__']:
         pass
     # Do not count if it has the :skip-doc: tag
     elif not obj.is_undoc_member and ':skip-doc:' in obj.docstring:
