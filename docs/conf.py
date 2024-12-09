@@ -11,6 +11,9 @@ project_root = os.path.join(os.path.abspath(os.pardir))
 sys.path.insert(0, project_root)
 from docs.parse_notebooks import copy_and_parse_notebooks_to_docs
 from functools import lru_cache
+from config.isf_logging import logger as isf_logger
+isf_logger.setLevel("INFO")
+logger = isf_logger.getChild("DOCS")
 
 project = 'In-Silico Framework (ISF)'
 copyright = '2023, Arco Bast, Amir Najafgholi, Maria Royo Cano, Rieke Fruengel, Matt Keaton, Bjorge Meulemeester, Omar Valerio'
@@ -111,7 +114,7 @@ def skip_member(app, what, name, obj, skip, options):
     # Skip if it has the :skip-doc: tag
     if not obj.is_undoc_member and ':skip-doc:' in obj.docstring:
         # print(f"Docstring for {name}: {obj.__doc__}")
-        print(f"Skipping {what}: {name} due to :skip-doc: tag")
+        logger.info(f"Skipping {what}: {name} due to :skip-doc: tag")
         skip = True
     
     # Skip inherited members
@@ -119,7 +122,7 @@ def skip_member(app, what, name, obj, skip, options):
         skip = True
     
     if name in modules_to_skip:
-        print(f"Skipping {what}: {name} due to :skip-doc: tag in module {obj.name}")
+        logger.info(f"Skipping {what}: {name} due to :skip-doc: tag in module {obj.name}")
         skip = True
     
     return skip
@@ -193,7 +196,7 @@ def find_modules_with_tag(source_dir, tag=":skip-doc:"):
 
 modules_to_skip = modules_to_skip + find_modules_with_tag(project_root)
 # skipping documentation for certain members
-print("ignoring modules: ", modules_to_skip)
+logger.info("ignoring modules: ", modules_to_skip)
 autoapi_ignore = modules_to_skip
 
 N_MEMBERS = 0
@@ -218,7 +221,7 @@ def count_documented_members(app, what, name, obj, skip, options):
     # Do not count if it has the :skip-doc: tag
     elif not obj.is_undoc_member and ':skip-doc:' in obj.docstring:
         LAST_PARENT_TO_SKIP = obj.id
-        print("Ignoring empty docstrings for children of", obj.id)
+        logger.info("    Ignoring empty docstrings for children of", obj.id)
         return
     elif obj.inherited:
         return
@@ -232,21 +235,21 @@ def count_documented_members(app, what, name, obj, skip, options):
         if obj.docstring:
             N_DOC_MEMBERS += 1
         else:
-            print(f"Undocumented member: {what}: {name}")
+            logger.warning(f"Undocumented member: {what}: {name}")
     return
     
 def log_documented_members(app, env):
     """Log the number of documented members."""
     global N_MEMBERS
     global N_DOC_MEMBERS
-    print(f"Documented members: {N_DOC_MEMBERS}/{N_MEMBERS}")
+    logger.info(f"Documented members: {N_DOC_MEMBERS}/{N_MEMBERS}")
 
 
 def setup(app):
     # skip members with :skip-doc: tag in their docstrings
     app.connect('autoapi-skip-member', skip_member)
     app.connect('autoapi-skip-member', count_documented_members)
-    app.connect('env-get-updated', log_documented_members)
+    app.connect('env-updated', log_documented_members)
 
 toc_object_entries_show_parents = 'hide'  # short toc entries
 autoapi_dirs = [project_root]
