@@ -1,5 +1,5 @@
 '''
-passive properties L2 neuron model
+test passive properties neuron model for visual inspection
 '''
 
 import sys
@@ -20,12 +20,11 @@ __author__ = 'Robert Egger'
 __date__ = '2013-01-28'
 
 
-def test_BAC_firing(fname):
+def test_passive_props(fname):
     neuronParameters = scp.build_parameters(fname)
     scp.load_NMODL_parameters(neuronParameters)
     cellParam = neuronParameters.neuron
 
-    #    cell = scp.create_cell(cellParam, scaleFunc=scale_apical)
     cell = scp.create_cell(cellParam)
 
     totalArea = 0.0
@@ -45,7 +44,7 @@ def test_BAC_firing(fname):
 #            apicalArea += sec.area
         if sec.label == 'Dendrite':
             basalArea += sec.area
-        if sec.label == 'AIS':
+        if sec.label == 'AIS' or sec.label == 'Myelin':
             axonArea += sec.area
 
     logger.info('total area = {:.2f} micron^2'.format(totalArea))
@@ -54,87 +53,71 @@ def test_BAC_firing(fname):
     logger.info('basal area = {:.2f} micron^2'.format(basalArea))
     logger.info('axon area = {:.2f} micron^2'.format(axonArea))
 
-    tStop = 3000.0
+    tStop = 600.0
     neuronParameters.sim.tStop = tStop
     #    neuronParameters.sim.dt = 0.005
-    tIStart = 700.0
-    duration = 2000.0
+    tIStart = 295.0
+    tIDur = 600.0
 
-    #    RinCorrection = 41.9/32.3
-    #    RinCorrection = 41.9/24.5
-    RinCorrection = 1.0
-    iAmpSoma1 = 0.619 * RinCorrection
-    iAmpSoma2 = 0.793 * RinCorrection
-    iAmpSoma3 = 1.507 * RinCorrection
+    tList = []
+    vList = []
 
-    visualize = False
-    t1, vmSoma1 = soma_injection(cell, iAmpSoma1, tIStart, duration,
-                                 neuronParameters.sim, visualize)
-    t2, vmSoma2 = soma_injection(cell, iAmpSoma2, tIStart, duration,
-                                 neuronParameters.sim, visualize)
-    t3, vmSoma3 = soma_injection(cell, iAmpSoma3, tIStart, duration,
-                                 neuronParameters.sim, visualize)
+    iAmpRange = [-0.5 + i * 0.2 for i in range(6)]  # nA
+    for iAmp in iAmpRange:
+        iclamp = h.IClamp(0.5, sec=cell.soma)
+        iclamp.delay = tIStart
+        iclamp.dur = tIDur
+        iclamp.amp = iAmp
 
-    plt.figure(1)
-    plt.plot(t1, vmSoma1, 'k', label='soma')
-    plt.xlabel('time [ms]')
-    plt.ylabel('Vm [mV]')
-    plt.title('soma current injection amp=%.2f nA' % (iAmpSoma1))
-    plt.legend()
-    plt.figure(2)
-    plt.plot(t2, vmSoma2, 'k', label='soma')
-    plt.xlabel('time [ms]')
-    plt.ylabel('Vm [mV]')
-    plt.title('soma current injection amp=%.2f nA' % (iAmpSoma2))
-    plt.legend()
-    plt.figure(3)
-    plt.plot(t3, vmSoma3, 'k', label='soma')
-    plt.xlabel('time [ms]')
-    plt.ylabel('Vm [mV]')
-    plt.title('soma current injection amp=%.2f nA' % (iAmpSoma3))
-    plt.legend()
-    #    plt.figure(4)
-    #    plt.plot(t4, vmSoma4, 'k', label='soma')
-    #    plt.plot(t4, vmApical4, 'r', label='apical')
-    #    plt.xlabel('time [ms]')
-    #    plt.ylabel('Vm [mV]')
-    #    plt.title('apical current injection amp=%.2f nA' % (iAmpApical2))
-    #    plt.legend()
-    plt.show()
+        logger.info('current stimulation: {:.2f} nA'.format(iAmp))
+        tVec = h.Vector()
+        tVec.record(h._ref_t)
+        startTime = time.time()
+        scp.init_neuron_run(neuronParameters.sim, vardt=True)
+        stopTime = time.time()
+        dt = stopTime - startTime
+        logger.info('NEURON runtime: {:.2f} s'.format(dt))
+
+        vmSoma = np.array(cell.soma.recVList[0])
+        t = np.array(tVec)
+        tList.append(t)
+        vList.append(vmSoma)
+
+        tau = compute_tau_effective(t[np.where(t >= tIStart)],
+                                    vmSoma[np.where(t >= tIStart)])
+        logger.info('tau = {:.2fms}'.format(tau))
+        dVEffective = vmSoma[-1] - vmSoma[np.where(t >= tIStart)][0]
+        RInEffective = dVEffective / iAmp
+        logger.info('RIn = {:.2f}MOhm'.format(RInEffective))
+
+        cell.re_init_cell()
+
+        logger.info('-------------------------------')
+
+    showPlots = True
+    if showPlots:
+        plt.figure(1)
+        for i in range(len(tList)):
+            currentStr = 'I=%.2fnA' % iAmpRange[i]
+            plt.plot(tList[i], vList[i], label=currentStr)
+        plt.legend()
+        plt.show()
 
 
-def soma_injection(cell,
-                   amplitude,
-                   delay,
-                   duration,
-                   simParam,
-                   saveVisualization=False):
-    iclamp = h.IClamp(0.5, sec=cell.soma)
-    iclamp.delay = delay
-    iclamp.dur = duration
-    iclamp.amp = amplitude
-
-    logger.info('soma current injection: {:.2f} nA'.format(amplitude))
-    tVec = h.Vector()
-    tVec.record(h._ref_t)
-    startTime = time.time()
-    scp.init_neuron_run(simParam, vardt=True)
-    stopTime = time.time()
-    dt = stopTime - startTime
-    logger.info('NEURON runtime: {:.2f} s'.format(dt))
-
-    vmSoma = np.array(cell.soma.recVList[0])
-    t = np.array(tVec)
-
-    if saveVisualization:
-        visFName = 'visualization/soma_injection_86/'
-        visFName += 'soma_current_injection_amp_%.1fnA_dur_%.0fms' % (amplitude,
-                                                                      duration)
-        scp.write_cell_simulation(visFName, cell, ['Vm'], t, allPoints=True)
-
-    cell.re_init_cell()
-
-    return t, vmSoma
+def compute_tau_effective(t, v):
+    dV = v[-1] - v[0]
+    vTau = 0.63212 * dV + v[0]
+    tau = -1.0
+    for i in range(len(v)):
+        if dV > 0:
+            if v[i] > vTau:
+                tau = t[i] - t[0]
+                break
+        elif dV < 0:
+            if v[i] < vTau:
+                tau = t[i] - t[0]
+                break
+    return tau
 
 
 def scale_apical(cell):
@@ -186,4 +169,4 @@ def write_sim_results(fname, t, v):
 if __name__ == '__main__':
     #    anomalous_rectifier()
     fname = sys.argv[1]
-    test_BAC_firing(fname)
+    test_passive_props(fname)

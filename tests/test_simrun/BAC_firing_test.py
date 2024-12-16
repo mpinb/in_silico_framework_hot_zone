@@ -1,5 +1,5 @@
 '''
-passive properties L2 neuron model
+test BAC firing for visual inspection
 '''
 
 import sys
