@@ -1,7 +1,9 @@
 '''Calculate the cell type specific synaptic strengths of synapses based on the neuron model and network parameters.
 
 This module provides functionality to simulate each synapse in a network-embedded neuron model,
-and to fit the synaptic strength of each synapse type to empirical data.
+calculate statistics per synapse type (e.g. mean, median and max voltage deflection).
+It can linearly interpolates the relationship between the synaptic strength and the EPSP statistics, and
+infers the optimal synaptic strength for each synapse type based on empirical data.
 
 The main class :py:class:`~simrun.synaptic_strength_fitting.PSPs` is used to manage the synaptic strength fitting process.
 '''
@@ -1246,11 +1248,13 @@ def linear_fit_pdf(pdf):
 
 
 def calculate_optimal_g(pdf):
-    """Calculate the optimal synaptic conductance such that the EPSP matches empirical data.
+    """Calculate the optimal synaptic conductance such that the EPSP statistics match empirical data.
     
-    This method calculated the optimal synaptic conductance by matching empirically observed EPSP statistics (mean, median, maximum)
+    This function calculates the optimal synaptic conductance by matching empirically observed EPSP statistics (mean, median, maximum)
     to a linear model. Each statistic provides a different estimate of the optimal ``g``.
     The final optimal ``g`` is then a weighed average of the three statistics, where the weights for ``mean:median:max`` are ``2:2:1`` respectively.
+    
+    This function is used in :py:class:`~simrun.synaptic_strength_fitting.PSPs` to calculate the optimal synaptic conductance for each celltype.
     
     Args:
         pdf (pd.DataFrame): 
