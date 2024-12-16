@@ -55,7 +55,7 @@ def resolve_db_path(path):
         print('old path', path)
         path = path.replace(
             '/gpfs01/bethge/home/regger/data/',
-            '/nas1/Data_regger/AXON_SAGA/Axon4/PassiveTouch/')
+            '/nas1/Data_regger/AXON_SAGA/Axon4/PassiveTouch/')  # TODO: make this more general
         print('new path', path)
     if not path.startswith('mdb://'):
         return path
