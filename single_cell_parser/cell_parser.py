@@ -1230,9 +1230,9 @@ class CellParser(object):
         """Add spines with morphological features to the neuron.
         
         .. deprecated:: 0.1.0
-            Including specific morphological features of spines provided no substantial physiological differences
-            compared to simply scaling the membrane capacitance and resistance of the dendritic structures (see :py:meth:`_add_spines`).
-            However, computation time substantially increased.
+            Including specific morphological features of spines made it impossible to find a neuron model for as long as we tried this
+            project.
+            Instead we scale the membrane capacitance and resistance of the dendritic structures (see :py:meth:`_add_spines`).
             
         Args:
             parameters (dict): Parameters for spine morphology. See :ref:`cell_parameters_format` for an example.
