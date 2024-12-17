@@ -286,7 +286,7 @@ class Simulator_Setup:
                 logger.error("Could not run the cell modify function {} ({})\n{}".format(name, fun, e))
                 raise
             self._check_not_none(cell, 'cell', name)
-        params = self.get_params_after_cell_generation(params,cell)
+        # params = self.get_params_after_cell_generation(params,cell)
         return cell, params
 
 
