@@ -250,19 +250,19 @@ def run_new_simulations(
         1.3 Set up the simulation with recording sites from the neuron parameters
     
     2. Run :paramref:`nSweeps` simulations using :py:meth:`~single_cell_parser.init_neuron_run`, 
-    each time creating a new network embedding and sampling new activity using :py:meth:`~single_cell_parser.network.Network.create_saved_network2`.
+    each time creating a new network embedding and sampling new activity using :py:meth:`~single_cell_parser.network.NetworkMapper.create_saved_network2`.
     3. Parse and write out simulation data, including voltage traces from the soma 
     and additional recording sites defined in the neuron parameters.
-    4. Finalize the simulation by removing the "_running" suffix from the dirname ":paramref:`dirPrefix`/results/%Y%M%D-%H%M_UID_running".
+    4. Finalize the simulation by removing the "_running" suffix from the dirname ``dirPrefix/results/YYYYMMDD-HHMM_UID_running``.
     
     Args:
         cellParamName (str): Path to a :ref:`cell_parameters_format` file.
         evokedUpParamName (str): Path to a :ref:`network_parameters_format` file.
-        dirPrefix (str): Prefix of the output directory. The final directory name will be :paramref:`dirPrefix`/results/%Y%M%D-%H%M_UID.
+        dirPrefix (str): Prefix of the output directory. The final directory name will be ``dirPrefix/results/YYYYMMDD-HHMM_UID.``
         seed (int): Random seed for the simulation.
         nSweps (int): Number of simulations to run with these parameters.
             Trial-to-trial variability is introduced by the random seed in terms of
-            different network activity and connectivity realizations (see :py:meth:`~single_cell_parser.network.Network.created_saved_network2`).
+            different network activity and connectivity realizations (see :py:meth:`~single_cell_parser.network.NetworkMapper.created_saved_network2`).
         tStop (float): Duration of each simulation in ms.
         tStim (float): Time in ms at which the in-vivo evoked synaptic input should start.
         scale_apical (callable, DEPRECATED): Function to scale the apical dendrite. Assumes the cell has an apical dendrite - see below.
@@ -279,7 +279,7 @@ def run_new_simulations(
 
     .. deprecated:: 0.1
         The `scale_apical` argument is deprecated and will be removed in a future version.
-        Use the ``cell_modify_functions`` key in the :ref:`cell_params_format` file instead.
+        Use the ``cell_modify_functions`` key in the :ref:`cell_parameters_format` file instead.
 
     Returns:
         str: Path to the output directory containing the simulation results.
