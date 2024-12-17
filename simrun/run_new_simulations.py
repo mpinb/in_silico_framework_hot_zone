@@ -243,10 +243,12 @@ def run_new_simulations(
     The workflow of this method is as follows:
 
     1. Initialize the simulation
+    
         1.1 Set a random seed. Used in the output directory name, and for generating network realizations 
         with :py:class:`~single_cell_parser.network.NetworkMapper`.
         1.2 Build the cell with biophysical properties.
         1.3 Set up the simulation with recording sites from the neuron parameters
+    
     2. Run :paramref:`nSweeps` simulations using :py:meth:`~single_cell_parser.init_neuron_run`, 
     each time creating a new network embedding and sampling new activity using :py:meth:`~single_cell_parser.network.Network.create_saved_network2`.
     3. Parse and write out simulation data, including voltage traces from the soma 
