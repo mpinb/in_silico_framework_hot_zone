@@ -1044,7 +1044,6 @@ class ISFDataBase:
 
         str_ = ['<{}.{} object at {}>'.format(self.__class__.__module__, self.__class__.__name__, hex(id(self)))]
         str_.append("Located at {}".format(self._basedir))
-        str_.append("Located at {}".format(self._basedir))
         # str_.append("{1}DataBases{0} | {2}Directories{0} | {3}Keys{0}".format(
         #     bcolors.ENDC, bcolors.OKGREEN, bcolors.WARNING, bcolors.OKCYAN) )
         str_.append(colorize(self._basedir.name, bcolors.OKGREEN))
