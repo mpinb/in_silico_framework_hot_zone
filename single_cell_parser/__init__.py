@@ -4,44 +4,16 @@ This package provides functionality to parse :py:class:`~single_cell_parser.cell
 from NEURON :ref:`hoc_file_format` files, map synapses onto these cells, and run biophysically 
 detailed NEURON simulations with the resulting neuron-network models.
 
-Attention:
+See also:
     This package should not be confused with :py:mod:`singlecell_input_mapper`. 
     
     This package is specialized to handle biophysical properties of neurons and simulation runs, and
     provides API access to the NEURON simulator :cite:`hines2001neuron`.
     It handles (among other things) synaptic activations onto a biophysically detailed neuron model.
-    To assign activity to a network realization (i.e. making it a **functional** network realization),
-    this package implements only basic functionality to generate such network realizations, or activity.
     
-    :py:mod:`singlecell_input_mapper` provides extensive functionality to generate network realizations and activity,
-    constrained by empirical data. The results of such pipelines can be read in with this package.
-    To use different network models, please familiarize yourself with the :ref:`file_formats`.
-    
-    In any case, beware of the following classes and methods that are duplicates in name, but not in functionality:
-    
-    .. list-table:: 
-        :header-rows: 1
-
-        * - :py:mod:`singlecell_input_mapper.singlecell_input_mapper`
-          - :py:mod:`single_cell_parser`
-        * - :py:class:`~singlecell_input_mapper.singlecell_input_mapper.cell.Cell`
-          - :py:class:`~single_cell_parser.cell.Cell`
-        * - :py:class:`~singlecell_input_mapper.singlecell_input_mapper.cell.CellParser`
-          - :py:class:`~single_cell_parser.cell_parser.CellParser`
-        * - :py:class:`~singlecell_input_mapper.singlecell_input_mapper.reader.Edge`
-          - :py:class:`~single_cell_parser.reader.Edge`
-        * - :py:class:`~singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseMapper`
-          - :py:class:`~single_cell_parser.synapse_mapper.SynapseMapper`
-        * - :py:class:`~singlecell_input_mapper.singlecell_input_mapper.scalar_field.ScalarField`
-          - :py:class:`~single_cell_parser.scalar_field.ScalarField`
-        * - :py:class:`~singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper`
-          - :py:class:`~single_cell_parser.network.NetworkMapper`
-        * - :meth:`~singlecell_input_mapper.singlecell_input_mapper.cell.Synapse`
-          - :meth:`~single_cell_parser.synapse.Synapse`
-        * - :meth:`~singlecell_input_mapper.singlecell_input_mapper.reader.read_hoc_file`
-          - :meth:`~single_cell_parser.reader.read_hoc_file`
-        * - :meth:`~singlecell_input_mapper.singlecell_input_mapper.reader.read_scalar_field`
-          - :meth:`~single_cell_parser.reader.read_scalar_field`
+    :py:mod:`singlecell_input_mapper` provides extensive functionality to generate network realizations,
+    constrained by empirical data. 
+    The results of such pipelines can be read in with this package.
 
 '''
 import logging
@@ -319,7 +291,6 @@ def spines_update_network_paramfile(
     '''Update the network.param file to point to the new synapse distribution file'''
     network_param = build_parameters(network_paramfile)
     for i in list(network_param.network.keys()):
-        network_param.network[
-            i].synapses.distributionFile = new_synapse_distribution_file
+        network_param.network[i].synapses.distributionFile = new_synapse_distribution_file
     network_param.save(new_network_paramfile)
     logger.info("Success: network.param file updated")
