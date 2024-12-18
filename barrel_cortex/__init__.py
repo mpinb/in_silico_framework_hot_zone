@@ -315,7 +315,7 @@ def construct_pt3add(values):
     Args:
         values (list): list of values
         
-    Returns
+    Returns:
         str: pt3dadd line
     """
     values = tuple(values)

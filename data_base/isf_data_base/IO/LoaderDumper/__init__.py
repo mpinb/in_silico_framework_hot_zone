@@ -1,22 +1,20 @@
-'''Module implements a database concept, using two interfaces:
-(1) the dump function
-(2) the loader class
+'''Read and write data in various formats.
 
-To save an object, the dump method is called, e.g:
+This package provides IO modules that always contain three components:
 
-..highlight:: python
-..code-block:: python
-    import myDumper
-    myDumper.dump(obj, savedir)
+1. A ``dump()`` function to write out the data, and its corresponding ``Loader`` object.
+2. A ``Loader`` class that can load the data back into memory.
+3. a ``check()`` method that checks whether the object can be saved with this dumper.
+
+To save an object, the dump method is called::
+
+    >>> import myDumper
+    >>> myDumper.dump(obj, savedir)
  
-This saves the object using a method specified in the respective dump method.
-Additionally, a file Loader.pickle is created. This contains a Loader object,
-which contains all the mechanisms to load the object. 
-
-The Loader class provides a get-method, which returns the saved object. To allow
-moving of the data, the path of the data is not saved within the Loader object
-and has to be passed to the get function. This is wrapped in the following load function,
-which is the intended way to reload arbitrary objects saved with a Dumper.
+This saves the object as specified in the respective ``dump()`` method.
+In addition, a ``Loader.json`` is saved alongside the data. 
+This file contains the specification of a ``Loader`` object, 
+which can then be initialized and contains all the mechanisms to load the object back into memory.
 '''
 
 import os
@@ -31,8 +29,20 @@ import numpy as np
 
 
 def load(savedir, load_data=True, loader_kwargs={}):
-    '''Standard interface to load data, that was saved to savedir
-    with an arbitrary dumper'''
+    '''Standard interface to load data.
+    
+    Loads the data's respective ``Loader`` in the same directory as the data.
+    Uses this ``Loader`` to load the data
+    
+    Args:
+        savedir (str): Path to the data
+        load_data (bool): Whether to load the data (default), or just the ``Loader`` object. Useful for debugging purposes.
+        loader_kwargs (dict): Additional keyword arguments for the loader. Note that the ``Loader.json`` file should in principle contain all necessary information.
+        
+    Returns:
+        object: The loaded object: either the data, or the ``Loader`` object.
+    
+    '''
     #     with open(os.path.join(savedir, 'Loader.pickle'), 'rb') as file_:
     #         myloader = cloudpickle.load(file_, encoding = 'latin1')
     if os.path.exists(os.path.join(savedir, 'Loader.pickle')):
@@ -54,16 +64,21 @@ def load(savedir, load_data=True, loader_kwargs={}):
 
 
 def get_dumper_string_by_dumper_module(dumper_module):
-    """
-    Check if a dumper module starts with the correct prefix.
-    The prefix can either be isf_data_base.something, 
-    but also data_base.something, since isf_data_base is the default data_base system for the isf project.
+    """Convert a dumper submodule to a string.
+    
+    This is used to write the ``Loader.json`` specification file.
 
     Args:
         dumper_module: The module to check.
     
     Returns:
-        The dumper string.
+        The dumper string, relative to its parent ``LoaderDumper`` module.
+        
+    Example::
+    
+        >>> import data_base.isf_data_base.IO.LoaderDumper.my_dumper as dumper_module
+        >>> get_dumper_string_by_dumper_module(dumper_module)
+        'my_dumper'
     """
     name = dumper_module.__name__
     name = generic_to_specific_databases_module_name(name)
@@ -100,6 +115,16 @@ def generic_to_specific_databases_module_name(module_name):
 
 
 def get_dumper_string_by_savedir(savedir):
+    """Get the dumper string from a filepath.
+    
+    This function reads the ``Loader.json`` file in the savedir and returns the dumper in string format.
+    
+    Args:
+        savedir (str): The path to the saved data. Must contain a ``Loader.json`` file.
+        
+    Returns:
+        str: The dumper string.
+    """
     loader_kwargs = json.load(open(os.path.join(savedir, 'Loader.json')))
     loader_module = loader_kwargs['Loader']
     del loader_kwargs['Loader']

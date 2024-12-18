@@ -1441,6 +1441,23 @@ packages:
   size: 19975
   timestamp: 1643971626978
 - kind: conda
+  name: fasteners
+  version: 0.17.3
+  build: pyhd8ed1ab_0
+  subdir: noarch
+  noarch: python
+  url: https://conda.anaconda.org/conda-forge/noarch/fasteners-0.17.3-pyhd8ed1ab_0.tar.bz2
+  sha256: 42be6ac8478051b26751d778490d6a71de12e5c6443e145ff3eddbc577d9bcda
+  md5: 348e27e78a5e39090031448c72f66d5e
+  depends:
+  - python >=3.6
+  license: Apache-2.0
+  license_family: APACHE
+  purls:
+  - pkg:pypi/fasteners?source=hash-mapping
+  size: 19975
+  timestamp: 1643971626978
+- kind: conda
   name: fftw
   version: 3.3.10
   build: nompi_hf1063bd_110
