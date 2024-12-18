@@ -6,8 +6,8 @@ import yaml
 import os
 import warnings
 from compatibility import YamlLoader
-import logging
-logger = logging.getLogger("ISF").getChild(__name__)
+from config.isf_logging import logger as isf_logger
+logger = isf_logger.getChild(__name__)
 
 if 'ISF_DISTRIBUTED_LOCK_BLOCK' in os.environ:
     pass
@@ -16,7 +16,7 @@ elif 'ISF_DISTRIBUTED_LOCK_CONFIG' in os.environ:
     with open(os.environ['ISF_DISTRIBUTED_LOCK_CONFIG'], 'r') as f:
         config = yaml.load(f, Loader=YamlLoader)
 else:
-    logger.warning(
+    logger.attention(
         "Environment variable ISF_DISTRIBUTED_LOCK_CONFIG is not set. " +
         "Falling back to default configuration.")
     config = [

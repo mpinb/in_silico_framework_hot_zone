@@ -484,7 +484,7 @@ def calc_recursive_filetree(
             if Path.exists(element/'db') and not all_files:
                 # subdb: recurse deeper without adding 'db' as key
                 # (only add 'db' if all_files=True)
-                recursion_kwargs_next_iter['db'] = db[element.name]
+                recursion_kwargs_next_iter['db'] = db.get(element.name, readonly=True)
                 recursion_kwargs_next_iter['root_dir_path'] = Path(recursion_kwargs_next_iter['db'].basedir)
             lines = calc_recursive_filetree(**recursion_kwargs_next_iter)
             
