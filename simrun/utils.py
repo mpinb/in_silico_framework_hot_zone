@@ -103,50 +103,6 @@ def load_param_file_if_path_is_provided(pathOrParam):
         logger.warning("Returning parameter object as is (type: {})".format(type(pathOrParam)))
         return pathOrParam
 
-def scale_apical(cell):
-    '''Scale a cell's apical diameters depending on the distance to soma.
-    
-    This method scales the apical diameters of a cell with a factor of :math:`2.5` if
-    the section is within a distance of :math:`1000 \mu m` from the soma.
-    
-    :skip-doc:
-    
-    .. deprecated:: 0.1
-        This method is deprecated and will be removed in future versions.
-        Use :py:meth:`single_cell_parser.cell_modify_functions.scale_apical` instead.
-    
-    Args:
-        cell (:py:class:`single_cell_parser.cell.Cell`): The cell object.
-        
-    Return:
-        None: Updates the cell object in place.
-    '''
-    # TODO: deprecated, remove
-    import neuron
-    h = neuron.h
-    dendScale = 2.5
-    scaleCount = 0
-    for sec in cell.sections:
-        if sec.label == 'ApicalDendrite':
-            dist = cell.distance_to_soma(sec, 1.0)
-            if dist > 1000.0:
-                continue
-            # for cell 86:
-            if scaleCount > 32:
-                break
-            scaleCount += 1
-            # dummy = h.pt3dclear(sec=sec)
-            for i in range(sec.nrOfPts):
-                oldDiam = sec.diamList[i]
-                newDiam = dendScale * oldDiam
-                h.pt3dchange(i, newDiam, sec=sec)
-                # x, y, z = sec.pts[i]
-                # sec.diamList[i] = sec.diamList[i]*dendScale
-                # d = sec.diamList[i]
-                # dummy = h.pt3dadd(x, y, z, d, sec=sec)
-
-    logger.info('Scaled {:d} apical sections...'.format(scaleCount))
-
 class defaultValues:
     """
     :skip-doc:
