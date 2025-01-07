@@ -23,7 +23,7 @@ on:
 
 jobs:
   test:
-    name: Test Py3.8-pixi
+    name: Test pixi MacOS
     runs-on: macos-latest
     steps:
       - name: Checkout
