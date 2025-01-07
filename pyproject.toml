@@ -64,19 +64,19 @@ no-build-isolation = ["pandas-msgpack"]
 [tool.pixi.tasks]
 launch_dask_server = {cmd = [
   "dask-scheduler", 
-  "--port=$port_number", 
-  "--bokeh-port=$bokeh_port", 
+  "--port=$ISF_DASK_PORT", 
+  "--bokeh-port=$ISF_DASK_BOKEH_PORT", 
   "--host=localhost"
-  ], description = "Launch a Dask scheduler", env = {port_number = "8786", bokeh_port = "8787"}}
+  ], description = "Launch a Dask scheduler", env = {ISF_DASK_PORT = "8786", ISF_DASK_BOKEH_PORT = "8787"}, cwd="/tmp"}
 
 launch_dask_workers = {cmd = [
   "dask-worker", 
-  "tcp://localhost:8786", 
+  "localhost:$ISF_DASK_PORT", 
   "--nthreads=1", 
-  "--nprocs=$ISF_NUM_WORKERS", 
+  "--nprocs=$ISF_NUM_DASK_WORKERS", 
   "--memory-limit=100e15", 
-  "--bokeh-port=$bokeh_port"
-  ], description = "Launch Dask workers", env = {bokeh_port = "8787", ISF_NUM_WORKERS = "4"}}
+  "--dashboard-address=$ISF_DASK_BOKEH_PORT"
+  ], description = "Launch Dask workers", env = {ISF_DASK_PORT = "8786", ISF_DASK_BOKEH_PORT = "8787", ISF_NUM_DASK_WORKERS = "4"}, cwd = "/tmp"}
 
 launch_jupyter_server = {cmd = [
         'jupyter-lab',
@@ -85,3 +85,18 @@ launch_jupyter_server = {cmd = [
         '--port=$ISF_LAB_PORT',
         "--NotebookApp.allow_origin='*'"
     ], description = "Launching jupyter lab server", env = {ISF_LAB_PORT = "11113"}}
+
+test = {cmd = [
+  "pytest", 
+  "-n",
+  "$ISF_NUM_PYTEST_WORKERS",
+  "-rsx",
+  "-vv",
+  "--color=yes",
+  "--durations=15",
+  "--cov-report",
+  "xml:tests/logs/test_report.xml",
+  "--cov=/tmp",
+  "--dask_server_port",
+  "$ISF_DASK_PORT",
+  ], description = "Run test suite", env = {ISF_NUM_PYTEST_WORKERS = "5", ISF_DASK_PORT = "8786"}, cwd="tests"}
