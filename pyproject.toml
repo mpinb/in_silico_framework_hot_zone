@@ -60,3 +60,28 @@ ipywidgets = ">=8.1.5,<9"
 
 [tool.pixi.pypi-options]
 no-build-isolation = ["pandas-msgpack"]
+
+[tool.pixi.tasks]
+launch_dask_server = {cmd = [
+  "dask-scheduler", 
+  "--port=$port_number", 
+  "--bokeh-port=$bokeh_port", 
+  "--host=localhost"
+  ], description = "Launch a Dask scheduler", env = {port_number = "8786", bokeh_port = "8787"}}
+
+launch_dask_workers = {cmd = [
+  "dask-worker", 
+  "tcp://localhost:8786", 
+  "--nthreads=1", 
+  "--nprocs=$ISF_NUM_WORKERS", 
+  "--memory-limit=100e15", 
+  "--bokeh-port=$bokeh_port"
+  ], description = "Launch Dask workers", env = {bokeh_port = "8787", ISF_NUM_WORKERS = "4"}}
+
+launch_jupyter_server = {cmd = [
+        'jupyter-lab',
+        "--ip='*'",
+        '--no-browser',
+        '--port=$ISF_LAB_PORT',
+        "--NotebookApp.allow_origin='*'"
+    ], description = "Launching jupyter lab server", env = {ISF_LAB_PORT = "11113"}}
