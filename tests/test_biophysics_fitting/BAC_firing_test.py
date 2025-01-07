@@ -10,6 +10,7 @@ import single_cell_parser as scp
 import single_cell_parser.analyze as sca
 import numpy as np
 import matplotlib.pyplot as plt
+from .context import cellParamName
 
 h = neuron.h
 import logging
@@ -20,8 +21,8 @@ __author__ = 'Robert Egger'
 __date__ = '2013-01-28'
 
 
-def test_BAC_firing(fname):
-    neuronParameters = scp.build_parameters(fname)
+def test_BAC_firing():
+    neuronParameters = scp.build_parameters(cellParamName)
     scp.load_NMODL_parameters(neuronParameters)
     cellParam = neuronParameters.neuron
 
