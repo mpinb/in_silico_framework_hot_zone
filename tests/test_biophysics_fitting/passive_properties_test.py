@@ -10,7 +10,7 @@ import single_cell_parser as scp
 import single_cell_parser.analyze as sca
 import numpy as np
 import matplotlib.pyplot as plt
-
+from .context import cellParamName
 h = neuron.h
 import logging
 
@@ -20,8 +20,8 @@ __author__ = 'Robert Egger'
 __date__ = '2013-01-28'
 
 
-def test_passive_props(fname):
-    neuronParameters = scp.build_parameters(fname)
+def test_passive_props():
+    neuronParameters = scp.build_parameters(cellParamName)
     scp.load_NMODL_parameters(neuronParameters)
     cellParam = neuronParameters.neuron
 
@@ -85,10 +85,10 @@ def test_passive_props(fname):
 
         tau = compute_tau_effective(t[np.where(t >= tIStart)],
                                     vmSoma[np.where(t >= tIStart)])
-        logger.info('tau = {:.2fms}'.format(tau))
+        logger.info('tau = {:.2f} ms'.format(tau))
         dVEffective = vmSoma[-1] - vmSoma[np.where(t >= tIStart)][0]
         RInEffective = dVEffective / iAmp
-        logger.info('RIn = {:.2f}MOhm'.format(RInEffective))
+        logger.info('RIn = {:.2f} MOhm'.format(RInEffective))
 
         cell.re_init_cell()
 
@@ -98,7 +98,7 @@ def test_passive_props(fname):
     if showPlots:
         plt.figure(1)
         for i in range(len(tList)):
-            currentStr = 'I=%.2fnA' % iAmpRange[i]
+            currentStr = 'I=%.2f nA' % iAmpRange[i]
             plt.plot(tList[i], vList[i], label=currentStr)
         plt.legend()
         plt.show()
