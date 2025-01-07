@@ -22,7 +22,7 @@ def parameters_to_cell(
     synfile = None,
     dirPrefix = '', 
     tStop = 345.0, 
-    scale_apical = scale_apical,
+    scale_apical = None,
     range_vars = None, 
     allPoints=False,
     cell = None, 
