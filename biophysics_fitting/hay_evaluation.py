@@ -25,7 +25,7 @@ __date__ = '2018-11-08'
 neuron_basedir = os.path.join(os.path.dirname(__file__), 'MOEA_EH_minimal')
 
 
-def setup_hay_evaluator(testing=False):
+def setup_hay_evaluator():
     '''Set up the NEURON simulator environment for evaluation.
     
     This method adds a stump cell to the neuron environment, which is
@@ -84,9 +84,7 @@ def setup_hay_evaluator(testing=False):
             h('chdir("{path}")'.format(path=neuron_basedir))
             h('strdef central_file_name')
             h('central_file_name = "{}"'.format(central_file_name))
-            h('load_file("MOEA_gui_for_objective_calculation.hoc")')
-            if testing:
-                test()
+            h('''load_file("MOEA_gui_for_objective_calculation.hoc")''')
 
 
 def is_setup():
