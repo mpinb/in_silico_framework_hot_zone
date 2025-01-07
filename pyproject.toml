@@ -13,9 +13,6 @@ platforms = ["linux-64", "osx-arm64"]
 build-backend = "hatchling.build"
 requires = ["hatchling"]
 
-[dependency-groups]
-release = ["tables>=3.8.0,<4"]
-
 [tool.pixi.system-requirements]
 libc = "2.17"
 
@@ -53,18 +50,18 @@ blosc = ">=1.11.1,<2"
 scikit-learn = ">=0.23.2"
 seaborn = ">=0.12.2,<0.13"
 matplotlib = ">=3.3.2,<4"
+tables = ">=3.8.0,<4"
 pandas-msgpack = { git = "https://github.com/abast/pandas-msgpack.git"}
 
 [tool.pixi.pypi-options]
 no-build-isolation = ["pandas-msgpack"]
 
 [tool.pixi.feature.release]
-pypi-dependencies = { neuron = ">=8.2", "distributed"= ">=2.30.0" }
+pypi-dependencies = { neuron = ">=8.2", "distributed"= ">=2.30.0"}
 dependencies = { numpy = "<=1.21" }
 platforms = ["linux-64", "osx-arm64"]
 
 [tool.pixi.feature.legacy]
-pypi-dependencies = { tables = ">=3.8.0,<4" }
 dependencies = { neuron = "7.8.2.*", numpy = "1.19.2", distributed = "2.30.0" }
 platforms = ["linux-64"]
 
