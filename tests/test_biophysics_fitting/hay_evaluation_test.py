@@ -63,7 +63,7 @@ def hay_objective_function(x):
     return pd.Series(np.array(o[0].pass_fitness_vec()),
                      index=get_hay_objective_names())
 
-@pytest.skip("This test segfaults, unsure why. It's set for removal either way.")
+@pytest.mark.skip("This test segfaults, unsure why. It's set for removal either way.")
 def hay_evaluation_test():
     '''compare the result of the optimization of the hay evaluator with a precomputed result'''
     print(
