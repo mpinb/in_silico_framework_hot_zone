@@ -10,7 +10,7 @@ import single_cell_parser as scp
 import neuron
 from ..test_simrun import decorators
 import numpy as np
-from simrun.utils import scale_apical
+from single_cell_parser.cell_modify_functions.scale_apical_morph_86 import scale_apical_morph_86
 import simrun.generate_synapse_activations
 import simrun.run_new_simulations
 import simrun.run_existing_synapse_activations
@@ -135,7 +135,7 @@ def test_reproduce_simulation_trial_from_roberts_model_control(tmpdir, client):
             nprocs=1,
             tStop=345,
             silent=True,
-            scale_apical=scale_apical)
+            scale_apical=scale_apical_morph_86)
         dummy = client.compute(dummy).result()
 
         #synapse activation
