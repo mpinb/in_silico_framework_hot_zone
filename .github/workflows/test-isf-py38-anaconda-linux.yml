@@ -23,7 +23,7 @@ on:
 jobs:
   test:
     name: Test ISF Anaconda Py3.8 (linux)
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     defaults:
       run:
         shell: bash -l {0}
@@ -42,8 +42,7 @@ jobs:
           fi
           pushd .
           cd installer/py3.8
-          set -o pipefail
-          ./install.sh -p $CONDA_TARGET_DIR | tee $HOME/build_output_3.8.txt
+          ./install.sh -p $CONDA_TARGET_DIR | tee $HOME/build_output_3.8.txt || exit 1
           exit_status=${PIPESTATUS[0]}
           popd
           source $CONDA_TARGET_DIR/bin/activate
