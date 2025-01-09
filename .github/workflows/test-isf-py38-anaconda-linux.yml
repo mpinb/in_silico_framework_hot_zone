@@ -17,6 +17,7 @@ on:
     branches:
       - testing
       - installer
+      - compatibility
   workflow_dispatch:
 
 jobs:
