@@ -3,16 +3,16 @@ authors = [{name = "Bjorge Meulemeester", email = "bjorge.meulemeester@mpinb.mpg
 
 description = "Add a short description here"
 name = "in_silico_framework"
-requires-python = ">=3.8, <3.10"
+requires-python = "==3.8.*"
 version = "0.1.0"
+
+[tool.pixi.project]
+channels = ["conda-forge"]
+platforms = ["linux-64", "osx-arm64"]
 
 [build-system]
 build-backend = "hatchling.build"
 requires = ["hatchling"]
-
-[tool.pixi.project]
-channels = ["conda-forge"]
-platforms = ["linux-64"]
 
 [tool.pixi.system-requirements]
 libc = "2.17"
@@ -20,12 +20,8 @@ libc = "2.17"
 [tool.pixi.dependencies]
 # default conda dependencies
 pandas = "1.1.3.*"
-numpy = "1.19.2.*"
-distributed = "2.30.0.*"
 dask = "2.30.0.*"
-neuron = "7.8.2.*"
 scikit-learn = "0.23.2.*"
-simpleitk = ">=2.4.0,<3"
 pypdf2 = ">=3.0.1,<4"
 mock = ">=5.1.0,<6"
 scandir = ">=1.10.0,<2"
@@ -45,23 +41,35 @@ jupyterlab = ">=3.5.3,<4"
 jupyter-scatter = ">=0.19.1,<0.20"
 cmasher = ">=1.6.3,<2"
 ipywidgets = ">=8.1.5,<9"
+simpleitk = ">=2.2.1,<3"
 
 [tool.pixi.pypi-dependencies]
 bluepyopt = "==1.9.126"
 sumatra = "==0.7.4"
-tables = ">=3.8.0,<4"
 redis = ">=5.2.0,<6"
-pyarrow = "==12.0.1"
-blosc = ">=1.11.1,<2"
-pandas-msgpack = { git = "https://github.com/abast/pandas-msgpack.git" }
-
-[tool.pixi.feature.isf.dependencies]
-flask = "1.1.4.*"
-pyyaml = "==5.3.1"
-
+pyarrow = "==12.0.1" 
+blosc = ">=1.11.1,<2" 
+scikit-learn = ">=0.23.2"
+seaborn = ">=0.12.2,<0.13"
+pandas-msgpack = { git = "https://github.com/abast/pandas-msgpack.git"}
 
 [tool.pixi.pypi-options]
 no-build-isolation = ["pandas-msgpack"]
+
+[tool.pixi.target.osx]
+pypi-dependencies = { neuron = ">=8.2", "distributed"= ">=2.30.0"}
+dependencies = { numpy = "1.21", pytables = ">=3.7.0,<4" }
+
+[tool.pixi.target.linux]
+dependencies = { neuron = "7.8.2.*", numpy = "1.19.2", distributed = "2.30.0"}
+pypi-dependencies = { tables = ">=3.8.0,<4" }
+
+[tool.pixi.environments]
+docs = ["docs"]
+default = ["isf"]
+
+[tool.pixi.feature.isf]
+dependencies = { pyyaml = "5.3.1", flask = "1.1.4"}
 
 [tool.pixi.feature.docs.dependencies]
 flask = ">=2"
@@ -79,10 +87,6 @@ sphinx-inline-tabs = ">=2023.4.21,<2024"
 [dependency-groups]
 # pypi dependencies
 docs = ["sphinx-paramlinks>=0.6.0,<0.7", "catppuccin[pygments]>=2.2.0,<3", "sphinx-autoapi>=3.4.0,<4"]
-
-[tool.pixi.environments]
-default = ["isf"]
-docs = ["docs"]
 
 [tool.pixi.tasks]
 launch_dask_server = {cmd = [
