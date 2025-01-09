@@ -6,7 +6,6 @@ on:
       - README.md
       - CHANGELOG.md
       - .gitignore
-      - .github/**
   pull_request_target:
     types:
       - closed
@@ -14,7 +13,6 @@ on:
       - README.md
       - CHANGELOG.md
       - .gitignore
-      - .github/**
   push:
     branches:
       - testing
