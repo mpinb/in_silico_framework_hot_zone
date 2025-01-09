@@ -19,7 +19,7 @@ from functools import partial
 import numpy as np
 import dask
 from data_base.analyze.temporal_binning import universal as temporal_binning
-from data_base.isf_data_base.IO.LoaderDumper import numpy_to_msgpack as numpy_to_msgpack
+from data_base.isf_data_base.IO.LoaderDumper import numpy_to_npz
 import logging
 logger = logging.getLogger("ISF").getChild(__name__)
 try:
