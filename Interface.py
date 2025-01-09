@@ -211,7 +211,7 @@ from singlecell_input_mapper.ongoing_network_param_from_template import create_n
            as create_ongoing_network_parameter
 
 if not 'ISF_MINIMIZE_IO' in os.environ:
-    if get_versions()['dirty']: warnings.warn('The source folder has uncommited changes!')
+    if get_versions()['dirty']: logger.attention('The source folder has uncommited changes!')
 
 defaultdict_defaultdict = lambda: defaultdict(lambda: defaultdict_defaultdict())
 
@@ -272,8 +272,10 @@ def get_client(client_port=38786, timeout=120):
     logger.info("Making mechanisms visible on client side")
     def update_path(): sys.path.insert(0, os.path.dirname(__file__))
     def import_mechanisms(): import mechanisms
+    def import_Interface(): import Interface
     c.run(update_path)
     c.run(import_mechanisms)
+    c.run(import_Interface)
     return c
 
 print("\n\n")
@@ -283,5 +285,5 @@ import barrel_cortex
 from barrel_cortex import excitatory, inhibitory, color_cellTypeColorMap, color_cellTypeColorMap_L6paper, color_cellTypeColorMap_L6paper_with_INH
 
 import compatibility
-# Set logging level back to WARNING to suppress verbosity in regular usage
-logger.setLevel(logging.WARNING)
+
+logger.setLevel(logging.ATTENTION)

@@ -51,6 +51,7 @@ coverage==7.3.0
 pytest-xdist==3.3.1
 execnet==2.0.2  # for pytest-xdist
 exceptiongroup==1.1.2
+tomli==2.0.2
 
 ## misc
 chart-studio==1.1.0

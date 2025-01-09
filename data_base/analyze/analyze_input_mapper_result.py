@@ -1,5 +1,8 @@
-'''This module contains methods to compare the result of the SingleCellInputMapper to
-the neuronet population.'''
+'''Compare the result of the :py:mod:`singlecell_input_mapper` to
+the neuronet population.
+
+:skip-doc:
+'''
 
 import glob
 import pandas as pd
@@ -7,7 +10,12 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from data_base.IO.roberts_formats import read_InputMapper_summary
 from ..utils import select
-from ..analyze import excitatory, inhibitory
+import logging
+logger = logging.getLogger("ISF").getChild(__name__)
+try:
+    from barrel_cortex import excitatory, inhibitory
+except ImportError:
+    logger.warning("Could not import excitatory/inhibitory celltypes from barrel_cortex. Is the module available?")
 
 
 def get_neuronet_data(COLUMN='C2',

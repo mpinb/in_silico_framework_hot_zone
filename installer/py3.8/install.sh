@@ -246,8 +246,6 @@ do
 done
 
 
-
-
 # -------------------- Cleanup -------------------- #
 rm $SCRIPT_DIR/tempfile
 exit 0

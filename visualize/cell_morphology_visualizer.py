@@ -258,20 +258,19 @@ class CMVDataParser:
         for sec_n, sec in enumerate(cell.sections):
             if sec.label == 'Soma':
                 n_segments = len([seg for seg in sec])
-                for i, pt in enumerate(sec.pts):
-                    seg_n = int(n_segments * i / len(sec.pts))
-                    x, y, z = pt
-                    d = sec.diamList[i]
-                    points.append([x, y, z, d, sec_n, seg_n])
+                # for i, pt in enumerate(sec.pts):
+                #     seg_n = int(n_segments * i / len(sec.pts))
+                #     x, y, z = pt
+                #     d = sec.diamList[i]
+                #     points.append([x, y, z, d, sec_n, seg_n])
                 # print('adding soma')
                 # print(sec_n)
-                # x, y, z = self.soma_center
-                # # soma size
-                # mn, mx = np.min(cell.soma.pts, axis=0), np.max(cell.soma.pts,
-                #                                                axis=0)
-                # d_range = [mx_ - mn_ for mx_, mn_ in zip(mx, mn)]
-                # d = max(d_range)
-                # points.append([x, y, z, d, sec_n, 0])
+                x, y, z = self.soma_center
+                # soma size
+                mn, mx = np.min(cell.soma.pts, axis=0), np.max(cell.soma.pts, axis=0)
+                d_range = [mx_ - mn_ for mx_, mn_ in zip(mx, mn)]
+                d = max(d_range)
+                points.append([x, y, z, d, sec_n, 0])
             elif sec.label in ['AIS', 'Myelin']:
                 continue
             else:
