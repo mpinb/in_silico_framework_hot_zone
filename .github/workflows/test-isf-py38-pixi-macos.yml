@@ -1,4 +1,4 @@
-name: Py 3.8
+name: Test pixi (MacOS)
 on:
   pull_request:
     types: [opened, synchronize]

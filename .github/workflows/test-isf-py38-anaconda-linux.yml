@@ -1,4 +1,4 @@
-name: Py 3.8
+name: Test Anaconda (linux)
 on:
   pull_request:  # run on the PR base to check if the changes work before merging.
     # Note that this will also run upon any activity in the PR
@@ -24,9 +24,24 @@ on:
 
 jobs:
   build:
-    uses: ./.github/workflows/build-isf.yml
-    with:
-      py_version: 3.8
+      name: Build ISF (Anaconda py3.8)
+      run: |
+        CONDA_TARGET_DIR="${{ runner.tool_cache }}/anaconda_isf${{ inputs.py_version }}"
+        if [ -d "$CONDA_TARGET_DIR" ]; then
+          echo "Found existing installation in $CONDA_TARGET_DIR. Removing previous Anaconda installation..."
+          rm -r "$CONDA_TARGET_DIR"
+        else
+          echo "No previous Anaconda installation found. Continuing..."
+        fi
+        pushd .
+        cd installer/py${{ inputs.py_version }}
+        set -o pipefail
+        ./install.sh -p $CONDA_TARGET_DIR | tee $HOME/build_output_${{ inputs.py_version }}.txt
+        exit_status=${PIPESTATUS[0]}
+        popd
+        source $CONDA_TARGET_DIR/bin/activate
+        conda list 
+        exit $exit_status
 
   test:
     name: Test Py3.8
