@@ -33,7 +33,7 @@ jobs:
         uses: actions/checkout@v4
       - name: Build ISF (Anaconda py3.8)
         run: |
-          CONDA_TARGET_DIR="${{ runner.tool_cache }}/anaconda_isf${{ inputs.py_version }}"
+          CONDA_TARGET_DIR="$HOME/anaconda_isf3.8"
           if [ -d "$CONDA_TARGET_DIR" ]; then
             echo "Found existing installation in $CONDA_TARGET_DIR. Removing previous Anaconda installation..."
             rm -r "$CONDA_TARGET_DIR"
@@ -41,9 +41,9 @@ jobs:
             echo "No previous Anaconda installation found. Continuing..."
           fi
           pushd .
-          cd installer/py${{ inputs.py_version }}
+          cd installer/py3.8
           set -o pipefail
-          ./install.sh -p $CONDA_TARGET_DIR | tee $HOME/build_output_${{ inputs.py_version }}.txt
+          ./install.sh -p $CONDA_TARGET_DIR | tee $HOME/build_output_3.8.txt
           exit_status=${PIPESTATUS[0]}
           popd
           source $CONDA_TARGET_DIR/bin/activate
@@ -52,7 +52,7 @@ jobs:
       - name: Test
         run: |
           echo "------------ Setting up environment -------------"
-          CONDA_TARGET_DIR="${{ runner.tool_cache }}/anaconda_isf3.8"
+          CONDA_TARGET_DIR="$HOME/anaconda_isf3.8"
           source $CONDA_TARGET_DIR/bin/activate
           echo "Using Python: $(which python)"
           export PYTHONPATH=$(pwd):$HOME
