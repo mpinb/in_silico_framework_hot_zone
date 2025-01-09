@@ -1,21 +1,20 @@
 name: Test Anaconda (linux)
 on:
-  pull_request:  # run on the PR base to check if the changes work before merging.
-    # Note that this will also run upon any activity in the PR
+  pull_request:
     types: [opened, synchronize]
     paths-ignore:
-      - README.md  # don't run workflow when README changes
-      - CHANGELOG.md # Should never be edited anyway
+      - README.md
+      - CHANGELOG.md
       - .gitignore
       - .github/**
-  pull_request_target:  # run on PR target after closing the PR
+  pull_request_target:
     types:
       - closed
     paths-ignore:
-        - README.md  # don't run workflow when README changes
-        - CHANGELOG.md # Should never be edited anyway
-        - .gitignore
-        - .github/**
+      - README.md
+      - CHANGELOG.md
+      - .gitignore
+      - .github/**
   push:
     branches:
       - testing
@@ -99,7 +98,7 @@ jobs:
           pkill -U $USER dask-worker
 
       - name: Save test logs as artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: ${{ always() }} 
         with:
           name: ${{ github.run_id }}_logs
