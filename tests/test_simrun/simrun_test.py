@@ -19,7 +19,6 @@ from data_base.IO.roberts_formats import read_pandas_synapse_activation_from_rob
 # from compatibility import synchronous_scheduler
 from mechanisms import l5pt as l5pt_mechanisms
 from ..test_simrun.context import cellParamName, networkName, example_path, parent
-from tests import get_rel_tolerance
 assert os.path.exists(cellParamName)
 assert os.path.exists(networkName)
 assert os.path.exists(example_path)
