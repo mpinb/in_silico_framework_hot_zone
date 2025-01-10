@@ -34,7 +34,7 @@ import os, cloudpickle
 from simrun.reduced_model.get_kernel import ReducedLdaModel
 from data_base.data_base import DataBase, get_db_by_unique_id
 from . import pandas_to_parquet, pandas_to_msgpack
-from . import numpy_to_npz
+from . import numpy_to_zarr
 import pandas as pd
 import compatibility
 import six
@@ -116,7 +116,7 @@ def dump(obj, savedir):
             new_lda_value_dicts.append({})
             for k in list(d.keys()):
                 key = 'lda_value_dicts_' + str(lv)
-                db.set(key, d[k].round(decimals=2), dumper=numpy_to_npz)
+                db.set(key, d[k].round(decimals=2), dumper=numpy_to_zarr)
                 new_lda_value_dicts[-1][k] = key
                 lv += 1
         Rm.lda_value_dicts = new_lda_value_dicts

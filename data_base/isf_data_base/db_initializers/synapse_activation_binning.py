@@ -19,7 +19,7 @@ from functools import partial
 import numpy as np
 import dask
 from data_base.analyze.temporal_binning import universal as temporal_binning
-from data_base.isf_data_base.IO.LoaderDumper import numpy_to_npz
+from data_base.isf_data_base.IO.LoaderDumper import numpy_to_zarr
 import logging
 logger = logging.getLogger("ISF").getChild(__name__)
 try:
@@ -333,7 +333,7 @@ def save_groupby(db, result, groupby):
         pass
     sub_db = db.create_sub_db(identifier)
     for key in result:
-        sub_db.set(key, result[key], dumper=numpy_to_npz)
+        sub_db.set(key, result[key], dumper=numpy_to_zarr)
 
 
 def init(
