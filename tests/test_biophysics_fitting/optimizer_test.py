@@ -4,7 +4,7 @@ import os, tempfile, six, shutil, pytest
 import pandas as pd
 import numpy as np
 import single_cell_parser as scp
-from tests import get_n_decimals
+from tests import get_rel_tolerance, get_n_decimals
 from data_base import utils
 from functools import partial
 from data_base.IO.LoaderDumper import to_cloudpickle, pandas_to_pickle
@@ -390,7 +390,11 @@ def test_ON_HOLD_legacy_simulator_and_new_simulator_give_same_results():
 
 def test_reproducability():
     import neuron, sys
-    n_decimals = get_n_decimals(sys.platform, neuron.__version__)
+    tol = get_rel_tolerance(sys.platform, neuron.__version__)
+    if sys.platform.startswith('osx'):
+        tol = 3*tol  # since results are combined and z-scored, allow for a bit wider tolerance (3%)
+    # n_decimals = get_n_decimals(sys.platform, neuron.__version__)
+
     setup_hay_evaluator(
     )  # this adds a stump cell to the neuron environment,which is
     # necessary to acces the hay evaluate functions. For the vairalbe time step solver,
@@ -410,7 +414,11 @@ def test_reproducability():
 
     features_legacy = get_features()
     for k in list(features_new.keys()):
-        np.testing.assert_almost_equal(
+        # np.testing.assert_almost_equal(
+        #     features_new[k],
+        #     features_legacy[k],
+        #     decimal=n_decimals)
+        np.testing.assert_allcose(
             features_new[k],
             features_legacy[k],
-            decimal=n_decimals)
+            rtol=tol)

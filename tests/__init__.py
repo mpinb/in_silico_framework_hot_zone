@@ -23,7 +23,7 @@ def get_rel_tolerance(platform, neuron_version):
     if neuron_version.startswith("7.8.2"):
         return 1e-6  # For the original NEURON version, we want exact reproducibility
     else:
-        return 1e-2  # Otherwise, we allow for some numerical differences
+        return 1e-2  # Otherwise, we allow for 1% numerical differences
 
 def setup_current_injection_experiment(
         rangevars=None
