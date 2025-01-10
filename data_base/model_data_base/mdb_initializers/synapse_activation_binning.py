@@ -16,7 +16,7 @@ from functools import partial
 import numpy as np
 import dask
 from data_base.analyze.temporal_binning import universal as temporal_binning
-from ..IO.LoaderDumper import numpy_to_npz
+from ..IO.LoaderDumper import numpy_to_msgpack
 import logging
 logger = logging.getLogger("ISF").getChild(__name__)
 try:
@@ -184,7 +184,7 @@ def save_groupby(mdb, result, groupby):
         pass
     sub_mdb = mdb.create_sub_mdb(identifier)
     for key in result:
-        sub_mdb.setitem(key, result[key], dumper=numpy_to_npz)
+        sub_mdb.setitem(key, result[key], dumper=numpy_to_msgpack)
 
 
 def init(mdb,
