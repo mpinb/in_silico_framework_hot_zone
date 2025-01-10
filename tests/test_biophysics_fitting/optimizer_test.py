@@ -4,6 +4,7 @@ import os, tempfile, six, shutil, pytest
 import pandas as pd
 import numpy as np
 import single_cell_parser as scp
+from tests import get_n_decimals
 from data_base import utils
 from functools import partial
 from data_base.IO.LoaderDumper import to_cloudpickle, pandas_to_pickle
@@ -388,12 +389,15 @@ def test_ON_HOLD_legacy_simulator_and_new_simulator_give_same_results():
 
 
 def test_reproducability():
+    import neuron, sys
+    n_decimals = get_n_decimals(sys.platform, neuron.__version__)
     setup_hay_evaluator(
     )  # this adds a stump cell to the neuron environment,which is
     # necessary to acces the hay evaluate functions. For the vairalbe time step solver,
     # this changes the step size and can therefore minimally change the results.
     # before testing reproducability, it is therefore necessary to initialize
     # the evaluator
+    
     db_new = set_up_db(step=True)
     try:
         s_new = db_new['86']['get_Simulator'](db_new['86'], step=False)
@@ -406,6 +410,7 @@ def test_reproducability():
 
     features_legacy = get_features()
     for k in list(features_new.keys()):
-        np.testing.assert_almost_equal(features_new[k],
-                                       features_legacy[k],
-                                       decimal=6)
+        np.testing.assert_almost_equal(
+            features_new[k],
+            features_legacy[k],
+            decimal=n_decimals)
