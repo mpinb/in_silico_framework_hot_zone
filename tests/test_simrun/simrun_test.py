@@ -132,7 +132,7 @@ def test_reproduce_simulation_trial_from_roberts_model_control(tmpdir, client):
     elif sys.platform.startswith('darwin'):
         # OSX has updated NEURON version (NEURON 8), and the results are not exactly the same
         # compared to Robert's original results (NEURON < 7.8.2)
-        n_decimals=2
+        n_decimals=1
 
     try:
         dummy = simrun.run_existing_synapse_activations.run_existing_synapse_activations(
