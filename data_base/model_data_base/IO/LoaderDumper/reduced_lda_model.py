@@ -17,7 +17,7 @@ import os, cloudpickle
 from simrun.reduced_model.get_kernel import ReducedLdaModel
 from data_base.model_data_base.model_data_base import ModelDataBase
 from . import pandas_to_parquet, pandas_to_msgpack
-from . import numpy_to_msgpack
+from . import numpy_to_npz
 import pandas as pd
 import compatibility
 import six
@@ -78,7 +78,7 @@ def dump(obj, savedir):
             new_lda_value_dicts.append({})
             for k in list(d.keys()):
                 key = 'lda_value_dicts_' + str(lv)
-                mdb.setitem(key, d[k].round(decimals=2), dumper=numpy_to_msgpack)
+                mdb.setitem(key, d[k].round(decimals=2), dumper=numpy_to_npz)
                 new_lda_value_dicts[-1][k] = key
                 lv += 1
         Rm.lda_value_dicts = new_lda_value_dicts
