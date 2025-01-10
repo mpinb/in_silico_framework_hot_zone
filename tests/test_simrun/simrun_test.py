@@ -127,7 +127,13 @@ def test_position_of_morphology_does_not_matter_after_network_mapping(tmpdir, cl
 
 #@decorators.testlevel(2)
 def test_reproduce_simulation_trial_from_roberts_model_control(tmpdir, client):
-    tol = get_rel_tolerance(sys.platform, neuron.__version__)
+    if sys.platform.startswith('linux'):
+        tol = 1.5*1e-6
+    elif sys.platform.startswith('osx'):
+        # OSX has updated NEURON version (NEURON 8), and the results are not exactly the same
+        # compared to Robert's original results (NEURON < 7.8.2)
+        tol = 1.5*1e-2
+
     try:
         dummy = simrun.run_existing_synapse_activations.run_existing_synapse_activations(
             cellParamName,

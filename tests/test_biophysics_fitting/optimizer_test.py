@@ -4,7 +4,6 @@ import os, tempfile, six, shutil, pytest
 import pandas as pd
 import numpy as np
 import single_cell_parser as scp
-from tests import get_rel_tolerance, get_n_decimals
 from data_base import utils
 from functools import partial
 from data_base.IO.LoaderDumper import to_cloudpickle, pandas_to_pickle
@@ -389,10 +388,13 @@ def test_ON_HOLD_legacy_simulator_and_new_simulator_give_same_results():
 
 
 def test_reproducability():
-    import neuron, sys
-    tol = get_rel_tolerance(sys.platform, neuron.__version__)
-    if sys.platform.startswith('osx'):
-        tol = 3*tol  # since results are combined and z-scored, allow for a bit wider tolerance (3%)
+    import sys
+    if sys.platform.startswith('linux'):
+        tol = 1.5*1e-6
+    elif sys.platform.startswith('osx'):
+        # OSX has updated NEURON version (NEURON 8), and the results are not exactly the same
+        # compared to Robert's original results (NEURON < 7.8.2)
+        tol = 1.5*1e-2
     # n_decimals = get_n_decimals(sys.platform, neuron.__version__)
 
     setup_hay_evaluator(
@@ -418,7 +420,7 @@ def test_reproducability():
         #     features_new[k],
         #     features_legacy[k],
         #     decimal=n_decimals)
-        np.testing.assert_allcose(
+        np.testing.assert_allclose(
             features_new[k],
             features_legacy[k],
             rtol=tol)
