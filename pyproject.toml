@@ -16,6 +16,7 @@ requires = ["hatchling"]
 
 [tool.pixi.system-requirements]
 libc = "2.17"
+linux = "3.10.0"
 
 [tool.pixi.dependencies]
 # default conda dependencies
@@ -42,6 +43,7 @@ jupyter-scatter = ">=0.19.1,<0.20"
 cmasher = ">=1.6.3,<2"
 ipywidgets = ">=8.1.5,<9"
 simpleitk = ">=2.2.1,<3"
+zarr = ">=2.15.0,<3"
 
 [tool.pixi.pypi-dependencies]
 bluepyopt = "==1.9.126"

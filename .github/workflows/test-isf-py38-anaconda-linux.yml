@@ -1,40 +1,29 @@
-name: Py 3.8
+name: Test Anaconda (linux)
 on:
-  pull_request:  # run on the PR base to check if the changes work before merging.
-    # Note that this will also run upon any activity in the PR
+  pull_request:
     types: [opened, synchronize]
     paths-ignore:
-      - README.md  # don't run workflow when README changes
-      - CHANGELOG.md # Should never be edited anyway
+      - README.md
+      - CHANGELOG.md
       - .gitignore
-      - .github/**
-  pull_request_target:  # run on PR target after closing the PR
+  pull_request_target:
     types:
       - closed
     paths-ignore:
-        - README.md  # don't run workflow when README changes
-        - CHANGELOG.md # Should never be edited anyway
-        - .gitignore
-        - .github/**
+      - README.md
+      - CHANGELOG.md
+      - .gitignore
   push:
     branches:
       - testing
       - installer
+      - compatibility
   workflow_dispatch:
 
 jobs:
-  build:
-    uses: ./.github/workflows/build-isf.yml
-    with:
-      py_version: 3.8
-
   test:
-    name: Test Py3.8
-    needs: build  # assures there is a build of ISF
-    # Assure test runs on whatever runner the build ran on
-    # Note that runners are requested based on label, not on name
-    # So the runner should have a label equal to its name
-    runs-on: ubuntu-latest
+    name: Test ISF Anaconda Py3.8 (linux)
+    runs-on: ubuntu-22.04
     defaults:
       run:
         shell: bash -l {0}
@@ -42,17 +31,27 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v4
-      - name: Restore cache for Anaconda environment
-        uses: actions/cache@v3
-        with:
-          path: ${{ runner.tool_cache }}/anaconda_isf3.8
-          key: ${{ runner.os }}-anaconda-3.8-${{ hashFiles('**/environment.yml') }}
-          restore-keys: |
-            ${{ runner.os }}-anaconda-3.8-
-      - name: Test in-silico-framework for Python 3.8
+      - name: Build ISF (Anaconda py3.8)
+        run: |
+          CONDA_TARGET_DIR="$HOME/anaconda_isf3.8"
+          if [ -d "$CONDA_TARGET_DIR" ]; then
+            echo "Found existing installation in $CONDA_TARGET_DIR. Removing previous Anaconda installation..."
+            rm -r "$CONDA_TARGET_DIR"
+          else
+            echo "No previous Anaconda installation found. Continuing..."
+          fi
+          pushd .
+          cd installer/py3.8
+          ./install.sh -p $CONDA_TARGET_DIR | tee $HOME/build_output_3.8.txt || exit 1
+          exit_status=${PIPESTATUS[0]}
+          popd
+          source $CONDA_TARGET_DIR/bin/activate
+          conda list 
+          exit $exit_status
+      - name: Test
         run: |
           echo "------------ Setting up environment -------------"
-          CONDA_TARGET_DIR="${{ runner.tool_cache }}/anaconda_isf3.8"
+          CONDA_TARGET_DIR="$HOME/anaconda_isf3.8"
           source $CONDA_TARGET_DIR/bin/activate
           echo "Using Python: $(which python)"
           export PYTHONPATH=$(pwd):$HOME
@@ -84,7 +83,7 @@ jobs:
           pkill -U $USER dask-worker
 
       - name: Save test logs as artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: ${{ always() }} 
         with:
           name: ${{ github.run_id }}_logs

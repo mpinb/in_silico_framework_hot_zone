@@ -15,9 +15,14 @@ from collections import defaultdict
 from functools import partial
 import numpy as np
 import dask
-from data_base.analyze import excitatory, inhibitory
 from data_base.analyze.temporal_binning import universal as temporal_binning
-from ..IO.LoaderDumper import numpy_to_msgpack as numpy_to_msgpack
+from ..IO.LoaderDumper import numpy_to_msgpack
+import logging
+logger = logging.getLogger("ISF").getChild(__name__)
+try:
+    from barrel_cortex import excitatory, inhibitory
+except ImportError:
+    logger.warning("Could not import excitatory/inhibitory celltypes from barrel_cortex. Is the module available?")
 
 
 def prefun(df):

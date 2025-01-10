@@ -11,9 +11,9 @@ import os
 from functools import partial
 import pandas as pd
 from simrun.somatic_summation_model import ParseVT
-from ..IO.LoaderDumper import dask_to_msgpack
+from ..IO.LoaderDumper import dask_to_parquet
 
-# dask_to_msgpack = data_base.IO.LoaderDumper.dask_to_msgpack
+# dask_to_parquet = data_base.IO.LoaderDumper.dask_to_parquet
 from collections import defaultdict
 import single_cell_parser as scp
 
@@ -230,14 +230,15 @@ def init(
     db_vt = db.create_sub_db('voltage_traces_somatic_summation_model',
                                 raise_=False)
     if block_till_saved:
-        db_vt.set((description_key, PSPClass_name),
-                       vt_new,
-                       dumper=dask_to_msgpack,
-                       scheduler=client)
+        db_vt.set(
+            (description_key, PSPClass_name),
+            vt_new,
+            dumper=dask_to_parquet,
+            scheduler=client)
     else:
-        return DistributedDDFWithSaveMethod(db=db_vt,
-                                            key=(description_key,
-                                                 PSPClass_name),
-                                            ddf=vt_new,
-                                            dumper=dask_to_msgpack,
-                                            scheduler=client)
+        return DistributedDDFWithSaveMethod(
+            db=db_vt,
+            key=(description_key, PSPClass_name),
+            ddf=vt_new,
+            dumper=dask_to_parquet,
+            scheduler=client)

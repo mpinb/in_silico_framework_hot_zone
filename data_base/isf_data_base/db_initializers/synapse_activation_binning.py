@@ -17,11 +17,20 @@ from __future__ import absolute_import
 from collections import defaultdict
 from functools import partial
 import numpy as np
-import dask
-from data_base.analyze import excitatory, inhibitory
+import dask, six
 from data_base.analyze.temporal_binning import universal as temporal_binning
-from data_base.isf_data_base.IO.LoaderDumper import numpy_to_msgpack as numpy_to_msgpack
+from data_base.isf_data_base.IO.LoaderDumper import numpy_to_zarr, numpy_to_msgpack
+import logging
+logger = logging.getLogger("ISF").getChild(__name__)
+try:
+    from barrel_cortex import excitatory, inhibitory
+except ImportError:
+    logger.warning("Could not import excitatory/inhibitory celltypes from barrel_cortex. Is the module available?")
 
+if six.PY2:
+    numpy_dumper = numpy_to_msgpack
+elif six.PY3:
+    numpy_dumper = numpy_to_zarr
 
 def prefun(df):
     """Augment a :ref:`syn_activation_format` dataframe with additional columns.
@@ -328,7 +337,7 @@ def save_groupby(db, result, groupby):
         pass
     sub_db = db.create_sub_db(identifier)
     for key in result:
-        sub_db.set(key, result[key], dumper=numpy_to_msgpack)
+        sub_db.set(key, result[key], dumper=numpy_dumper)
 
 
 def init(
