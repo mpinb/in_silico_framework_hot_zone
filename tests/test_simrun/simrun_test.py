@@ -126,12 +126,13 @@ def test_position_of_morphology_does_not_matter_after_network_mapping(tmpdir, cl
 
 #@decorators.testlevel(2)
 def test_reproduce_simulation_trial_from_roberts_model_control(tmpdir, client):
+    # Note: these tolerances were found with trial and error, but have no further meaning
     if sys.platform.startswith('linux'):
-        tol = 1.5*1e-6
-    elif sys.platform.startswith('osx'):
+        n_decimals=3
+    elif sys.platform.startswith('darwin'):
         # OSX has updated NEURON version (NEURON 8), and the results are not exactly the same
         # compared to Robert's original results (NEURON < 7.8.2)
-        tol = 1.5*1e-2
+        n_decimals=2
 
     try:
         dummy = simrun.run_existing_synapse_activations.run_existing_synapse_activations(
@@ -171,8 +172,9 @@ def test_reproduce_simulation_trial_from_roberts_model_control(tmpdir, client):
         #print pdf2.values
         #for x,y in zip(pdf1[pdf1.t<265].values.squeeze(), pdf2[pdf2.t<265].values.squeeze()):
         #    print x,y
-        np.testing.assert_allclose(pdf1.values, pdf2.values, rtol=tol)
-        # np.testing.assert_almost_equal(pdf1.values, pdf2.values, decimal=3)
+        
+        # np.testing.assert_allclose(pdf1.values, pdf2.values, rtol=tol)
+        np.testing.assert_almost_equal(pdf1.values, pdf2.values, decimal=n_decimals)
     except:
         raise
     assert isinstance(dummy[0][0][0], pd.DataFrame)

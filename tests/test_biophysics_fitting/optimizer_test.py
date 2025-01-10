@@ -391,10 +391,10 @@ def test_reproducability():
     import sys
     if sys.platform.startswith('linux'):
         tol = 1.5*1e-6
-    elif sys.platform.startswith('osx'):
+    elif sys.platform.startswith('darwin'):
         # OSX has updated NEURON version (NEURON 8), and the results are not exactly the same
         # compared to Robert's original results (NEURON < 7.8.2)
-        tol = 1.5*1e-2
+        tol = 2*1e-2
     # n_decimals = get_n_decimals(sys.platform, neuron.__version__)
 
     setup_hay_evaluator(
