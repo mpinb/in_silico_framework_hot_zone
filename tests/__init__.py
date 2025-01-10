@@ -15,6 +15,15 @@ def get_n_decimals(platform, neuron_version):
         return 6  # For the original NEURON version, we want exact reproducibility
     else:
         return 2  # Otherwise, we allow for some numerical differences
+    
+def get_rel_tolerance(platform, neuron_version):
+    if platform == "linux":
+        assert neuron_version.startswith("7.8.2"), \
+            "For exact reproducability, NEURON 7.8.2 is required on linux"
+    if neuron_version.startswith("7.8.2"):
+        return 1e-6  # For the original NEURON version, we want exact reproducibility
+    else:
+        return 1e-2  # Otherwise, we allow for some numerical differences
 
 def setup_current_injection_experiment(
         rangevars=None

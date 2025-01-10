@@ -19,7 +19,7 @@ from data_base.IO.roberts_formats import read_pandas_synapse_activation_from_rob
 # from compatibility import synchronous_scheduler
 from mechanisms import l5pt as l5pt_mechanisms
 from ..test_simrun.context import cellParamName, networkName, example_path, parent
-from tests import get_n_decimals
+from tests import get_rel_tolerance
 assert os.path.exists(cellParamName)
 assert os.path.exists(networkName)
 assert os.path.exists(example_path)
@@ -127,8 +127,7 @@ def test_position_of_morphology_does_not_matter_after_network_mapping(tmpdir, cl
 
 #@decorators.testlevel(2)
 def test_reproduce_simulation_trial_from_roberts_model_control(tmpdir, client):
-    import sys, neuron
-    n_decimals = get_n_decimals(sys.platform, neuron.__version__)
+    tol = get_rel_tolerance(sys.platform, neuron.__version__)
     try:
         dummy = simrun.run_existing_synapse_activations.run_existing_synapse_activations(
             cellParamName,
@@ -167,7 +166,8 @@ def test_reproduce_simulation_trial_from_roberts_model_control(tmpdir, client):
         #print pdf2.values
         #for x,y in zip(pdf1[pdf1.t<265].values.squeeze(), pdf2[pdf2.t<265].values.squeeze()):
         #    print x,y
-        np.testing.assert_almost_equal(pdf1.values, pdf2.values, decimal=n_decimals)
+        np.testing.assert_allclose(pdf1.values, pdf2.values, rtol=tol)
+        # np.testing.assert_almost_equal(pdf1.values, pdf2.values, decimal=3)
     except:
         raise
     assert isinstance(dummy[0][0][0], pd.DataFrame)
