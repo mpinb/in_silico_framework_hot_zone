@@ -33,14 +33,15 @@ from . import parent_classes
 import os, cloudpickle
 from simrun.reduced_model.get_kernel import ReducedLdaModel
 from data_base.data_base import DataBase, get_db_by_unique_id
-from . import pandas_to_parquet, pandas_to_msgpack
-from . import numpy_to_zarr, numpy_to_msgpack
+from . import pandas_to_parquet
+from . import numpy_to_zarr
 import pandas as pd
 import compatibility
 import six
 import json
 
 if six.PY2:
+    from . import numpy_to_msgpack
     numpy_dumper = numpy_to_msgpack
 elif six.PY3:
     numpy_dumper = numpy_to_zarr
@@ -103,6 +104,7 @@ def dump(obj, savedir):
     db_list = Rm.db_list
 
     if six.PY2:
+        from . import pandas_to_msgpack
         st_dumper = pandas_to_msgpack
     elif six.PY3:
         st_dumper = pandas_to_parquet
