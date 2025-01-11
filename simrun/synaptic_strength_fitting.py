@@ -20,7 +20,7 @@ from collections import defaultdict
 defaultdict_defaultdict = lambda: defaultdict(lambda: defaultdict_defaultdict())
 from .utils import get_cellnumbers_from_confile, split_network_param_in_one_elem_dicts
 from .get_cell_with_network import get_cell_with_network
-from barrel_cortex import inhibitory, excitatory  # TODO: make general
+from config.cell_types import EXCITATORY, INHIBITORY
 
 logger = logging.getLogger("ISF").getChild(__name__)
 
@@ -831,7 +831,7 @@ def generate_ex_network_param_from_network_embedding(confile):
     out = defaultdict_defaultdict()
     import six
     for k, cellnumber in six.iteritems(get_cellnumbers_from_confile(confile)):
-        if not k.split('_')[0] in excitatory:
+        if not k.split('_')[0] in EXCITATORY:
             continue
         out['network'][k]['cellNr'] = cellnumber
         out['network'][k]['activeFrac'] = 1.0
@@ -878,7 +878,7 @@ def generate_inh_network_param_from_network_embedding(confile):
     import six
     out = defaultdict_defaultdict()
     for k, cellnumber in six.iteritems(get_cellnumbers_from_confile(confile)):
-        if not k.split('_')[0] in inhibitory:
+        if not k.split('_')[0] in INHIBITORY:
             continue
         out['network'][k]['cellNr'] = cellnumber
         out['network'][k]['activeFrac'] = 1.0
@@ -1120,7 +1120,7 @@ def merge_celltypes(
         defaultdict: A dictionary with concatenated voltage traces.
     """
     if celltype_must_be_in is None:
-        celltype_must_be_in = excitatory
+        celltype_must_be_in = EXCITATORY
 
     out = defaultdict_defaultdict()
     for detection_string in detection_strings:

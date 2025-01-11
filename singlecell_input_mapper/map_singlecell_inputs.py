@@ -1,9 +1,16 @@
 """Map synapses onto a postsynaptic cell.
 
-This module provides a full pipeline for creating anatomical realizations of the connectivity 
-of individual neuron morphologies, based on methods and data presented in 
+This module provides a full pipeline for creating dense connectome models
+of the rat barrel cortex, based on methods and data presented in 
 :cite:t:`Udvary_Harth_Macke_Hege_De_Kock_Sakmann_Oberlaender_2022`.
-An anatomical realization refers to a set of synapses sampled from a probability distribution.
+
+This runfile assumes you have downloaded and extracted the barrel cortex model data from
+https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/JZPULNa.
+If this is not the case, please consult ``installer/download_bc_model` and extract.
+
+Attention:
+    This file is specific to the barrel cortex model data. If you want to use it for other data,
+    you need to adapt the paths to the data accordingly.
 
 Inputs:
 

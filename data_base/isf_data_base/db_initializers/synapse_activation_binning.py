@@ -20,12 +20,9 @@ import numpy as np
 import dask, six
 from data_base.analyze.temporal_binning import universal as temporal_binning
 from data_base.isf_data_base.IO.LoaderDumper import numpy_to_zarr
+from config.cell_types import EXCITATORY, INHIBITORY
 import logging
 logger = logging.getLogger("ISF").getChild(__name__)
-try:
-    from barrel_cortex import excitatory, inhibitory
-except ImportError:
-    logger.warning("Could not import excitatory/inhibitory celltypes from barrel_cortex. Is the module available?")
 
 if six.PY2:
     from data_base.isf_data_base.IO.LoaderDumper import numpy_to_msgpack
@@ -59,7 +56,7 @@ def prefun(df):
     df['celltype'] = dummy.str[0]
     df['presynaptic_column'] = dummy.str[1]
     df['proximal'] = (df.soma_distance < 500).replace(True, 'prox').replace(False, 'dist')
-    df['EI'] = df['celltype'].isin(excitatory).replace(True, 'EXC').replace(
+    df['EI'] = df['celltype'].isin(EXCITATORY).replace(True, 'EXC').replace(
         False, 'INH')
     bs = 50
     df['binned_somadist'] = df.soma_distance.div(bs).map(np.floor).astype(
