@@ -13,6 +13,7 @@ import pandas as pd
 from data_base.utils import silence_stdout, convertible_to_int, chunkIt
 from data_base.analyze.spike_detection import spike_in_interval
 from functools import partial
+from config.cell_types import EXCITATORY, INHIBITORY
 
 
 def get_binsize(length, binsize_goal=50):
@@ -342,8 +343,7 @@ def augment_synapse_activation_df_with_branch_bin(
         pd.DataFrame: The augmented dataframe with the additional columns 'section/branch_bin', 'celltype', 'EI', and 'syn_weight' (if synaptic_weight_dict is provided).
     """
     if excitatory_celltypes is None:
-        from barrel_cortex import excitatory
-        excitatory_celltypes = excitatory
+        excitatory_celltypes = EXCITATORY
     
     out = []
     for secID, df in sa_.groupby('section_ID'):
@@ -574,8 +574,7 @@ def load_syn_weights(db, client, excitatory_celltypes=None):
         :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general.init` for the database initialization.
     """
     if excitatory_celltypes is None:
-        from barrel_cortex import excitatory
-        excitatory_celltypes = excitatory
+        excitatory_celltypes = EXCITATORY
     folder_ = db['parameterfiles_network_folder']
     fnames = db['parameterfiles_network_folder'].listdir()
     fnames.pop(fnames.index('Loader.pickle'))
