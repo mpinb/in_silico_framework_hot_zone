@@ -489,7 +489,7 @@ def run(
 
 
 def get_population_with_different_n_objectives(old_pop, n_objectives):
-    '''function to adapt the number of objectives of individuals
+    '''Adapt the number of objectives of individuals
     
     Args:
         old_pop: list of deap.Individuals

@@ -3,9 +3,16 @@ A Python translation of the evaluation functions used in :cite:t:`Hay_Hill_Schue
 This module provides methods to run Hay's stimulus protocols, and evaluate the resulting voltage traces.
 '''
 
+from typing import Any
 import numpy as np
 from .ephys import *
-
+from six import iteritems
+from biophysics_fitting.hay_specification import (
+    HAY_BAP_DEFINITIONS, 
+    HAY_BAC_DEFINITIONS, 
+    HAY_STEP1_DEFINITIONS,
+    HAY_STEP2_DEFINITIONS,
+    HAY_STEP3_DEFINITIONS)
 __author__ = 'Arco Bast'
 __date__ = '2018-11-08'
 
@@ -105,10 +112,9 @@ class BAC:
         self.prefix = prefix
 
     def get(self, **voltage_traces):
-        import six
         spikecount = self.BAC_spikecount(voltage_traces)['.raw']
         out = {}
-        for name, (_, mean, std) in six.iteritems(self.definitions):
+        for name, (_, mean, std) in iteritems(self.definitions):
             # special case in the original code were in the case of two somatic spikes
             # 7 is substracted from the mean
             if spikecount == 2 and name == 'BAC_caSpike_width':
@@ -116,12 +122,12 @@ class BAC:
             out_current = getattr(self, name)(voltage_traces)
             out_current['.normalized'] = normalize(out_current['.raw'], mean,
                                                    std)
-            checks = [v for k, v in six.iteritems(out_current) if 'check' in k]
+            checks = [v for k, v in iteritems(out_current) if 'check' in k]
             if all(checks):
                 out_current[''] = out_current['.normalized']
             else:
                 out_current[''] = 20.  # *std
-            out_current = {name + k: v for k, v in six.iteritems(out_current)}
+            out_current = {name + k: v for k, v in iteritems(out_current)}
             out.update(out_current)
         return self.check(out, voltage_traces)
 
@@ -271,17 +277,15 @@ class bAP:
 
     def get(self, **voltage_traces):
         out = {}
-        import six
-        for name, (_, mean, std) in six.iteritems(self.definitions):
+        for name, (_, mean, std) in iteritems(self.definitions):
             out_current = getattr(self, name)(voltage_traces)
-            out_current['.normalized'] = normalize(out_current['.raw'], mean,
-                                                   std)
-            checks = [v for k, v in six.iteritems(out_current) if 'check' in k]
+            out_current['.normalized'] = normalize(out_current['.raw'], mean, std)
+            checks = [v for k, v in iteritems(out_current) if 'check' in k]
             if all(checks):
                 out_current[''] = out_current['.normalized']
             else:
                 out_current[''] = 20  # *std
-            out_current = {name + k: v for k, v in six.iteritems(out_current)}
+            out_current = {name + k: v for k, v in iteritems(out_current)}
             out.update(out_current)
         return self.check(out, voltage_traces)
 
@@ -289,11 +293,12 @@ class bAP:
         # checking for problems in voltage trace
         t, v = voltage_traces['tVec'], voltage_traces['vList'][0]
         vmax = None  # voltage_traces['vMax']
-        err = trace_check_err(t,
-                              v,
-                              stim_onset=self.stim_onset,
-                              stim_duration=self.stim_duration,
-                              punish=self.punish)
+        err = trace_check_err(
+            t,
+            v,
+            stim_onset=self.stim_onset,
+            stim_duration=self.stim_duration,
+            punish=self.punish)
         err_flags = trace_check(
             t,
             v,
@@ -307,10 +312,9 @@ class bAP:
         if self.punish_last_spike_after_deadline:
             relevant_err_flags = err_flags
         else:
-            import six
             relevant_err_flags = {
                 k: v
-                for k, v in six.iteritems(err_flags)
+                for k, v in iteritems(err_flags)
                 if not 'last_spike_before_deadline' in k
             }
         for name in list(self.definitions.keys()):
@@ -328,8 +332,7 @@ class bAP:
         t, v = voltage_traces['tVec'], voltage_traces['vList'][0]
         return {
             '.check_1AP':
-                nan_if_error(AP_height_check_1AP)(t, v,
-                                                  thresh=self.soma_thresh),
+                nan_if_error(AP_height_check_1AP)(t, v, thresh=self.soma_thresh),
             '.raw':
                 nan_if_error(AP_height)(t, v, thresh=self.soma_thresh)
         }
@@ -369,12 +372,186 @@ class bAP:
     def bAP_att3(self, voltage_traces):
         return self._bAP_att(voltage_traces, _n=2)
 
+class _Step:
+    """Template class for evaluating step current injections."""
+    def __init__(
+        self,
+        soma_thresh=-30,
+        stim_onset=700,
+        stim_duration=2000,
+        punish=250.,
+        punish_last_spike_after_deadline=True,
+        punish_minspikenum=5,
+        punish_returning_to_rest_tolerance=2.,
+        definitions=None,
+        name='StepTemplate',
+        step_index=0
+        ):
+
+        assert definitions is not None, "The Step class is a template, and must be filled with mean and st values (definitions), depending on the current amplitude. Refer to bipohysics_fitting.hay_specification for the definitions."
+        self.soma_thresh = soma_thresh
+        self.stim_onset = stim_onset
+        self.stim_duration = stim_duration
+        self.definitions = definitions
+        self.punish = punish
+        self.punish_last_spike_after_deadline = punish_last_spike_after_deadline
+        self.punish_minspikenum = punish_minspikenum
+        self.punish_returning_to_rest_tolerance = punish_returning_to_rest_tolerance
+        self.name = name
+        self.step_index = step_index
+
+    def get(self, **voltage_traces):
+        out = {}
+        for name, (_, mean, std) in iteritems(self.definitions):
+            out_current = getattr(self, name)(voltage_traces)
+            out_current['.normalized'] = normalize(out_current['.raw'], mean, std)
+            checks = [v for k, v in iteritems(out_current) if 'check' in k]
+            if all(checks):
+                out_current[''] = out_current['.normalized']
+            else:
+                out_current[''] = 20  # *std
+            out_current = {name + k: v for k, v in iteritems(out_current)}
+            out.update(out_current)
+        return self.check(out, voltage_traces)
+
+    def check(self, out, voltage_traces):
+        # checking for problems in voltage trace
+        t, v = voltage_traces['tVec'], voltage_traces['vList'][0]
+        vmax = None  # voltage_traces['vMax']
+        err = trace_check_err(
+            t,
+            v,
+            stim_onset=self.stim_onset,
+            stim_duration=self.stim_duration,
+            punish=self.punish)
+        err_flags = trace_check(
+            t,
+            v,
+            stim_onset=self.stim_onset,
+            stim_duration=self.stim_duration,
+            minspikenum=self.punish_minspikenum,
+            soma_threshold=self.soma_thresh,
+            returning_to_rest=self.punish_returning_to_rest_tolerance,
+            name=self.name,
+            vmax=vmax)
+        for name in list(self.definitions.keys()):
+            if not all(err_flags.values()):
+                out[name] = err
+            elif out[name] > self.punish:
+                out[name] = self.punish * 0.75
+        out['{}.err'.format(self.name)] = err
+        out.update(err_flags)
+        return out
+
+    def mf(self, voltage_traces):
+        t, v = voltage_traces['tVec'], voltage_traces['vList'][0]
+        return {
+            '.check_1AP': nan_if_error(spike_count)(t, v, thresh=self.soma_thresh),
+            '.raw': nan_if_error(STEP_mean_frequency)(t, v, thresh=self.soma_thresh)
+        }
+        
+    def AI(self, voltage_traces):
+        t, v = voltage_traces['tVec'], voltage_traces['vList'][0]
+        return {
+            '.check_2ISI': nan_if_error(spike_count)(t, v, thresh=self.soma_thresh),
+            '.raw': nan_if_error(STEP_adaptation_index)(t, v, thresh=self.soma_thresh)
+        }
+        
+    def ISIcv(self, voltage_traces):
+        t, v = voltage_traces['tVec'], voltage_traces['vList'][0]
+        return {
+            '.check_2ISI': nan_if_error(spike_count)(t, v, thresh=self.soma_thresh),
+            '.raw': nan_if_error(STEP_coef_var)(t, v, thresh=self.soma_thresh)
+        }
+        
+    def DI(self, voltage_traces):
+        t, v = voltage_traces['tVec'], voltage_traces['vList'][0]
+        return {
+            '.check_2ISI': nan_if_error(spike_count)(t, v, thresh=self.soma_thresh),
+            '.raw': nan_if_error(STEP_initial_ISI)(t, v, thresh=self.soma_thresh)
+        }
+        
+    def TTFS(self, voltage_traces):
+        t, v = voltage_traces['tVec'], voltage_traces['vList'][0]
+        return {
+            '.check_1AP': nan_if_error(spike_count)(t, v, thresh=self.soma_thresh),
+            '.raw': nan_if_error(STEP_time_to_first_spike)(t, v, thresh=self.soma_thresh)
+        }
+        
+    def AHP_depth_abs(self, voltage_traces):
+        t, v = voltage_traces['tVec'], voltage_traces['vList'][0]
+        return {
+            '.check_2AP': nan_if_error(AHP_depth_abs_check_2AP)(t, v, thresh=self.soma_thresh),
+            '.raw': nan_if_error(AHP_depth_abs)(t, v, thresh=self.soma_thresh)
+        }
+        
+    def APh(self, voltage_traces):
+        t, v = voltage_traces['tVec'], voltage_traces['vList'][0]
+        return {
+            '.check_1AP':
+                nan_if_error(AP_height_check_1AP)(t, v, thresh=self.soma_thresh),
+            '.raw':
+                nan_if_error(AP_height)(t, v, thresh=self.soma_thresh)
+        }
+        
+    def fAHPd(self, voltage_traces):
+        t, v = voltage_traces['tVec'], voltage_traces['vList'][0]
+        return {
+            '.check_2AP':
+                nan_if_error(AHP_depth_abs_check_2AP)(t, v, thresh=self.soma_thresh),
+            '.raw':
+                nan_if_error(STEP_fast_ahp_depth)(t, v, thresh=self.soma_thresh)
+        }
+    
+    def sAHPd(self, voltage_traces):
+        t, v = voltage_traces['tVec'], voltage_traces['vList'][0]
+        return {
+            '.check_2AP':
+                nan_if_error(AHP_depth_abs_check_2AP)(t, v, thresh=self.soma_thresh),
+            '.raw':
+                nan_if_error(STEP_slow_ahp_depth)(t, v, thresh=self.soma_thresh)
+        }
+    
+    def sAHPt(self, voltage_traces):
+        t, v = voltage_traces['tVec'], voltage_traces['vList'][0]
+        return {
+            '.check_2AP':
+                nan_if_error(AHP_depth_abs_check_2AP)(t, v, thresh=self.soma_thresh),
+            '.raw':
+                nan_if_error(STEP_slow_ahp_time)(t, v, thresh=self.soma_thresh)
+        }
+
+    def APw(self, voltage_traces):
+        t, v = voltage_traces['tVec'], voltage_traces['vList'][0]
+        return {
+            '.check_1AP':
+                nan_if_error(AP_width_check_1AP)(t, v, thresh=self.soma_thresh),
+            '.raw':
+                nan_if_error(AP_width)(t, v, thresh=self.soma_thresh)
+        }
+        
+    def __getattr__(self, name):
+        """Suffix the evaluation objective with the step index."""
+        assert hasattr(self, name.rstrip(str(self.step_index))), f"Attribute {name} not found in {self.name}"
+        return object.__getattribute__(self, name.rstrip(str(self.step_index)))
+
+class StepOne(_Step):
+    def __init__(self):
+        super().__init__(definitions=HAY_STEP1_DEFINITIONS, name='StepOne', step_index='1')
+        
+class StepTwo(_Step):
+    def __init__(self):
+        super().__init__(definitions=HAY_STEP2_DEFINITIONS, name='StepTwo', step_index='2')
+        
+class StepThree(_Step):
+    def __init__(self):
+        super().__init__(definitions=HAY_STEP3_DEFINITIONS, name='StepThree', step_index='3')
 
 def get_evaluate_bAP(**kwargs):
     bap = bAP(**kwargs)
 
     def fun(**kwargs):
-        return bap.get(kwargs)
+        return bap.get(**kwargs)
 
     return fun
 
@@ -383,6 +560,30 @@ def get_evaluate_BAC(**kwargs):
     bac = BAC(**kwargs)
 
     def fun(**kwargs):
-        return bac.get(kwargs)
+        return bac.get(**kwargs)
+
+    return fun
+
+def get_evaluate_StepOne(**kwargs):
+    step = StepOne(**kwargs)
+
+    def fun(**kwargs):
+        return step.get(**kwargs)
+
+    return fun
+
+def get_evaluate_StepTwo(**kwargs):
+    step = StepTwo(**kwargs)
+
+    def fun(**kwargs):
+        return step.get(**kwargs)
+
+    return fun
+
+def get_evaluate_StepThree(**kwargs):
+    step = StepThree(**kwargs)
+
+    def fun(**kwargs):
+        return step.get(**kwargs)
 
     return fun

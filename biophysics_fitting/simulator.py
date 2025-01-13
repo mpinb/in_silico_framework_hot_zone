@@ -164,7 +164,8 @@ class Simulator_Setup:
 
     def get_stim_run_fun_by_stim(self, stim):
         l = [x for x in self.stim_run_funs if x[0].split('.')[0] == stim]
-        assert len(l) == 1
+        assert len(l) > 0, "No stimulus run function is configured for simulus {}. Did you configure this stimulus, or was it overridden at some point?".format(stim) 
+        assert len(l) == 1, "Multiple stimulus run functions are configured for stimulus {}. This is not allowed, as i can only run one stimulus at a time.".format(stim)
         return l[0]
 
     def get_stim_response_measure_fun(self, stim):
@@ -176,6 +177,7 @@ class Simulator_Setup:
 
     def get_params(self, params):
         '''Get the modified biophysical parameters.
+        
         Applies each method in :paramref:`params_modify_funs` to the parameter vector.
         
         Args:
@@ -185,6 +187,7 @@ class Simulator_Setup:
             (pd.Series): Modified parameters.
         '''
         for name, fun in self.params_modify_funs:
+            logger.info("Applying {} to params".format(name))
             params = fun(params)
         return params
 
