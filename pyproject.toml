@@ -3,7 +3,7 @@ authors = [{name = "Bjorge Meulemeester", email = "bjorge.meulemeester@mpinb.mpg
 
 description = "Add a short description here"
 name = "in_silico_framework"
-requires-python = ">=3.8, <3.10"
+requires-python = ">=3.8, <3.9"
 version = "0.1.0"
 
 [build-system]
