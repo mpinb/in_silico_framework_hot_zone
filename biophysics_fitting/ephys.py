@@ -575,7 +575,7 @@ def BAC_ISI(t, v, thresh=None):
     return 0.5 * (ISI_1 + ISI_2)
 
 
-def STEP_mean_frequency(t, v, thresh=None, stim_onset=700, stim_end=2000):
+def STEP_mean_frequency(t, v, stim_duration=2000, thresh=None):
     """
     Computes the mean frequency of action potentials in a voltage trace for a step stimulus.
     
@@ -588,11 +588,11 @@ def STEP_mean_frequency(t, v, thresh=None, stim_onset=700, stim_end=2000):
         float: Mean frequency of action potentials in the voltage trace.
     """
     spikes = find_crossing(v, thresh)[0]
-    stim_dur = stim_end - stim_onset
-    f = 1000 * len(spikes) / (stim_dur)  # Convert stim_dur to seconds
+    f = 1000 * len(spikes) / (stim_duration)  # Convert stim_dur to seconds
     return f
 
-def STEP_check_2_ISIs(t, v, thresh=None, stim_onset=700, stim_end=2000):
+
+def STEP_check_2_ISIs(t, v, thresh=None):
     """
     Check if there are more than 2 ISIs in the trace.
     
@@ -609,7 +609,8 @@ def STEP_check_2_ISIs(t, v, thresh=None, stim_onset=700, stim_end=2000):
     """
     return len(spike_count(t, v, thresh)) >= 5
 
-def STEP_adaptation_index(t, v, thresh=None, stim_end=2000):
+
+def STEP_adaptation_index(t, v, stim_end=2000, thresh=None):
     """
     Calculate the adaptation index for a step current stimulus.
 
@@ -624,13 +625,14 @@ def STEP_adaptation_index(t, v, thresh=None, stim_end=2000):
     # Hay provided multiple ways of calculating the AI, depending on how many initial spikes to omit
     # (e.g. ramp_adaptation_index omits the first 2, adaptation_index omits the first 20%, adaptation_index2 omits just the first)
     # This is adaptation_index2 in the original .hoc code, which is the one that was ultimately used for the algorithm
-    spikes = find_crossing(v, thresh)[0]
+    spike_inds = find_crossing(v, thresh)[0]
+    spike_times = t[spike_inds]
 
     # Calculate ISIs
     start = 1
-    isi = np.diff(spikes[start:])  # Ignore first spike for ISIs
+    isi = np.diff(spike_times[start:])  # Ignore first spike for ISIs
     # Check last ISI i.e. the time between the last spike and the end of the stimulus
-    vt_tail = stim_end - spikes[-1]
+    vt_tail = stim_end - spike_times[-1]
     if vt_tail > 0 and vt_tail > isi[-1]:
         # if this time is larger than the last ISI,
         # treat it as if it is an additional ISI for more precise calculation
@@ -642,9 +644,16 @@ def STEP_adaptation_index(t, v, thresh=None, stim_end=2000):
 
     return adaptation_index
 
-def STEP_coef_var(t, v, thresh=None):
+
+def STEP_coef_var(t, v, stim_end, thresh=None):
     """
     Computes the coefficient of variation (CV) of the Inter-Spike Interval (ISI) of a voltage trace for a step stimulus.
+    
+    The CV is calculated as :math:``\frac{\sigma_{ISI}}{\mu_{ISI}}``.
+    
+    Note:
+        We are considering a population sample (rather than a complete population), and so we must Bessel-correct the standard deviation.
+        In this case, the standard deviation is calculated with 1 degree of freedom, i.e. a denominator of :math:`N-1` instead of :math:`N`.
     
     Args:
         t (numpy.ndarray): Array of time values.
@@ -654,10 +663,22 @@ def STEP_coef_var(t, v, thresh=None):
     Returns:
         float: Coefficient of variation of the ISI.
     """
-    spikes = find_crossing(v, thresh)[0]
+    spike_inds = find_crossing(v, thresh)[0]
+    spike_times = t[spike_inds]
     
-    ISIs = np.diff(spikes)
-    return np.std(ISIs) / np.mean(ISIs)
+    # Calculate ISIs
+    start = 1
+    isi = np.diff(spike_times[start:])  # Ignore first spike for ISIs
+    # Check last ISI i.e. the time between the last spike and the end of the stimulus
+    vt_tail = stim_end - spike_times[-1]
+    if vt_tail > 0 and vt_tail > isi[-1]:
+        # if this time is larger than the last ISI,
+        # treat it as if it is an additional ISI for more precise calculation
+        isi = np.append(isi, vt_tail)
+    
+    # Make sure std has 1 degree of freedom, consistent with original .hoc code
+    return np.std(isi, ddof=1) / np.mean(isi)
+
 
 def STEP_initial_ISI(t, v, thresh=None):
     """
@@ -674,7 +695,8 @@ def STEP_initial_ISI(t, v, thresh=None):
     ISI = t[spikes[1]] - t[spikes[0]]
     return ISI
 
-def STEP_time_to_first_spike(t, v, thresh=None):
+
+def STEP_time_to_first_spike(t, v, stim_onset, thresh=None):
     """
     Computes the time to first spike (TTFS) of a voltage trace for a step stimulus.
     
@@ -691,7 +713,8 @@ def STEP_time_to_first_spike(t, v, thresh=None):
         float: Time to first spike.
     """
     spikes = find_crossing(v, thresh)[0]
-    return t[spikes[0]]
+    return t[spikes[0]] - stim_onset
+
 
 def STEP_fast_ahp_depth(t, v, thresh=None, time_scale=5):
     """
@@ -713,11 +736,11 @@ def STEP_fast_ahp_depth(t, v, thresh=None, time_scale=5):
     Returns:
         float: Depth of the fAHP.
     """
-    spike_time_indices = find_crossing(v, thresh)
-    up_cross_ind, down_cross_ind = spike_time_indices
+    spike_time_indices = find_crossing(v, thresh)[0]
     d = []
 
-    for ind_t_spike_1, ind_t_spike_2 in zip(up_cross_ind[:-1], down_cross_ind[1:]):
+    start = 1
+    for ind_t_spike_1, ind_t_spike_2 in zip(spike_time_indices[start:-1], spike_time_indices[start+1:]):
         t_spike_1, t_spike_2 = t[ind_t_spike_1], t[ind_t_spike_2]
         begin_ind = ind_t_spike_1
 
@@ -731,7 +754,8 @@ def STEP_fast_ahp_depth(t, v, thresh=None, time_scale=5):
         d.append(np.min(v[begin_ind:end_ind]))
 
     d = np.array(d)
-    return np.mean(d)
+    return d
+
 
 def STEP_slow_ahp_depth(t, v, thresh=None, time_scale=5):
     """
@@ -753,11 +777,11 @@ def STEP_slow_ahp_depth(t, v, thresh=None, time_scale=5):
     Returns:
         float: Depth of the sAHP.
     """
-    spike_time_indices = find_crossing(v, thresh)
-    up_cross_ind, down_cross_ind = spike_time_indices
+    spike_time_indices = find_crossing(v, thresh)[0]
     d = []
 
-    for ind_t_spike_1, ind_t_spike_2 in zip(up_cross_ind[:-1], down_cross_ind[1:]):
+    start = 1
+    for ind_t_spike_1, ind_t_spike_2 in zip(spike_time_indices[start:-1], spike_time_indices[start+1:]):
         t_spike_1, t_spike_2 = t[ind_t_spike_1], t[ind_t_spike_2]
         end_ind = ind_t_spike_2
         
@@ -769,7 +793,8 @@ def STEP_slow_ahp_depth(t, v, thresh=None, time_scale=5):
         d.append(np.min(v[begin_ind:end_ind]))
 
     d = np.array(d)
-    return np.mean(d)
+    return d
+
 
 def STEP_slow_ahp_time(t, v, thresh=None, time_scale=5):
     """
@@ -782,16 +807,25 @@ def STEP_slow_ahp_time(t, v, thresh=None, time_scale=5):
         the sAHP is computed as the minimum between the first spike and the next spike,
         and there is no difference between fast and slow AHP.
         
+    Attention:
+        It's important to not return the average deviation from the mean sAHP time, but the full array of sAHP times.
+        sAHP times can deviate both negatively and positively from the mean. Averaging this out will lead to a false
+        sense of accuracy.
+        
     Args:
         t (numpy.ndarray): Array of time values.
         v (numpy.ndarray): Array of voltage values.
         thresh (float, optional): Voltage threshold for spike detection. Defaults to None.
         time_scale (float, optional): Time scale in milliseconds. Defaults to 5 ms.
+    
+    Returns:
+        np.ndarray: Array of sAHP times.
     """
-    spike_time_indices = find_crossing(v, thresh)
-    up_cross_ind, down_cross_ind = spike_time_indices
+    spike_time_indices = find_crossing(v, thresh)[0]
     d = []
-    for ind_t_spike_1, ind_t_spike_2 in zip(up_cross_ind[:-1], down_cross_ind[1:]):
+    
+    start = 1  # ignore first spike
+    for ind_t_spike_1, ind_t_spike_2 in zip(spike_time_indices[start:-1], spike_time_indices[start+1:]):
         t_spike_1, t_spike_2 = t[ind_t_spike_1], t[ind_t_spike_2]
         end_ind = ind_t_spike_2
         
@@ -801,8 +835,10 @@ def STEP_slow_ahp_time(t, v, thresh=None, time_scale=5):
             begin_ind = np.searchsorted(t, t_spike_1 + time_scale)
         
         # Find the index of the minimum voltage value between ti1 and ti2
-        min_v_ind = np.argmin(v[begin_ind:end_ind])
-        d.append(t[min_v_ind + begin_ind])
+        min_v_ind = begin_ind + np.argmin(v[begin_ind:end_ind])
+        t_sahp = t[min_v_ind]
+        rel_time = (t_sahp - t_spike_1) / (t_spike_2 - t_spike_1)
+        d.append(rel_time)
         
     d = np.array(d)
-    return np.mean(d)
+    return d

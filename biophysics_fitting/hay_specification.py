@@ -34,7 +34,7 @@ HAY_STEP1_DEFINITIONS = {
             'APh1': ("AP height", 26.227399999999999,4.9702999999999999),
             'fAHPd1': ("Fast after-hyperpolarization depth", -51.951099999999997, 5.8212999999999999),
             'sAHPd1': ("Slow after-hyperpolarization depth", -58.0443, 4.5814000000000004),
-            'sAHPt1': ("Slow after-hyperpolarization time", 0.23760000000000001, 0.029899999999999999),
+            'sAHPt1': ("Slow after-hyperpolarization time", 0.23760000000000001, 0.0299),
             'APw1': ("AP width", 1.3077000000000001, 0.16650000000000001)
 }
 HAY_STEP2_DEFINITIONS = {
@@ -53,11 +53,12 @@ HAY_STEP3_DEFINITIONS = {
             'mf3': ("Mean frequency", 22.5,2.2222),
             'AI3': ("Adaptation index", 0.0045999999999999999, 0.0025999999999999999),
             'ISIcv3': ("Interspike interval coefficient of variation", 0.095399999999999999, 0.014),
+            'DI3': ("Doublet interspike interval", 5.38, 0.83),
             'TTFS3': ("Time to first spike", 7.25,1.0),
             'APh3': ("AP height", 16.436800000000002, 6.9321999999999999),
             'fAHPd3': ("Fast afterhypoerpolarization depth", -56.557899999999997, 3.5834000000000001),
-            'sAHPd3': ("Slow after-hyperpolarization depth", -59.9923,3.9247000000000001),
-            'sAHPt3': ("Slow after-hyperpolarization time", 0.21310000000000001, 0.036799999999999999),
+            'sAHPd3': ("Slow after-hyperpolarization depth", -59.99230000000001, 3.9247000000000005),
+            'sAHPt3': ("Slow after-hyperpolarization time",   0.21310000000000001, 0.036799999999999999),
             'APw3': ("AP zidth", 1.8647, 0.41189999999999999)
 }
 

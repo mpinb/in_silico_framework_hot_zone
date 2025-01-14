@@ -447,21 +447,21 @@ class _Step:
         t, v = voltage_traces['tVec'], voltage_traces['vList'][0]
         return {
             '.check_1AP': nan_if_error(spike_count)(t, v, thresh=self.soma_thresh),
-            '.raw': nan_if_error(STEP_mean_frequency)(t, v, thresh=self.soma_thresh)
+            '.raw': nan_if_error(STEP_mean_frequency)(t, v, self.stim_duration, thresh=self.soma_thresh)
         }
         
     def AI(self, voltage_traces):
         t, v = voltage_traces['tVec'], voltage_traces['vList'][0]
         return {
             '.check_2ISI': nan_if_error(spike_count)(t, v, thresh=self.soma_thresh),
-            '.raw': nan_if_error(STEP_adaptation_index)(t, v, thresh=self.soma_thresh)
+            '.raw': nan_if_error(STEP_adaptation_index)(t, v, stim_end=self.stim_onset + self.stim_duration, thresh=self.soma_thresh)
         }
         
     def ISIcv(self, voltage_traces):
         t, v = voltage_traces['tVec'], voltage_traces['vList'][0]
         return {
             '.check_2ISI': nan_if_error(spike_count)(t, v, thresh=self.soma_thresh),
-            '.raw': nan_if_error(STEP_coef_var)(t, v, thresh=self.soma_thresh)
+            '.raw': nan_if_error(STEP_coef_var)(t, v, stim_end = self.stim_onset+self.stim_duration, thresh=self.soma_thresh)
         }
         
     def DI(self, voltage_traces):
@@ -475,7 +475,7 @@ class _Step:
         t, v = voltage_traces['tVec'], voltage_traces['vList'][0]
         return {
             '.check_1AP': nan_if_error(spike_count)(t, v, thresh=self.soma_thresh),
-            '.raw': nan_if_error(STEP_time_to_first_spike)(t, v, thresh=self.soma_thresh)
+            '.raw': nan_if_error(STEP_time_to_first_spike)(t, v, self.stim_onset, thresh=self.soma_thresh)
         }
         
     def AHP_depth_abs(self, voltage_traces):
