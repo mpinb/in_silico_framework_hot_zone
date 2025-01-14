@@ -619,7 +619,6 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/pybtex-0.24.0-pyhd8ed1ab_2.tar.bz2
       - conda: https://conda.anaconda.org/conda-forge/linux-64/pybtex-docutils-1.0.3-py38h578d9bd_1.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/pycparser-2.22-pyhd8ed1ab_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/noarch/pydata-sphinx-theme-0.4.3-pyhd8ed1ab_0.tar.bz2
       - conda: https://conda.anaconda.org/conda-forge/noarch/pygments-2.18.0-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/pyparsing-3.1.4-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/pypdf2-3.0.1-pyhd8ed1ab_0.conda
@@ -661,7 +660,6 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/soupsieve-2.5-pyhd8ed1ab_1.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/sphinx-7.1.2-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/sphinx-basic-ng-1.0.0b2-pyhd8ed1ab_2.conda
-      - conda: https://conda.anaconda.org/conda-forge/noarch/sphinx-book-theme-0.0.41-pyhd8ed1ab_0.tar.bz2
       - conda: https://conda.anaconda.org/conda-forge/noarch/sphinx-copybutton-0.5.2-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/sphinx-inline-tabs-2023.4.21-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/sphinxcontrib-applehelp-1.0.4-pyhd8ed1ab_0.conda
@@ -1106,6 +1104,22 @@ packages:
   requires_dist:
   - msgpack
   requires_python: '>=3.8,<4'
+- kind: pypi
+  name: bluepyopt
+  version: 1.9.126
+  url: https://files.pythonhosted.org/packages/07/ba/88492eae3bdadc1f11cef7bf6be95919ea57789a055611a29d555af21bb9/bluepyopt-1.9.126.tar.gz
+  sha256: 4837b930959ff00ddd5879707cc21fb9215f874d2ab3ff74e9cc0ff5f2ce5494
+  requires_dist:
+  - numpy>=1.6
+  - pandas>=0.18
+  - deap
+  - efel>=2.13
+  - scoop>=0.7
+  - ipyparallel
+  - pickleshare>=0.7.3
+  - jinja2>=2.8
+  - future
+  - pebble>=4.3.10
 - kind: pypi
   name: bluepyopt
   version: 1.9.126
@@ -1749,6 +1763,13 @@ packages:
   purls: []
   size: 618596
   timestamp: 1640112124844
+- kind: pypi
+  name: deap
+  version: 1.4.2
+  url: https://files.pythonhosted.org/packages/ed/cb/ca39adc56ba747ac4e5b58cc157dd9df8c25e65690bf30552bdf44aca62f/deap-1.4.2.tar.gz
+  sha256: d679be3373db8ba912b4664260ca29c7aca10372ff5a968231047b49efc22ac5
+  requires_dist:
+  - numpy
 - kind: pypi
   name: deap
   version: 1.4.2
@@ -5380,6 +5401,36 @@ packages:
   - stfio ; extra == 'stimfitio'
   - pillow ; extra == 'tiffio'
   requires_python: '>=3.7'
+- kind: pypi
+  name: neo
+  version: 0.11.1
+  url: https://files.pythonhosted.org/packages/47/7f/51deed26600013c9fb6d3c0129a32a1b1b3aa1e2ea8163cfaad647fc8501/neo-0.11.1.tar.gz
+  sha256: f4a206044b332ad00b10072b0dc7a70b359fa365ec786f92ab757ef4ae588474
+  requires_dist:
+  - packaging
+  - numpy>=1.18.5
+  - quantities>=0.12.1
+  - igor ; extra == 'all'
+  - klusta ; extra == 'all'
+  - scipy>=1.0.0 ; extra == 'all'
+  - nixio>=1.5.0 ; extra == 'all'
+  - pillow ; extra == 'all'
+  - pyedflib ; extra == 'all'
+  - sonpy ; extra == 'all'
+  - pynwb ; extra == 'all'
+  - h5py ; extra == 'all'
+  - h5py ; extra == 'biocam'
+  - sonpy ; extra == 'ced'
+  - pyedflib ; extra == 'edf'
+  - igor ; extra == 'igorproio'
+  - klusta ; extra == 'kwikio'
+  - h5py ; extra == 'maxwell'
+  - scipy>=1.0.0 ; extra == 'neomatlabio'
+  - nixio>=1.5.0 ; extra == 'nixio'
+  - pynwb ; extra == 'nwb'
+  - stfio ; extra == 'stimfitio'
+  - pillow ; extra == 'tiffio'
+  requires_python: '>=3.7'
 - kind: conda
   name: nest-asyncio
   version: 1.6.0
@@ -5640,6 +5691,12 @@ packages:
   - pkg:pypi/pandas?source=hash-mapping
   size: 11356829
   timestamp: 1603237383931
+- kind: pypi
+  name: pandas-msgpack
+  version: 0.1.4+14.gfcb0471.dirty
+  url: git+https://github.com/abast/pandas-msgpack.git@fcb0471e37e1c6b412cedc9cfb28e66c76a47ecc
+  requires_dist:
+  - pandas
 - kind: pypi
   name: pandas-msgpack
   version: 0.1.4+14.gfcb0471.dirty
@@ -6164,24 +6221,6 @@ packages:
   - pkg:pypi/pycparser?source=hash-mapping
   size: 105098
   timestamp: 1711811634025
-- kind: conda
-  name: pydata-sphinx-theme
-  version: 0.4.3
-  build: pyhd8ed1ab_0
-  subdir: noarch
-  noarch: python
-  url: https://conda.anaconda.org/conda-forge/noarch/pydata-sphinx-theme-0.4.3-pyhd8ed1ab_0.tar.bz2
-  sha256: 27fa9059490e4e871d916d4aa6776d057bc45825dc18bececd7eae3ffaee4c04
-  md5: 6b244842d35eb2c8f85a757cbb17947a
-  depends:
-  - python >=3.5
-  - sphinx
-  license: BSD-3-Clause
-  license_family: BSD
-  purls:
-  - pkg:pypi/pydata-sphinx-theme?source=hash-mapping
-  size: 2063422
-  timestamp: 1611661664661
 - kind: conda
   name: pygments
   version: 2.18.0
@@ -7106,29 +7145,6 @@ packages:
   size: 20338
   timestamp: 1727436819491
 - kind: conda
-  name: sphinx-book-theme
-  version: 0.0.41
-  build: pyhd8ed1ab_0
-  subdir: noarch
-  noarch: python
-  url: https://conda.anaconda.org/conda-forge/noarch/sphinx-book-theme-0.0.41-pyhd8ed1ab_0.tar.bz2
-  sha256: ec3aa5af37fd639133daf7f77d507864ac5221a2bb45ded957bb7d337e6c5372
-  md5: 8848404afec0f9986c7e049d646083cb
-  depends:
-  - beautifulsoup4 >=4.6.1,<5
-  - click
-  - docutils >=0.15
-  - pydata-sphinx-theme >=0.4.1,<0.5.0
-  - python >=3.7
-  - pyyaml
-  - sphinx
-  license: BSD-3-Clause
-  license_family: BSD
-  purls:
-  - pkg:pypi/sphinx-book-theme?source=hash-mapping
-  size: 58256
-  timestamp: 1615313727717
-- kind: conda
   name: sphinx-copybutton
   version: 0.5.2
   build: pyhd8ed1ab_0
@@ -7353,6 +7369,24 @@ packages:
   - pkg:pypi/statsmodels?source=hash-mapping
   size: 12061602
   timestamp: 1644535941523
+- kind: pypi
+  name: sumatra
+  version: 0.7.4
+  url: https://files.pythonhosted.org/packages/81/e0/8ceeee0b439efe6d7993054215a24ef2b837c5a9fdcf4ddc30527526f3d1/Sumatra-0.7.4.tar.gz
+  sha256: f779912c3cf32405dc027fd5a3abd9d9ddbec0ba147e40dc80d5b80720b3fb11
+  requires_dist:
+  - django<1.9,>=1.6
+  - django-tagging
+  - httplib2
+  - docutils
+  - jinja2
+  - parameters
+  - future
+  - bzr ; extra == 'bzr'
+  - gitpython ; extra == 'git'
+  - hgapi ; extra == 'hg'
+  - mpi4py ; extra == 'mpi'
+  - pysvn ; extra == 'svn'
 - kind: pypi
   name: sumatra
   version: 0.7.4
