@@ -69,7 +69,6 @@ class NetworkMapper:
         Args:
             postCell (:py:class:`~single_cell_parser.cell.Cell`): The cell to map synapses onto.
             nwParam (:py:class:`~sumatra.parameters.NTParameterSet`): The network parameter set (see :ref:`network_parameters_format` for more info).
-            nwParam (:py:class:`~sumatra.parameters.NTParameterSet`): The network parameter set (see :ref:`network_parameters_format` for more info).
             simParam (:py:class:`~sumatra.parameters.NTParameterSet`): The simulation parameter set. Default: None.
         '''
         self.cells = {}
@@ -172,7 +171,7 @@ class NetworkMapper:
         
         Args:
             synInfoName (str): 
-                Name of the file containing the synapse activation times.
+                Name of the file containing the :ref:`syn_activation_format` file.
             synWeightName (str): 
                 Name of the file containing the synapse weights. Default: None.
             include_silent_synapses: 
@@ -1338,7 +1337,7 @@ def activate_functional_synapse(
         syn (:py:class:`~single_cell_parser.synapse.Synapse`): Synapse object.
         cell (:py:class:`~single_cell_parser.cell.Cell`): Postsynaptic cell.
         preSynCell (:py:class:`~single_cell_parser.cell.PointCell`): Presynaptic cell.
-        synParameters (dict): Synapse parameters.
+        synParameters (dict): Synapse parameters, see also the ``synapses.rerceptors.<syn_type>`` key in the :ref:`network_parameters_format` file.
         tChange (float): Time at which the synapse parameters change (e.g. the release probability due to a spike).
         synParametersChange (dict): Synapse parameters after change (including e.g. the release probability).
         forceSynapseActivation (bool): If True, the synapse is activated regardless of the release probability.
@@ -1398,6 +1397,7 @@ def activate_functional_synapse(
             #            try treating parameters as hoc range variables,
             #            then as hoc global variables
             try:
+                # e.g. syn.receptors['glutamate_syn'].decayampa = 1.0
                 paramStr = 'syn.receptors[\'' + recepStr + '\'].'
                 paramStr += param + '=' + str(recep.parameter[param])
                 exec(paramStr)

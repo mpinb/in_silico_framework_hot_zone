@@ -38,20 +38,19 @@ class Synapse(object):
         self,
         edgeID,
         edgePtID,
-        edgex,
+        edgex=None,
         preCellType='',
         postCellType=''):
         '''
         Args:
             edgeID (int): ID of attached section in cell.sections
             edgePtID (int): ID of attached point in cell.sections[edgeID].pts
-            edgex (float): relative coordinate along attached section
             preCellType (str): reference to presynaptic cell (PointCell)
             postCellType (str): reference to postsynaptic cell (PointCell)
         '''
         self.secID = edgeID
         self.ptID = edgePtID
-        self.x = edgex
+        self.x = edgex  # TODO unused
         self.preCellType = preCellType
         self.preCell = None
         self.releaseSite = None
@@ -67,13 +66,17 @@ class Synapse(object):
         return self._active
 
     def activate_hoc_syn(self, source, preCell, targetCell, receptors):
-        '''setup of all necessary hoc connections.
-        stores all mechanisms and NetCons for reference counting.
+        '''Setup of all necessary hoc connections.
+        
+        Stores all mechanisms and NetCons for reference counting.
         
         Args:
             source (:py:class:`single_cell_parser.cell.PointCell`): 
                 Presynaptic cell whose :py:attr:`single_cell_parser.cell.PointCell.spikes` attribute is used as ``source`` in NEURON's NetCon object.
                 Note that in the context of a synapse, ``spikes`` means release times, which is not necessarily the same as the presynaptic spike times.
+            preCell (:py:class:`single_cell_parser.cell.PointCell`): Presynaptic cell.
+            targetCell (:py:class:`single_cell_parser.cell.Cell`): Postsynaptic cell.
+            receptors (dict): Dictionary of receptors.
         '''
         self.releaseSite = source
         self.preCell = preCell
