@@ -318,7 +318,7 @@ An example of the raw and parsed format is shown below:
 Raw :py:mod:`simrun` output
 '''''''''''''''''''''''''''
 
-.. list-table:: Synapse activation
+.. list-table:: Synapse activations (single trial)
     :header-rows: 1
 
     * - synapse type
@@ -361,7 +361,7 @@ Raw :py:mod:`simrun` output
 Parsed dataframe
 '''''''''''''''''
 
-.. list-table:: Synapse activation
+.. list-table:: Synapse activations (all trials)
     :header-rows: 1
 
     * - trial index
@@ -444,7 +444,7 @@ An example of the raw and parsed format is shown below:
 Raw :py:mod:`simrun` output
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. list-table:: Presynaptic spike times
+.. list-table:: Presynaptic spike times (single trial)
     :header-rows: 1
 
     * - cell type
@@ -472,7 +472,7 @@ Raw :py:mod:`simrun` output
 Parsed dataframe
 ~~~~~~~~~~~~~~~~
 
-.. list-table:: Presynaptic spike times
+.. list-table:: Presynaptic spike times (all trials)
     :header-rows: 1
 
     * - trial index
