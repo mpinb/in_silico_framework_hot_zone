@@ -7,6 +7,15 @@ What should I do if
      
      
 Weba and pillow 2016?
+
+Challenging of using not only temporal, but also spatial information -> did not work with just LDA.
+Representation of input data is much larger.
+
+Just time is numpy array of lenght 255 (stim) + 50 (stim) x n_trials (729k)
+
+Including spatial extends with about x 50 to account for spatial bins.
+
+==> data extractors.
 '''
 
 import Interface as I
@@ -24,7 +33,7 @@ except ImportError:
 
 import pandas as pd
 import matplotlib.pyplot as plt
-import weakref
+import weakref  # CUDA keeps memory occupied as long as the pointer exists. Making weakrefs to data doesn't prevent the garbage collector form doing its job.
 
 
 def convert_to_numpy(x):
@@ -144,7 +153,16 @@ class Rm(object):
 
 
 class Strategy(object):
-    """what you give to the optimizer i think - rieke"""
+    """
+    Cost function to provide to the optimizer.
+    
+    As a function of the parameters, compute a value for each trial.
+    The optimizer will optimize for this value (highest AUROC score)
+    
+    Needs some repr for input data.
+    
+    E.G. A strategy that needs to optimize for AP refractory, then the Strategy needs to incorporate this data
+    """
 
     def __init__(self, name):
         self.name = name
@@ -163,8 +181,7 @@ class Strategy(object):
         self._setup()
         self.get_y = I.partial(self.get_y_static, self.y)
         self.get_score = I.partial(self.get_score_static, self._get_score)
-        self._objective_function = I.partial(self._objective_function_static,
-                                             self.get_score, self.get_y)
+        self._objective_function = I.partial(self._objective_function_static,self.get_score, self.get_y)
         self.setup_done = True
 
     def _setup(self):
@@ -174,8 +191,7 @@ class Strategy(object):
         pass
 
     def set_split(self, split, setup=True):
-        cupy_split = make_weakref(
-            np.array(split))  # cupy, if cupy is there, numpy otherwise
+        cupy_split = make_weakref(np.array(split))  # cupy, if cupy is there, numpy otherwise
         numpy_split = numpy.array(split)  # allways numpy
         self.get_score = I.partial(self.get_score_static,
                                    self._get_score,
@@ -458,6 +474,7 @@ class DataExtractor_spatiotemporalSynapseActivation(DataExtractor):
         self.data = None
 
     def setup(self, Rm):
+        """Setup necessary parameters, depending on zhich RM is passed. makes sure self.data is set."""
         self.db = Rm.db
         self.tmin = Rm.tmin
         self.tmax = Rm.tmax
@@ -587,11 +604,9 @@ class DataExtractor_categorizedTemporalSynapseActivation(DataExtractor):
                 #print keys
                 assert set(m[key].keys()) == set(keys)
                 if self.selected_indices is None:
-                    out[k].append(m[key][k][:,
-                                            self.tmax - self.width:self.tmax])
+                    out[k].append(m[key][k][:, self.tmax - self.width:self.tmax])
                 else:
-                    out[k].append(m[key][k][self.selected_indices,
-                                            self.tmax - self.width:self.tmax])
+                    out[k].append(m[key][k][self.selected_indices, self.tmax - self.width:self.tmax])
             out[k] = numpy.vstack(out[k])
         self.data = out
 
@@ -663,8 +678,7 @@ class DataExtractor_spiketimes(DataExtractor):
             st_list = []
             if self.selected_indices is not None:
                 for m, single_db in enumerate(self.db):
-                    st_list.append(single_db['spike_times'].iloc[
-                        self.selected_indices[m]])
+                    st_list.append(single_db['spike_times'].iloc[self.selected_indices[m]])
             else:
                 for single_db in self.db:
                     st_list.append(single_db['spike_times'])
@@ -794,10 +808,17 @@ class Solver_COBYLA(Solver):
 
     @staticmethod
     def _optimize(_objective_function, maxiter=5000, x0=None):
-        out = scipy.optimize.minimize(_objective_function,
-                                      x0,
-                                      method='COBYLA',
-                                      options=dict(maxiter=maxiter, disp=True))
+        """
+        
+        Args:
+            _objective-function (callable): A Strategy._get_score function
+            
+        """
+        out = scipy.optimize.minimize(
+            _objective_function,
+            x0,
+            method='COBYLA',
+            options=dict(maxiter=maxiter, disp=True))
         return out
 
 
@@ -810,15 +831,16 @@ class Strategy_ISIcutoff(Strategy):
 
     def _setup(self):
         self.ISI = make_weakref(np.array(self.data['ISI'].fillna(-100)))
-        self._get_score = I.partial(self._get_score_static, self.ISI,
-                                    self.penalty)
+        self._get_score = I.partial(self._get_score_static, self.ISI,self.penalty)
 
     @staticmethod
     def _get_score_static(ISI, penalty, x):
+        """Compute the objective value for the given parameters x."""
+        # hard cutoff for ISI.
         ISIc = ISI.copy()
         x = x[0] * -1
-        ISIc[ISI <= x] = 0
-        ISIc[ISI > x] = penalty
+        ISIc[ISI <= x] = 0          # very good
+        ISIc[ISI > x] = penalty     # very bad
         return ISIc
 
     def _get_x0(self):
@@ -828,7 +850,9 @@ class Strategy_ISIcutoff(Strategy):
 
 
 class Strategy_ISIexponential(Strategy):
-
+    """TODO: is this fully implemented? There doesnt seem to be an actual exponential here...
+    :skip-doc:
+    """
     def __init__(self, name, max_isi=100):
         super(Strategy_ISIexponential, self).__init__(name)
         self.name = name
@@ -847,6 +871,7 @@ class Strategy_ISIexponential(Strategy):
 
     @staticmethod
     def _get_score_static(ISI, x):
+        """NAN if no preceding AP"""
         ISI = ISI.replace([np.inf, -np.inf], np.nan).fillna(-10**10).values
         return np.array(ISI)
 
@@ -879,12 +904,10 @@ class Strategy_ISIraisedCosine(Strategy):
         ISI = ISI.fillna(width)
         ISI = ISI.astype(int) - 1
         self.ISI = make_weakref(np.array(ISI))
-        self._get_score = I.partial(self._get_score_static,
-                                    self.RaisedCosineBasis_postspike, self.ISI)
+        self._get_score = I.partial(self._get_score_static, self.RaisedCosineBasis_postspike, self.ISI)
 
     def _get_x0(self):
-        return (numpy.random.rand(len(self.RaisedCosineBasis_postspike.phis)) *
-                2 - 1) * 5
+        return (numpy.random.rand(len(self.RaisedCosineBasis_postspike.phis)) * 2 - 1) * 5
 
     @staticmethod
     def _get_score_static(RaisedCosineBasis_postspike, ISI, x):

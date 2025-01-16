@@ -4,9 +4,6 @@ import single_cell_parser as scp
 import single_cell_parser.analyze as sca
 from data_base.analyze import excitatory, inhibitory
 
-# import Interface as I # moved to bottom becose auf circular import
-
-
 def get_cell_activations(network_param, tStop=350):
     param = network_param
     out_dict = {}
@@ -93,8 +90,9 @@ def get_expectancy_value_of_activated_prox_synapses_by_EI(
     return EXC, INH
 
 
-def get_poisson_realizations_from_expectancy_values(expectancy_values,
-                                                    nSweeps=1000):
+def get_poisson_realizations_from_expectancy_values(
+    expectancy_values,
+    nSweeps=1000):
     dummy = np.vstack(
         [np.random.poisson(lam=x, size=nSweeps) for x in expectancy_values])
     return np.transpose(dummy)
