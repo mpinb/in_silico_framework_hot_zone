@@ -105,14 +105,14 @@ def get_synapse_points(cell, n):
     pass
 
 
-def get_lines(cell, n, range_vars='Vm'):
+def get_lines(cell, time_index, range_vars='Vm'):
     '''Get list of dictionaries of lines that can be displayed using the :py:meth:`plot_lines` function
     
     This is used to generate videos of membrane voltage vs soma distance.
     
     Args:
         cell (:py:class:`single_cell_parser.cell.Cell`): cell object
-        n (int): index of the time vector
+        time_index (int): index of the time vector
         range_vars (str): range variable to plot
         
     Returns:
@@ -169,17 +169,17 @@ def get_lines(cell, n, range_vars='Vm'):
         # voltage traces are a special case
         if range_vars[0] == 'Vm':
             traces_dummy = [
-                currentSec_backup.parent.recVList[parent_idx_segment][n]
+                currentSec_backup.parent.recVList[parent_idx_segment][time_index]
             ]
             for vec in currentSec_backup.recVList:
-                traces_dummy.append(vec[n])
+                traces_dummy.append(vec[time_index])
         # other range vars are saved differently in the cell object compared to Vm
         else:
             vec_list = []  # currentSec_backup.recordVars[range_vars[0]]
             try:
                 traces_dummy = [
                     currentSec_backup.parent.recordVars[range_vars[0]]
-                    [parent_idx_segment][n]
+                    [parent_idx_segment][time_index]
                 ]
             except:
                 traces_dummy = [np.NaN]
@@ -187,7 +187,7 @@ def get_lines(cell, n, range_vars='Vm'):
                 traces_dummy.append(np.nan)
                 continue  #if range mechanism is not in section: continue
             for vec in currentSec_backup.recordVars[range_vars[0]]:
-                traces_dummy.append(vec[n])
+                traces_dummy.append(vec[time_index])
                 #sec.recordVars[range_vars[0]][lv_for_record_vars]
         
         assert(len(distance_dummy) == len(traces_dummy))
@@ -200,7 +200,7 @@ def get_lines(cell, n, range_vars='Vm'):
                 points_lines[label]['color'] = cmap[label]
                 points_lines[label]['marker'] = '.'
                 points_lines[label]['linestyle'] = 'None'
-                points_lines[label]['t'] = cell.tVec[n]
+                points_lines[label]['t'] = cell.tVec[time_index]
             difference = np.abs(traces_dummy[1] - traces_dummy[0])
             points_lines[label]['x'].append(distance_dummy[1] if difference >
                                             difference_limit else float('nan'))
@@ -211,7 +211,7 @@ def get_lines(cell, n, range_vars='Vm'):
             out['y'] = traces_dummy
             out['color'] = cmap[currentSec_backup.label]
             out['label'] = currentSec_backup.label
-            out['t'] = cell.tVec[n]
+            out['t'] = cell.tVec[time_index]
             out_all_lines.append(out)
     out_all_lines.extend(list(points_lines.values()))
     return out_all_lines
