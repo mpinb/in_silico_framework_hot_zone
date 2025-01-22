@@ -1,10 +1,13 @@
 from data_base.dbopen import resolve_db_path
 import single_cell_parser as scp
 import pandas as pd
-import logging, os, inspect, six, sys
+import os, inspect, six, sys
 from collections import defaultdict
 defaultdict_defaultdict = lambda: defaultdict(lambda: defaultdict_defaultdict())
-logger = logging.getLogger("ISF").getChild(__name__)
+from config.isf_logging import logger
+
+def CUPY_is_available():
+    return "cupy" in sys.modules
 
 def get_cellnumbers_from_confile(confile):
     """Get the amount of cells of each type from a confile.
