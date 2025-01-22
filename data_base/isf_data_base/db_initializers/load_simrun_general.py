@@ -77,13 +77,10 @@ import single_cell_parser as scp
 import single_cell_parser.analyze as sca
 from data_base.isf_data_base import ISFDataBase
 from data_base.isf_data_base.IO.LoaderDumper import (
-    dask_to_categorized_msgpack, 
     pandas_to_pickle,
     to_cloudpickle, 
     to_pickle, 
     pandas_to_parquet, 
-    dask_to_msgpack, 
-    pandas_to_msgpack,
     get_dumper_string_by_dumper_module, 
     dask_to_parquet)
 from data_base.exceptions import DataBaseException
@@ -1297,11 +1294,12 @@ def _get_dumper(value):
     Raises:
         NotImplementedError: If the dataframe is not a pandas or dask dataframe.
     '''
-    # For the legacy py2.7 version, it still uses the msgpack dumper
-    if isinstance(value, pd.DataFrame):
-        return OPTIMIZED_PANDAS_DUMPER if six.PY3 else pandas_to_msgpack
-    elif isinstance(value, dd.DataFrame):
-        return OPTIMIZED_DASK_DUMPER if six.PY3 else dask_to_msgpack
+    if six.PY2:
+        # For the legacy py2.7 version, it still uses the msgpack dumper
+        from data_base.isf_data_base.IO.LoaderDumper import pandas_to_msgpack, dask_to_msgpack
+        return pandas_to_msgpack if isinstance(value, pd.DataFrame) else dask_to_msgpack
+    elif six.PY3:
+        return OPTIMIZED_PANDAS_DUMPER if isinstance(value, pd.DataFrame) else OPTIMIZED_DASK_DUMPER
     else:
         raise NotImplementedError()
 
@@ -1415,7 +1413,7 @@ def load_initialized_cell_and_evokedNW_from_db(
     
     """
     import dask
-    from data_base.IO.roberts_formats import write_pandas_synapse_activation_to_roberts_format
+    from data_base.isf_data_base.IO.roberts_formats import write_pandas_synapse_activation_to_roberts_format
     neup, netp = load_param_files_from_db(db, sti)
     sa = db['synapse_activation']
     sa = sa.loc[sti].compute()

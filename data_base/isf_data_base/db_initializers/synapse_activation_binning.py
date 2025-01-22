@@ -17,11 +17,18 @@ from __future__ import absolute_import
 from collections import defaultdict
 from functools import partial
 import numpy as np
-import dask
-from data_base.analyze import excitatory, inhibitory
+import dask, six
 from data_base.analyze.temporal_binning import universal as temporal_binning
-from data_base.isf_data_base.IO.LoaderDumper import numpy_to_msgpack as numpy_to_msgpack
+from data_base.isf_data_base.IO.LoaderDumper import numpy_to_zarr
+from config.cell_types import EXCITATORY, INHIBITORY
+import logging
+logger = logging.getLogger("ISF").getChild(__name__)
 
+if six.PY2:
+    from data_base.isf_data_base.IO.LoaderDumper import numpy_to_msgpack
+    numpy_dumper = numpy_to_msgpack
+elif six.PY3:
+    numpy_dumper = numpy_to_zarr
 
 def prefun(df):
     """Augment a :ref:`syn_activation_format` dataframe with additional columns.
@@ -49,7 +56,7 @@ def prefun(df):
     df['celltype'] = dummy.str[0]
     df['presynaptic_column'] = dummy.str[1]
     df['proximal'] = (df.soma_distance < 500).replace(True, 'prox').replace(False, 'dist')
-    df['EI'] = df['celltype'].isin(excitatory).replace(True, 'EXC').replace(
+    df['EI'] = df['celltype'].isin(EXCITATORY).replace(True, 'EXC').replace(
         False, 'INH')
     bs = 50
     df['binned_somadist'] = df.soma_distance.div(bs).map(np.floor).astype(
@@ -328,7 +335,7 @@ def save_groupby(db, result, groupby):
         pass
     sub_db = db.create_sub_db(identifier)
     for key in result:
-        sub_db.set(key, result[key], dumper=numpy_to_msgpack)
+        sub_db.set(key, result[key], dumper=numpy_dumper)
 
 
 def init(

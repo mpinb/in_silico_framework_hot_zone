@@ -1,9 +1,18 @@
 """Map synapses onto a postsynaptic cell.
 
-This module provides a full pipeline for creating an anatomical embedding of a single
-neuron, based on methods and data presented in 
+This module provides a full pipeline for creating dense connectome models
+of the rat barrel cortex, based on methods and data presented in 
 :cite:t:`Udvary_Harth_Macke_Hege_De_Kock_Sakmann_Oberlaender_2022`.
-This pipeline requires the following data as input: 
+
+This runfile assumes you have downloaded and extracted the barrel cortex model data from
+https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/JZPULNa.
+If this is not the case, please consult ``installer/download_bc_model` and extract.
+
+Attention:
+    This file is specific to the barrel cortex model data. If you want to use it for other data,
+    you need to adapt the paths to the data accordingly.
+
+Inputs:
 
 - Morphology of the post-synaptic neuron
 - 3D field of synapse densities or synapse counts.

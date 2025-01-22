@@ -1,4 +1,4 @@
-name: Py 3.8
+name: Test pixi (MacOS)
 on:
   pull_request:
     types: [opened, synchronize]
@@ -6,7 +6,6 @@ on:
       - README.md
       - CHANGELOG.md
       - .gitignore
-      - .github/**
   pull_request_target:
     types:
       - closed
@@ -14,7 +13,6 @@ on:
       - README.md
       - CHANGELOG.md
       - .gitignore
-      - .github/**
   push:
     branches:
       - testing
@@ -62,7 +60,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Save test logs
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: ${{ always() }} 
         with:
           name: ${{ github.run_id }}_logs

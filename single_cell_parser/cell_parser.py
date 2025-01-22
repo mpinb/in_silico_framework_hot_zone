@@ -1252,10 +1252,8 @@ class CellParser(object):
         logger.info(("    spine head length: {}".format(spineheadLength)))
         logger.info(("    spine head diameter: {}".format(spineheadDiam)))
 
-        excitatory = [
-            'L6cc', 'L2', 'VPM', 'L4py', 'L4ss', 'L4sp', 'L5st', 'L6ct', 'L34',
-            'L6ccinv', 'L5tt', 'Generic'
-        ]
+        from config.cell_types import EXCITATORY
+        excitatory = EXCITATORY.extend("GENERIC")
 
         def get_closest(lst, target):
             lst = np.asarray(lst)

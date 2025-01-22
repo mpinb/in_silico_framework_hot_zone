@@ -17,7 +17,7 @@ from mpl_toolkits.mplot3d.art3d import Line3DCollection
 import numpy as np
 import shutil
 from visualize.vtk import write_vtk_skeleton_file
-import os, dask, time, six, socket, barrel_cortex, warnings
+import os, dask, time, six, socket, warnings
 from .utils import write_video_from_images, write_gif_from_images, display_animation_from_images, draw_arrow
 if six.PY3:
     from scipy.spatial.transform import Rotation
@@ -757,8 +757,8 @@ class CellMorphologyVisualizer(CMVDataParser):
         self.synapse_legend = True
         self.legend = True
         self.highlight_arrow_kwargs = None        
-        self.synapse_group_function = lambda x: x # barrel_cortex.synapse_group_function_HZpaper
-        self.population_to_color_dict = {}  # barrel_cortex.color_cellTypeColorMapHotZone    
+        self.synapse_group_function = lambda x: x
+        self.population_to_color_dict = {} 
 
     def _write_png_timeseries(
         self, 
