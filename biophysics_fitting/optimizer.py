@@ -10,19 +10,18 @@ such that:
 
 The main interface is the function :py:meth:`start_run`.
 
-.. note::
-    
+Note: 
     Part of this module is licensed under the GNU Lesser General Public License version 3.0 as published by the Free Software Foundation:
     
-    Copyright (c) 2016, EPFL/Blue Brain Project
-    Part of this file is part of BluePyOpt <https://github.com/BlueBrain/BluePyOpt>
+    Copyright (c) 2016, EPFL/Blue Brain Project. 
+    Part of this file is part of BluePyOpt <https://github.com/BlueBrain/BluePyOpt>. 
     This library is free software; you can redistribute it and/or modify it under
     the terms of the GNU Lesser General Public License version 3.0 as published
-    by the Free Software Foundation.
-    This library is distributed in the hope that it will be useful, but WITHOUT
-    ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-    FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more
-    details.
+    by the Free Software Foundation. 
+    This library is distributed in the hope that it will be useful, but WITHOUT 
+    ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS 
+    FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more 
+    details. 
     You should have received a copy of the GNU Lesser General Public License
     along with this library; if not, write to the Free Software Foundation, Inc.,
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
@@ -489,7 +488,7 @@ def run(
 
 
 def get_population_with_different_n_objectives(old_pop, n_objectives):
-    '''function to adapt the number of objectives of individuals
+    '''Adapt the number of objectives of individuals
     
     Args:
         old_pop: list of deap.Individuals

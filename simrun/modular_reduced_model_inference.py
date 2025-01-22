@@ -22,21 +22,27 @@ import Interface as I
 import sklearn.metrics
 import scipy.optimize
 import numpy
-try:
-    import cupy
-    import cupy as np
-    CUPY_ENABLED = True
-except ImportError:
-    import numpy as np
-    print('CuPy could not be imported.')
-    CUPY_ENABLED = False
-
 import pandas as pd
 import matplotlib.pyplot as plt
-import weakref  # CUDA keeps memory occupied as long as the pointer exists. Making weakrefs to data doesn't prevent the garbage collector form doing its job.
-
+import weakref
+from config.isf_logging import logger
+from .utils import CUPY_is_available
+CUPY_ENABLED = CUPY_is_available()
+if CUPY_ENABLED:
+    import cupy
+    np = cupy
+else:
+    logger.warning("CUPY is not available.")
+    import numpy as np
 
 def convert_to_numpy(x):
+    """Convert a numpy to a cupy array
+
+    Only performs this conversion if CUPY is available.
+
+    Args:
+        x (cupy.array): the array to convert.
+    """
     if CUPY_ENABLED:
         return cupy.asnumpy(x)
     else:
@@ -53,36 +59,85 @@ _WEAKREF_ARRAY_LIST = []
 
 
 def make_weakref(obj):
+    """Create a weak reference of a Python object.
+
+    Objects saved on VRAM do not get cleared automatically,
+    and memory management needs to be done manually.
+    However, weak references get cleared by the Python garbage collector.
+    This is a convenience method to convert Python objects to weak references,
+    so that memory handling is more robust and practical.
+
+    Attention:
+        A weak reference is not the same as a direct reference.
+        Objects with references to it (i.e; referents) do not get destroyed as long as a direct reference exists.
+        This is not the case for weak references.
+    """    
     _WEAKREF_ARRAY_LIST.append(obj)
     return weakref.proxy(obj)
 
 
 def clear_memory():
+    """Remove all weak references
+    
+    Cupy frees GPU memory when all references are deleted
+    As this is difficult to track, use the :py:meth:`simrun.modular_reduced_model_inference.make_weakref` method, which storesall GPU arrays in the _WEAKREF_ARRAY_LIST and returns a weakref object. 
+    This can be used to interact with the data, but is not a reference.
+    Therefore, it is sufficient to empty _WEAKREF_ARRAY_LIST, which frees the GPU memory.
+    All weakref objects pointing to GPU arrays will then be invalidated.
+    """
     del _WEAKREF_ARRAY_LIST[:]
 
 
 def dereference(weakrefobj):
-    '''Dereferences a weakref.proxy object, returning a reference to the underlying object itself.
-    Uses private interface ... check after version update!
-    https://stackoverflow.com/questions/19621036/acquiring-a-regular-reference-from-a-weakref-proxy-in-python'''
+    '''Dereference a reference and fetch the referent.
+
+    Attention:
+        Uses private interface ... check after version update!
+
+    See also:
+        https://stackoverflow.com/questions/19621036/acquiring-a-regular-reference-from-a-weakref-proxy-in-python
+
+    Args:
+        weakrefobj (wearkef.proxy.object): The weak reference to an object.
+
+    Returns:
+        obj: The underlying referent object referred to by the wear reference.
+
+    '''
     return weakrefobj.__repr__.__self__
 
 
 def get_n_workers_per_ip(workers, n):
-    '''helper function to get n workers per machine'''
+    '''Convenience method to get a certain amount of workers per machine
+
+    Groups all workers by their IP, fetches :paramref:`n` workers per IP,
+    and returns them as a list.
+
+    Args:
+        workers (List[dask.distributed.worker.Worker]):
+            List or array of dask workers.
+        n (int): Amount fo workers to fetch per machine.
+
+    Returns:
+        List[dask.distributed.worker.Worker]: List of :paramref:`n`*``n_machines`` workers.
+    '''
     s = I.pd.Series(workers)
     return s.groupby(s.str.split(':').str[1]).apply(lambda x: x[:n]).tolist()
 
 
 class Rm(object):
 
-    def __init__(self,
-                 name,
-                 db,
-                 tmin=None,
-                 tmax=None,
-                 width=None,
-                 selected_indices=None):
+    def __init__(
+        self,
+        name,
+        db,
+        tmin=None,
+        tmax=None,
+        width=None,
+        selected_indices=None):
+        """
+
+        """
         self.name = name
         self.db = db
         self.tmax = tmax
@@ -122,22 +177,26 @@ class Rm(object):
 
     def run(self, client=None, n_workers=None, strategy_selection=None):
         for strategy_name in sorted(self.strategies.keys()):
+
+            # 1. Extract the strategy to apply
             if strategy_selection is not None:
                 if not strategy_name in strategy_selection:
                     continue
             strategy = self.strategies[strategy_name]
+
+            # 2. Solve for this strategy
             for solver_name in sorted(strategy.solvers.keys()):
                 solver = strategy.solvers[solver_name]
                 if client is not None:
-                    print('starting remote optimization'
-                         ), strategy_name, solver_name
+                    logger.info(
+                        'Starting remote optimization: strategy {} with solver {}'.format(strategy_name, solver_name))
                     workers = client.scheduler_info()['workers'].keys()
                     workers = get_n_workers_per_ip(workers, n_workers)
                     solver.optimize_all_splits(client, workers=workers)
                     self.results_remote = True
                 else:
-                    print('starting local optimization'
-                         ), strategy_name, solver_name
+                    logger.info(
+                        'Starting local optimization: strategy {} with solver {}'.format(strategy_name, solver_name))
                     solver.optimize_all_splits()
 
     def _gather_results(self, client):
@@ -289,14 +348,60 @@ class DataExtractor(object):
 
 
 class DataView(object):
+    """Convenience wrapper class to access data.
 
-    def __init__(self, mapping_dict={}):
+    This wrapper class redirects data extractors based on a key mapping.
+    This API is used by default in :py:class:`~simrun.modular_reduced_model_inference.Rm`
+    If no mapping is provided, or a requested key does not exist in the mapping, the original key is used instead.
+
+    Example:
+
+        >>> data = {'a': 1, 'b': 2}
+        >>> dv = DataView()
+        >>> dv.setup(Rm)
+        >>> dv['a']
+        1
+        >>> dv.mapping_dict = {'a': 'b'}
+        >>> dv['a']
+        2
+    
+    Attributes:
+        mapping_dict (dict):
+            Mapping between requested keys and target keys.
+            Used to redirect data fetching.
+        Rm (:py:class:`Rm`):
+            Reduced model. Set after running :py:method:`setup`
+    """
+
+    def __init__(self, mapping_dict = None):
+        """
+        Args:
+            mapping_dict (dict): 
+                Mapping between requested keys and target keys.
+                Used to redirect data fetching.
+        """
+        mapping_dict = mapping_dict or {}
         self.mapping_dict = mapping_dict
 
     def setup(self, Rm):
+        """Initialize from a reduced model.
+
+        Allow access to parent :py:class:`Rm` attributes.
+
+        Args:
+            Rm (:py:class:`Rm`): The reduced model to initialize from.
+        """
         self.Rm = Rm
 
     def __getitem__(self, key):
+        """Fetch data from key.
+
+        If the key exists in :paramref:`mapping_dict`, return the data
+        associated to the key redirect instead.
+
+        Args:
+            key (str): The key to fetch.
+        """
         if not key in self.mapping_dict:
             return self.Rm.extract(key)
         else:
@@ -308,6 +413,10 @@ class DataSplitEvaluation(object):
     evaluating performance scores corresponding to the splits'''
 
     def __init__(self, Rm):
+        """
+        Args:
+            Rm (:py:class:`Rm`): Reduced model. Set after running :py:method:`setup`
+        """
         self.Rm = Rm
         self.splits = {}
         self.solvers = []
@@ -513,9 +622,6 @@ class DataExtractor_spatiotemporalSynapseActivation(DataExtractor):
                 k.pop(level)
                 out.append(tuple(k))
         return set(out)
-
-
-#     def get_sorted_keys_by_group(self, group):
 
     def get_sorted_keys_by_group(self, group, db=None):  #rieke
         '''returns keys sorted such that the first key is the closest to the soma'''
