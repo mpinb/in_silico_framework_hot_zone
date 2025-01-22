@@ -6,9 +6,6 @@ from collections import defaultdict
 defaultdict_defaultdict = lambda: defaultdict(lambda: defaultdict_defaultdict())
 from config.isf_logging import logger
 
-def CUPY_is_available():
-    return "cupy" in sys.modules
-
 def get_cellnumbers_from_confile(confile):
     """Get the amount of cells of each type from a confile.
     
