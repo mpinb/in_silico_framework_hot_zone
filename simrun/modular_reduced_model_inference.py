@@ -211,8 +211,9 @@ class Rm(object):
         return self.DataSplitEvaluation.compute_scores()
 
 
-class Strategy(object):
-    """
+class _Strategy(object):
+    """Strategy base class.
+    
     Cost function to provide to the optimizer.
     
     As a function of the parameters, compute a value for each trial.
@@ -252,14 +253,18 @@ class Strategy(object):
     def set_split(self, split, setup=True):
         cupy_split = make_weakref(np.array(split))  # cupy, if cupy is there, numpy otherwise
         numpy_split = numpy.array(split)  # allways numpy
-        self.get_score = I.partial(self.get_score_static,
-                                   self._get_score,
-                                   cupy_split=cupy_split)
-        self.get_y = I.partial(self.get_y_static,
-                               self.y,
-                               numpy_split=numpy_split)
-        self._objective_function = I.partial(self._objective_function_static,
-                                             self.get_score, self.get_y)
+        self.get_score = I.partial(
+            self.get_score_static,
+            self._get_score,
+            cupy_split=cupy_split)
+        self.get_y = I.partial(
+            self.get_y_static,
+            self.y,
+            numpy_split=numpy_split)
+        self._objective_function = I.partial(
+            self._objective_function_static,
+            self.get_score, 
+            self.get_y)
         if setup:
             for solver in self.solvers.values():
                 solver._setup()
@@ -723,7 +728,7 @@ class DataExtractor_categorizedTemporalSynapseActivation(DataExtractor):
 from simrun.modular_reduced_model_inference import RaisedCosineBasis, numpy, make_weakref, np
 
 
-class Strategy_categorizedTemporalRaisedCosine(Strategy):
+class Strategy_categorizedTemporalRaisedCosine(_Strategy):
     '''requires keys: spatiotemporalSa, st, y, ISI'''
 
     def __init__(self, name, RaisedCosineBasis_temporal):
@@ -733,10 +738,10 @@ class Strategy_categorizedTemporalRaisedCosine(Strategy):
     def _setup(self):
         self.compute_basis()
         self.groups = sorted(self.base_vectors_arrays_dict.keys())
-        self.len_t, self.len_trials = self.base_vectors_arrays_dict.values(
-        )[0].shape
-        self._get_score = I.partial(self._get_score_static,
-                                    self.base_vectors_arrays_dict)
+        self.len_t, self.len_trials = self.base_vectors_arrays_dict.values()[0].shape
+        self._get_score = I.partial(
+            self._get_score_static,
+            self.base_vectors_arrays_dict)
 
     def compute_basis(self):
         '''computes_base_vector_array with shape (spatial, temporal, trials)'''
@@ -928,7 +933,7 @@ class Solver_COBYLA(Solver):
         return out
 
 
-class Strategy_ISIcutoff(Strategy):
+class Strategy_ISIcutoff(_Strategy):
 
     def __init__(self, name, cutoff_range=(0, 4), penalty=-10**10):
         super(Strategy_ISIcutoff, self).__init__(name)
@@ -955,7 +960,7 @@ class Strategy_ISIcutoff(Strategy):
         return numpy.random.rand(1) * (max_ - min_) + min_
 
 
-class Strategy_ISIexponential(Strategy):
+class Strategy_ISIexponential(_Strategy):
     """TODO: is this fully implemented? There doesnt seem to be an actual exponential here...
     :skip-doc:
     """
@@ -993,7 +998,7 @@ class Strategy_ISIexponential(Strategy):
 
 # TODO: This is the solver they landed on: filter out recent spikes and fit raised cosines. The other strategies
 # were other ideas that didnt work
-class Strategy_ISIraisedCosine(Strategy):
+class Strategy_ISIraisedCosine(_Strategy):
 
     def __init__(self, name, RaisedCosineBasis_postspike):
         super(Strategy_ISIraisedCosine, self).__init__(name)
@@ -1040,7 +1045,7 @@ class Strategy_ISIraisedCosine(Strategy):
         return v
 
 
-class Strategy_spatiotemporalRaisedCosine(Strategy):
+class Strategy_spatiotemporalRaisedCosine(_Strategy):
     '''requires keys: spatiotemporalSa, st, y, ISI'''
 
     def __init__(self, name, RaisedCosineBasis_spatial,
@@ -1161,7 +1166,7 @@ class Strategy_spatiotemporalRaisedCosine(Strategy):
                                                            plot_kwargs={'c': c})
 
 
-class Strategy_temporalRaisedCosine_spatial_cutoff(Strategy):
+class Strategy_temporalRaisedCosine_spatial_cutoff(_Strategy):
     '''requires keys: temporalSa, st, y, ISI'''
 
     def __init__(self, name, RaisedCosineBasis_spatial,
@@ -1282,7 +1287,7 @@ class Strategy_temporalRaisedCosine_spatial_cutoff(Strategy):
                                                            plot_kwargs={'c': c})
 
 
-class Strategy_linearCombinationOfData(Strategy):
+class Strategy_linearCombinationOfData(_Strategy):
 
     def __init__(self, name, data_keys):
         super(Strategy_linearCombinationOfData, self).__init__(name)
@@ -1301,7 +1306,7 @@ class Strategy_linearCombinationOfData(Strategy):
         return np.dot(data_values.T, x)
 
 
-class CombineStrategies_sum(Strategy):
+class CombineStrategies_sum(_Strategy):
 
     def __init__(self, name):
         super(CombineStrategies_sum, self).__init__(name)
