@@ -1,16 +1,25 @@
 from functools import partial
 import scipy.optimize
 
-class Solver(object):
-
+class _Solver(object):
+    """Solver base class
+    
+    Each child 
+    """
     def __init__(self, name):
         self.name = name
+        
+        # set by setup
+        self.strategy = None
+        self.optimize = None
 
     def setup(self, strategy):
+        # set strategy
         self.strategy = strategy
-        self._setup()
+        # strategy-specific setup
+        self._setup_optimizer()
 
-    def _setup(self):
+    def _setup_optimizer(self):
         pass
 
     def optimize_all_splits(self, client=None, workers=None):
@@ -19,7 +28,6 @@ class Solver(object):
             x0 = self.strategy._get_x0()
             self.strategy.set_split(split['train'])
             if client:
-
                 out[name] = client.submit(self.optimize, x0=x0, workers=workers)
             else:
                 out[name] = self.optimize(x0=x0)
@@ -43,12 +51,35 @@ class Solver(object):
         return out
 
 
-class Solver_COBYLA(Solver):
+class Solver_COBYLA(_Solver):
+    """COBYLA solver strategy for reduced models.
+    
+    Attributes:
+        name (str): name of the solver
+        optimize (callable): 
+            Optimization function: :py:meth:`scipy.optimize.minimize` with ``method='COBYLA'``.
+            Optimization function need an objective function to minimize.
+            These objecetive functions depend on the strategy.
+            
+    See also:
+        :py:mod:`~simrun.modular_reduced_model_inference.strategy` for available strategies and their
+        respective objective functions.
+    """
 
     def __init__(self, name):
+        """
+        Args:
+            name (str): name of the solver
+        """
         self.name = name
+        
+        # set by _setup
+        self.strategy = None
+        self.optimize = None
 
-    def _setup(self):
+    def _setup_optimizer(self):
+        """Set up the optimization strategy.
+        """
         self.optimize = partial(
             self._optimize,
             self.strategy._objective_function,
@@ -56,10 +87,14 @@ class Solver_COBYLA(Solver):
 
     @staticmethod
     def _optimize(_objective_function, maxiter=5000, x0=None):
-        """
+        """Static optimization method.
+        
+        This method is the core optimizer. It minimizes :paramref:`_objective_function` using
+        :py:meth:`scipy.optimize.minimize` with ``method='COBYLA'``.
         
         Args:
-            _objective-function (callable): A Strategy._get_score function
+            _objective_function (callable): 
+                A strategy-specific objective function.
             
         """
         out = scipy.optimize.minimize(
@@ -68,5 +103,3 @@ class Solver_COBYLA(Solver):
             method='COBYLA',
             options=dict(maxiter=maxiter, disp=True))
         return out
-
-

@@ -29,7 +29,7 @@ from .data_extractor import (
 )
 
 from .solver import (
-    Solver,
+    _Solver,
     Solver_COBYLA
 )
 
