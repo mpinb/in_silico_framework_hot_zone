@@ -17,10 +17,10 @@ logger = isf_logger.getChild("DOCS")
 logger.setLevel("INFO")
 
 project = 'In-Silico Framework (ISF)'
-copyright = '2023, Arco Bast, Amir Najafgholi, Maria Royo Cano, Rieke Fruengel, Matt Keaton, Bjorge Meulemeester, Omar Valerio'
-author = 'Arco Bast, Amir Najafgholi, Maria Royo Cano, Rieke Fruengel, Matt Keaton, Bjorge Meulemeester, Omar Valerio'
-release = '0.2.0-alpha'
-version = '0.2.0-alpha'
+copyright = '2023, Arco Bast, Robert Egger, Bjorge Meulemeester, Maria Royo Cano, Rieke Fruengel, Matt Keaton, Omar Valerio'
+author = 'Arco Bast, Robert Egger, Bjorge Meulemeester, Maria Royo Cano, Rieke Fruengel, Matt Keaton, Omar Valerioo'
+release = '0.4.0-beta'
+version = '0.4.0-beta'
 ## Make your modules available in sys.path
 
 # copy over tutorials and convert links to python files to sphinx documentation directives
@@ -38,9 +38,9 @@ init_data_base_compatibility()  # make db importable before running autosummary 
 
 extensions = [
     'sphinx.ext.autodoc',      # Core library for html generation from docstrings
-    # 'sphinx.ext.autosummary',  # Create neat summary tables
-    'autoapi.extension',      # improvement over autodoc, but still requires autodoc
-    'sphinx.ext.napoleon',     # Support for NumPy and Google style docstrings
+    # 'sphinx.ext.autosummary',  # Create neat summary tables --> this has now been overridden in templates/macros.rst for more control.
+    'autoapi.extension',        # improvement over autodoc, but still requires autodoc
+    'sphinx.ext.napoleon',     # Preprocess docstrings to convert Google-style docstrings to reST
     'sphinx_paramlinks',       # Parameter links
     'sphinx.ext.todo',         # To-do notes
     'sphinx.ext.viewcode',
@@ -69,40 +69,6 @@ def skip_member(app, what, name, obj, skip, options):
     Note that the object attributes tested for in this function are only compatible
     with the sphinx-autoapi extension. If you are using a different extension, you
     may need to modify this function to use e.g. obj.__doc__ instead of obj.docstring.
-    
-    Args:
-        obj (autoapidoc._objects.Python*): 
-            autoapi object containing the following attrs:
-            
-            - name: the name of the object
-            - id: the object's id i.e. the fully qualified name (FQN)
-            - short_name: the object's short name (dropping all prefixes before a .)
-            - display: whether the object should be displayed (this is the attribute that is modified by this function)
-            - docstring: the docstring of the object
-            - type: the type of the object ('method', 'function', 'class', 'data', 'module', 'package')
-            - children: the children of the object
-            - summary: the summary of the object (usually the first sentence/line of the docstring)
-            - url_root: the root of the object's rst filepath relative to this directory (default: /autoapi, which points to the autoapi directory within this directory)
-            - inherited: whether the object is inherited
-            - type: the type of the object
-            - imported: whether the object is imported
-            - include_path: full path to the object's .rst stub.
-            - is_private_member: whether the object is a private member
-            - is_special_member: whether the object is a special member
-            - is_top_level_object: whether the object is a top level object
-            - is_undoc_member: whether the object is an undocumented member
-            - options (list): the options of the object (e.g. 'members', 'undoc-members', 'private-members', 'show-module-summary')
-            - member_order: ??
-            - obj: the object itself in dict format
-                - obj.type: the type of the object ('method', 'function', 'class', 'data', 'module', 'package')
-                - obj.name: the name of the object
-                - obj.qual_name: non-fully qualified name of the object (e.g. class.method)
-                - obj.full_name: FQN
-                - obj.args: ??
-                - obj.doc: the docstring of the object
-                - obj.from_line_no: the line number where the object is defined
-                - obj.to_line_no: the line number where the object ends (the full object, not only the docstring)
-                - obj.return_annotation (bool): whether the object has a return annotation
     """
     # Debug print to check what is being processed
     # print(f"Processing {what}: {name}")
@@ -128,6 +94,7 @@ def skip_member(app, what, name, obj, skip, options):
     
     return skip
     
+    
 def get_module_docstring(module_path):
     """Get the docstring of a module without importing it."""
     try:
@@ -150,6 +117,7 @@ def get_module_docstring(module_path):
         print(f"Error getting docstring for module {module_path}: {e}")
         return None
 
+
 modules_to_skip = [
     '**tests**', 
     '**barrel_cortex**', 
@@ -164,6 +132,7 @@ modules_to_skip = [
     "**docs**",
     "**.ipynb_checkpoints**"
 ]
+
 
 @lru_cache(maxsize=None)
 def find_modules_with_tag(source_dir, tag=":skip-doc:"):
@@ -193,10 +162,7 @@ def find_modules_with_tag(source_dir, tag=":skip-doc:"):
                         modules_with_tag.append(module_path + "**")
     return modules_with_tag
 
-
-
 modules_to_skip = modules_to_skip + find_modules_with_tag(project_root)
-# skipping documentation for certain members
 logger.info("ignoring modules: {}".format(modules_to_skip))
 autoapi_ignore = modules_to_skip
 
@@ -239,12 +205,23 @@ def count_documented_members(app, what, name, obj, skip, options):
             logger.warning(f"Undocumented member: {what}: {name}")
     return
     
+    
 def log_documented_members(app, env):
     """Log the number of documented members."""
     global N_MEMBERS
     global N_DOC_MEMBERS
     logger.info(f"Documented members: {N_DOC_MEMBERS}/{N_MEMBERS}")
 
+
+def find_first_match(lines, substring):
+    for i, line in enumerate(lines):
+        if substring in line:
+            return i
+    return -1
+
+
+def autoapi_prepare_jinja_env(jinja_env):
+        jinja_env.filters["find_first_match"] = find_first_match
 
 def setup(app):
     # skip members with :skip-doc: tag in their docstrings
@@ -270,7 +247,7 @@ bibtex_bibfiles = ['bibliography.bib']
 
 # Napoleon settings
 napoleon_google_docstring = True
-napoleon_include_init_with_doc = False
+napoleon_include_init_with_doc = True
 napoleon_include_private_with_doc = True
 napoleon_include_special_with_doc = True
 napoleon_use_admonition_for_examples = False
@@ -278,7 +255,7 @@ napoleon_use_admonition_for_notes = False
 napoleon_use_admonition_for_references = False
 napoleon_use_ivar = False
 napoleon_use_param = True
-napoleon_use_rtype = True
+napoleon_use_rtype = True  # if True, separate return type from description. otherwise, it's included in the description inline
 napoleon_preprocess_types = False  # otherwise custom argument types will not work
 napoleon_type_aliases = None
 napoleon_attr_annotations = True

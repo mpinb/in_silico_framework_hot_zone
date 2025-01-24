@@ -10,4 +10,13 @@ span.summarylabel {
     filter: opacity(40%);
 }
 
-.absolute-paragraph h2 {font-size: medium}
+.class-section-header {
+    font-size: medium;
+    background-color: var(--color-background-secondary);
+    color: var(--color-foreground-primary);
+    font-size: 1.5em; /* Adjust the size as needed */
+    padding: 10px;
+    width: 100%;
+    box-sizing: border-box;
+    text-indent: 3em;
+}

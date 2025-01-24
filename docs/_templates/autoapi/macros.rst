@@ -21,7 +21,7 @@
 .. rst-class:: absolute-paragraph
 
 {{ title }}
-{{ '^' * title|length }}
+{{ '-' * title|length }}
 
 {% endif %}
 
