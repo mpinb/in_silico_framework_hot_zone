@@ -222,8 +222,14 @@ class SynapseDensity(object):
         The only cell type specificity that is considered here is whether or not the postsynaptic cell is excitatory or inhibitory.
         Cell type wiring specificity is only considered in the network realization phase, when the synapse density field is Poisson sampled and normalized.
         Then the normalization values depend on the exact presynaptic cell type.
+    
     See also:
         See: :py:class:`~singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper`
+    
+    Attributes:
+        cellPST (dict): 
+            Nested dictionary containing the 3D length/surface area density of the postsynaptic neuron.
+            See :py:meth:`~SynapseDensity.compute_cell_PST` for details.
     '''
     def __init__(
         self, 
@@ -244,10 +250,6 @@ class SynapseDensity(object):
             exPST (:py:class:`~singlecell_input_mapper.singlecell_input_mapper.scalar_field.ScalarField`): normalization PST for connections with presynaptic excitatory cell types.
             inhPST (:py:class:`~singlecell_input_mapper.singlecell_input_mapper.scalar_field.ScalarField`): normalization PST for connections with presynaptic inhibitory cell types.
             
-        Attributes:
-            cellPST (dict): 
-                Nested dictionary containing the 3D length/surface area density of the postsynaptic neuron.
-                See :py:meth:`~SynapseDensity.compute_cell_PST` for details.
         '''
         self.cell = cell
         self.postCellType = postCellType

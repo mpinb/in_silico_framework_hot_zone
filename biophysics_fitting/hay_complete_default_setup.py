@@ -141,7 +141,7 @@ def record_Step(cell):
 def get_Simulator(fixed_params, step=False):
     """Set up a Simulator object for the Hay stimulus protocol on a Layer 5 Pyramidal Tract (L5PT) neuron.
     
-    This method sets up a simulator object for the Hay :cite;t:`Hay_Hill_Schuermann_Markram_Segev_2011` stimulus protocol.
+    This method sets up a simulator object for the Hay :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011` stimulus protocol.
     It sets: 
     
     - The cell-specific :paramref:`fixed_params`
@@ -162,7 +162,7 @@ def get_Simulator(fixed_params, step=False):
         step (bool): Whether to include the step currents in the setup.
         
     Returns:
-        :py:class:`~biophysics_fitting.simulator.Simulator`: The simulator object, set up for the :cite;t:`Hay_Hill_Schuermann_Markram_Segev_2011` stimulus protocol for a specific L5PT.
+        :py:class:`~biophysics_fitting.simulator.Simulator`: The simulator object, set up for the :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011` stimulus protocol for a specific L5PT.
         
     
     Note:

@@ -820,7 +820,7 @@ class CellParser(object):
                 seg.g_pas = seg.g_pas * F
 
     def _add_spines_ar(self, label, spineParam):
-        '''Adds passive spines to anomalously rectifying membrane :cite:`Waters_Helmchen_2006`.
+        r'''Adds passive spines to anomalously rectifying membrane :cite:`Waters_Helmchen_2006`.
         
         Spines are added according to spine parameters for individual (dendritic) structures
         by scaling :math:`C_m` and :math:`R_{N,0}` by :math:`F` and :math:`1/F` respectively, where

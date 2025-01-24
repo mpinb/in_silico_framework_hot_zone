@@ -31,12 +31,12 @@ def parameters_to_cell(
     
     Rebuild the cell from a :ref:`cell_params_format` file.
     If specified, the synapses in the :ref:`syn_file_format` file are reconnected and simulated according to the
-    parameters defined in the :ref:`network_params_format` file. If no :ref:`syn_file_format` file is provided,
-    a new network embedding is created based on the :ref:`network_params_format` file.
+    parameters defined in the :ref:`network_parameters_format` file. If no :ref:`syn_file_format` file is provided,
+    a new network embedding is created based on the :ref:`network_parameters_format` file.
     
     Args:
         neuronParam (str): Path to :ref:`cell_params_format` file. 
-        networkParam (str): Path to :ref:`network_params_format` file.
+        networkParam (str): Path to :ref:`network_parameters_format` file.
         synfile (str): Path to the realized synapses in :ref:`syn_file_format` format.
         dirPrefix (str): Prefix for the directory where the results are stored.
         tStop (float): Time in ms at which the simulation should stop.

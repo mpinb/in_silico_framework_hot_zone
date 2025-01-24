@@ -298,12 +298,12 @@ def spines_update_network_paramfile(
     network_paramfile, 
     new_network_paramfile
     ):
-    '''Update a :ref:`network_params_format` file to point to a new :ref:`syn_file_format` file.
+    '''Update a :ref:`network_parameters_format` file to point to a new :ref:`syn_file_format` file.
     
     Args:
         new_synapse_distribution_file (str): The path to the new :ref:`syn_file_format` file.
-        network_paramfile (str): The path to the original :ref:`network_params_format` file.
-        new_network_paramfile (str): The path to the new :ref:`network_params_format` file. 
+        network_paramfile (str): The path to the original :ref:`network_parameters_format` file.
+        new_network_paramfile (str): The path to the new :ref:`network_parameters_format` file. 
             A new_network_paramfile will be created if it does not already exist.
     '''
     network_param = build_parameters(network_paramfile)

@@ -1,26 +1,62 @@
+"""Extract and parse data from databases.
+
+Data extractors initialize from ReducedModel objects.
+Depending on the reduced model object, the data extractors fetch data from the database and return it in a structured way.
+These data extrcators are specific to match a :py:class:`simrun.modular_reduced_model_inference.Strategy` object.
+For example, the spatiotemporal raised cosine strategy requires to bin the synapse activations spatiotemporally.
+This is then handled with the :py:class:`DataExtractor_spatiotemporalSynapseActivation` class.
+"""
+
+
 import numpy
 import pandas as pd
 from data_base.analyze.spike_detection import spike_in_interval
 from data_base.IO.LoaderDumper import pandas_to_parquet
+from config.isf_logging import logger
 
 class _DataExtractor(object):
-
+    """Simple base class for data extractors.
+    
+    Child classes must implement ``get`` and ``setup`` methods.
+    """
     def get(self):
+        """:skip-doc:"""
         pass
 
     def setup(self, Rm):
+        """Setup necessary parameters, depending on which RM is passed
+        
+        Args:
+            Rm (:py:class:`Rm`): Reduced model object
+        """        
         pass
 
 
 class DataExtractor_spatiotemporalSynapseActivation(_DataExtractor):
-    '''extracts array of the shape (trial, time, space) from spatiotemporal synapse activation binning'''
+    '''Extracts matrix of the shape ``(trial, time, space)`` from spatiotemporal synapse activation binning
+    
+    Attributes:
+        key (tuple|str): key to access the data in the :py:class:`DataBase`
+        data (dict): dictionary with groups as keys and spatiotemporal inputpatterns as keys.
+    '''
 
     def __init__(self, key):
+        """
+        Args:
+            key (tuple|str): key to access the data in the :py:class:`DataBase`
+        """
         self.key = key
         self.data = None
 
     def setup(self, Rm):
-        """Setup necessary parameters, depending on zhich RM is passed. makes sure self.data is set."""
+        """Set up the data extractor.
+        
+        This method sets up the time window and selected trials for fetching the
+        synaptse input data.
+        
+        Args:
+            Rm (:py:class:`Rm`): Reduced model object. Must have the atttributes ``db``, ``tmin``, ``tmax``, ``width``, and ``selected_indices``.
+        """
         self.db = Rm.db
         self.tmin = Rm.tmin
         self.tmax = Rm.tmax
@@ -31,43 +67,69 @@ class DataExtractor_spatiotemporalSynapseActivation(_DataExtractor):
         }
 
     @staticmethod
-    def get_spatial_bin_level(key):
-        '''returns the index that relects the spatial dimension'''
+    def _get_spatial_bin_level(key):
+        '''Get the string index of the database key that relects the spatial dimension
+        
+        Args:
+            key (tuple): key to access the data in the :py:class:`DataBase`
+            
+        Returns:
+            int: index of the spatial dimension in the key
+            
+        Example:
+
+            >>> key = ('sub_database', 'spatiotemporal_synapse_activation__binned_somadist__100to150__group1')
+            >>> _get_spatial_bin_level(key)
+            1
+        '''
+        # TODO: shouldnt this be +1? The level comes AFTER the binned_somadist part
         return key[-1].split('__').index('binned_somadist')
 
     def get_spatial_binsize(self):
-        '''returns spatial binsize'''
+        '''Get the spatial binsize
+        
+        Fetches the spatial bin size from a grouped synapse activation dataframe based on the database key.
+        
+        Returns:
+            float: spatial binsize, indicating how much $\mu m$ it covers.
+        '''
         db = self.db[0] if type(db) == list else self.db
         key = self.key
-        level = self.get_spatial_bin_level(key)
+        level = self._get_spatial_bin_level(key)
         spatial_binsize = db[key].keys()[0][level]  # something like '100to150'
         spatial_binsize = spatial_binsize.split('to')
         spatial_binsize = float(spatial_binsize[1]) - float(spatial_binsize[0])
         return spatial_binsize
 
     def get_groups(self):
-        '''returns all groups other than spatial binning'''
+        '''Get all groups (other than spatial binning)
+        
+        Returns:
+            set: Set of groups that define how the synapse activations are grouped.
+        '''
         db = self.db
         if type(db) != list:
             db = [db]
         key = self.key
-        level = self.get_spatial_bin_level(key)
+        level = self._get_spatial_bin_level(key)
         out = []
-        for single_db in db:  #rieke
+        for single_db in db:
             for k in single_db[key].keys():
                 k = list(k)
                 k.pop(level)
                 out.append(tuple(k))
         return set(out)
 
-    def get_sorted_keys_by_group(self, group, db=None):  #rieke
-        '''returns keys sorted such that the first key is the closest to the soma'''
-        if db == None:  #rieke bc
+    def get_sorted_keys_by_group(self, group, db=None):
+        '''returns keys sorted such that the first key is the closest to the soma
+        
+        '''
+        if db == None:
             db = self.db
         db = db[0] if type(db) == list else db
         key = self.key
         group = list(group)
-        level = self.get_spatial_bin_level(key)
+        level = self._get_spatial_bin_level(key)
         keys = db[key].keys()
         keys = sorted(keys, key=lambda x: float(x[level].split('to')[0]))
         out = []
@@ -94,8 +156,7 @@ class DataExtractor_spatiotemporalSynapseActivation(_DataExtractor):
             keys = self.get_sorted_keys_by_group(group, db=single_db)
             if self.selected_indices is not None:
                 out = [
-                    single_db[key][k][self.selected_indices[m],
-                                       self.tmax - self.width:self.tmax]
+                    single_db[key][k][self.selected_indices[m], self.tmax - self.width:self.tmax]
                     for k in keys
                 ]
             else:
@@ -107,19 +168,28 @@ class DataExtractor_spatiotemporalSynapseActivation(_DataExtractor):
             outs.append(out)
 
         outs = numpy.concatenate(outs, axis=0)
-        print(outs.shape)
+        logger.info(outs.shape)
         return outs
 
     def get(self):
-        '''returns dictionary with groups as keys and spatiotemporal inputpatterns as keys.
-        E.g. if the synapse activation is grouped by excitatory / inhibitory identity and spatial bins,
-        the dictionary would be {'EXC': matrix_with_dimensions[trial, time, space], 
-                                 'INH': matrix_with_dimensions[trial, time, space]}'''
+        '''Get the spatiotemporal input patterns.
+        
+        Example:
+        
+            >>> data = de.get()
+            >>> data.keys()
+            ['group1', 'group2']
+            >>> data['group1'].shape
+            (n_trials, n_time, n_space)
+        
+        Returns:
+            dict: dictionary with groups as keys and spatiotemporal inputpatterns as keys.        
+        '''
         return self.data  # {g: self.get_spatiotemporal_input(g) for g in self.get_groups()}
 
 
 class DataExtractor_categorizedTemporalSynapseActivation(_DataExtractor):
-
+    """:skip-doc:"""
     def __init__(self, key):
         self.key = key
         self.data = None
@@ -158,7 +228,7 @@ class DataExtractor_categorizedTemporalSynapseActivation(_DataExtractor):
 
 
 class DataExtractor_spiketimes(_DataExtractor):
-
+    """:skip-doc:"""
     def setup(self, Rm):
         self.db = Rm.db
         self.st = None
@@ -179,7 +249,7 @@ class DataExtractor_spiketimes(_DataExtractor):
 
 
 class DataExtractor_object(_DataExtractor):
-
+    """:skip-doc:"""
     def __init__(self, key):
         self.key = key
 
@@ -192,7 +262,7 @@ class DataExtractor_object(_DataExtractor):
 
 
 class DataExtractor_spikeInInterval(_DataExtractor):
-
+    """:skip-doc:"""
     def __init__(self, tmin=None, tmax=None):
         self.tmin = tmin
         self.tmax = tmax
@@ -225,7 +295,7 @@ class DataExtractor_spikeInInterval(_DataExtractor):
 
 
 class DataExtractor_ISI(_DataExtractor):
-
+    """:skip-doc:"""
     def __init__(self, t=None):
         self.t = t
 
@@ -257,7 +327,7 @@ class DataExtractor_ISI(_DataExtractor):
 
 
 class DataExtractor_daskDataframeColumn(_DataExtractor):  #rieketodo
-
+    """:skip-doc:"""
     def __init__(self, key, column, client=None):
         if not isinstance(key, tuple):
             self.key = (key,)

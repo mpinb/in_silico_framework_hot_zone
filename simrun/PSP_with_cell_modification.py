@@ -17,6 +17,9 @@ class PSP_with_current_injection:
     
     The membrane potential is clamped by injecting a current into the soma.
         
+    See also:
+        :py:mod:`single_cell_parser.cell_modify_functions` for available cell modification functions.
+    
     Attributes:
         neuron_param (NTParameterSet): Parameters of the neuron model.
         confile (str): Path to the network connectivity (:ref:`con_file_format`) file.
@@ -34,9 +37,6 @@ class PSP_with_current_injection:
             Limits for the current injection optimization to clamp the membrane potential (in :math:`nA`).
         holding_current (float):
             Current that needs to be injected to hold the somatic potential at :paramref:`target_vm`.
-            
-    See also:
-        :py:mod:`single_cell_parser.cell_modify_functions` for available cell modification functions.
     '''
     def __init__(
         self,

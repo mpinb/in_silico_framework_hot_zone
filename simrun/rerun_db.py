@@ -11,7 +11,7 @@ See also:
 
 See also:
     :py:mod:`~single_cell_parser.cell_modify_functions` and :py:mod:`~single_cell_parser.network_modify_functions` 
-    for example functions to modify the :ref:`cell_params_format` and :ref:`network_params_format`.
+    for example functions to modify the :ref:`cell_params_format` and :ref:`network_parameters_format`.
 """
 
 import single_cell_parser as scp

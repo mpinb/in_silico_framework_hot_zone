@@ -1,21 +1,20 @@
-'''
-This module implements a framework to 
+'''Create reduced models from synapse activation data.
 
-What should I do if
- - I run my reduced model but the strategies are not executed remotely?
-     --> make sure, the strategy has a Solver registered
-     
-     
-Weba and pillow 2016?
+This package implements strategies (see below) to create reduced models from synapse activation data.
+It is implemented so that it allows for a "modular" inference: fitting can be performed in parallel on different parts of the data.
+This was a necessary requirement when considering both the spatial and temporal dimension of the input snapse activation data.
 
-Challenging of using not only temporal, but also spatial information -> did not work with just LDA.
-Representation of input data is much larger.
+A strategy defines a reduced model containing a set of free parameters :math:`\mathbf{x}` that are optimized to match the input data.
+It also defines what data needs to be reproduced in the first place, and zhat constitutes a good match between the reduced model and the input data.
+For a list of available strategies, see :py:mod:`~simrun.modular_reduced_model_inference.strategy`.
 
-Just time is numpy array of lenght 255 (stim) + 50 (stim) x n_trials (729k)
-
-Including spatial extends with about x 50 to account for spatial bins.
-
-==> data extractors.
+Example:
+    :cite:t:`Bast_Fruengel_Kock_Oberlaender_2024` describes how to use a raised cosine basis
+    to create a reduced model from synapse activation data.
+    In this case, the input data are synapse activation patterns, and the target data are spike times.
+    The strategy in this case is :py:class:`Strategy_spatiotemporalRaisedCosine`, whwich defines a linear sum
+    of raised cosine basis functions. These functions are to be multiplied with the input data to predict spike probabilities.
+    The free parameters are then the weights of the linear combination of these baiss functions.
 '''
 
 from .data_extractor import (

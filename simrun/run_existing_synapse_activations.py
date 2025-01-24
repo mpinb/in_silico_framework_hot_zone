@@ -43,7 +43,7 @@ def _evoked_activity(
     
     Args:
         cellParamName (str): Path to a :ref:`cell_params_format` file 
-        evokedUpParamName (str): Path to a :ref:`network_params_format` file
+        evokedUpParamName (str): Path to a :ref:`network_parameters_format` file
         synapse_activation_files (list): List of paths to :ref:`synapse_activation_format` files
         dirPrefix (str): Path to the directory where the simulation results should be stored.
         tStop (float): Time in ms at which the synaptic input should stop.
@@ -227,7 +227,7 @@ def run_existing_synapse_activations(
     
     Args:
         cellParamName (str): Path to a :ref:`cell_params_format` file 
-        evokedUpParamName (str): Path to a :ref:`network_params_format` file
+        evokedUpParamName (str): Path to a :ref:`network_parameters_format` file
         synapseActivationGlob (list): List of paths to :ref:`synapse_activation_format` files or globstring
         dirprefix (str): Path to the directory where the simulation results should be stored.
         nSweeps (int): Number of synapse activations per process.

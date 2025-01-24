@@ -199,17 +199,6 @@ class ISFDataBase:
     If the dask backends are used to save the data, it will be saved out-of-memory, 
     allowing larger-than-memory calculations.
 
-    Args:
-        basedir (str): 
-            The directory in which the database will be created, or read from.
-        readonly (bool, optional): 
-            If True, the database will be read only. Defaults to False.
-        nocreate (bool, optional): 
-            If True, a new database will not be created if it does not exist. 
-            Defaults to False.
-        suppress_errors (bool, optional):
-            If True, errors will be suppressed and raised as warnings instead. Defaults to False. Use with caution.
-            
     Attributes:
         basedir (str): The directory in which the database will be created, or read from.
         readonly (bool): If True, the database will be read-only.
@@ -224,9 +213,9 @@ class ISFDataBase:
         _db_state_fn (str): 
             The path to the database state file. Contains information on:
             
-            - ``_registeredDumpers``: A list of all registered dumpers.
-            - ``_unique_id``: A unique identifier for this database.
-            - ``_registered_to_path``: The path that this database has been registered to on the current filesystem.
+        - ``_registeredDumpers``: A list of all registered dumpers.
+        - ``_unique_id``: A unique identifier for this database.
+        - ``_registered_to_path``: The path that this database has been registered to on the current filesystem.
             
         _forbidden_keys (list): A list of keys that are not allowed to be used: ``["Loader.json", "metadata.db.lock", "sqlitedict.db.lock", "db_state.json"]``
         _is_initialized (bool): True if the database has been initialized. This should happen during the initialization.
@@ -234,6 +223,18 @@ class ISFDataBase:
         
     '''
     def __init__(self, basedir, readonly = False, nocreate = False, suppress_errors=False):
+        """
+        Args:
+            basedir (str): 
+                The directory in which the database will be created, or read from.
+            readonly (bool, optional): 
+                If True, the database will be read only. Defaults to False.
+            nocreate (bool, optional): 
+                If True, a new database will not be created if it does not exist. 
+                Defaults to False.
+            suppress_errors (bool, optional):
+                If True, errors will be suppressed and raised as warnings instead. Defaults to False. Use with caution.
+        """
         self.basedir = os.path.abspath(str(basedir))  # for public access: str. This is not a Path object for backwards compatibility.
         self._basedir = Path(self.basedir)  # for internal operations
         self.readonly = readonly

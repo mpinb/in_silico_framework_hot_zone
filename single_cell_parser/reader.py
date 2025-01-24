@@ -21,6 +21,14 @@ class _Edge(object):
     If :math:`d-\lambda` segmentation is used, these edges are **not** comparable to NEURON segments.
     
     The purpose of this class is for private use in reading in hoc files: it should not be invoked directly.
+        
+    See also:
+        :py:meth:`~single_cell_parser.cell_parser.CellParser.determine_nseg` for determining the number of segments in a section, and API
+        access to NEURON segments.
+        
+    See also:
+        :py:class:`singlecell_input_mapper.singlecell_input_mapper.reader._Edge` for a similar class 
+        that is used in the :py:mod:`singlecell_input_mapper` module.
 
     Attributes:
         label (str): label and ID of the segment (e.g. "Dendrite_1_0_0").
@@ -30,14 +38,6 @@ class _Edge(object):
         parentID (int): label and ID of the parent segment.
         parentConnect (float): How far along the parent section the connection is (i.e. the `x`-coordinate).
         valid (bool): Flag indicating if the segment is valid.
-        
-    See also:
-        :py:meth:`~single_cell_parser.cell_parser.CellParser.determine_nseg` for determining the number of segments in a section, and API
-        access to NEURON segments.
-        
-    See also:
-        :py:class:`singlecell_input_mapper.singlecell_input_mapper.reader._Edge` for a similar class 
-        that is used in the :py:mod:`singlecell_input_mapper` module.
     '''
 
     def is_valid(self):

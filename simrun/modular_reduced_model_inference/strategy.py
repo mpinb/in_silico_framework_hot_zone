@@ -1,3 +1,22 @@
+"""Strategies for creating reduced models.
+
+Strategies are pipelines whose sole purpose is to define a cost function.
+Cost functions are functions :math:`f: D, x \rightarrow c` that take data :math:`D` and parameters :math:`x` as input and return some cost :math:`c`.
+Solvers then optimize these cost functions to find the best parameters :math:`x` for the given data :math:`D`.
+
+This approach is purposefully kept very general, so that it can be used for a wide range of purposes.
+
+One such example is given in :citet:`Bast_Fruengel_Kock_Oberlaender_2024`.
+Here, the strategy contains a set of raised cosine basis functions.
+These are weighed and superimposed to create spatiotemporal filters. 
+Once multiplied with synaptic activation data, they provided a weighed input of synapse activations.
+This is then used to predict the spike probability based on the synaptic activation patterns.
+The parameters that are being optimized are the weights of the raised cosine basis functions.
+
+
+"""
+
+
 import numpy as np
 from functools import partial
 import sklearn.metrics
@@ -119,6 +138,9 @@ class _Strategy(object):
         self.get_y = None
         self.get_score = None
         self._objective_function = None
+        
+    def _get_score(self, x):
+        pass
 
     def setup(self, data, DataSplitEvaluation):
         if self.setup_done:
@@ -213,6 +235,7 @@ class _Strategy(object):
         s = get_score(x)
         y = get_y()
         return -1 * sklearn.metrics.roc_auc_score(y, convert_to_numpy(s))
+
 
     def add_solver(self, solver, setup=True):
         """Add a solver to the strategy.
@@ -347,20 +370,20 @@ class RaisedCosineBasis(object):
     
     .. math::
     
-        f_i(x) = \frac{1}{2} * cos(a * log(\tau + c) - \phi_i) + \frac{1}{2}
+        f_i(x) = \frac{1}{2} cos(a \cdot log(\tau + c) - \phi_i) + \frac{1}{2}
         
     where :math:`\tau` is the input dimension (space or time e.g.), :math:`a` is the steepness, :math:`c` is the offset, and :math:`\phi` is the phase.
-    These basis functions can be superimposed using learnable weights :math:`x_i` to form a single filter :math:`w_{\tau}` over the domain :math:`\tau`:
+    These basis functions can be superimposed using learnable weights :math:`x_i` to form a single filter :math:`\mathbf{w}(\tau)` over the domain :math:`\tau`:
     
     .. math::
     
-        w_{\tau} = \sum_{i} x_i \cdot f_i(x)
+        \mathbf{w}(\tau) = \sum_{i} x_i \cdot f_i(\tau)
         
-    And this filter can then be used to weigh the input data :math:`N_{input}`:
+    And this filter can then be used to weigh the input data :math:`\mathbf{D}`:
     
-    ..math::
+    .. math::
     
-        WI(t) = \int_{t-width}^{t}  w_{\tau} \cdot N_{input}(\tau)
+        WI(t) = \int_{t-width}^{t}  \mathbf{w}(\tau) \cdot \mathbf{D}(\tau)
         
     Note:
         The notation here heavily implies that the cosine functions are defined over the time domain.
@@ -402,11 +425,12 @@ class RaisedCosineBasis(object):
         self.basis = None
         self.compute(self.width)
 
+
     def compute(self, width=80):
         r"""Compute the vector of raised cosine basis functions :math:`\mathbf{f}`.
         
         Each element :math:`f_i` in the vector :math:`\mathbf{f}` is a raised cosine basis function 
-        with a different :math:`phi_i`. The domain of each :math:`f_i` is :math:`[0, width]`.
+        with a different :math:`\phi_i`. The domain of each :math:`f_i` is :math:`[0, width]`.
         
         Args:
             width (int): The width of the basis functions.
@@ -429,12 +453,14 @@ class RaisedCosineBasis(object):
         ]
         return self
 
+
     def get(self):
         """Get the basis functions :math:`\mathbf{f}`.
         
         Returns:
             list: The list of basis functions."""
         return self.basis
+
 
     def get_superposition(self, x):
         r"""Get the weighed sum :math:`\mathbf{w}(\tau)` of the basis functions :math:`f`.
@@ -444,7 +470,7 @@ class RaisedCosineBasis(object):
         
         .. math::
     
-            w(\tau) = \sum_{i} x_i\ f_i(\tau) = \mathbf{x} \cdot \mathbf{f}(\tau) \\
+            \mathbf{w}(\tau) = \sum_{i} x_i\ f_i(\tau) = \mathbf{x} \cdot \mathbf{f}(\tau) \\
         
         Args:
             x (array): The (learnable) input weights :math:`\mathbf{x}`
@@ -453,6 +479,7 @@ class RaisedCosineBasis(object):
             array: The weighed sum of the basis functions.
         """
         return sum([b_i * x_i for b_i, x_i in zip(self.basis, x)])
+
 
     def visualize(self, ax=None, plot_kwargs=None):
         """Visualize the basis functions :math:`\mathbf{f}`.
@@ -471,8 +498,9 @@ class RaisedCosineBasis(object):
         for b in self.get():
             ax.plot(self.t, b, **plot_kwargs)
 
-    def visualize_w(self, x, ax=None, plot_kwargs=None):
-        """Visualize the superposition :math:`\mathbf{w}_{\tau}` of the basis functions :math:`\mathbf{f}`.
+
+    def visualize_w(self, x, ax=None, plot_kwargs=None):    
+        r"""Visualize the superposition :math:`\mathbf{w}(\tau)` of the basis functions :math:`\mathbf{f}`.
         
         Args:
             x (array): The (learnable) input weights for the basis functions.
@@ -484,6 +512,7 @@ class RaisedCosineBasis(object):
         if ax is None:
             ax = plt.figure().add_subplot(111)
         ax.plot(self.t, self.get_superposition(x), **plot_kwargs)
+
 
     @staticmethod
     def get_raised_cosine(
@@ -584,8 +613,8 @@ class Strategy_spatiotemporalRaisedCosine(_Strategy):
         - ``ISI``: The inter-spike intervals.
 
     Attributes:
-        RaisedCosineBasis_spatial (RaisedCosineBasis): The spatial basis functions :math:`g_z`.
-        RaisedCosineBasis_temporal (RaisedCosineBasis): The temporal basis :math:`f_t`.
+        RaisedCosineBasis_spatial (RaisedCosineBasis): The spatial basis functions :math:`\mathbf{g}_z`.
+        RaisedCosineBasis_temporal (RaisedCosineBasis): The temporal basis functions :math:`\mathbf{f}_t`.
         base_vectors_arrays_dict (dict): 
             The basis vectors for each group. basis vectors are of shape (n_trials, N_{\tau}, N_{z})
             These basis vectors are used for the optimizer, and are already multiplied with the data.
@@ -600,6 +629,12 @@ class Strategy_spatiotemporalRaisedCosine(_Strategy):
     '''
 
     def __init__(self, name, RaisedCosineBasis_spatial, RaisedCosineBasis_temporal):
+        """
+        Args:
+            name (str): The name of the strategy.
+            RaisedCosineBasis_spatial (RaisedCosineBasis): The spatial basis functions :math:`\mathbf{g}_z`.
+            RaisedCosineBasis_temporal (RaisedCosineBasis): The temporal basis :math:`\mathbf{f}_t`.
+        """
         super(Strategy_spatiotemporalRaisedCosine, self).__init__(name)
         self.RaisedCosineBasis_spatial = RaisedCosineBasis_spatial
         self.RaisedCosineBasis_temporal = RaisedCosineBasis_temporal
@@ -616,30 +651,31 @@ class Strategy_spatiotemporalRaisedCosine(_Strategy):
     def compute_basis(self):
         r'''Compute the basis vectors for the dataset.
         
-        These basis vectors are defined as :math:`\mathbf{f}_t \cdot \mathbf{g}_z \cdot \mathbf{y}`.
+        These basis vectors are defined as :math:`\mathbf{f}_t \cdot \mathbf{g}_z \cdot \mathbf{D}`.
         When these basis vectors are weighed, they form the argument of the integral over the domain.
         Once integrated over the domain, they yield the weighted net input.
         
         .. math::
 
-            WNI(t) = \int_{t-width}^{t} \int_z \mathbf{w}_{\tau}(\tau) \cdot \mathbf{w}_{z}(z) \cdot \mathbf{y} = \int_{t-width}^{t} \int_z \mathbf{x} \cdot \mathbf{y} \cdot \mathbf{f}_t \cdot \mathbf{g}_z \cdot \mathbf{y}
+            WNI(t) = \int_{t-width}^{t} \int_z \mathbf{w}_{\tau}(\tau) \cdot \mathbf{w}_{z}(z) \cdot \mathbf{D} = \int_{t-width}^{t} \int_z \mathbf{x} \cdot \mathbf{y} \cdot \mathbf{f}_t \cdot \mathbf{g}_z \cdot \mathbf{D}
         
         Attention:
-            These are not the same basis vectors as in :py:class:`~simrun.modular_reduced_model_inference.RaisedCosineBasis`.
-            These basis vectors are already multiplied with the data.
-            Since dot product is commutative, the order of such multiplication does not matter.
+            These are not the same basis vectors as in :py:class:`RaisedCosineBasis`.
+            These basis vectors are already multiplied with the data :math:`\mathbf{D}`.
+            Since dot product is commutative, the order of this multiplication does not matter for calculating
+            the weighted net input, but these intermediate basis vectors are different.
             
         Returns:
-            dict: A dictionary of basis vectors for each group. basis vectors are of shape (N_{\tau}, N_{z}, n_trials)
+            dict: A dictionary of basis vectors for each group. basis vectors are of shape :math:`(n_trials, dim(\mathbf{f}(\tau)), dim(\mathbf{g}_z))`.
         '''
         
         def _compute_base_vector_array(spatiotemp_SA):
             r"""
             Args:
-                spatiotemp_SA (array): The spatiotemporal synaptic activation patterns of shape (trial, time, space).
+                spatiotemp_SA (array): The spatiotemporal synaptic activation patterns of shape :math:`(n_trials, dim(\mathbf{f}(\tau)), dim(\mathbf{g}_z))`.
                 
             Returns:
-                array: The basis vector array of shape (trial, N_{\tau}, N_{z}).
+                array: The basis vector array of shape :math:`(n_trials, dim(\mathbf{f}(\tau)), dim(\mathbf{g}_z))`.
             """
             _, time_domain, space_domain = spatiotemp_SA.shape
             self.RaisedCosineBasis_spatial.compute(space_domain)
@@ -661,7 +697,10 @@ class Strategy_spatiotemporalRaisedCosine(_Strategy):
         self.base_vectors_arrays_dict = base_vectors_arrays_dict
 
     def _get_x0(self):
-        """Get an initial guess for the learnable weights of the basis functions :math:`\mathbf{x}` and :math:`\mathbf{y}`.
+        r"""Get an initial guess for the learnable weights  :math:`\mathbf{x}` and :math:`\mathbf{y}` of the basis functions :math:`\mathbf{f}(\tau)` and :math:`\mathbf{g}_z`.
+        
+        Returns:
+            np.array: An array of random values in the range :math:`[-1, 1)`, with the same length as the basis parameters.
         """
         return np.random.rand((self.len_z + self.len_t) * len(self.groups)) * 2 - 1
 
@@ -709,19 +748,22 @@ class Strategy_spatiotemporalRaisedCosine(_Strategy):
 
     @staticmethod
     def _get_score_static(convert_x, base_vectors_arrays_dict, x):
-        """Calculate the weighted net input :math:`WNI(t)` for the given weights :math:`\mathbf{x}`.
+        r"""Calculate the weighted net input :math:`WNI(t)` for the given weights :math:`\mathbf{x}`.
         
-        This method left-multiplies the basis vectors :math:``\mathbf{f}_t \cdot \mathbf{g}_z \cdot \mathbf{y}` with the learnable weights :math:`\mathbf{x}`.
-        It then sums the results for each group to get the weighted net input :math:`WNI(t)`.
+        This method left-multiplies the basis vectors :math:`\mathbf{f}(\tau) \cdot \mathbf{g}(z) \cdot \mathbf{D}` 
+        with the learnable weights :math:`\mathbf{x}` and :math:`\mathbf{y}`.
+        It then integrates the results for each group to get the weighted net input :math:`WNI(t)`.
         
         Args:
             convert_x (callable): The conversion function from the learnable weights to the basis vectors.
             base_vectors_arrays_dict (dict): The dictionary of basis vectors for each group.
-            x (array): The learnable weights :math:`\mathbf{x}`.
+            x (array): 
+                The learnable weights :math:`\mathbf{x}` and :math:`\mathbf{y}` as a single array.
+                These are converted to spatial and temporal weights per group with :paramref:`convert_x`.
             
         Attention:
             These basis vectors are already multiplied with the data, and are thus not the same
-            as the basis vectors in :py:class:`~simrun.modular_reduced_model_inference.RaisedCosineBasis`.
+            as the basis vectors in :py:class:`RaisedCosineBasis`.
             Since dot product is commutative, the order of this multiplication does not matter.
             
         Returns:
@@ -737,14 +779,15 @@ class Strategy_spatiotemporalRaisedCosine(_Strategy):
         return wni  # shape: (n_trials,)
 
     def normalize(self, x, flipkey=None):
-        '''Normalize the kernel basis functions such that sum of all absolute values of all kernels is 1
+        '''Normalize the kernel basis functions such that sum of all absolute values of all kernels is 1.
         
         Attention:
-            These are the same basis functions as in :py:class:`~simrun.modular_reduced_model_inference.RaisedCosineBasis`.
-            These are thus not multiplied with the synapse activation data.
+            These are the same basis functions as in :py:class:`RaisedCosineBasis`.
+            These are thus not multiplied with the synapse activation data, as is the case with :py:meth:`compute_basis`
             
         Args:
-            x (array): The learnable weights :math:`\mathbf{x}` as a 1D array.
+            x (array): The learnable weights :math:`\mathbf{x}` and :math:`\mathbf{y}` as a 1D array.
+                These are converted to spatial and temporal weights per group with :paramref:`convert_x`.
             
         Returns:
             array: The normalized learnable weights :math:`\mathbf{x}`.
@@ -794,11 +837,19 @@ class Strategy_spatiotemporalRaisedCosine(_Strategy):
         optimizer_output,
         only_successful=False,
         normalize=True):
-        """Plot out the basis functions.
+        """Plot the basis functions.
         
         Attention:
-            These are the same basis functions as in :py:class:`~simrun.modular_reduced_model_inference.RaisedCosineBasis`.
-            These are thus not multiplied with the synapse activation data, like :paramref:`basis`.
+            These are the same basis functions as in :py:class:`RaisedCosineBasis`.
+            These are thus not multiplied with the synapse activation data, as is the case with :paramref:`basis`.
+            
+        Args:
+            optimizer_output (List[scipy.optimize.OptimizeResult]): An array of optimizer outputs. usually one element per data split.
+            only_succesful (bool): Whether to only plot the successful optimizer outputs. Default is False.
+            normalize (bool): Whether to normalize the basis functions. Default is True.
+            
+        Returns:
+            None: Nothing. Plots the basis functions.
         """
         fig = plt.figure(figsize=(10, 5))
         ax_z = fig.add_subplot(1, 2, 1)

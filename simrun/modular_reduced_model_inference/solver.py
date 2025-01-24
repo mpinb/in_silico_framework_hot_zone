@@ -1,3 +1,12 @@
+"""Optimize a cost function.
+
+This module implements solvers that can optimize a given cost function by adapting a vector of free parameters :math:`\mathbf{x}`.
+The cost function is usually defined by a :py:class:`~simrun.modular_reduced_model_inference.strategy._Strategy` object.
+
+Different solvers can be defined here, to provide different optimization schemes.
+"""
+
+
 from functools import partial
 import scipy.optimize
 
@@ -54,16 +63,16 @@ class _Solver(object):
 class Solver_COBYLA(_Solver):
     """COBYLA solver strategy for reduced models.
     
+    See also:
+        :py:mod:`~simrun.modular_reduced_model_inference.strategy` for available strategies and their
+        respective objective functions.
+    
     Attributes:
         name (str): name of the solver
         optimize (callable): 
             Optimization function: :py:meth:`scipy.optimize.minimize` with ``method='COBYLA'``.
             Optimization function need an objective function to minimize.
             These objecetive functions depend on the strategy.
-            
-    See also:
-        :py:mod:`~simrun.modular_reduced_model_inference.strategy` for available strategies and their
-        respective objective functions.
     """
 
     def __init__(self, name):

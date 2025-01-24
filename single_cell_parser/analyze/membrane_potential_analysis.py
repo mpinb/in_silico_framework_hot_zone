@@ -430,21 +430,16 @@ class RecordingSiteManager(object):
 class RecordingSite(object):
     '''Dataclass for a recording site.
 
+    See also:
+        The :py:class:`~single_cell_parser.analyze.membrane_potential_analysis.RecordingSiteManager`
+        class for setting up recording sites and parsing their voltage traces.
+    
     Attributes:
         secID (int): Section ID of the recording site.
         segID (int): Segment ID of the recording site.
         label (str): Identifier label.
         vRecordings (list): List of recorded voltage vectors.
             Parsed from the :py:class:`~single_cell_parser.cell.Cell`.
-
-    Args:
-        secID (int): Section ID of the recording site.
-        segID (int): Segment ID of the recording site.
-        label (str): Identifier label.
-
-    See also:
-        The :py:class:`~single_cell_parser.analyze.membrane_potential_analysis.RecordingSiteManager`
-        class for setting up recording sites and parsing their voltage traces.
     '''
     secID = None
     segID = None
@@ -452,6 +447,12 @@ class RecordingSite(object):
     vRecordings = None
 
     def __init__(self, secID, segID, label):
+        """    
+        Args:
+            secID (int): Section ID of the recording site.
+            segID (int): Segment ID of the recording site.
+            label (str): Identifier label.
+        """
         self.secID = secID
         self.segID = segID
         self.label = label

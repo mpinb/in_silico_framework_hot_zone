@@ -51,12 +51,8 @@ class ReaderSmr:
     '''
     A class for reading smr-files and accessing stimulus times and voltage traces.
 
-    Args:
-        path (str): The path to the smr-file.
-        analogsignal_id (int): The ID of the analog signal to read.
-        stim_times_channel (str): The name of the channel containing the stimulus times.
-        min_rel_time (float): The minimum relative time to include in the voltage traces.
-        max_rel_time (float): The maximum relative time to include in the voltage traces.
+    See also:
+        :py:class:`spike_analysis.core.ReaderLabView`
 
     Attributes:
         path (str): The path to the smr-file.
@@ -70,8 +66,6 @@ class ReaderSmr:
         t_start (float): The start time of the voltage traces.
         t_end (float): The end time of the voltage traces.
         
-    See also:
-        :py:class:`spike_analysis.core.ReaderLabView`
     '''
 
     def __init__(self,
@@ -80,6 +74,13 @@ class ReaderSmr:
                  stim_times_channel=None,
                  min_rel_time=None,
                  max_rel_time=None):
+        """    
+        Args:
+            path (str): The path to the smr-file.
+            analogsignal_id (int): The ID of the analog signal to read.
+            stim_times_channel (str): The name of the channel containing the stimulus times.
+            min_rel_time (float): The minimum relative time to include in the voltage traces.
+            max_rel_time (float): The maximum relative time to include in the voltage traces."""
         self.path = path
         self.analogsignal_id = analogsignal_id
         self.stim_times_channel = stim_times_channel
@@ -228,13 +229,9 @@ class ReaderLabView:
     Data is read using :py:meth:`spike_analysis.core.read_labview_junk1_dat_files`.
     If :paramref:`apply_filter`, a highpass filter is applied to the data using :py:meth:`spike_analysis.core.highpass_filter`.
     
-    Args:
-        path (str): The path to the LabView file.
-        stim_times (str): list of stimulus times.
-        sampling_rate (int): The sampling rate of the data.
-        scale (int): Scales the data with this value.
-        apply_filter (bool): Whether to apply a highpass filter to the data.
-        
+    See also:
+        :py:class:`spike_analysis.core.ReaderSmr`
+    
     Attributes:
         path (str): The path to the smr-file.
         stim_times (list): The times of the stimuli.
@@ -245,9 +242,6 @@ class ReaderLabView:
         v (numpy.ndarray): The voltage values of the traces.
         t_start (float): The start time of the voltage traces.
         t_end (float): The end time of the voltage traces.
-        
-    See also:
-        :py:class:`spike_analysis.core.ReaderSmr`
     """
     def __init__(
         self,
@@ -257,6 +251,14 @@ class ReaderLabView:
         scale=100,
         apply_filter=False
         ):
+        """
+        Args:
+            path (str): The path to the LabView file.
+            stim_times (str): list of stimulus times.
+            sampling_rate (int): The sampling rate of the data.
+            scale (int): Scales the data with this value.
+            apply_filter (bool): Whether to apply a highpass filter to the data.
+        """
         self.path = path
         self.stim_times = stim_times
         self.sampling_rate = sampling_rate
@@ -1130,21 +1132,21 @@ class STAPlugin_TEMPLATE(object):
 
 class STAPlugin_ISIn(STAPlugin_TEMPLATE):
     """SpikeTimeAnalysis (STA) plugin to compute the inter spike interval (ISI) to the next, second next, nth spike.
-    
-    Args:
-        name (str, optional): The name of the plugin. Defaults to 'ISIn'.
-        source (str, optional): The :py:class:`~data_base.data_base.DataBase` key containing the spike times. Defaults to 'spike_times'.
-        max_n (int, optional): The maximum order of ISIs computed. Defaults to 5.
+        
+    See also:
+        :py:class:`spike_analysis.core.SpikeTimesAnalysis` reads in :paramref:`source`.
         
     Attributes:
         name (str): The name of the plugin.
         source (str): The :py:class:`~data_base.data_base.DataBase` key containing the spike times.
         max_n (int): The maximum order of ISIs computed.
-    
-    See also:
-        :py:class:`spike_analysis.core.SpikeTimesAnalysis` reads in :paramref:`source`.
     """
     def __init__(self, name='ISIn', source='spike_times', max_n=5):
+        """
+        Args:
+            name (str, optional): The name of the plugin. Defaults to 'ISIn'.
+            source (str, optional): The :py:class:`~data_base.data_base.DataBase` key containing the spike times. Defaults to 'spike_times'.
+            max_n (int, optional): The maximum order of ISIs computed. Defaults to 5."""
         self.name = name
         self.source = source
         self.max_n = max_n
@@ -1196,20 +1198,14 @@ class STAPlugin_ISIn(STAPlugin_TEMPLATE):
 class STAPlugin_bursts(STAPlugin_TEMPLATE):
     """SpikeTimeAnalysis (STA) plugin to detect high frequency events (doublet, triplet, ...) that occur within a timewindow.
     
-    Args:
-        name (str, optional): The name of the plugin. Defaults to 'bursts'.
-        source (str, optional): The :py:class:`~data_base.data_base.DataBase` key containing the spike times. Defaults to 'spike_times'.
-        event_maxtimes (dict, optional): Dictionary containing the maximum duration of each event type. Default: ``{0:0, 1:10, 2:30}``
-        event_names (dict, optional): Dictionary containing the names of the event types. Default: ``{0: "singlet", 1: "doublet", 2: "triplet"}``
+    See also:
+        :py:class:`spike_analysis.core.SpikeTimesAnalysis` reads in :paramref:`source`.
         
     Attributes:
         name (str): The name of the plugin.
         source (str, optional): The :py:class:`~data_base.data_base.DataBase` key containing the spike times. Defaults to 'spike_times'.
         event_maxtimes (dict): Dictionary containing the maximum duration of each event type.
         event_names (dict): Dictionary containing the names of the event types.
-    
-    See also:
-        :py:class:`spike_analysis.core.SpikeTimesAnalysis` reads in :paramref:`source`.
     """
     def __init__(
         self,
@@ -1218,6 +1214,12 @@ class STAPlugin_bursts(STAPlugin_TEMPLATE):
         event_maxtimes=None,
         event_names=None
         ):
+        """
+        Args:
+            name (str, optional): The name of the plugin. Defaults to 'bursts'.
+            source (str, optional): The :py:class:`~data_base.data_base.DataBase` key containing the spike times. Defaults to 'spike_times'.
+            event_maxtimes (dict, optional): Dictionary containing the maximum duration of each event type. Default: ``{0:0, 1:10, 2:30}``
+            event_names (dict, optional): Dictionary containing the names of the event types. Default: ``{0: "singlet", 1: "doublet", 2: "triplet"}``"""
         if event_maxtimes is None:
             event_maxtimes = {0:0, 1:10, 2:30}
         if event_names is None:
@@ -1299,26 +1301,26 @@ class STAPlugin_bursts(STAPlugin_TEMPLATE):
 class STAPlugin_annotate_bursts_in_st(STAPlugin_TEMPLATE):
     """SpikeTimeAnalysis (STA) plugin to annotate bursts in a spike times dataframe.
     
-    Args:
-        name (str, optional): The name of the plugin. Defaults to 'bursts_st'.
-        source (str, optional): The :py:class:`~data_base.data_base.DataBase` key containing the spike times. Defaults to 'spike_times'.
-        event_maxtimes (dict, optional): Dictionary containing the maximum duration of each event type. Default: ``{0:0, 1:10, 2:30}``
-        event_names (dict, optional): Dictionary containing the names of the event types. Default: ``{0: "singlet", 1: "doublet", 2: "triplet"}``
+    See also:
+        :py:class:`spike_analysis.core.SpikeTimesAnalysis` reads in :paramref:`source`.
         
     Attributes:
         name (str): The name of the plugin.
         source (str, optional): The :py:class:`~data_base.data_base.DataBase` key containing the spike times. Defaults to 'spike_times'.
         event_maxtimes (dict): Dictionary containing the maximum duration of each event type.
         event_names (dict): Dictionary containing the names of the event types.
-        
-    See also:
-        :py:class:`spike_analysis.core.SpikeTimesAnalysis` reads in :paramref:`source`.
     """
     def __init__(self,
                  name='bursts_st',
                  source='st',
                  event_maxtimes=None,
                  event_names=None):
+        """    
+        Args:
+            name (str, optional): The name of the plugin. Defaults to 'bursts_st'.
+            source (str, optional): The :py:class:`~data_base.data_base.DataBase` key containing the spike times. Defaults to 'spike_times'.
+            event_maxtimes (dict, optional): Dictionary containing the maximum duration of each event type. Default: ``{0:0, 1:10, 2:30}``
+            event_names (dict, optional): Dictionary containing the names of the event types. Default: ``{0: "singlet", 1: "doublet", 2: "triplet"}``"""
         if event_maxtimes is None:
             event_maxtimes = {0:0, 1:10, 2:30}
         if event_names is None:
@@ -1370,26 +1372,27 @@ class STAPlugin_annotate_bursts_in_st(STAPlugin_TEMPLATE):
 class STAPlugin_ongoing(STAPlugin_TEMPLATE):
     """SpikeTimeAnalysis (STA) plugin to compute the ongoing activity.
     
-    Args:
-        name (str, optional): The name of the plugin. Defaults to 'ongoing_activity'.
-        source (str, optional): The :py:class:`~data_base.data_base.DataBase` key containing the spike times. Defaults to 'spike_times'.
-        ongoing_sample_length (int, optional): The length of the ongoing sample in ms. Defaults to 90000.
-        mode (str, optional): The mode of the analysis. Can be 'frequency' or 'count'. Defaults to 'frequency'.
-        
+    See also:
+        :py:class:`spike_analysis.core.SpikeTimesAnalysis` reads in :paramref:`source`.
+
     Attributes:
         name (str): The name of the plugin. Defaults to 'ongoing_activity'.
         source (str, optional): The :py:class:`~data_base.data_base.DataBase` key containing the spike times. Defaults to 'spike_times'.
         ongoing_sample_length (int): The length of the ongoing sample in ms. Defaults to 90000.
         mode (str): The mode of the analysis. Can be 'frequency' or 'count'. Defaults to 'frequency'.
-        
-    See also:
-        :py:class:`spike_analysis.core.SpikeTimesAnalysis` reads in :paramref:`source`.
     """
     def __init__(self,
                  name='ongoing_activity',
                  source='spike_times',
                  ongoing_sample_length=90000,
                  mode='frequency'):
+        """
+        Args:
+            name (str, optional): The name of the plugin. Defaults to 'ongoing_activity'.
+            source (str, optional): The :py:class:`~data_base.data_base.DataBase` key containing the spike times. Defaults to 'spike_times'.
+            ongoing_sample_length (int, optional): The length of the ongoing sample in ms. Defaults to 90000.
+            mode (str, optional): The mode of the analysis. Can be 'frequency' or 'count'. Defaults to 'frequency'. 
+        """
         STAPlugin_TEMPLATE.__init__(self)
         if not mode in ('frequency', 'count'):
             raise ValueError('mode must be "frequency" or "count"!')
@@ -1431,13 +1434,6 @@ class STAPlugin_ongoing(STAPlugin_TEMPLATE):
 
 class STAPlugin_quantification_in_period(STAPlugin_TEMPLATE):
     """SpikeTimeAnalysis (STA) plugin to quantify the activity in a period.
-    
-    Args:
-        name (str, optional): The name of the plugin. Defaults to 'frequency_in_period'.
-        source (str, optional): The :py:class:`~data_base.data_base.DataBase` key containing the spike times. Defaults to 'st_df'.
-        period (str, optional): The period to analyze. Defaults to None (entire trace).
-        t_start (float, optional): The start time of the period. Defaults to None.
-        t_end (float, optional): The end time of the period. Defaults to None.
         
     Attributes:
         name (str): The name of the plugin. Defaults to 'frequency_in_period'.
@@ -1454,6 +1450,14 @@ class STAPlugin_quantification_in_period(STAPlugin_TEMPLATE):
                  t_start=None,
                  t_end=None,
                  mode='frequency'):
+        """
+        Args:
+            name (str, optional): The name of the plugin. Defaults to 'frequency_in_period'.
+            source (str, optional): The :py:class:`~data_base.data_base.DataBase` key containing the spike times. Defaults to 'st_df'.
+            period (str, optional): The period to analyze. Defaults to None (entire trace).
+            t_start (float, optional): The start time of the period. Defaults to None.
+            t_end (float, optional): The end time of the period. Defaults to None.
+        """
         if not mode in ('frequency', 'count_per_trial', 'count_total'):
             raise ValueError(
                 'mode must be "frequency" or "count_per_trial" or "count_total"!'
@@ -1498,17 +1502,6 @@ class STAPlugin_quantification_in_period(STAPlugin_TEMPLATE):
 class STAPlugin_extract_column_in_filtered_dataframe(STAPlugin_TEMPLATE):
     """SpikeTimeAnalysis (STA) plugin to extract a column from a filtered dataframe.
     
-    Args:
-        name (str, optional): The name of the plugin. Defaults to None.
-        column_name (str, optional): The name of the column to extract. Defaults to None.
-        source (str, optional): The :py:class:`~data_base.data_base.DataBase` key containing the dataframe. Defaults to None.
-        
-    Attributes:
-        name (str): The name of the plugin.
-        column_name (str): The name of the column to extract.
-        source (str): The :py:class:`~data_base.data_base.DataBase` key containing the dataframe.
-        select (dict): The selection criteria for the dataframe.
-        
     Raises:
         ValueError: If :paramref:`name`, :paramref:`column_name`, or :paramref:`source` are not defined.
         
@@ -1516,9 +1509,21 @@ class STAPlugin_extract_column_in_filtered_dataframe(STAPlugin_TEMPLATE):
         :py:class:`spike_analysis.core.SpikeTimesAnalysis` reads in :paramref:`source`.
     See also:
         :py:meth:`data_base.utils.select` filters out the columns using :paramref:`select`
+        
+    Attributes:
+        name (str): The name of the plugin.
+        column_name (str): The name of the column to extract.
+        source (str): The :py:class:`~data_base.data_base.DataBase` key containing the dataframe.
+        select (dict): The selection criteria for the dataframe.
     """
 
     def __init__(self, name=None, column_name=None, source=None, select={}):
+        """
+        Args:
+            name (str, optional): The name of the plugin. Defaults to None.
+            column_name (str, optional): The name of the column to extract. Defaults to None.
+            source (str, optional): The :py:class:`~data_base.data_base.DataBase` key containing the dataframe. Defaults to None. 
+        """
         if None in (name, column_name, source):
             raise ValueError("name and column and source must be defined!")
         self.name, self.column_name, self.source, self.select = name, column_name, source, select
@@ -1542,27 +1547,28 @@ class STAPlugin_extract_column_in_filtered_dataframe(STAPlugin_TEMPLATE):
 
 class STAPlugin_spike_times_dataframe(STAPlugin_TEMPLATE):
     """SpikeTimeAnalysis (STA) plugin to create a spike times dataframe.
-    
-    Args:
-        name (str, optional): The name of the plugin. Defaults to 'spike_times_dataframe'.
-        source (str, optional): The :py:class:`~data_base.data_base.DataBase` key containing the spike times. Defaults to 'spike_times'.
-        offset (int, optional): The offset of the spike times. Defaults to 0.
-        mode (str, optional): The mode of the analysis. Can be 'spike_times' or 'stim_times'. Defaults to 'spike_times'.
         
+    See also:
+        :py:class:`spike_analysis.core.SpikeTimesAnalysis` reads in :paramref:`source`.
+ 
     Attributes:
         name (str): The name of the plugin.
         source (str): The :py:class:`~data_base.data_base.DataBase` key containing the spike times.
         offset (int): The offset of the spike times.
         mode (str): The mode of the analysis. Can be 'spike_times' or 'stim_times'.
-        
-    See also:
-        :py:class:`spike_analysis.core.SpikeTimesAnalysis` reads in :paramref:`source`.
     """
     def __init__(self,
                  name='spike_times_dataframe',
                  source='spike_times',
                  offset=0,
-                 mode='spike_times'):
+                mode='spike_times'):
+        """
+        Args:
+            name (str, optional): The name of the plugin. Defaults to 'spike_times_dataframe'.
+            source (str, optional): The :py:class:`~data_base.data_base.DataBase` key containing the spike times. Defaults to 'spike_times'.
+            offset (int, optional): The offset of the spike times. Defaults to 0.
+            mode (str, optional): The mode of the analysis. Can be 'spike_times' or 'stim_times'. Defaults to 'spike_times'.
+        """
         self.name = name
         self.source = source
         self.offset = offset
@@ -1588,18 +1594,11 @@ class STAPlugin_spike_times_dataframe(STAPlugin_TEMPLATE):
 class STAPlugin_response_probability_in_period(STAPlugin_TEMPLATE):
     """SpikeTimeAnalysis (STA) plugin to compute the response probability in a period.
     
-    Args:
-        name (str, optional): The name of the plugin. Defaults to 'frequency_in_period'.
-        source (str, optional): The :py:class:`~data_base.data_base.DataBase` key containing the spike times. Defaults to 'st_df'.
-        period (str, optional): The period to analyze. Defaults to None (entire trace).
-        t_start (float, optional): The start time of the period. Defaults to None.
-        t_end (float, optional): The end time of the period. Defaults to None.
+    See also:
+        :py:class:`spike_analysis.core.SpikeTimesAnalysis` reads in :paramref:`source`.
         
     Attributes:
         name (str): The name of the plugin. Defaults to 'frequency_in_period'.
-        
-    See also:
-        :py:class:`spike_analysis.core.SpikeTimesAnalysis` reads in :paramref:`source`.
     """
     def __init__(
         self,
@@ -1608,6 +1607,14 @@ class STAPlugin_response_probability_in_period(STAPlugin_TEMPLATE):
         period=None,
         t_start=None,
         t_end=None):
+        """
+        Args:
+            name (str, optional): The name of the plugin. Defaults to 'frequency_in_period'.
+            source (str, optional): The :py:class:`~data_base.data_base.DataBase` key containing the spike times. Defaults to 'st_df'.
+            period (str, optional): The period to analyze. Defaults to None (entire trace).
+            t_start (float, optional): The start time of the period. Defaults to None.
+            t_end (float, optional): The end time of the period. Defaults to None.
+        """
         self.name = name
         self.source = source
         self.t_start, self.t_end, self.period = _sta_input_checker(
@@ -1635,26 +1642,28 @@ class STAPlugin_response_probability_in_period(STAPlugin_TEMPLATE):
 
 class STAPlugin_response_latency_in_period(STAPlugin_TEMPLATE):
     """SpikeTimeAnalysis (STA) plugin to compute the response latency in a period.
-    
-    Args:
-        name (str, optional): The name of the plugin. Defaults to 'frequency_in_period'.
-        source (str, optional): The :py:class:`~data_base.data_base.DataBase` key containing the spike times. Defaults to 'st_df'.
-        period (str, optional): The period to analyze. Defaults to None (entire trace).
-        t_start (float, optional): The start time of the period. Defaults to None.
-        t_end (float, optional): The end time of the period. Defaults to None.
-        
-    Attributes:
-        name (str): The name of the plugin. Defaults to 'frequency_in_period'.
-        
+            
     See also:
         :py:class:`spike_analysis.core.SpikeTimesAnalysis` reads in :paramref:`source`.
+ 
+    Attributes:
+        name (str): The name of the plugin. Defaults to 'frequency_in_period'.
     """
-    def __init__(self,
-                 name='frequency_in_period',
-                 source='st_df',
-                 period=None,
-                 t_start=None,
-                 t_end=None):
+    def __init__(
+        self,
+        name='frequency_in_period',
+        source='st_df',
+        period=None,
+        t_start=None,
+        t_end=None):
+        """
+        Args:
+            name (str, optional): The name of the plugin. Defaults to 'frequency_in_period'.
+            source (str, optional): The :py:class:`~data_base.data_base.DataBase` key containing the spike times. Defaults to 'st_df'.
+            period (str, optional): The period to analyze. Defaults to None (entire trace).
+            t_start (float, optional): The start time of the period. Defaults to None.
+            t_end (float, optional): The end time of the period. Defaults to None.
+        """
         self.name = name
         self.source = source
         self.t_start, self.t_end, self.period = _sta_input_checker(
@@ -1704,23 +1713,24 @@ class STAPlugin_response_latency_in_period(STAPlugin_TEMPLATE):
 
 class SpikeTimesAnalysis:
     '''Class for applying event_analysis routines on a spike times dataframe.
-    
-    Args:
-        spike_times_object (object): The spike times object.
-        default_event_analysis (list): A list of event analysis routines.
-        periods (dict): A dictionary containing period labels as keys and (period_start, period_end) as values.
         
     Attributes:
         spike_times_object (object): The spike times object.
         _db (dict): The database containing the spike times and the event analysis routines.
         periods (dict): A dictionary containing period labels as keys and (period_start, period_end) as values.
-    
     '''
 
-    def __init__(self,
-                 spike_times_object,
-                 default_event_analysis=[],
-                 periods={}):
+    def __init__(
+        self,
+        spike_times_object,
+        default_event_analysis=[],
+        periods={}):
+        """
+        Args:
+            spike_times_object (object): The spike times object.
+            default_event_analysis (list): A list of event analysis routines.
+            periods (dict): A dictionary containing period labels as keys and (period_start, period_end) as values.
+        """
         self.periods = periods
         self.spike_times_object = spike_times_object
         # spike_times = _spike_times_series_from_spike_times_dataframe(spike_times_object.st)

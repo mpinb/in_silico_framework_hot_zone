@@ -33,17 +33,6 @@ class Simulator_Setup:
     of the apical dendrite. Make sure that the :py:class:`~biophysics_fitting.simulator.Simulator` :paramref:`stim_run_fun` reads the 
     parameter :paramref:`recSite` and sets up the stimulus accordingly (see :py:class:`~biophysics_fitting.simulator.Simulator`).
     
-    Attributes:
-        cell_param_generator (callable): A function that generates a :py:class:`~sumatra.parameters.NTParameterSet` cell parameter object.
-        cell_param_modify_funs (list): list of functions that modify the cell parameters.
-        cell_generator (callable): A function that generates a :py:class:`~single_cell_parser.cell.Cell` object.
-        cell_modify_funs (list): List of functions that modify the cell object.
-        stim_setup_funs (list): List of functions that set up the stimulus.
-        stim_run_funs (list): List of functions that each run a simulation.
-        stim_response_measure_funs (list): List of functions that extract voltage traces from the cell.
-        params_modify_funs (list): List of functions that modify the biophysical parameter vector.
-        check_funs (list): List of functions that check the setup. Useful for debugging.
-    
     Example::
 
         >>> def param_modify_function(params):
@@ -109,6 +98,18 @@ class Simulator_Setup:
         >>> s.setup.cell_modify_funs.append([
             'ephys',  # name must equal the prefix of the parameter, i.e. 'ephys'
             partial(ephys, 'soma.gKv'=1, 'soma.gNav'=2)])
+    
+    Attributes:
+        cell_param_generator (callable): A function that generates a :py:class:`~sumatra.parameters.NTParameterSet` cell parameter object.
+        cell_param_modify_funs (list): list of functions that modify the cell parameters.
+        cell_generator (callable): A function that generates a :py:class:`~single_cell_parser.cell.Cell` object.
+        cell_modify_funs (list): List of functions that modify the cell object.
+        stim_setup_funs (list): List of functions that set up the stimulus.
+        stim_run_funs (list): List of functions that each run a simulation.
+        stim_response_measure_funs (list): List of functions that extract voltage traces from the cell.
+        params_modify_funs (list): List of functions that modify the biophysical parameter vector.
+        check_funs (list): List of functions that check the setup. Useful for debugging.
+    
     """
     def __init__(self):
         self.cell_param_generator = None
@@ -301,8 +302,6 @@ class Simulator:
     The usual application is to specify biophysical parameters in a parameter vector and simulate
     current injection responses depending on these parameters.
     
-    Attributes:
-        setup (:py:class:`~biophysics_fitting.simulator.Simulator_Setup`): A Simulator_Setup object that keeps track of the simulation setup.
     
     Example:
     
@@ -366,6 +365,9 @@ class Simulator:
         The names for stim_setup_funs, stim_run_funs and stim_response_measure_funs need to start
             with the name of the simulus followed by a dot. For each stimulus, each of the three
             functions needs to be defined exactly once. 
+    
+    Attributes:
+        setup (:py:class:`~biophysics_fitting.simulator.Simulator_Setup`): A Simulator_Setup object that keeps track of the simulation setup.
     '''
 
     def __init__(self):
