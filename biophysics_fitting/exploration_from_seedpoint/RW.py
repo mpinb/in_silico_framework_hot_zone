@@ -1,3 +1,12 @@
+"""Perofrm a random walk through parameter space starting from a seed point.
+
+This module provides the :py:class:`~biophysics_fitting.exploration_from_seedpoint.RW` class,
+which implements a random walk procedure through parameter space.
+Every random parameter iteration provides new biophsyical parameters, 
+which are evaluated by running a set of stimulus protocols with early stopping criteria.
+"""
+
+
 from functools import partial
 import os
 import pandas as pd
