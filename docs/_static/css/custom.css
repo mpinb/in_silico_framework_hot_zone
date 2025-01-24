@@ -10,7 +10,7 @@ span.summarylabel {
     filter: opacity(40%);
 }
 
-.class-section-header {
+p.class-section-header.rubric {
     font-size: medium;
     background-color: var(--color-background-secondary);
     color: var(--color-foreground-primary);
@@ -18,5 +18,12 @@ span.summarylabel {
     padding: 10px;
     width: 100%;
     box-sizing: border-box;
-    text-indent: 3em;
+    display: block;
+}
+
+dd p.class-section-header.rubric {
+    font-size: var(--font-size--small);
+    font-weight: inherit;
+    line-height: inherit;
+    text-transform: uppercase;
 }

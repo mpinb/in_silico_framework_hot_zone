@@ -5,6 +5,12 @@
 {% if obj.display %}
    {% if is_own_page %}
 
+.. main page title: MUST be BEFORE toctree trigger -------------------------------
+
+{{ obj.short_name }}
+{{ "=" * obj.short_name | length }}
+   {% endif %}
+
 .. setup: which children to show -------------------------------------------------
 
    {% set visible_children = obj.children | selectattr("display") | list %}
@@ -67,12 +73,6 @@
 
       {% endif %}
 
-.. main page title ---------------------------------------------------------------
-
-{{ obj.short_name }}
-{{ "=" * obj.short_name | length }}
-   {% endif %}
-
 .. class signature --------------------------------------------------------------
 
 .. py:class:: {{ obj.id }}{% if obj.args %}({{ obj.args }}){% endif %}
@@ -94,8 +94,6 @@
    {%- endif %}
    {%- if argument_lines %}
 
-   {{ argument_lines }}
-
    .. rubric:: Arguments
       :class: class-section-header
 
@@ -115,6 +113,6 @@
    .. rubric:: Methods
       :class: class-section-header
 
-{{ macros.auto_summary(visible_methods, title="") }}
+   {{ macros.auto_summary(visible_methods, title="") | indent(3)}}
    {%- endif %}
 {%- endif %}
