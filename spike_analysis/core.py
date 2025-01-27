@@ -623,7 +623,7 @@ class SpikeDetectionCreastTrough(object):
             threshold above which a creast of a spike is detected as such. 
             Needs to be float, ``"minimum"``, or ``"zero"``. 
             If "minimum" or "zero" is chosen, the threashold will be set based on the histogram of all creasts. 
-            If "minimum" is chosen, :paramref:`lim_creast` will be set to the first minimum in the histogram above or equal to $0.4mV$. 
+            If "minimum" is chosen, :paramref:`lim_creast` will be set to the first minimum in the histogram above or equal to :math:`0.4mV`. 
             If "zero" is chosen, :paramref:`lim_creast` will be set to the first empty bin.
         lim_trough (float|str) as :paramref:`lim_creast`. If float is specified, you probably 
             want to use a negative value. lim creast and lim_trough need to be both floats, both 

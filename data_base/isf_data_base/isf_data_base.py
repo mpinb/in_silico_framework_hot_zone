@@ -213,9 +213,9 @@ class ISFDataBase:
         _db_state_fn (str): 
             The path to the database state file. Contains information on:
             
-        - ``_registeredDumpers``: A list of all registered dumpers.
-        - ``_unique_id``: A unique identifier for this database.
-        - ``_registered_to_path``: The path that this database has been registered to on the current filesystem.
+            - ``_registeredDumpers``: A list of all registered dumpers.
+            - ``_unique_id``: A unique identifier for this database.
+            - ``_registered_to_path``: The path that this database has been registered to on the current filesystem.
             
         _forbidden_keys (list): A list of keys that are not allowed to be used: ``["Loader.json", "metadata.db.lock", "sqlitedict.db.lock", "db_state.json"]``
         _is_initialized (bool): True if the database has been initialized. This should happen during the initialization.

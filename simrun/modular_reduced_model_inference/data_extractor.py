@@ -91,7 +91,7 @@ class DataExtractor_spatiotemporalSynapseActivation(_DataExtractor):
         Fetches the spatial bin size from a grouped synapse activation dataframe based on the database key.
         
         Returns:
-            float: spatial binsize, indicating how much $\mu m$ it covers.
+            float: spatial binsize, indicating how much :math:`\mu m` it covers.
         '''
         db = self.db[0] if type(db) == list else self.db
         key = self.key
