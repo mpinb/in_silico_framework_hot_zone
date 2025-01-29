@@ -5,6 +5,16 @@
 {% if obj.display %}
    {% if is_own_page %}
 
+.. breadcrumb trail -----------------------------------------------------------------------
+
+      {% if breadcrumb %}
+:mod:`{{ root_module }}`
+         {%- for n in range(breadcrumb|length )  %}
+ ❭ :mod:`~{{ root_module }}.{{ breadcrumb[:n+1] | join('.') }}`
+         {%- endfor %}
+
+      {% endif %}
+
 .. main page title: MUST be BEFORE toctree trigger -------------------------------
 
 {{ obj.short_name }}
@@ -56,22 +66,12 @@
       {%- elif new_docstring %}
          {%- set argument_lines = new_docstring %}
       {%- endif %}
-      {%- set argument_lines = argument_lines | reject("==", '') | list %}
+      {%- set argument_lines = argument_lines | reject("==", '') | reject("==", "\n") | list %}
       {%- if argument_lines == [''] %}
          {%- set argument_lines = [] %}
       {%- endif %}
 
    {% endif %}
-
-.. breadcrumb trail -----------------------------------------------------------------------
-
-      {% if breadcrumb %}
-:mod:`{{ root_module }}`
-         {%- for n in range(breadcrumb|length )  %}
- ❭ :mod:`~{{ root_module }}.{{ breadcrumb[:n+1] | join('.') }}`
-         {%- endfor %}
-
-      {% endif %}
 
 .. class signature --------------------------------------------------------------
 
@@ -94,25 +94,30 @@
    {%- endif %}
    {%- if argument_lines %}
 
-   .. rubric:: Arguments
-      :class: class-section-header
-
    {{ argument_lines | join('\n') | indent(3) }}
-   
+      
    {%- endif %}
    {%- if attribute_lines %}
 
-   .. rubric:: Attributes
-      :class: class-section-header
+   .. rst-class:: class-header
 
+   .. py:data:: Attributes
+
+   
    {{ attribute_lines | join('\n') | indent(3) }}
    
+
    {%- endif %}
+
    {%- if visible_methods %}
 
-   .. rubric:: Methods
-      :class: class-section-header
+   
+   .. rst-class:: class-header
 
-   {{ macros.auto_summary(visible_methods, title="") | indent(3)}}
-   {%- endif %}
+   .. py:data:: Methods
+
+   {{ macros.auto_summary(visible_methods) | indent(3) }}
+
 {%- endif %}
+
+{% endif %}
