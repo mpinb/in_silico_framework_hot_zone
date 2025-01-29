@@ -204,7 +204,7 @@ class ISFDataBase:
         readonly (bool): If True, the database will be read-only.
         nocreate (bool): If True, a new database will not be created if it does not exist.
         metadata (dict): A dictionary containing metadata for the database. See also: :py:class:`~data_base.isf_data_base.isf_data_base.MetadataAccessor`.
-        parend_db (ISFDataBase): The parent database, if this is a sub-database. Default: None.
+        parent_db (ISFDataBase): The parent database, if this is a sub-database. Default: None.
         _unique_id (str): A unique identifier for this database.
         _registered_to_path (str): The path that this database has been registered to on the current filesystem.
         _registeredDumpers (list): A list of all registered dumpers. 
