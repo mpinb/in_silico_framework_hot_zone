@@ -130,7 +130,8 @@ modules_to_skip = [
     "**mechanisms**",
     "**config**",
     "**docs**",
-    "**.ipynb_checkpoints**"
+    "**.ipynb_checkpoints**",
+    "**docs/autoapi**"
 ]
 
 
@@ -168,14 +169,13 @@ autoapi_ignore = modules_to_skip
 
 N_MEMBERS = 0
 N_DOC_MEMBERS = 0
-LAST_PARENT_TO_SKIP = ""
+LAST_PARENT_TO_SKIP = "NO_PARENT"
 
 def count_documented_members(app, what, name, obj, skip, options):
     """Count the number of documented members.
     
     Args:
-        obj (autoapidoc._objects.Python*): 
-            autoapi object containing the attrs as described in :py:meth:`skip_member`
+        obj (autoapidoc._objects.Python*): autoapi object
     """
     
     global N_MEMBERS
@@ -183,6 +183,7 @@ def count_documented_members(app, what, name, obj, skip, options):
     global LAST_PARENT_TO_SKIP
     # skip special members, except __get__ and __set__
     short_name = name.rsplit('.', 1)[-1]
+    # don't count undocumented special members, except __get__ and __set__
     if short_name.startswith('__') and short_name.endswith('__') and name not in ['__get__', '__set__']:
         return
     # Do not count if it has the :skip-doc: tag
@@ -190,16 +191,19 @@ def count_documented_members(app, what, name, obj, skip, options):
         LAST_PARENT_TO_SKIP = obj.id
         logger.debug("    Ignoring empty docstrings for children of {}".format(obj.id))
         return
+    # dont double count inherited members
     elif obj.inherited:
         return
+    # Skip if it was skipped at conf level.
     elif name in modules_to_skip:
         return
+    # the parent object of this one is skipped, so don't count this one either.
     elif LAST_PARENT_TO_SKIP in obj.id:
         return
     
-    elif obj.type in ['method', 'function', 'class', 'module']:
+    elif what in ['method', 'function', 'class', 'module', 'package']:
         N_MEMBERS += 1
-        if obj.docstring:
+        if obj.docstring and obj.docstring.strip():
             N_DOC_MEMBERS += 1
         else:
             logger.warning(f"Undocumented member: {what}: {name}")

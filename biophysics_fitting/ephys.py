@@ -17,13 +17,13 @@ def trace_check(
         vmax=None,  ## added by arco
         name=''):
     """
-    Check the properties of a voltage trace::
+    Check the properties of a voltage trace:
     
-        1. Check that at least minspikenum are present.
-        2. Check if it properly returns to rest.
-        3. Check that there are no spikes before stimulus onset (in soma or dendrite).
-        4. Check if last spike is before deadline.
-        5. Check that the maximum dendritic depolarization before stimulus onset is not too large.
+    1. Check that at least minspikenum are present.
+    2. Check if it properly returns to rest.
+    3. Check that there are no spikes before stimulus onset (in soma or dendrite).
+    4. Check if last spike is before deadline.
+    5. Check that the maximum dendritic depolarization before stimulus onset is not too large.
 
     Args:
         t (array): Time array.

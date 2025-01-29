@@ -100,10 +100,10 @@ def setup_bAP(cell, delay=295):
     
     Soma:
     
-        - shape = step
-        - amplitude = 1.9 nA
-        - delay = 295 ms
-        - duration = 5 ms
+    - shape = step
+    - amplitude = 1.9 nA
+    - delay = 295 ms
+    - duration = 5 ms
     
     Args:
         cell (:py:class:`~single_cell_parser.cell.Cell`): The cell object.
@@ -120,17 +120,17 @@ def setup_BAC(cell, dist=970, delay=295):
     
     Soma:
 
-        - shape = step    
-        - amplitude = 1.9 nA
-        - delay = 295 ms
-        - duration = 5 ms
+    - shape = step    
+    - amplitude = 1.9 nA
+    - delay = 295 ms
+    - duration = 5 ms
         
     Apical dendrite:
 
-        - shape = epsp
-        - amplitude = 0.5 nA
-        - distance = 970 um (default)
-        - delay = 300 ms
+    - shape = epsp
+    - amplitude = 0.5 nA
+    - distance = 970 um (default)
+    - delay = 300 ms
     
     Args:
         cell (:py:class:`~single_cell_parser.cell.Cell`): The cell object.

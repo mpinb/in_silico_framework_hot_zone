@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+"""Database utility and convenience functions.
+"""
 import sys, os, time, random, string, warnings, six, cloudpickle, \
     contextlib, io, dask, distributed, tempfile, shutil, \
     signal, logging, threading, hashlib, collections, inspect, \

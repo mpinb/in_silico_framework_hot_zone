@@ -1,3 +1,12 @@
+"""Open files directly in a database.
+
+This module provides funtcionality to open files in a database directly.
+This is generally not recommended, as the content of databases is usually written in a specific format,
+which is automatically inferred by the database.
+
+However, for development and testing purposes, it may be of use to explicitly open these files.
+"""
+
 from __future__ import absolute_import
 import os
 from data_base.data_base import DataBase, get_db_by_unique_id, is_model_data_base
