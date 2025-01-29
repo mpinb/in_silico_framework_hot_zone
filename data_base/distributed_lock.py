@@ -208,14 +208,21 @@ def get_lock(name):
 
 
 def get_read_lock(name):
+    """Fetch the correct read lock, depending on global locking server configuration.
+    
+    Args:
+        name (str): The name of the lock.
+        
+    Returns:
+        :py:class:`~data_base.distributed_lock.InterProcessLockNoWritePermission` | :py:class:`redis.lock` | :py:class:`kazoo.client.Lock`: 
+            The lock object.
+    """
     if 'ISF_DISTRIBUTED_LOCK_BLOCK' in os.environ:
         raise RuntimeError('ISF_DISTRIBUTED_LOCK_BLOCK is defined, which turns off locking.')    
     if SERVER['type'] == 'file':
         return InterProcessLockNoWritePermission(name)
-    
     elif SERVER["type"] == "redis":
         import redis
-
         return redis.lock.Lock(CLIENT, name, timeout=300)
     elif SERVER["type"] == "zookeeper":
         return CLIENT.ReadLock(name)
@@ -226,6 +233,15 @@ def get_read_lock(name):
 
 
 def get_write_lock(name):
+    """Fetch the correct write lock, depending on global locking server configuration.
+    
+    Args:
+        name (str): The name of the lock.
+        
+    Returns:
+        :py:class:`~data_base.distributed_lock.InterProcessLockNoWritePermission` | :py:class:`redis.lock` | :py:class:`kazoo.client.WriteLock`:
+            The lock object.
+    """
     if 'ISF_DISTRIBUTED_LOCK_BLOCK' in os.environ:
         raise RuntimeError('ISF_DISTRIBUTED_LOCK_BLOCK is defined, which turns off locking.')    
     if SERVER['type'] == 'file':

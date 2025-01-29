@@ -87,8 +87,6 @@ def compute_mean_psp_amplitude(vTraces, tStim, dt, width=35.0, t_delay=15.0):
 
 
 def compute_vm_std_windows(vStd, tStim, dt, width=35.0, window_start_times=None):
-    if window_start_times is None:
-        window_start_times = [-50.0, 15.0]
     """Compute the standard deviation of the voltage during different time windows.
         
     Args:
@@ -101,6 +99,8 @@ def compute_vm_std_windows(vStd, tStim, dt, width=35.0, window_start_times=None)
     Returns:
         tuple: A tuple containing the time windows and the average standard deviations.
     """
+    if window_start_times is None:
+        window_start_times = [-50.0, 15.0]
     avgStds = []
     for t in window_start_times:
         begin = int((tStim + t) / dt + 0.5)

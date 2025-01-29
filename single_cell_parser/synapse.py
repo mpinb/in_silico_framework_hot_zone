@@ -1,5 +1,11 @@
 '''
+Synapse class for synaptic activations and NEURON API.
 
+Used in :py:class:`single_cell_parser.cell.Cell` to store synapse information,
+and to activate/deactivate synapses in NEURON.
+
+See also:
+    :py:class:`single_cell_parser.cell.Cell`.
 '''
 from neuron import h
 from collections import Sequence
@@ -63,6 +69,14 @@ class Synapse(object):
         self.pruned = False
 
     def is_active(self):
+        """Check if the synapse is active.
+        
+        Returns:
+            bool: Activation status of the synapse.
+            
+        See also:
+            :py:meth:`activate_hoc_syn` and :py:meth:`disconnect_hoc_synapse`
+        """
         return self._active
 
     def activate_hoc_syn(self, source, preCell, targetCell, receptors):
@@ -112,7 +126,10 @@ class Synapse(object):
     def disconnect_hoc_synapse(self):
         """Disconnect the synapse from the neuron model.
         
+        Disconnecting the synapse turns off the release site and removes the :py:class:`~neuron.h.NetCon`
         
+        See also:
+            :py:meth:`activate_hoc_syn`.
         """
         if self.releaseSite:
             self.releaseSite.turn_off()

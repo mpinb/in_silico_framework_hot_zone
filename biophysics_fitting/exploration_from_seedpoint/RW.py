@@ -72,7 +72,7 @@ class RW:
             checkpoint_every (int): save the results every n iterations
             check_point_by_time (float): time interval in minutes for checkpointing for using time-based checkpointing. If both
                 checkpoint_every and checkpoint_by_time are set, checkpointing will be done by time.
-            concat_every_n_save (int): number of checkpoints after which the pickle files are concatenated and cleaned
+            concat_every_n_save (int): number of checkpoints after which the intermediate ``.pickle` files are concatenated to a single ``.parquet`` dataframe.
             mode (str): Random walk mode. Options: (None, 'expand'). default: None
                 'expand': only propose new points that move further away from seedpoint
             aim_params (dict): this param will make the exploration algorithm propose only new points such that a set of 
@@ -104,6 +104,14 @@ class RW:
         self.stop_n_inside_with_aim_params = stop_n_inside_with_aim_params
     
     def _normalize_aim_params(self,aim_params):
+        """Normalize aim parameters to be between 0 and 1.
+        
+        Args:
+            aim_params (dict): aim parameters
+            
+        Returns:
+            pd.Series: normalized aim parameters
+        """
         normalized_params = pd.Series(aim_params)
         for key in normalized_params.keys():
             min_ = self.param_ranges['min'][key]
@@ -140,6 +148,15 @@ class RW:
         return p*(max_-min_)+min_
         
     def _concatenate_and_clean(self,seed_folder, particle_id, iteration  = None): 
+        """Concatenate the intermediate ``.pickle`` results and save as one parquet file. 
+        
+        Removes the pickle files.
+        
+        Args:
+            seed_folder (str): folder where the seedpoint is located
+            particle_id (int): id of the particle
+            iteration (int): iteration number. Default: None
+        """
         # check that we are doing this for the latest iteration
         outdir = os.path.join(seed_folder, str(particle_id))
         iterations = sorted(list(set([int(f.split('.')[0]) for f in os.listdir(outdir)
@@ -159,7 +176,14 @@ class RW:
         shutil.move(df_parquet_path + '.saving', df_parquet_path) 
         self._clean_the_pickles(outdir, pickle_files, iteration) 
 
-    def _clean_the_pickles(self,outdir, files, iteration): 
+    def _clean_the_pickles(self,outdir, files, iteration):
+        """Remove the pickle files that correspond to the intermediate results of a iteration.
+        
+        Args:
+            outdir (str): directory where the pickle files are located
+            files (list): list of files in the directory
+            iteration (int): iteration number
+        """
         paths = [os.path.join(outdir, file) for file in files]
         logger.info(f'Cleaning the pickle files in {outdir}')
         for path in paths: 
@@ -167,7 +191,18 @@ class RW:
             if not path.endswith(f'{iteration}.pickle'): # do not remove the last rngn
                 os.remove(path + '.rngn')
 
-    def _load_pickle_or_parquet(self,outdir, iteration, mode: ['pickle_load', 'parquet_load']):
+    def _load_pickle_or_parquet(self,outdir, iteration, mode = 'parquet_load'):
+        """Load the results of a iteration from a pickle or parquet file.
+        
+        Args:
+            outdir (str): directory where the pickle or parquet files are located
+            iteration (int): iteration number
+            mode (str): mode to load the results. Default: 'parquet_load'
+            
+        Returns:
+            tuple: dataframe and path to the file
+        """
+        assert mode in ['pickle_load', 'parquet_load'], 'mode must be "pickle_load" or "parquet_load"'
         if mode == 'pickle_load': 
             df_path = os.path.join(outdir, '{}.pickle'.format(iteration))
             df = pd.read_pickle(df_path)   

@@ -86,6 +86,14 @@ class CurrentAnalysis:
         self._compute_current_arrays()
 
     def _get_current_by_rv(self, rv):
+        """Get the section current by the range variable name.
+        
+        Args:
+            rv (str): The range variable name.
+              
+        Returns:
+            np.array: The ionic current of the section.
+        """
         try:
             if self.mode == 'dict':
                 return self.cell[rv]
@@ -97,6 +105,20 @@ class CurrentAnalysis:
             return np.array([float('nan')] * len(self.t))
 
     def _compute_current_arrays(self):
+        """Compute the ionic currents of a section.
+
+        Updates the following attributes:
+        
+        - depolarizing_currents (np.array): The depolarizing currents.
+        - hyperpolarizing_currents (np.array): The hyperpolarizing currents.
+        - depolarizing_currents_sum (np.array): The sum of the depolarizing currents.
+        - hyperpolarizing_currents_sum (np.array): The sum of the hyperpolarizing currents.
+        - net_current (np.array): The net current.
+        - depolarizing_currents_normalized (np.array): The normalized depolarizing currents.
+        - hyperpolarizing_currents_normalized (np.array): The normalized hyperpolarizing currents.
+        - voltage_trace (np.array): The voltage trace.
+        
+        """
         out_depolarizing = []
         out_hyperpolarizing = []
         for rv in self.rangeVars:

@@ -124,6 +124,10 @@ class _Strategy(object):
     """
 
     def __init__(self, name):
+        """
+        Args:
+            name (str): The name of the strategy.
+        """
         self.name = name
         self.solvers = {}
         # self.split = None
@@ -140,9 +144,30 @@ class _Strategy(object):
         self._objective_function = None
         
     def _get_score(self, x):
+        """Compute the score for the given parameters x.
+        
+        This method needs to be defined for each strategy.
+        This score will be optimized by the solver.
+        
+        Example:
+            :py:class:`~simrun.modular_reduced_model_inference.Strategy_categorizedTemporalRaisedCosine._get_score_static`,
+            which is assigned to :py:meth:`~simrun.modular_reduced_model_inference.Strategy_categorizedTemporalRaisedCosine._get_score`.
+        """
         pass
 
     def setup(self, data, DataSplitEvaluation):
+        """Setup the strategy with the given data.
+        
+        This method sets up the strategy with the given data and the DataSplitEvaluation object.
+        
+        Strategy-specific setup is performed by :py:meth:`~simrun.modular_reduced_model_inference._Strategy._setup`,
+        which is overloaded by child classes.
+        
+        Args:
+            data (dict): The data to use.
+            DataSplitEvaluation (:py:class:`~simrun.modular_reduced_model_inference.reduced_model.DataSplitEvaluation`): 
+                The DataSplitEvaluation object to use.
+        """
         if self.setup_done:
             return
         self.data = data
@@ -155,12 +180,42 @@ class _Strategy(object):
         self.setup_done = True
 
     def _setup(self):
+        """Strategy-specific setup.
+        
+        This method is overloaded by child classes to provide setup specific for the Strategy.
+        """
         pass
 
     def _get_x0(self):
+        """Get an initial guess for the learnable weights of the basis functions :math:`\mathbf{x}`.
+        
+        This method is overloaded specific to the strategy.
+        """
         pass
 
     def set_split(self, split, setup=True):
+        """Set the split for this strategy.
+        
+        Scoring is usually performed on multiple splits of the data.
+        This method assigns one such split to the strategy, so that
+        all consequent calls to :py:meth:`get_score` and :py:meth:`get_y` will use this split.
+        
+        Args:
+            split (array): An array of indices to use for the split.
+            setup (bool): Whether to setup the strategy after setting the split. Default is True.
+            
+        Returns:
+            _Strategy: The strategy object with the split set.
+            
+        Example:
+
+            >>> s = Strategy('test')
+            >>> s.get_score()
+            # returns a score for all data
+            >>> s = s.set_split(np.array([0, 1, 2]))
+            >>> s.get_score()
+            # returns a score for the data at indices 0, 1, and 2
+        """
         cupy_split = make_weakref(np.array(split))  # cupy, if cupy is there, numpy otherwise
         numpy_split = np.array(split)  # allways numpy
         self.get_score = partial(
@@ -240,7 +295,12 @@ class _Strategy(object):
     def add_solver(self, solver, setup=True):
         """Add a solver to the strategy.
         
-        
+        Args:
+            solver (:py:class:`~simrun.modular_reduced_model_inference.solver.Solver`): The solver to add.
+            setup (bool): Whether to setup the solver. Default is True.
+            
+        Returns:
+            None. Adds the solver to the strategy.
         """
         assert solver.name not in self.solvers.keys()
         self.solvers[solver.name] = solver
@@ -749,6 +809,10 @@ class Strategy_spatiotemporalRaisedCosine(_Strategy):
     @staticmethod
     def _get_score_static(convert_x, base_vectors_arrays_dict, x):
         r"""Calculate the weighted net input :math:`WNI(t)` for the given weights :math:`\mathbf{x}`.
+        
+        This is the method that calculates the cost function for the optimizer.
+        It is assigned to :py:meth:`~simrun.modular_reduced_model_inference.Strategy_spatiotemporalRaisedCosine._get_score` during
+        the setup of the strategy.
         
         This method left-multiplies the basis vectors :math:`\mathbf{f}(\tau) \cdot \mathbf{g}(z) \cdot \mathbf{D}` 
         with the learnable weights :math:`\mathbf{x}` and :math:`\mathbf{y}`.

@@ -484,15 +484,6 @@ def BPAPatt_check_relative_height(t, v_soma, v_dend, bAP_thresh=None, stim_onset
         bool: True if the ratio of bAP amplitude at soma and dendrite is greater than 1, False otherwise.
     """
     return BPAPatt(t, v_soma, bAP_thresh, stim_onset) / BPAPatt(t, v_dend, bAP_thresh, stim_onset) > 1
-def BPAPatt_check_relative_height(
-    t,
-    v_soma,
-    v_dend,
-    bAP_thresh=None,
-    stim_onset=None):
-                                  
-    return BPAPatt(t, v_soma, bAP_thresh, stim_onset) / BPAPatt(
-        t, v_dend, bAP_thresh, stim_onset) > 1
 
 
 def BPAPatt_check_1_AP(t, v_soma, thresh=None, stim_onset=None):

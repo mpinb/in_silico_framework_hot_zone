@@ -4,6 +4,7 @@ This module provides methods to run Hay's stimulus protocols, and evaluate the r
 '''
 
 import numpy as np
+import six
 from .ephys import *
 
 __author__ = 'Arco Bast'
@@ -105,7 +106,6 @@ class BAC:
         self.prefix = prefix
 
     def get(self, **voltage_traces):
-        import six
         spikecount = self.BAC_spikecount(voltage_traces)['.raw']
         out = {}
         for name, (_, mean, std) in six.iteritems(self.definitions):
@@ -114,8 +114,7 @@ class BAC:
             if spikecount == 2 and name == 'BAC_caSpike_width':
                 mean = mean - 7.
             out_current = getattr(self, name)(voltage_traces)
-            out_current['.normalized'] = normalize(out_current['.raw'], mean,
-                                                   std)
+            out_current['.normalized'] = normalize(out_current['.raw'], mean, std)
             checks = [v for k, v in six.iteritems(out_current) if 'check' in k]
             if all(checks):
                 out_current[''] = out_current['.normalized']

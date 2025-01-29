@@ -13,9 +13,10 @@ from data_base import utils as db_utils
 from collections import defaultdict
 import tempfile
 import matplotlib.pyplot as plt
+import six
 from IPython import display
 import seaborn as sns
-from data_base.analyze.spike_detection import spike_in_interval as mdb_analyze_spike_in_interval
+from data_base.analyze.spike_detection import spike_in_interval as db_analyze_spike_in_interval
 from data_base.analyze.temporal_binning import universal as temporal_binning
 from visualize import histogram
 import logging
@@ -35,7 +36,7 @@ def read_smr_file(path):
         path (str): Absolute path to the Spike2 file.
 
     Returns:
-        neo.core.block.Block: A neo.core.block.Block object containing the content of the Spike2 file.
+        :py:class:`neo.core.block.Block`: A :py:class:`~neo.core.block.Block` object containing the content of the Spike2 file.
     """
     # copying file to tmp_folder to avoid modifying it at all cost
     dest_folder = tempfile.mkdtemp()
@@ -596,7 +597,6 @@ def strip_st(st):
     return st[[c for c in st.columns if db_utils.convertible_to_int(c)]]
 
 
-import pandas as pd
 
 def get_spike_times_from_row(row):
     """Returns a list containing all non-NaN elements in the given pandas Series.
@@ -615,24 +615,6 @@ def get_spike_times_from_row(row):
 
 class SpikeDetectionCreastTrough(object):
     '''Detects spikes by creast and trough amplitude.
-    
-    Args:
-        reader_object (:py:class:`~spike_analysis.core.ReaderSmr`|:py:class:`~spike_analysis.core.LabViewReader`): 
-            Reader object with get_voltage_traces and get_stim_times method, e.g. ReaderSmr
-        lim_creast (float|str) 
-            threshold above which a creast of a spike is detected as such. 
-            Needs to be float, ``"minimum"``, or ``"zero"``. 
-            If "minimum" or "zero" is chosen, the threashold will be set based on the histogram of all creasts. 
-            If "minimum" is chosen, :paramref:`lim_creast` will be set to the first minimum in the histogram above or equal to :math:`0.4mV`. 
-            If "zero" is chosen, :paramref:`lim_creast` will be set to the first empty bin.
-        lim_trough (float|str) as :paramref:`lim_creast`. If float is specified, you probably 
-            want to use a negative value. lim creast and lim_trough need to be both floats, both 
-            "zero" or both "minimum".
-        max_creast_trough_interval (float): Maximum interval between creast and trough such that a spike is recognized.
-        tdelta (float): minimum interval between spikes
-        stimulus_period (int): number of stimuli applied per trial. E.g., for paired pulse stimuli, it should be 2.
-        stimulus_period_offse (int): Number of stimulus that initiates first trial.
-        cellid (str): name to be used in spike times dataframe
     
     Attributes:
         lim_creast (float|str): lim_creast used for spike detection (if "minimum" or "zero" was defined, this will be the numeric value used)
@@ -654,6 +636,25 @@ class SpikeDetectionCreastTrough(object):
                  upper_creast_threshold=np.inf,
                  cellid='__no_cellid_assigned__',
                  spike_time_mode='latest'):
+        """
+        Args:
+            reader_object (:py:class:`~spike_analysis.core.ReaderSmr`|:py:class:`~spike_analysis.core.LabViewReader`): 
+                Reader object with get_voltage_traces and get_stim_times method, e.g. ReaderSmr
+            lim_creast (float|str) 
+                threshold above which a creast of a spike is detected as such. 
+                Needs to be float, ``"minimum"``, or ``"zero"``. 
+                If "minimum" or "zero" is chosen, the threashold will be set based on the histogram of all creasts. 
+                If "minimum" is chosen, :paramref:`lim_creast` will be set to the first minimum in the histogram above or equal to :math:`0.4mV`. 
+                If "zero" is chosen, :paramref:`lim_creast` will be set to the first empty bin.
+            lim_trough (float|str) as :paramref:`lim_creast`. If float is specified, you probably 
+                want to use a negative value. lim creast and lim_trough need to be both floats, both 
+                "zero" or both "minimum".
+            max_creast_trough_interval (float): Maximum interval between creast and trough such that a spike is recognized.
+            tdelta (float): minimum interval between spikes
+            stimulus_period (int): number of stimuli applied per trial. E.g., for paired pulse stimuli, it should be 2.
+            stimulus_period_offse (int): Number of stimulus that initiates first trial.
+            cellid (str): name to be used in spike times dataframe
+        """
         self.reader = reader_object
         self.stimulus_period = stimulus_period
         self.stimulus_period_offset = stimulus_period_offset
@@ -1507,6 +1508,7 @@ class STAPlugin_extract_column_in_filtered_dataframe(STAPlugin_TEMPLATE):
         
     See also:
         :py:class:`spike_analysis.core.SpikeTimesAnalysis` reads in :paramref:`source`.
+
     See also:
         :py:meth:`data_base.utils.select` filters out the columns using :paramref:`select`
         
@@ -1599,6 +1601,7 @@ class STAPlugin_response_probability_in_period(STAPlugin_TEMPLATE):
         
     Attributes:
         name (str): The name of the plugin. Defaults to 'frequency_in_period'.
+        _by_trial (:py:class:`numpy.ndarray`): Whether there are any spikes in this trial.
     """
     def __init__(
         self,
@@ -1648,6 +1651,7 @@ class STAPlugin_response_latency_in_period(STAPlugin_TEMPLATE):
  
     Attributes:
         name (str): The name of the plugin. Defaults to 'frequency_in_period'.
+        _by_trial (:py:class:`numpy.ndarray`): The median response latency by trial.
     """
     def __init__(
         self,
@@ -1770,13 +1774,28 @@ class SpikeTimesAnalysis:
             return self._db[key]
 
     def get_by_trial(self, key):
+        """Get spike information by trial.
+        
+        Assumes the key refers to an STAPlugin that contains the attribute ``_by_trial``.
+        
+        Args:
+            key (str): The name of the event analysis routine, referring to an STAPlugin.
+        
+        Example:
+            :py:class:`~spike_analysis.core.STAPlugin_response_probability_in_period` and
+            :py:class:`~spike_analysis.core.STAPlugin_response_latency_in_period` have this attribute.
+        """
         return self._db[key]._by_trial
 
 
-import six
 
 
 def get_interval(interval_dict, t):
+    """:skip-doc:
+    
+    used in :py:class:`~spike_analysis.core.VisualizeEventAnalysis`, which
+    seems deprecated?
+    """
     for i, v in six.iteritems(interval_dict):
         if (t >= v[0]) and (t < v[1]):
             return i

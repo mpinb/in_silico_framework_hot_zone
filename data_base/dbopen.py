@@ -14,7 +14,8 @@ def cache(function):
     Returns:
         callable: The cached function.
         
-    Example::
+    Example:
+    
         >>> cache(my_function)(*args, **kwargs)
     """
     import hashlib
@@ -41,7 +42,7 @@ def cache(function):
 def resolve_db_path(path):
     """Resolve the path of a database.
     
-    Resolve a path of the form db://<unique_id>/<managed_folder>/<file> to
+    Resolve a path of the form ``db://<unique_id>/<managed_folder>/<file>`` to
     the absolute path of the file on the current filesystem.
     
     Args:
@@ -80,7 +81,7 @@ def resolve_db_path(path):
 def create_db_path(path):
     """Create a database path from a given path.
     
-    Database paths are of the form 'db://<unique_id>/<key>/<subfolder>'.
+    Database paths are of the form ``db://<unique_id>/<key>/<subfolder>``.
     The point of these paths is to be independent of their location on the hard drive,
     and can thus be transferred to other file systems, and resolved afterwards using the database registry.
     
@@ -141,8 +142,10 @@ class dbopen:
     However, for development and testing purposes, it may be of use to explicitly open these files.
     
     Example:
+    
         >>> with dbopen('db://my_db/my_key') as f:
         ...     print(f.read())
+        # dumps the raw file content - not recommended for e.g. binary formats
         
     Attributes:
         path (str): The path to the file.
@@ -150,6 +153,11 @@ class dbopen:
         exit_hooks (list): A list of functions to be called when the context manager is exited. Used to close ``.tar`` files
     '''
     def __init__(self, path, mode='r'):
+        """
+        Args:
+            path (str): The path to the file.
+            mode (str): The mode in which the file is opened. Default: 'r'
+        """
         self.path = path
         self.mode = mode
         self.exit_hooks = []
@@ -182,6 +190,12 @@ class taropen:
         mode (str): The mode in which the file is opened.
         tar_levels (list): A list of indices denoting the ``.tar`` hierarchy.
         open_files (list): A list of open files.
+        
+        
+    Attention:
+        This seems to be not fully implemented: the ``open()`` method has undefined attributes.
+    
+    :skip-doc:
     '''
 
     def __init__(self, path, mode='r'):

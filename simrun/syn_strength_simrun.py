@@ -1,4 +1,10 @@
 '''
+.. deprecated:: 0.1
+    This module is deprecated and will be removed in a future release.
+    It is kept around for reference, but all of this functionality is now
+    handled by the :mod:`simrun.syn_strength_fitting` module.
+
+:skip-doc:
 '''
 
 import sys
@@ -9,6 +15,7 @@ import neuron
 import single_cell_parser as scp
 import single_cell_parser.analyze as sca
 import matplotlib
+from config.isf_logging import logger
 
 matplotlib.use('agg')
 import matplotlib.pyplot as plt
@@ -18,6 +25,8 @@ h = neuron.h
 
 __author__ = 'Robert Egger'
 __date__ = '2012-08-06'
+
+logger.warning('Deprecation warning: This module is deprecated and will be removed in a future release.')
 
 
 def unitary_connections(modelName,

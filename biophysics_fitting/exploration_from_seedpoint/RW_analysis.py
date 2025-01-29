@@ -1,6 +1,7 @@
 """
-This module provides code to analyze the results of a random walk exploration through biophysical parameter space.
-See :py:mod:`~biophysics_fitting.exploration_from_seedpoint.RW` for more information.
+This module provides routines to analyze the results of a random walk exploration through biophysical parameter space.
+See also:
+    :py:mod:`~biophysics_fitting.exploration_from_seedpoint.RW`
 """
 
 import Interface as I
@@ -87,6 +88,11 @@ def read_pickle(seed_folder, particle_id):
 def read_all(basedir, n_particles_start = 0, n_particles_end = 1000):
     """
     Read the results of all directories contained within some base directory, independent of which seepdoint or particle.
+    
+    Args:
+        basedir (str): the base directory containing the results of the RW exploration.
+        n_particles_start (int): the first particle to read
+        n_particles_end (int): the last particle to read
     """
     fun = I.dask.delayed(read_pickle)
     ds = [fun(basedir, i) for i in range(n_particles_start, n_particles_end)]
@@ -96,7 +102,8 @@ def read_all(basedir, n_particles_start = 0, n_particles_end = 1000):
 class Load:
     """Class for efficiently loading exploration results
     
-    Uses DASK to parallellize loading in large datasets."""
+    Uses dask to parallellize loading in large datasets.
+    """
 
     def __init__(self, client, path, n_particles=1000):
         self.path = path
@@ -107,11 +114,16 @@ class Load:
         self.df = None
 
     def get_df(self):
+        """Get the exploration results as a pandas dataframe."""
         if self.df is None:
             self.df = I.dask.dataframe.from_delayed(self.futures)
         return self.df
 
     def get_futures(self):
+        """Get the futures of the delayed computations.
+        
+        Useful to check the progress of distributed loading.
+        """
         return self.futures
 
 

@@ -14,13 +14,20 @@ html_template = 'animation_template.html'
 
 
 def find_nearest(array, value):
-    'https://stackoverflow.com/questions/2566412/find-nearest-value-in-numpy-array'
+    """Finds the index of the value in the array that is closest to the value specified in the arguments
+    
+    See also:
+        https://stackoverflow.com/questions/2566412/find-nearest-value-in-numpy-array
+        
+    :skip-doc:
+    """
     array = np.asarray(array)
     idx = (np.abs(array - value)).argmin()
     return idx
 
 
 def get_default_axis(range_var):
+    """:skip-doc:"""
     if range_var == 'Vm':
         return (0, 1600), (-80, 0)
     if range_var == 'Ih.gIh':
@@ -36,11 +43,25 @@ def get_default_axis(range_var):
 
 
 def _load_base64(filename, extension='png'):
-    #https://github.com/jakevdp/JSAnimation/blob/master/JSAnimation/html_writer.py
+    """Load a file and encode it in base64.
+    
+    This is used to load images and embed them in an html file, such as Jupyter notebooks.
+    
+    Args:
+        filename (str): path to file
+        extension (str): the file extension. Default: 'png'
+        
+    Returns:
+        str: base64 encoded string
+    
+    See also:
+        https://github.com/jakevdp/JSAnimation/blob/master/JSAnimation/html_writer.py
+    """
     with open(filename, 'rb') as f:
         data = f.read()
-    return 'data:image/{0};base64,{1}'.format(extension,
-                                              b64encode(data).decode('ascii'))
+    return 'data:image/{0};base64,{1}'.format(
+        extension,
+        b64encode(data).decode('ascii'))
 
 
 def display_animation(
@@ -102,6 +123,7 @@ def find_closest_index(list_, value):
 
 
 def get_synapse_points(cell, n):
+    """:skip-doc:"""
     pass
 
 
