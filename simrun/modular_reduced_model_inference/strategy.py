@@ -613,8 +613,8 @@ class Strategy_spatiotemporalRaisedCosine(_Strategy):
         - ``ISI``: The inter-spike intervals.
 
     Attributes:
-        RaisedCosineBasis_spatial (RaisedCosineBasis): The spatial basis functions :math:`\mathbf{g}_z`.
-        RaisedCosineBasis_temporal (RaisedCosineBasis): The temporal basis functions :math:`\mathbf{f}_t`.
+        RaisedCosineBasis_spatial (RaisedCosineBasis): The spatial basis functions :math:`\mathbf{g}(z)`.
+        RaisedCosineBasis_temporal (RaisedCosineBasis): The temporal basis functions :math:`\mathbf{f}(t)`.
         base_vectors_arrays_dict (dict): 
             The basis vectors for each group. basis vectors are of shape (n_trials, N_{\tau}, N_{z})
             These basis vectors are used for the optimizer, and are already multiplied with the data.
@@ -632,8 +632,8 @@ class Strategy_spatiotemporalRaisedCosine(_Strategy):
         """
         Args:
             name (str): The name of the strategy.
-            RaisedCosineBasis_spatial (RaisedCosineBasis): The spatial basis functions :math:`\mathbf{g}_z`.
-            RaisedCosineBasis_temporal (RaisedCosineBasis): The temporal basis :math:`\mathbf{f}_t`.
+            RaisedCosineBasis_spatial (RaisedCosineBasis): The spatial basis functions :math:`\mathbf{g}(z)`.
+            RaisedCosineBasis_temporal (RaisedCosineBasis): The temporal basis :math:`\mathbf{f}(t)`.
         """
         super(Strategy_spatiotemporalRaisedCosine, self).__init__(name)
         self.RaisedCosineBasis_spatial = RaisedCosineBasis_spatial
@@ -651,13 +651,13 @@ class Strategy_spatiotemporalRaisedCosine(_Strategy):
     def compute_basis(self):
         r'''Compute the basis vectors for the dataset.
         
-        These basis vectors are defined as :math:`\mathbf{f}_t \cdot \mathbf{g}_z \cdot \mathbf{D}`.
+        These basis vectors are defined as :math:`\mathbf{f}(t) \cdot \mathbf{g}(z) \cdot \mathbf{D}`.
         When these basis vectors are weighed, they form the argument of the integral over the domain.
         Once integrated over the domain, they yield the weighted net input.
         
         .. math::
 
-            WNI(t) = \int_{t-width}^{t} \int_z \mathbf{w}_{\tau}(\tau) \cdot \mathbf{w}_{z}(z) \cdot \mathbf{D} = \int_{t-width}^{t} \int_z \mathbf{x} \cdot \mathbf{y} \cdot \mathbf{f}_t \cdot \mathbf{g}_z \cdot \mathbf{D}
+            WNI(t) = \int_{t-width}^{t} \int_z \mathbf{w}_{\tau}(\tau) \cdot \mathbf{w}_{z}(z) \cdot \mathbf{D} = \int_{t-width}^{t} \int_z \mathbf{x} \cdot \mathbf{y} \cdot \mathbf{f}(t) \cdot \mathbf{g}(z) \cdot \mathbf{D}
         
         Attention:
             These are not the same basis vectors as in :py:class:`RaisedCosineBasis`.
@@ -666,16 +666,16 @@ class Strategy_spatiotemporalRaisedCosine(_Strategy):
             the weighted net input, but these intermediate basis vectors are different.
             
         Returns:
-            dict: A dictionary of basis vectors for each group. basis vectors are of shape :math:`(n_trials, dim(\mathbf{f}(\tau)), dim(\mathbf{g}_z))`.
+            dict: A dictionary of basis vectors for each group. basis vectors are of shape :math:`(n_trials, dim(\mathbf{f}(\tau)), dim(\mathbf{g}(z)))`.
         '''
         
         def _compute_base_vector_array(spatiotemp_SA):
             r"""
             Args:
-                spatiotemp_SA (array): The spatiotemporal synaptic activation patterns of shape :math:`(n_trials, dim(\mathbf{f}(\tau)), dim(\mathbf{g}_z))`.
+                spatiotemp_SA (array): The spatiotemporal synaptic activation patterns of shape :math:`(n_trials, dim(\mathbf{f}(\tau)), dim(\mathbf{g}(z)))`.
                 
             Returns:
-                array: The basis vector array of shape :math:`(n_trials, dim(\mathbf{f}(\tau)), dim(\mathbf{g}_z))`.
+                array: The basis vector array of shape :math:`(n_trials, dim(\mathbf{f}(\tau)), dim(\mathbf{g}(z)))`.
             """
             _, time_domain, space_domain = spatiotemp_SA.shape
             self.RaisedCosineBasis_spatial.compute(space_domain)
@@ -697,7 +697,7 @@ class Strategy_spatiotemporalRaisedCosine(_Strategy):
         self.base_vectors_arrays_dict = base_vectors_arrays_dict
 
     def _get_x0(self):
-        r"""Get an initial guess for the learnable weights  :math:`\mathbf{x}` and :math:`\mathbf{y}` of the basis functions :math:`\mathbf{f}(\tau)` and :math:`\mathbf{g}_z`.
+        r"""Get an initial guess for the learnable weights  :math:`\mathbf{x}` and :math:`\mathbf{y}` of the basis functions :math:`\mathbf{f}(\tau)` and :math:`\mathbf{g}(z)`.
         
         Returns:
             np.array: An array of random values in the range :math:`[-1, 1)`, with the same length as the basis parameters.

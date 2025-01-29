@@ -65,9 +65,6 @@ class Combiner:
     def combine(self, features):
         '''Combines features that are computed by an Evaluator class.
         
-        Details, how to set up the Combiner are in the docstring of
-        the Combiner class.
-        
         Args:
             features (list): A list of features to be combined.
             
