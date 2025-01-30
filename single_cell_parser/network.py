@@ -407,7 +407,7 @@ class NetworkMapper:
         
         Network parameters contains information on how many presynaptic cells per synapse type there are.
         This method simply creates these cells as :py:class:`~single_cell_parser.cell.PointCell`s, but provides no further configuration
-        to these :py:class:`~single_cell_parser.cell.PointCell`s.
+        to these :py:class:`~single_cell_parser.cell.PointCell` objects.
         '''
         # Check if new cells need to be constructed
         createCells = False
@@ -909,7 +909,7 @@ class NetworkMapper:
     def _create_functional_connectivity_map(self):
         '''Connect functional anatomical synapses based on ``convergence``.
          
-        Synapses are connected here to spike generators (:py:class:`~PointCell`s) according to physiological
+        Synapses are connected here to spike generators (:py:class:`~PointCell` objects) according to physiological
         and/or anatomical constraints on connectivity (i.e., convergence of presynaptic cell type).
         Used to create fixed functional realization.
         Used in :py:meth:`~create_functional_realization`
@@ -1041,7 +1041,7 @@ class NetworkMapper:
         the presynaptic cells have been created in :py:meth:`_create_presyn_cells` (step 2),
         and their activity should have been generated in :py:meth:`_activate_presyn_cells` (step 3).
         
-        Assigns synapse weights using :py:meth:`~_assign_synapse_weights`and connect synapses to presynaptic cells with defined activity.
+        Assigns synapse weights using :py:meth:`~_assign_synapse_weights` and connect synapses to presynaptic cells with defined activity.
         
         Args:
             weights (dict): Weights for each synapse type.

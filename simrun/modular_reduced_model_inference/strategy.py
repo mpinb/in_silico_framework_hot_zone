@@ -6,13 +6,12 @@ Solvers then optimize these cost functions to find the best parameters :math:`x`
 
 This approach is purposefully kept very general, so that it can be used for a wide range of purposes.
 
-One such example is given in :citet:`Bast_Fruengel_Kock_Oberlaender_2024`.
+One such example is given in :cite:t:`Bast_Fruengel_Kock_Oberlaender_2024`.
 Here, the strategy contains a set of raised cosine basis functions.
 These are weighed and superimposed to create spatiotemporal filters. 
 Once multiplied with synaptic activation data, they provided a weighed input of synapse activations.
 This is then used to predict the spike probability based on the synaptic activation patterns.
 The parameters that are being optimized are the weights of the raised cosine basis functions.
-
 
 """
 
@@ -663,7 +662,9 @@ class Strategy_ISIraisedCosine(_Strategy):
 
 
 class Strategy_spatiotemporalRaisedCosine(_Strategy):
-    r'''
+    r'''Spatiotemporal raised cosine strategy.
+    
+    Uses the :py:class:``RaisedCosineBasis`` to create a set of basis functions.
     
     Attention:
         The input data must contain the following keys:

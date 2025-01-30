@@ -2,7 +2,7 @@
 
 This module provides a function to rebuild a network-embedded neuron model from 
 a :py:class:`~data_base.data_base.DataBase`. it also allows to change the :ref:`cell_parameters_format`, 
-:ref:`network_parameters_format`, and :ref:`synapse_activation_format` data before resimulating the trial.
+:ref:`network_parameters_format`, and :ref:`syn_activation_format` data before resimulating the trial.
 
 See also:
     To rebuild and re-simulate a :py:mod:`simrun` simulation from parameter files instead of a :py:class:`~data_base.data_base.DataBase`, 
@@ -54,7 +54,7 @@ def synapse_activation_df_to_roberts_synapse_activation(sa):
     :skip-doc:
     
     Args:
-        sa (pd.DataFrame): A :ref:`synapse_activation_format` dataframe.
+        sa (pd.DataFrame): A :ref:`syn_activation_format` dataframe.
         
     Returns:
         dict: A dictionary of synapse activations.
@@ -200,7 +200,7 @@ def trial_to_cell_object(
         cellName (str): Name of the :ref:`cell_parameters_format` file.
         networkName (str): Name of the :ref:`network_parameters_format` file.
         synapse_activation_file (str | pandas.DataFrame): 
-            Path to the :ref:`synapse_activation_format` file or 
+            Path to the :ref:`syn_activation_format` file or 
             a pandas DataFrame containing the synapse activation data.
         range_vars (str | list): Range variables to record.
         scale_apical (callable, DEPRECATED): Function to scale the apical dendrites.

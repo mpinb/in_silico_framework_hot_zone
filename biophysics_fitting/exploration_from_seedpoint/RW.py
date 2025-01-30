@@ -64,11 +64,12 @@ class RW:
             df_seeds (pd.DataFrame): individual seed points as rows and the parameters as columns
             param_ranges (pd.DataFrame): parameters as rows and has a ``min_`` and ``max_`` column denoting range of values this parameter may take
             params_to_explore (list): list of parameters that should be explored. If None, all parameters are explored.
-            evaluation_function (callable): takes one argument (a new parameter vector), returns inside, evaluation:
-                    - inside: boolean that indicates if the parameter vector is within experimental constraits
-                        (i.e. results in acceptable physiology) or not. 
-                    - evaluation: dictionary that will be saved alongside the parameters. For example, this should contain
-                        ephys features.
+            evaluation_function (Callable): 
+                takes one argument (a new parameter vector) and returns:
+
+                - inside: boolean that indicates if the parameter vector is within experimental constraits (i.e. results in acceptable physiology) or not. 
+                - evaluation: dictionary that will be saved alongside the parameters. For example, this should contain ephys features.
+
             checkpoint_every (int): save the results every n iterations
             check_point_by_time (float): time interval in minutes for checkpointing for using time-based checkpointing. If both
                 checkpoint_every and checkpoint_by_time are set, checkpointing will be done by time.

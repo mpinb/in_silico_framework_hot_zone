@@ -19,8 +19,8 @@ def histogram(
     
     Supports groups: simply pass a Series of the format::
     
-    labelA: (bins,hist)
-    labelB: (bins,hist)
+        labelA: (bins,hist)
+        labelB: (bins,hist)
     
     In this case, the label attribute has no function (to be precise: it is overwritten by the decorator subsequent_calls_per_line)
     

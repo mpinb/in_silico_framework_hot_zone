@@ -45,8 +45,8 @@ class Cell(object):
         soma (:py:class:`~single_cell_parser.cell.PySection`): The soma section of the cell.
         tree (neuron.h.SectionList): NEURON SectionList containing all sections of the cell.
         branches (dict): maps the section ID (str) of the root section of each dendritic subtree to its corresponding section list (neuron.h.SectionList).
-        structures (dict): All sections, aggregated by label (e.g. Dendrite, ApicalDendrite, ApicalTuft, Myelin...). Keys are labels (str), values are lists of :py:class:`~single_cell_parser.cell.PySection`s.
-        sections (list): List of all :py:class:`~single_cell_parser.cell.PySection`s. sections[0] is the soma. Each section contains recorded data (if any was recorded, e.g. membrane voltage): a 2D array where axis 0 is segment number, and axis 1 is time.
+        structures (dict): All sections, aggregated by label (e.g. Dendrite, ApicalDendrite, ApicalTuft, Myelin...). Keys are labels (str), values are lists of :py:class:`~single_cell_parser.cell.PySection` objects.
+        sections (list): List of all :py:class:`~single_cell_parser.cell.PySection` objects. sections[0] is the soma. Each section contains recorded data (if any was recorded, e.g. membrane voltage): a 2D array where axis 0 is segment number, and axis 1 is time.
         synapses (dict): a dictionary of lists of :py:class:`single_cell_parser.synapse.Synapse` objects
         E (float): Default resting membrane potential. Defaults to -70.0
         changeSynParamDict (dict): dictionary of network parameter sets with keys corresponding to time points. Allows automatic update of parameter sets according to their relative timing.
@@ -735,7 +735,7 @@ class PySection(nrn.Section):
     def _re_init_vm_recording(self):
         '''Reinitialize votage recordings
         
-        Resizes the :py:class:`nrn.h.Vector`s to 0 to avoid NEURON segfaults
+        Resizes the :py:class:`nrn.h.Vector` objects to 0 to avoid NEURON segfaults
         '''
         for vec in self.recVList:
             vec.resize(0)
@@ -743,7 +743,7 @@ class PySection(nrn.Section):
     def _re_init_range_var_recording(self):
         '''Re-initialize the range mechanism recordings.
         
-        Resizes the :py:class:`nrn.h.Vector`s to 0 to avoid NEURON segfaults
+        Resizes the :py:class:`nrn.h.Vector` objects to 0 to avoid NEURON segfaults
         '''
         for key in list(self.recordVars.keys()):
             for vec in self.recordVars[key]:

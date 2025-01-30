@@ -90,18 +90,18 @@ def _kernel_preprocess_data(
     
     Args:
         db_list (list): List of data_base instances
-        keys_to_synapse_activation_data (list): List of keys to the :ref:`synapse_activation_format` data
-        synapse_acivation_window_min (int): Start of the :ref:`synapse_activation_format` data window
-        synapse_activation_window_max (int): End of the :ref:`synapse_activation_format` window
+        keys_to_synapse_activation_data (list): List of keys to the :ref:`syn_activation_format` data
+        synapse_acivation_window_min (int): Start of the :ref:`syn_activation_format` data window
+        synapse_activation_window_max (int): End of the :ref:`syn_activation_format` window
         output_window_min (int): Start of the output window
         output_window_max (int): End of the output window
-        aggfun (function): Function to aggregate :ref:`synapse_activation_format` data. If None, the data is concatenated.
+        aggfun (function): Function to aggregate :ref:`syn_activation_format` data. If None, the data is concatenated.
 
     
     Returns:
         tuple: 4D tuple containing:
         
-            - 2D matrix (synapse x time) of :ref:`synapse_activation_format` data for all included databases.
+            - 2D matrix (synapse x time) of :ref:`syn_activation_format` data for all included databases.
             - Dictionary mapping synapse activation keys to the boundaries of the concatenated data
             - 1D array of spike times, truncated to the output window
             - 1D array of all spike times
@@ -300,7 +300,7 @@ class ReducedLdaModel():
         """
         Args:
             keys_to_synapse_activation_data (list): 
-                List of keys to the :ref:`synapse_activation_format` data for each simrun-inited database that will be used to fit the model.
+                List of keys to the :ref:`syn_activation_format` data for each simrun-inited database that will be used to fit the model.
             synapse_activation_window_width (int): Width of the synapse activation window. Default is 80.
             synapse_activation_window_min (int): Start of the synapse activation window. Default is None.
             synapse_activation_window_max (int): End of the synapse activation window. Default is None.

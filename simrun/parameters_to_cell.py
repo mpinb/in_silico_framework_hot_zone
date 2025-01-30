@@ -41,13 +41,13 @@ def parameters_to_cell(
     evokedNW = None):
     """Rebuild and simulate a network-embedded cell.
     
-    Rebuild the cell from a :ref:`cell_params_format` file.
+    Rebuild the cell from a :ref:`cell_parameters_format` file.
     If specified, the synapses in the :ref:`syn_file_format` file are reconnected and simulated according to the
     parameters defined in the :ref:`network_parameters_format` file. If no :ref:`syn_file_format` file is provided,
     a new network embedding is created based on the :ref:`network_parameters_format` file.
     
     Args:
-        neuronParam (str): Path to :ref:`cell_params_format` file. 
+        neuronParam (str): Path to :ref:`cell_parameters_format` file. 
         networkParam (str): Path to :ref:`network_parameters_format` file.
         synfile (str): Path to the realized synapses in :ref:`syn_file_format` format.
         dirPrefix (str): Prefix for the directory where the results are stored.
@@ -60,7 +60,7 @@ def parameters_to_cell(
         
     .. deprecated:: 0.1
         The `scale_apical` argument is deprecated. 
-        Use the `cell_modify_funs` key in the :ref:`cell_params_format` file instead.
+        Use the `cell_modify_funs` key in the :ref:`cell_parameters_format` file instead.
         
     Returns:
         tuple: A tuple containing the :py:class:`~single_cell_parser.cell.Cell` and the evoked network (:py:class:`~single_cell_parser.network.Networkmapper`).

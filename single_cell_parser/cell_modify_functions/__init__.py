@@ -9,7 +9,8 @@ functions, and the values are the keyword arguments as a dictionary.
 See also:
     The :ref:`cell_parameters_format` file format.
 
-Example:
+Example::
+
     >>> cell_parameters.neuron.cell_modify_functions
     {'scale_apical': {'scale': 1.5}}
     >>> from single_cell_parser.cell_modify_functions import get

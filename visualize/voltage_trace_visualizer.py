@@ -3,7 +3,7 @@
 this module provides convenience methods to visualize the voltage traces of all stimuli run by a
 :py:class:`~biophysics_fitting.simulator.Simulator` object.
 
-.. figure:: /docs/_static/_images/voltage_traces.png
+.. figure:: ../../_static/_images/voltage_traces.png
 
    Example voltage traces from the Hay stimulus protocols (:cite:`Hay_Hill_Schuermann_Markram_Segev_2011`).
    The top row show the :py:class:`~biophysics_fitting.hay_evaluation_python.BAC` and :py:class:`~biophysics_fitting.hay_evaluation_python.bAP` stimuli.

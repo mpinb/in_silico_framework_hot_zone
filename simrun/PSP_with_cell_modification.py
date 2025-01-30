@@ -147,7 +147,7 @@ class PSP_with_current_injection:
         I.display.display(I.plt.gcf())
 
     def get_neuron_param_with_current_injection(self):
-        '''Get a :ref:`cell_params_format` file with a current injection.
+        '''Get a :ref:`cell_parameters_format` file with a current injection.
         
         The current injection is set up such that the potential :paramref:`target_vm` is reached at the timepoint :paramref:`optimize_for_timepoint`
         '''

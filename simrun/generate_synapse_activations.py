@@ -1,7 +1,7 @@
 '''
 Generate synapse activation files.
 
-This module creates :ref:`synapse_activation_format` files based on the parameters in 
+This module creates :ref:`syn_activation_format` files based on the parameters in 
 the :ref:`cell_parameters_format` and :ref:`network_parameters_format` files, but does not keep track of what happens
 with the postsynaptic neuron during these activations.
 
@@ -9,8 +9,8 @@ The usecase of generating these synapse activations without actually saving or k
 for the purpose of analyzing the synapse activations and presynaptic spike times. It allows for modularity between the steps of creating 
 synapse activations and simulating their effect on the postsynaptic neuron.
 
-These :ref:`synapse_activation_format` files can afterwards be used to re-run simulations afterwards with the :py:mod:`simrun.run_existing_synapse_activations` module.
-To generate :ref:`synapse_activation_format` files **and** simulate the effect on the postsynaptic neuron model in one go, use the :py:mod:`simrun.run_new_simulations` module instead.
+These :ref:`syn_activation_format` files can afterwards be used to re-run simulations afterwards with the :py:mod:`simrun.run_existing_synapse_activations` module.
+To generate :ref:`syn_activation_format` files **and** simulate the effect on the postsynaptic neuron model in one go, use the :py:mod:`simrun.run_new_simulations` module instead.
 
 .. hint::
    If the postsynaptic neuron is not simulated, why does this module need the :ref:`cell_parameters_file`?

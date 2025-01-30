@@ -4,7 +4,7 @@
      {%- if sig -%}
        \ (
        {%- for arg in obj.obj.args -%}
-          {%- if arg[0] %}{{ arg[0]|replace('*', '\*') }}{% endif -%}{{  arg[1] -}}
+          {%- if arg[0] %}{{ arg[0] | replace("_", "\_") | replace('*', '\*') }}{% endif -%}{{  arg[1] -}}
           {%- if not loop.last  %}, {% endif -%}
        {%- endfor -%}
        ){%- endif -%}

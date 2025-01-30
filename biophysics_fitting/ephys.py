@@ -289,25 +289,6 @@ def AP_height(t, v, thresh=None):
 
 def AP_width(t, v, thresh):
     """
-    Calculates the action potential (AP) width of a given voltage trace `v` with respect to a given threshold `thresh`.
-    
-    Args:
-        t (numpy.ndarray): Array of time values corresponding to the voltage trace `v`.
-        v (numpy.ndarray): Array of voltage values.
-        thresh (float): Threshold voltage value for detecting AP onset and offset.
-        
-    Returns:
-        numpy.ndarray: Array of AP widths (in seconds) for each detected AP in the voltage trace `v`.
-    """
-    w = [t[tk] - t[ti] for ti, tk in zip(*find_crossing(v, thresh))]
-    return np.array(w)
-
-
-AP_width_check_1AP = AP_height_check_1AP
-
-
-def AP_width(t, v, thresh):
-    """
     Calculates the action potential (AP) width given the time and voltage arrays and a threshold value.
 
     Args:
@@ -320,7 +301,6 @@ def AP_width(t, v, thresh):
     """
     w = [t[tk] - t[ti] for ti, tk in zip(*find_crossing(v, thresh))]
     return np.array(w)
-
 
 AP_width_check_1AP = AP_height_check_1AP
 

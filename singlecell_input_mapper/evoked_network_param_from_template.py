@@ -555,7 +555,7 @@ def whisker_evoked_PSTH(
     and parses it. These existing data files are set as global variables in this runfile. For other activity data, adapt these file names.
     
     The data linked in this runfile are for experiments where the C2 whisker was deflected.
-    For situations where other :paramref:`deflectedwhisker`s are requested, activity data of equivalent
+    For situations where other :paramref:`deflectedwhisker` are requested, activity data of equivalent
     columns relative to the C2 is requested.
     
     Example:

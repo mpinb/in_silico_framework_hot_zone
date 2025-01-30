@@ -4,7 +4,6 @@
 {%- set shortname = obj.id.split('.')[-1] | escape %}
 
 {% if obj.display %}
-.. backlink:
 {% if breadcrumb %}
 :mod:`{{ root_module }}`
 {%- for n in range(breadcrumb|length )  %}
