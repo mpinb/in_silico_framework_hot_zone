@@ -1,3 +1,15 @@
+"""Rebuild and re-simulate a network-embedded cell from parameter files.
+
+This module provides a function to rebuild a network-embedded neuron model from 
+:ref:`cell_parameters_format` and :ref:`network_parameters_format`. 
+The function also reconnects synapses from a :ref:`syn_file_format` file and simulate the network.
+
+See also:
+    To rebuild and re-simulate a :py:mod:`simrun` simulation from a :py:class:`~data_base.data_base.DataBase` instead of parameter files, 
+    please refer to :py:mod:`~simrun.sim_trial_to_cell_object` instead
+"""
+
+
 from __future__ import absolute_import
 from ._matplotlib_import import *
 import sys

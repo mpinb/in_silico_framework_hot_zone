@@ -9,7 +9,8 @@
 import numpy as np
 from data_base.utils import convertible_to_int
 from collections import defaultdict
-from config.isf_logging import logger
+from config.isf_logging import logger as isf_logger
+logger = isf_logger.getChild(__name__)
 
 logger.warning('Deprecation warning: This module is deprecated and will be removed in a future release.')
 

@@ -1,3 +1,28 @@
+"""Visulize all transmembrane ionic currents of a cell simulation.
+
+
+This module provides a class to visualize the transmembrane ionic currents of a cell simulation.
+It assumes that these have been recorded during the simulation. If this was not the case,
+consider re-simulating the cell and recording the currents, e.g. with a :py:class:`~biophysics_fitting.simulator.Simulator`.
+
+Example:
+
+    >>> def record_rangevars(cell, params):
+    ...     for rv in record_vars:
+    ...         cell.record_range_var(rv)
+    ...     return cell
+    >>> simulator.setup.cell_modify_funs.append(('BAC.record_range_vars', record_rangevars))
+    >>> cell, _ = simulator.get_simulated_cell(biophysical_parameters, stim="BAC")
+    >>> ca = CurrentAnalysis(cell)
+    >>> ca.plot_areas()
+    
+.. figure:: /docs/_static/_images/current_analysis.png
+
+    Example of a current analysis plot for a :py:class:`~biophysics_fitting.hay_evaluation_python.BAC` stimulus, simulated with a :py:class:`~biophysics_fitting.simulator.Simulator`.
+
+"""
+
+
 from biophysics_fitting import get_main_bifurcation_section
 from . import np
 from . import plt

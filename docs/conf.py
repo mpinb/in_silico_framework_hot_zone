@@ -12,16 +12,16 @@ sys.path.insert(0, project_root)
 from docs.parse_notebooks import copy_and_parse_notebooks_to_docs
 from functools import lru_cache
 from config.isf_logging import logger as isf_logger
-# isf_logger.setLevel("INFO")
+from docs.sphinx_hooks import count_documented_members, log_documented_members, find_first_match, DOCS_STATS
+from docs.skip_doc import skip_member, MODULES_TO_SKIP
 logger = isf_logger.getChild("DOCS")
 logger.setLevel("INFO")
 
 project = 'In-Silico Framework (ISF)'
 copyright = '2023, Arco Bast, Robert Egger, Bjorge Meulemeester, Maria Royo Cano, Rieke Fruengel, Matt Keaton, Omar Valerio'
-author = 'Arco Bast, Robert Egger, Bjorge Meulemeester, Maria Royo Cano, Rieke Fruengel, Matt Keaton, Omar Valerioo'
+author = 'Arco Bast, Robert Egger, Bjorge Meulemeester, Maria Royo Cano, Rieke Fruengel, Matt Keaton, Omar Valerio'
 release = '0.4.0-beta'
 version = '0.4.0-beta'
-## Make your modules available in sys.path
 
 # copy over tutorials and convert links to python files to sphinx documentation directives
 copy_and_parse_notebooks_to_docs(
@@ -59,173 +59,15 @@ rst_prolog = """
 .. role:: summarylabel
 """
 
-"""Configure modules, functions, methods, classes and attributes so that they are not documented by Sphinx."""
-
-project_root = os.path.join(os.path.abspath(os.pardir))
-
-def skip_member(app, what, name, obj, skip, options):
-    """Skip members if they have the :skip-doc: tag in their docstring.
-    
-    Note that the object attributes tested for in this function are only compatible
-    with the sphinx-autoapi extension. If you are using a different extension, you
-    may need to modify this function to use e.g. obj.__doc__ instead of obj.docstring.
-    """
-    # Debug print to check what is being processed
-    # print(f"Processing {what}: {name}")
-    
-    # skip special members, except __get__ and __set__
-    short_name = name.rsplit('.', 1)[-1]
-    if short_name.startswith('__') and short_name.endswith('__') and name not in ['__get__', '__set__']:
-        skip = True
-    
-    # Skip if it has the :skip-doc: tag
-    if not obj.is_undoc_member and ':skip-doc:' in obj.docstring:
-        # print(f"Docstring for {name}: {obj.__doc__}")
-        logger.info(f"Skipping {what}: {name} due to :skip-doc: tag")
-        skip = True
-    
-    # Skip inherited members
-    if obj.inherited:
-        skip = True
-    
-    if name in modules_to_skip:
-        logger.info(f"Skipping {what}: {name} due to :skip-doc: tag in module {obj.name}")
-        skip = True
-    
-    return skip
-    
-    
-def get_module_docstring(module_path):
-    """Get the docstring of a module without importing it."""
-    try:
-        # Find the module's file path
-        if not os.path.isfile(module_path):
-            raise FileNotFoundError(f"Module file {module_path} not found")
-
-        # Read the module's source code
-        with open(module_path, 'r', encoding='utf-8') as f:
-            source_code = f.read()
-
-        # Parse the source code
-        parsed_ast = ast.parse(source_code)
-
-        # Extract the docstring
-        docstring = ast.get_docstring(parsed_ast)
-        return docstring
-
-    except Exception as e:
-        print(f"Error getting docstring for module {module_path}: {e}")
-        return None
-
-
-modules_to_skip = [
-    '**tests**', 
-    '**barrel_cortex**', 
-    '**installer**', 
-    '**__pycache__**',
-    "**getting_started**",
-    "**compatibility**",
-    "**.pixi**",
-    "**dendrite_thickness**",
-    "**mechanisms**",
-    "**config**",
-    "**docs**",
-    "**.ipynb_checkpoints**",
-    "**docs/autoapi**"
-]
-
-
-@lru_cache(maxsize=None)
-def find_modules_with_tag(source_dir, tag=":skip-doc:"):
-    """Recursively find all modules with a specific tag in their docstring.
-    
-    Returns:
-        List of module path glob patterns with the tag.
-    """
-    modules_with_tag = []
-
-    for root, dirs, files in os.walk(source_dir):
-        for d in dirs.copy():
-            if any([
-                fnmatch.fnmatch(
-                    os.path.join(root, d), skip) 
-                for skip in modules_to_skip
-            ]):
-                dirs.remove(d)
-        for f in files:
-            if f.endswith(".py"):
-                module_path = os.path.join(root, f)
-                docstring = get_module_docstring(module_path)
-                if docstring and tag in docstring:
-                    if "__init__" in module_path:
-                        modules_with_tag.append(module_path.rstrip('__init__.py') + "**")
-                    else:
-                        modules_with_tag.append(module_path + "**")
-    return modules_with_tag
-
-modules_to_skip = modules_to_skip + find_modules_with_tag(project_root)
-logger.info("ignoring modules: {}".format(modules_to_skip))
-autoapi_ignore = modules_to_skip
-
-N_MEMBERS = 0
-N_DOC_MEMBERS = 0
-LAST_PARENT_TO_SKIP = "NO_PARENT"
-
-def count_documented_members(app, what, name, obj, skip, options):
-    """Count the number of documented members.
-    
-    Args:
-        obj (autoapidoc._objects.Python*): autoapi object
-    """
-    
-    global N_MEMBERS
-    global N_DOC_MEMBERS
-    global LAST_PARENT_TO_SKIP
-    # skip special members, except __get__ and __set__
-    short_name = name.rsplit('.', 1)[-1]
-    # don't count undocumented special members, except __get__ and __set__
-    if short_name.startswith('__') and short_name.endswith('__') and name not in ['__get__', '__set__']:
-        return
-    # Do not count if it has the :skip-doc: tag
-    elif not obj.is_undoc_member and ':skip-doc:' in obj.docstring:
-        LAST_PARENT_TO_SKIP = obj.id
-        logger.debug("    Ignoring empty docstrings for children of {}".format(obj.id))
-        return
-    # dont double count inherited members
-    elif obj.inherited:
-        return
-    # Skip if it was skipped at conf level.
-    elif name in modules_to_skip:
-        return
-    # the parent object of this one is skipped, so don't count this one either.
-    elif LAST_PARENT_TO_SKIP in obj.id:
-        return
-    
-    elif what in ['method', 'function', 'class', 'module', 'package']:
-        N_MEMBERS += 1
-        if obj.docstring and obj.docstring.strip():
-            N_DOC_MEMBERS += 1
-        else:
-            logger.warning(f"Undocumented member: {what}: {name}")
-    return
-    
-    
-def log_documented_members(app, env):
-    """Log the number of documented members."""
-    global N_MEMBERS
-    global N_DOC_MEMBERS
-    logger.info(f"Documented members: {N_DOC_MEMBERS}/{N_MEMBERS}")
-
-
-def find_first_match(lines, substring):
-    for i, line in enumerate(lines):
-        if substring in line:
-            return i
-    return -1
+# -- Settings for omitting members from documentation ----------------------
+autoapi_ignore = MODULES_TO_SKIP
+logger.info("ignoring modules: {}".format(MODULES_TO_SKIP))
 
 
 def autoapi_prepare_jinja_env(jinja_env):
-        jinja_env.filters["find_first_match"] = find_first_match
+    """Add custom filters to the Jinja environment."""
+    jinja_env.filters["find_first_match"] = find_first_match
+
 
 def setup(app):
     # skip members with :skip-doc: tag in their docstrings
@@ -234,6 +76,8 @@ def setup(app):
     app.connect('env-updated', log_documented_members)
 
 toc_object_entries_show_parents = 'hide'  # short toc entries
+
+# -- autoapi settings -----------------------------------------------------
 autoapi_dirs = [project_root]
 autoapi_type = "python"
 autoapi_keep_files = True
@@ -247,9 +91,11 @@ autoapi_options = [
     "show-module-summary",
 ]
 autoapi_own_page_level = 'method'
+
+# -- bibtex files ----------------------------------------------------------
 bibtex_bibfiles = ['bibliography.bib']
 
-# Napoleon settings
+# -- Napoleon settings -----------------------------------------------------
 napoleon_google_docstring = True
 napoleon_include_init_with_doc = True
 napoleon_include_private_with_doc = True

@@ -415,12 +415,6 @@ Parsed dataframe
       - 138.4
       - 
 
-Writers:
-    
-- :py:meth:`~single_cell_parser.writer.write_synapse_activation_file` is used by :py:mod:`simrun` and :py:mod:`~single_cell_parser.analyze.synanalysis`
-   to write raw output data.
-- :py:meth:`data_base.isf_data_base.db_initializers.load_simrun_general.init` parses these files into a pandas dataframe.
-
 .. attention::
 
    Not every spike of a presynaptic cell necessarily induces a synapse activation. Each synapse has a specific release

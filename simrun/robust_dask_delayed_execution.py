@@ -1,3 +1,13 @@
+"""Robustly execute all :py:class:`dask.delayed` objects in a :py:class:`ManagedFolder`
+
+Robust execution here is taken to mean:
+
+- The delayed objects are only executed once.
+- File locking is used to ensure each delayed object is only handled by a single process
+- The status (``["not_started", "started", "finished"]``) of the delayed objects is saved during execution.
+"""
+
+
 from data_base.distributed_lock import get_lock
 import os
 import warnings

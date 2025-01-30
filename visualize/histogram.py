@@ -1,5 +1,9 @@
-from ._decorators import *
+"""Plot line histograms
 
+This module provides convenience methods for plotting line histograms (so no filled surfaces) from precomputed bins.
+This is used to plot out e.g. activity data for multiple populations.
+"""
+from ._decorators import *
 
 @dask_to_pandas
 @subsequent_calls_per_line

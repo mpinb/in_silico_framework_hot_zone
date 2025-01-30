@@ -1,5 +1,10 @@
-'''
+'''Cell objects for neuron models and cell activity.
 
+This module contains classes for representing cells in NEURON simulations.
+This includes :py:class:`Cell` and :py:class:`PySection` for neuron models, containing morphological and biophysical properties.
+It also includes the :py:class:`~single_cell_parser.PointCell` class for handling presynaptic cell activations.
+The latter does not contain any morphological or biophysical properties, but handles the activation of presynaptic cells in a network.
+For neuron-network multiscale simulations, you should consult :py:mod:`simrun`.
 '''
 
 #from neuron import h, nrn
@@ -1047,6 +1052,9 @@ class SynParameterChanger():
         cell (:py:class:`~single_cell_parser.cell.Cell`): The cell object.
         synParam (dict): The new :ref:`network_parameters_format` as a dictionary or :py:class:`~sumatra.NTParameterSet`.
         tEvent (float): Time at which the synapse parameters should change.
+        
+    :skip-doc:
+    # TODO: this is not used in ISf as of now.
     """
     def __init__(self, cell, synParam, t):
         """

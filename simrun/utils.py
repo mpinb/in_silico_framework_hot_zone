@@ -1,3 +1,10 @@
+"""Utility and convenience functions for the :py:mod:`simrun` package.
+
+Provides functions to parse out specific info from parameter files, silence stdout,
+subdivide arrays for multiprocessing purposes, and more.
+"""
+
+
 from data_base.dbopen import resolve_db_path
 import single_cell_parser as scp
 import pandas as pd

@@ -183,13 +183,14 @@ def get_lock(name):
     
     Reads the locking configuration from the global variable ``SERVER`` and infers the correct lock type.
     The following locks are supported:
+    
     - :py:class:`~data_base.distributed_lock.InterProcessLockNoWritePermission`: for file based locking.
     - :py:class:`redis.lock.Lock`: for redis based locking.
     - :py:class:`kazoo.client.Lock`: for Apache zookeeper based locking.
     
     See also:
-        https://kazoo.readthedocs.io/en/latest/index.html
-        https://redis-py.readthedocs.io/en/stable/
+        `Kazoo documentation <https://kazoo.readthedocs.io/en/latest/index.html>`_ and
+        `Redis documentation <https://redis-py.readthedocs.io/en/stable/>`_
     """
     if 'ISF_DISTRIBUTED_LOCK_BLOCK' in os.environ:
         raise RuntimeError('ISF_DISTRIBUTED_LOCK_BLOCK is defined, which turns off locking.')

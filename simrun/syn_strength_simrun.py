@@ -15,7 +15,8 @@ import neuron
 import single_cell_parser as scp
 import single_cell_parser.analyze as sca
 import matplotlib
-from config.isf_logging import logger
+from config.isf_logging import logger as isf_logger
+logger = isf_logger.getChild(__name__)
 
 matplotlib.use('agg')
 import matplotlib.pyplot as plt

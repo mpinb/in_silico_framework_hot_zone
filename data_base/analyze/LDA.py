@@ -1,3 +1,16 @@
+"""Analyze the results of :py:mod:`simrun.reduced_model`
+
+.. deprecated:: 0.4.0
+    Analyzing synapse activations with LDA has been extended into :py:mod:`simrun.modular_reduced_model_inference`,
+    where instead of LDA, we fit a raised cosine basis to the synapse activations.
+    :py:mod:`simrun.modular_reduced_model_inference` is written to be more general, flexible,
+    and performant. The latter was necessary in order to include the spatial resolution of synapse activations.
+
+:skip-doc:
+
+"""
+
+
 #todo: scores based on variable inpupt
 import numpy as np
 

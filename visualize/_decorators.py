@@ -1,3 +1,12 @@
+"""Convenience methods for visualizastion
+
+this module provides decorator functions that can be used to:
+
+- convert dask dataframes to pandas dataframes
+- iterate over individual rows of a dataframe
+- print the types of some function's arguments (useful for debugging)
+
+"""
 import inspect
 import dask.dataframe as dd
 import pandas as pd

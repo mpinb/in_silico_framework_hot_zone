@@ -1,4 +1,11 @@
+"""Display animations in IPython sessions.
+
+This module proivdes functionality to create and render anmations in an IPython session.
+It is of particular use when using Jupyter notebooks.
+"""
+
 import numpy as np
+import copy
 import matplotlib.pyplot as plt
 # import dask
 import os
@@ -257,9 +264,6 @@ def init_fig(xlim=(0, 1500), ylim=(-80, 0)):
     ax.set_xlim(xlim)
     ax.set_ylim(ylim)
     return fig, ax
-
-
-import copy
 
 
 def plot_lines_fun(lines, ax):
