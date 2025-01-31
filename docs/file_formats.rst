@@ -4,10 +4,12 @@
 File & data formats
 ###################
 
+.. _am_file_format:
+
 .am
 ***
 
-The Amira proprietary file format. Refer to the `amira documentation <https://www.csc.kth.se/~weinkauf/notes/amiramesh.html>`_ for more information.
+The Amira proprietary VTK-like file format. Refer to the `amira documentation <https://www.csc.kth.se/~weinkauf/notes/amiramesh.html>`_ for more information.
 This flexible format can be used to store 3D scalar meshes, 3D neuron morphology reconstructions, slice image data etc.
 
 Readers:
