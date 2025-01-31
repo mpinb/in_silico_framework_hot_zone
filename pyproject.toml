@@ -4,7 +4,7 @@ authors = [{name = "Bjorge Meulemeester", email = "bjorge.meulemeester@mpinb.mpg
 description = "Add a short description here"
 name = "in_silico_framework"
 requires-python = "==3.8.*"
-version = "0.1.0"
+version = "0.4.0-beta"
 
 [tool.pixi.project]
 channels = ["conda-forge"]

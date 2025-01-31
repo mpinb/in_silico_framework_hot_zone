@@ -4,10 +4,12 @@
 File & data formats
 ###################
 
+.. _am_file_format:
+
 .am
 ***
 
-The Amira proprietary file format. Refer to the `amira documentation <https://www.csc.kth.se/~weinkauf/notes/amiramesh.html>`_ for more information.
+The Amira proprietary VTK-like file format. Refer to the `amira documentation <https://www.csc.kth.se/~weinkauf/notes/amiramesh.html>`_ for more information.
 This flexible format can be used to store 3D scalar meshes, 3D neuron morphology reconstructions, slice image data etc.
 
 Readers:
@@ -203,15 +205,13 @@ For each presynaptic cell type in the network, this following information is pro
    * - ``cellNr``
      - Amount of connected presynaptic cells of this type.
 
-The ``synapse`` key of each presynaptic cell type contains the following information:
+The ``synapses`` key of each presynaptic cell type contains the following information:
 
 .. list-table:: Synapse parameters
    :header-rows: 1
 
    * - Parameter
      - Description
-   * - ``receptors``
-     - Dictionary of synapse properties per receptor type (e.g. ``gaba_syn``): threshold, delay, weight, reversal potential and time dynamics.
    * - ``releaseProb``
      - Release probability of this synapse upon a spike of its associated presynaptic cell. 
        A synapse is either active or not active, never inbetween.
@@ -219,6 +219,29 @@ The ``synapse`` key of each presynaptic cell type contains the following informa
      - Reference to an associated :ref:`con_file_format` file for this cell type's synapses.
    * - ``distributionFile``
      - Reference to an associated :ref:`syn_file_format` file for this cell type's synapses.
+   * - ``receptors``
+     - Dictionary of synapse properties per receptor type (e.g. ``gaba_syn``). Properties are given below.
+
+Each ``synapses.receptors.<receptor type>`` in ``synapses.receptors`` contains the following information:
+
+.. list-table:: Receptor parameters
+   :header-rows: 1
+
+   * - Parameter
+     - Description
+   * - ``delay``
+     - Delay between the presynaptic cell activation and the downstream synapse activation in :math:`ms`. Often defaults to :math:`0`.
+   * - ``threshold``
+     - Threshold of the synapse.
+   * - ``weight``
+     - Weight of the synapse. 
+       Note that excitatory glutamate are :math:`AMPA` and :math:`NMDA` superpositions, and thus require two weights.
+   * - ``parameter``
+     - Receptor-specific parameters for the synapse dynamics. 
+       For example, for an AMPA synapse, this could be the decay time constant, the facilitation, etc.
+
+See also:
+  The receptor parameters are used for NEURON's `NetCon <https://nrn.readthedocs.io/en/latest/hoc/modelspec/programmatic/network/netcon.html>`_.
         
 Example::
 
