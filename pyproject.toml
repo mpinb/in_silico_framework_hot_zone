@@ -60,10 +60,10 @@ no-build-isolation = ["pandas-msgpack"]
 
 [tool.pixi.target.osx]
 pypi-dependencies = { neuron = ">=8.2", "distributed"= ">=2.30.0"}
-dependencies = { numpy = "1.21", pytables = ">=3.7.0,<4" }
+dependencies = { numpy = "==1.21", pytables = ">=3.7.0,<4" }
 
 [tool.pixi.target.linux]
-dependencies = { neuron = "7.8.2.*", numpy = "1.19.2", distributed = "2.30.0"}
+dependencies = { neuron = "==7.8.2", numpy = "==1.19.2", distributed = "==2.30.0"}
 pypi-dependencies = { tables = ">=3.8.0,<4" }
 
 [tool.pixi.environments]
@@ -71,7 +71,7 @@ docs = ["docs"]
 default = ["isf"]
 
 [tool.pixi.feature.isf]
-dependencies = { pyyaml = "5.3.1", flask = "1.1.4"}
+dependencies = { pyyaml = "==5.3.1", flask = "==1.1.4"}
 
 [tool.pixi.feature.docs.dependencies]
 flask = ">=2"
