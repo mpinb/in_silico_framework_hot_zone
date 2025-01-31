@@ -9,7 +9,7 @@ def client(pytestconfig):
     # If running tests locally, make sure you have a dask scheduler and dask worker running on the ports you want
     c = distributed.Client(
         '{}:{}'.format(
-            socket.gethostbyname("localhost"), 
+            socket.gethostname(), 
             pytestconfig.getoption("--dask_server_port"))
         )
     return c

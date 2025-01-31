@@ -136,8 +136,11 @@ def pytest_configure(config):
         os.path.join(CURRENT_DIR, "logs", "test.log"))
     isf_logging_file_handler.setLevel(logging.INFO)
     isf_logger.addHandler(isf_logging_file_handler)
-
+    
     c = distributed.Client(
-        "localhost:" + str(config.getoption("--dask_server_port"))
+        '{}:{}'.format(
+            socket.gethostname(), 
+            config.getoption("--dask_server_port"))
         )
+
     ensure_workers_have_imported_requirements(c)

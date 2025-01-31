@@ -115,7 +115,7 @@ class BAC:
         punish_returning_to_rest_tolerance=2.,
         punish_max_prestim_dendrite_depo=-50,
         prefix='',
-        definitions=None
+        definitions=HAY_BAC_DEFINITIONS
         ):
         """
         Args:
@@ -142,14 +142,7 @@ class BAC:
         self.ca_max_after_nth_somatic_spike = ca_max_after_nth_somatic_spike
         self.stim_onset = stim_onset
         self.stim_duration = stim_duration
-        self.definitions = definitions if definitions is not None else {
-            'BAC_APheight': ('AP_height', 25.0, 5.0),
-            'BAC_ISI': ('BAC_ISI', 9.901, 0.8517),
-            'BAC_ahpdepth': ('AHP_depth_abs', -65.0, 4.0),
-            'BAC_caSpike_height': ('BAC_caSpike_height', 6.73, 2.54),
-            'BAC_caSpike_width': ('BAC_caSpike_width', 37.43, 1.27),
-            'BAC_spikecount': ('Spikecount', 3.0, 0.01)
-        }
+        self.definitions = definitions
         self.repolarization = repolarization
         self.punish = punish
         self.punish_last_spike_after_deadline = punish_last_spike_after_deadline
@@ -434,13 +427,7 @@ class bAP:
         punish_last_spike_after_deadline=True,
         punish_minspikenum=1,
         punish_returning_to_rest_tolerance=2.,
-        definitions={
-            'bAP_APheight': ('AP_height', 25.0, 5.0),
-            'bAP_APwidth': ('AP_width', 2.0, 0.5),
-            'bAP_att2': ('BPAPatt2', 45.0, 10.0),
-            'bAP_att3': ('BPAPatt3', 36.0, 9.33),
-            'bAP_spikecount': ('Spikecount', 1.0, 0.01)
-        }):
+        definitions=HAY_BAP_DEFINITIONS):
         """
         Args:
             soma_thresh (float): The threshold for APs in the somatic voltage trace. Defaults to :math:`-30\ mV`.
@@ -663,8 +650,30 @@ class bAP:
         """
         return self._bAP_att(voltage_traces, _n=2)
 
+
 class _Step:
-    """Template class for evaluating step current injections."""
+    """Template class for evaluating step current injections.
+        
+    These metrics were introduced by :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011`, and illustrated in :cite:t:`Guest_Bast_Narayanan_Oberlaender`.
+    
+    See also:
+        :py:meth:`biophysics_fitting.setup_stim` for more information on the stimulus protocols.
+        
+    Attributes:
+        soma_thresh (float): The threshold for APs in the somatic voltage trace. Defaults to :math:`-30` mV.
+        stim_onset (float): The onset of the stimulus (ms). Defaults to :math:`700` ms.
+        stim_duration (float): The duration of the stimulus (ms). Defaults to :math:`2000` ms.
+        punish (float): The punishment value in units of :math:`\sigma`. 
+            Used as a baseline if the voltage trace cannot be evaluated on a metric (e.g. if it does not contain an AP). 
+            Defaults to :math:`250`.
+        punish_last_spike_after_deadline (bool): Whether to punish if the last spike is after the deadline. Defaults to ``True``
+        punish_minspikenum (int): The minimum number of spikes required for this stimulus protocol.
+        punish_returning_to_rest_tolerance (float): The tolerance for returning to rest (:math:`mV`). Defaults to :math:`2 mV`.
+        prefix (str): The prefix for the evaluation metric checks. Defaults to an empty string.
+        definitions (dict): The empirical means and standard deviations for the evaluation metrics. These are overridden by each child class.
+        name (str): The name of the stimulus protocol. Defaults to ``'StepTemplate'``.
+        step_index (int): The index of the step stimulus protocol. Defaults to :math:`0`. Options are: ``[1, 2, 3]``.
+    """
     def __init__(
         self,
         soma_thresh=-30,
@@ -678,6 +687,21 @@ class _Step:
         name='StepTemplate',
         step_index=0
         ):
+        """
+        Args:
+            soma_thresh (float): The threshold for APs in the somatic voltage trace. Defaults to :math:`-30\ mV`.
+            stim_onset (float): The onset of the stimulus (:math:`ms`). Defaults to :math:`700\ ms`.
+            stim_duration (float): The duration of the stimulus (:math:`ms`). Defaults to :math:`2000\ ms`.
+            punish (float): The punishment value in units of :math:`\sigma`.
+                Used as a baseline if the voltage trace cannot be evaluated on a metric (e.g. if it does not contain an AP).
+                Defaults to :math:`250 \sigma`.
+            punish_last_spike_after_deadline (bool): Whether to punish if the last spike is after the deadline. Defaults to ``True``
+            punish_minspikenum (int): The minimum number of spikes required for this stimulus protocol. Defaults to :math:`5`.
+            punish_returning_to_rest_tolerance (float): The tolerance for returning to rest (:math:`mV`). Defaults to :math:`2 mV`.
+            definitions (dict): The definitions for the evaluation metrics. See also: :py:attr:`definitions`.
+            name (str): The name of the stimulus protocol. Defaults to ``'StepTemplate'``.
+            step_index (int): The index of the step stimulus protocol. Defaults to :math:`0`. Options are: ``[1, 2, 3]``.    
+        """
 
         assert definitions is not None, "The Step class is a template, and must be filled with mean and st values (definitions), depending on the current amplitude. Refer to bipohysics_fitting.hay_specification for the definitions."
         self.soma_thresh = soma_thresh
@@ -692,6 +716,14 @@ class _Step:
         self.step_index = step_index
 
     def get(self, **voltage_traces):
+        """Get the full evaluation of the voltage traces for the step current injection.
+        
+        Args:
+            voltage_traces: dictionary with the voltage traces of the soma and dendrite.
+            
+        Returns:
+            dict: dictionary with the evaluation metrics, containing the raw values, normalized values, and checks.
+        """
         out = {}
         for name, (_, mean, std) in iteritems(self.definitions):
             out_current = getattr(self, name)(voltage_traces)
@@ -706,6 +738,15 @@ class _Step:
         return self.check(out, voltage_traces)
 
     def check(self, out, voltage_traces):
+        """Check for problems in the voltage trace.
+        
+        Args:
+            out: dictionary with the evaluation metrics
+            voltage_traces: dictionary with the voltage traces of the soma and dendrite.
+            
+        Returns:
+            dict: dictionary with the evaluation metrics, containing the raw values, normalized values, and checks.
+        """
         # checking for problems in voltage trace
         t, v = voltage_traces['tVec'], voltage_traces['vList'][0]
         vmax = None  # voltage_traces['vMax']
@@ -735,6 +776,18 @@ class _Step:
         return out
 
     def mf(self, voltage_traces):
+        """Get the mean frequency of the somatic voltage trace.
+        
+        Args:
+            voltage_traces (dict): dictionary with the voltage traces of the soma and dendrite.
+            
+        Returns:
+            dict: Dictionary mapping ``".check_1AP"`` to whether there is at least one action potential in the somatic voltage trace,
+                and ``".raw"`` to the mean frequency of the somatic voltage trace.
+            
+        See also:
+            :py:meth:`~biophysics_fitting.ephys.STEP_mean_frequency`
+        """
         t, v = voltage_traces['tVec'], voltage_traces['vList'][0]
         return {
             '.check_1AP': nan_if_error(spike_count)(t, v, thresh=self.soma_thresh),
@@ -742,6 +795,18 @@ class _Step:
         }
         
     def AI(self, voltage_traces):
+        """Get the adaptation index of the somatic voltage trace.
+        
+        Args:
+            voltage_traces (dict): dictionary with the voltage traces of the soma and dendrite.
+        
+        Returns:
+            dict: Dictionary mapping ``".check_2ISI"`` to whether there are 2 action potentials in the somatic voltage trace,
+                and ``".raw"`` to the adaptation index of the somatic voltage trace.
+            
+        See also:
+            :py:meth:`~biophysics_fitting.ephys.STEP_adaptation_index`
+        """
         t, v = voltage_traces['tVec'], voltage_traces['vList'][0]
         return {
             '.check_2ISI': nan_if_error(spike_count)(t, v, thresh=self.soma_thresh),
@@ -749,6 +814,18 @@ class _Step:
         }
         
     def ISIcv(self, voltage_traces):
+        """Get the coefficient of variation of the interspike interval in the somatic voltage trace.
+        
+        Args:
+            voltage_traces (dict): dictionary with the voltage traces of the soma and dendrite.
+            
+        Returns:
+            dict: Dictionary mapping ``".check_2ISI"`` to whether there are 2 action potentials in the somatic voltage trace,
+            and ``".raw"`` to the coefficient of variation of the interspike interval in the somatic voltage trace.
+            
+        See also:
+            :py:meth:`~biophysics_fitting.ephys.STEP_coef_var`
+        """
         t, v = voltage_traces['tVec'], voltage_traces['vList'][0]
         return {
             '.check_2ISI': nan_if_error(spike_count)(t, v, thresh=self.soma_thresh),
@@ -756,6 +833,18 @@ class _Step:
         }
         
     def DI(self, voltage_traces):
+        """Get the ISI of the first two spikes in the somatic voltage trace.
+        
+        Args:
+            voltage_traces (dict): dictionary with the voltage traces of the soma and dendrite.
+            
+        Returns:
+            dict: Dictionary mapping ``".check_1AP"`` to whether there is at least one action potential in the somatic voltage trace,
+                and ``".raw"`` to the delay index of the initial spike.
+                
+        See also:
+            :py:meth:`~biophysics_fitting.ephys.STEP_delay_index`       
+        """
         t, v = voltage_traces['tVec'], voltage_traces['vList'][0]
         return {
             '.check_2ISI': nan_if_error(spike_count)(t, v, thresh=self.soma_thresh),
@@ -763,6 +852,18 @@ class _Step:
         }
         
     def TTFS(self, voltage_traces):
+        """Get the time to first spike in the somatic voltage trace.
+        
+        Args:
+            voltage_traces (dict): dictionary with the voltage traces of the soma and dendrite.
+            
+        Returns:
+            dict: Dictionary mapping ``".check_1AP"`` to whether there is at least one action potential in the somatic voltage trace,
+                and ``".raw"`` to the time to first spike in the somatic voltage trace.
+                
+        See also:
+            :py:meth:`~biophysics_fitting.ephys.STEP_time_to_first_spike`
+        """
         t, v = voltage_traces['tVec'], voltage_traces['vList'][0]
         return {
             '.check_1AP': nan_if_error(spike_count)(t, v, thresh=self.soma_thresh),
@@ -770,6 +871,18 @@ class _Step:
         }
         
     def AHP_depth_abs(self, voltage_traces):
+        """Get the afterhyperpolarization depth in the somatic voltage trace.
+        
+        Args:
+            voltage_traces (dict): dictionary with the voltage traces of the soma and dendrite.
+            
+        Returns:
+            dict: Dictionary mapping ``".check_2AP"`` to whether there are 2 action potentials in the somatic voltage trace,
+                and ``".raw"`` to the afterhyperpolarization depth in the somatic voltage trace.
+                
+        See also:
+            :py:meth:`~biophysics_fitting.ephys.AHP_depth_abs`
+        """
         t, v = voltage_traces['tVec'], voltage_traces['vList'][0]
         return {
             '.check_2AP': nan_if_error(AHP_depth_abs_check_2AP)(t, v, thresh=self.soma_thresh),
@@ -777,6 +890,18 @@ class _Step:
         }
         
     def APh(self, voltage_traces):
+        """Get the AP heights fo all APs in the somatic voltage trace.
+        
+        Args:
+            voltage_traces (dict): dictionary with the voltage traces of the soma and dendrite.
+            
+        Returns:
+            dict: Dictionary mapping ``".check_1AP"`` to whether there is at least one action potential in the somatic voltage trace,
+                and ``".raw"`` to the AP heights in the somatic voltage trace.
+                
+        See also:
+            :py:meth:`~biophysics_fitting.ephys.AP_height`
+        """
         t, v = voltage_traces['tVec'], voltage_traces['vList'][0]
         return {
             '.check_1AP':
@@ -786,6 +911,18 @@ class _Step:
         }
         
     def fAHPd(self, voltage_traces):
+        """Get the fast afterhyperpolarization depth in the somatic voltage trace.
+        
+        Args:
+            voltage_traces (dict): dictionary with the voltage traces of the soma and dendrite.
+            
+        Returns:
+            dict: Dictionary mapping ``".check_2AP"`` to whether there are 2 action potentials in the somatic voltage trace,
+                and ``".raw"`` to the fast afterhyperpolarization depth in the somatic voltage trace.
+                
+        See also:
+            :py:meth:`~biophysics_fitting.ephys.STEP_fast_ahp_depth`
+        """
         t, v = voltage_traces['tVec'], voltage_traces['vList'][0]
         return {
             '.check_2AP':
@@ -795,6 +932,18 @@ class _Step:
         }
     
     def sAHPd(self, voltage_traces):
+        """Get the slow afterhyperpolarization depth in the somatic voltage trace.
+        
+        Args:
+            voltage_traces (dict): dictionary with the voltage traces of the soma and dendrite.
+            
+        Returns:
+            dict: Dictionary mapping ``".check_2AP"`` to whether there are 2 action potentials in the somatic voltage trace,
+                and ``".raw"`` to the slow afterhyperpolarization depth in the somatic voltage trace.
+                
+        See also:
+            :py:meth:`~biophysics_fitting.ephys.STEP_slow_ahp_depth`
+        """
         t, v = voltage_traces['tVec'], voltage_traces['vList'][0]
         return {
             '.check_2AP':
@@ -804,6 +953,15 @@ class _Step:
         }
     
     def sAHPt(self, voltage_traces):
+        """Get the slow afterhyperpolarization time in the somatic voltage trace.
+        
+        Args:
+            voltage_traces (dict): dictionary with the voltage traces of the soma and dendrite.
+            
+        Returns:
+            dict: Dictionary mapping ``".check_2AP"`` to whether there are 2 action potentials in the somatic voltage trace,
+                and ``".raw"`` to the slow afterhyperpolarization time in the somatic voltage trace.
+        """
         t, v = voltage_traces['tVec'], voltage_traces['vList'][0]
         return {
             '.check_2AP':
@@ -813,6 +971,18 @@ class _Step:
         }
 
     def APw(self, voltage_traces):
+        """Get the AP widths of all APs in the somatic voltage trace.
+        
+        Args:
+            voltage_traces (dict): dictionary with the voltage traces of the soma and dendrite.
+            
+        Returns:
+            dict: Dictionary mapping ``".check_1AP"`` to whether there is at least one action potential in the somatic voltage trace,
+                and ``".raw"`` to the AP widths in the somatic voltage trace.
+                
+        See also:
+            :py:meth:`~biophysics_fitting.ephys.AP_width`
+        """
         t, v = voltage_traces['tVec'], voltage_traces['vList'][0]
         return {
             '.check_1AP':
@@ -826,17 +996,84 @@ class _Step:
         assert hasattr(self, name.rstrip(str(self.step_index))), f"Attribute {name} not found in {self.name}"
         return object.__getattribute__(self, name.rstrip(str(self.step_index)))
 
+
 class StepOne(_Step):
+    """Evaluate Step current one.
+    
+    This class initializes all the evaluation metrics for the ``StepOne`` stimulus protocol.
+    The empirically observed objectives are in this case::
+    
+        {
+            'mf1': ("Mean frequency", 9.0, 0.88),
+            'AI1': ("Adaptation Index", 0.0035999999999999999, 0.0091000000000000004),
+            'ISIcv1': ("Interspike interval coefficient of variation", 0.12039999999999999, 0.032099999999999997),
+            'DI1': ("Doublet Interspike Interval", 57.75, 33.479999999999997),
+            'TTFS1': ("Time to first spike", 43.25, 7.3200000000000003),
+            'APh1': ("AP height", 26.227399999999999,4.9702999999999999),
+            'fAHPd1': ("Fast after-hyperpolarization depth", -51.951099999999997, 5.8212999999999999),
+            'sAHPd1': ("Slow after-hyperpolarization depth", -58.0443, 4.5814000000000004),
+            'sAHPt1': ("Slow after-hyperpolarization time", 0.23760000000000001, 0.0299),
+            'APw1': ("AP width", 1.3077000000000001, 0.16650000000000001)
+        } 
+    
+    See also:
+        :py:class:`_Step` for the template class, and :py:meth:`biophysics_fitting.setup_stim.setp_StepOne` for more information on the stimulus protocol.
+    """
     def __init__(self):
         super().__init__(definitions=HAY_STEP1_DEFINITIONS, name='StepOne', step_index='1')
+       
         
 class StepTwo(_Step):
+    """Evaluate Step current two.
+    
+    This class initializes all the evaluation metrics for the ``StepTwo`` stimulus protocol.
+    The empirically observed objectives are in this case::
+    
+        {
+            'mf2': ("Mean frequency", 14.5, 0.56000000000000005),
+            'AI2': ("Adaptation Index", 0.0023, 0.0055999999999999999),
+            'ISIcv2': ("Interspike Interval coeffitient of variation", 0.10829999999999999, 0.036799999999999999),
+            'DI2': ("Doublet interspike interval", 6.625, 8.6500000000000004),
+            'TTFS2': ("Ti;e to first spike", 19.125, 7.3099999999999996),
+            'APh2': ("Ap height", 16.520900000000001,6.1127000000000002),
+            'fAHPd2': ("Fast after-hyperpolarization depth", -54.194899999999997, 5.5705999999999998),
+            'sAHPd2': ("Slow after-hyperpolarization depth", -60.512900000000002, 4.6717000000000004),
+            'sAHPt2': ("Slow after-hyperpolarization time", 0.2787, 0.026599999999999999),
+            'APw2': ("AP width", 1.3833,0.2843)
+        }
+    
+    See also:
+        :py:class:`_Step` for the template class, and :py:meth:`biophysics_fitting.setup_stim.setp_StepTwo` for more information on the stimulus protocol.
+    """
     def __init__(self):
         super().__init__(definitions=HAY_STEP2_DEFINITIONS, name='StepTwo', step_index='2')
-        
+       
+
 class StepThree(_Step):
+    """Evaluate Step current three.
+    
+    This class initializes all the evaluation metrics for the ``StepThree`` stimulus protocol.
+    The empirically observed objectives are in this case::
+    
+        {
+            'mf3': ("Mean frequency", 22.5,2.2222),
+            'AI3': ("Adaptation index", 0.0045999999999999999, 0.0025999999999999999),
+            'ISIcv3': ("Interspike interval coefficient of variation", 0.095399999999999999, 0.014),
+            'DI3': ("Doublet interspike interval", 5.38, 0.83),
+            'TTFS3': ("Time to first spike", 7.25,1.0),
+            'APh3': ("AP height", 16.436800000000002, 6.9321999999999999),
+            'fAHPd3': ("Fast afterhypoerpolarization depth", -56.557899999999997, 3.5834000000000001),
+            'sAHPd3': ("Slow after-hyperpolarization depth", -59.99230000000001, 3.9247000000000005),
+            'sAHPt3': ("Slow after-hyperpolarization time",   0.21310000000000001, 0.036799999999999999),
+            'APw3': ("AP zidth", 1.8647, 0.41189999999999999)
+        }
+    
+    See also:
+        :py:class:`_Step` for the template class, and :py:meth:`biophysics_fitting.setup_stim.setp_StepThree` for more information on the stimulus protocol.
+    """
     def __init__(self):
         super().__init__(definitions=HAY_STEP3_DEFINITIONS, name='StepThree', step_index='3')
+
 
 def get_evaluate_bAP(**kwargs):
     """Get the evaluation function for the :math:`bAP` stimulus protocol.
@@ -845,7 +1082,7 @@ def get_evaluate_bAP(**kwargs):
     and returns a function that evaluates the voltage traces.
     
     Args:
-        kwargs: keyword arguments for the :py:class:`bAP` object.
+        **kwargs: Additional or overriding keyword arguments for the :py:class:`bAP` object. Defaults to None.
         
     Returns:
         Callable: function that evaluates the voltage traces.
@@ -865,7 +1102,7 @@ def get_evaluate_BAC(**kwargs):
     and returns a function that evaluates the voltage traces.
     
     Args:
-        kwargs: keyword arguments for the :py:class:`BAC` object.
+        **kwargs: Additional or overriding keyword arguments for the :py:class:`BAC` object. Defaults to None.
         
     Returns:
         Callable: function that evaluates the voltage traces.
@@ -877,7 +1114,19 @@ def get_evaluate_BAC(**kwargs):
 
     return fun
 
+
 def get_evaluate_StepOne(**kwargs):
+    """Get the evaluation function for the :math:`StepOne` stimulus protocol.
+    
+    Initializes a :py:class:`StepOne` object with the given keyword arguments,
+    and returns a function that evaluates the voltage traces.
+    
+    Args:
+        **kwargs: Additional or overriding keyword arguments for the :py:class:`StepOne` object. Defaults to None.
+        
+    Returns:
+        Callable: function that evaluates the voltage traces.
+    """
     step = StepOne(**kwargs)
 
     def fun(**kwargs):
@@ -885,7 +1134,19 @@ def get_evaluate_StepOne(**kwargs):
 
     return fun
 
+
 def get_evaluate_StepTwo(**kwargs):
+    """Get the evaluation function for the :math:`StepTwo` stimulus protocol.
+    
+    Initializes a :py:class:`StepTwo` object with the given keyword arguments,
+    and returns a function that evaluates the voltage traces.
+    
+    Args:
+        **kwargs: Additional or overriding keyword arguments for the :py:class:`StepTwo` object. Defaults to None.
+        
+    Returns:
+        Callable: function that evaluates the voltage traces.
+    """
     step = StepTwo(**kwargs)
 
     def fun(**kwargs):
@@ -893,7 +1154,19 @@ def get_evaluate_StepTwo(**kwargs):
 
     return fun
 
+
 def get_evaluate_StepThree(**kwargs):
+    """Get the evaluation function for the :math:`StepTwo` stimulus protocol.
+    
+    Initializes a :py:class:`StepTwo` object with the given keyword arguments,
+    and returns a function that evaluates the voltage traces.
+    
+    Args:
+        **kwargs: Additional or overriding keyword arguments for the :py:class:`StepThree` object. Defaults to None.
+        
+    Returns:
+        Callable: function that evaluates the voltage traces.
+    """
     step = StepThree(**kwargs)
 
     def fun(**kwargs):

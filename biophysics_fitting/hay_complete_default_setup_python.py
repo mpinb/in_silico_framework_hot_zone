@@ -102,11 +102,11 @@ def get_Simulator(fixed_params, step=False, vInit=False):
     
     Args:
         fixed_params (dict): A dictionary of fixed parameters for the cell.
-        step (bool): Whether to include step current measurements.
+        step (bool): Whether to include step current measurements. These take quite long to simulate. Default: ``False``.
         vInit (bool): Whether to include vInit measurements. (not implemented yet)
         
     Returns:
-        (:py:class:`~biophysics_fitting.simulator.Simulator`): A simulator object.
+        :py:class:`~biophysics_fitting.simulator.Simulator`: A simulator object.
         
     See also:
         See :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011` for more information.    
@@ -117,6 +117,13 @@ def get_Simulator(fixed_params, step=False, vInit=False):
         ['bAP.hay_measure', param_to_kwargs(record_bAP)])
     s.setup.stim_response_measure_funs.append(
         ['BAC.hay_measure', param_to_kwargs(record_BAC)])
+    if step:
+        s.setup.stim_response_measure_funs.append(
+            ['StepOne.hay_measure', param_to_kwargs(record_Step)])
+        s.setup.stim_response_measure_funs.append(
+            ['StepTwo.hay_measure', param_to_kwargs(record_Step)])
+        s.setup.stim_response_measure_funs.append(
+            ['StepThree.hay_measure', param_to_kwargs(record_Step)])
     if vInit:
         raise NotImplementedError
     return s
@@ -179,24 +186,30 @@ def get_Evaluator(
     vInit=False,
     bAP_kwargs={},
     BAC_kwargs={},
+    StepOne_kwargs={},
+    StepTwo_kwargs={},
+    StepThree_kwargs={},
     interpolate_voltage_trace=True
     ):
     """Get a set up :py:class:`~biophysics_fitting.evaluator.Evaluator` object for the Hay protocol.
     
-    Sets up an evaluator object for the Hay protocol, including measuring functions for bAP and BAC stimuli.
+    Sets up an evaluator object for the Hay protocol, including measuring functions for bAP, BAC and three step current stimuli.
     
     Args:
         step (bool): Whether to include step current measurements (not implemented yet).
         vInit (bool): Whether to include vInit measurements. (not implemented yet)
-        bAP_kwargs (dict): Keyword arguments for the bAP measurement function.
-        BAC_kwargs (dict): Keyword arguments for the BAC measurement function.
+        bAP_kwargs (dict): Keyword arguments for the ``bAP`` measurement function.
+        BAC_kwargs (dict): Keyword arguments for the ``BAC`` measurement function.
+        StepOne_kwargs (dict): Keyword arguments for the ``StepOne`` measurement function.
+        StepTwo_kwargs (dict): Keyword arguments for the ``StepTwo`` measurement function.
+        StepThree_kwargs (dict): Keyword arguments for the ``StepThree`` measurement function.
         interpolate_voltage_trace (bool): Whether to interpolate the voltage trace to a fixed time interval.
         
     Returns:
-        (:py:class:`~biophysics_fitting.evaluator.Evaluator`): An evaluator object.
+        :py:class:`~biophysics_fitting.evaluator.Evaluator`: An evaluator object.
         
     Raises:
-        NotImplementedError: If :paramref:step or :paramref:vInit are set to True.
+        NotImplementedError: If :paramref:vInit is set to True.
         
     See also:
         See :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011` for more information.
@@ -204,7 +217,6 @@ def get_Evaluator(
     e = Evaluator()
     bap = hay_evaluation_python.bAP(**bAP_kwargs)
     bac = hay_evaluation_python.BAC(**BAC_kwargs)
-    # TODO add step currents
 
     if interpolate_voltage_trace:
         e.setup.pre_funs.append(interpolate_vt)
@@ -214,9 +226,17 @@ def get_Evaluator(
 
     e.setup.evaluate_funs.append(
         ['bAP.hay_measure', bap.get, 'bAP.hay_features'])
-
+    
     if step:
-        raise NotImplementedError
+        step_one = hay_evaluation_python.StepOne(**StepOne_kwargs)
+        step_two = hay_evaluation_python.StepTwo(**StepTwo_kwargs)
+        step_three = hay_evaluation_python.StepThree(**StepThree_kwargs)
+        e.setup.evaluate_funs.append(
+            ['StepOne.hay_measure', step_one.get, 'StepOne.hay_features'])
+        e.setup.evaluate_funs.append(
+            ['StepTwo.hay_measure', step_two.get, 'StepTwo.hay_features'])
+        e.setup.evaluate_funs.append(
+            ['StepThree.hay_measure', step_three.get, 'StepThree.hay_features'])
     if vInit:
         raise NotImplementedError
     e.setup.finalize_funs.append(lambda x: merge(list(x.values())))

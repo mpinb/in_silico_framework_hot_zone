@@ -3,8 +3,10 @@ from biophysics_fitting.hay_evaluation import (
     get_hay_problem_description, 
     get_hay_objective_names, 
     setup_hay_evaluator,
-    get_hay_params_pdf
+    get_hay_params_pdf,
     )
+from biophysics_fitting.hay_complete_default_setup_python import get_Evaluator, get_Simulator, get_Combiner
+from biophysics_fitting.hay_complete_default_setup import get_fixed_params_example
 from config.isf_logging import StreamToLogger, logger
 import numpy as np
 import pandas as pd
@@ -54,17 +56,42 @@ def hay_objective_function(x):
     x = h.Vector().from_python(x)
 
     h.organism[0].set_genome(x)
-    with StreamToLogger(
-            logger, 10) as sys.stdout:  # redirect to log with level DEBUG (10)
+    with StreamToLogger(logger, 10) as sys.stdout: 
         try:
             h.evaluator.evaluate_population(o)
         except:
             return [1000] * 5
-    return pd.Series(np.array(o[0].pass_fitness_vec()),
-                     index=get_hay_objective_names())
+    return pd.Series(np.array(o[0].pass_fitness_vec()), index=get_hay_objective_names())
+
+
+def test_hay_evaluation_python():
+    """Test the evaluation of the Python hay evaluator translation
+    """
+    fixed_params = get_fixed_params_example()
+    fixed_params = {'BAC.hay_measure.recSite': 294.8203371921156,
+        'BAC.stim.dist': 294.8203371921156,
+        'bAP.hay_measure.recSite1': 294.8203371921156,
+        'bAP.hay_measure.recSite2': 474.8203371921156,
+        'hot_zone.min_': 384.8203371921156,
+        'hot_zone.max_': 584.8203371921156,
+        'hot_zone.outsidescale_sections': [23, 24, 25, 26, 27, 28, 29, 31, 32, 33, 34, 35, 37, 38, 40, 42, 43, 44, 46, 48, 50, 51, 52, 54, 56, 58, 60],
+        'morphology.filename': '/gpfs/soma_fs/scratch/meulemeester/project_src/in_silico_framework/getting_started/example_data/simulation_data/biophysics/89/db/morphology/89_L5_CDK20050712_nr6L5B_dend_PC_neuron_transform_registered_C2.hoc'}
+    s = get_Simulator(fixed_params=fixed_params, step=True)
+    e = get_Evaluator(step=True)
+    c = get_Combiner(step=True)
+    
+    x = get_feasible_model_params().x
+    features_dict = s.run(x)
+    evaluation = e.evaluate(features_dict)
+    y = c.combine(evaluation)
+    y_target = get_feasible_model_objectives().y
+    
+    assert np.allclose(y, y_target, rtol=1e-3, atol=1e-3)
+
+
 
 @pytest.mark.skip("This test segfaults, unsure why. It's set for removal either way.")
-def hay_evaluation_test():
+def test_hay_evaluation():
     '''compare the result of the optimization of the hay evaluator with a precomputed result'''
     print(
         "Testing this only works, if you uncomment the following line in MOEA_gui_for_objective_calculation.hoc: "

@@ -394,7 +394,13 @@ class CellParser(object):
                         for s in paramStrings:
                             if not '_ion' in mechName:
                                 s = '.'.join(('seg', mechName, s))
-                                exec(s)
+                                try:
+                                    exec(s)
+                                except ValueError as e:
+                                    logger.error(
+                                        "NEURON Could not set range mechanism parameter {} in label {}\n Tried exectuing: {}.".format(mechName, label, s))
+                                    logger.error(traceback.format_exc())
+                                    raise e
                             else:
                                 sec.push()
                                 exec(s)

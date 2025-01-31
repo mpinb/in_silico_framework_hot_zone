@@ -6,26 +6,21 @@ this module has been adapted to allow for more flexibility and integration with 
 :skip-doc:
 '''
 from __future__ import absolute_import
-
+import os
 from functools import partial
 from multiprocessing import Pool
 import numpy as np
 import pandas as pd
-
 import single_cell_parser as scp
-
 from . import setup_stim
 from .utils import tVec, vmSoma, vmApical
 from .parameters import set_fixed_params, param_to_kwargs
-
 from .simulator import Simulator, run_fun
-from .L5tt_parameter_setup import get_L5tt_template, set_morphology, set_ephys, set_hot_zone, set_param, set_many_param
+from .L5tt_parameter_setup import get_L5tt_template_v2, set_morphology, set_ephys, set_hot_zone, set_param, set_many_param
 # moved to bottom to resolve circular import
 # from .hay_evaluation import hay_evaluate_BAC, hay_evaluate_bAP, hay_evaluate_StepOne, hay_evaluate_StepTwo, hay_evaluate_StepThree
-
 from .evaluator import Evaluator
 from toolz.dicttoolz import merge
-
 from .combiner import Combiner
 
 __author__ = 'Arco Bast'
@@ -61,7 +56,7 @@ def get_fixed_params_example():
         'BAC.hay_measure.recSite':
             349,
         'morphology.filename':
-            '/nas1/Data_arco/project_src/in_silico_framework/biophysics_fitting/MOEA_EH_minimal/morphology/89_L5_CDK20050712_nr6L5B_dend_PC_neuron_transform_registered_C2.hoc'
+            os.path.abspath(os.path.join(__file__, "..", "..", "getting_started", 'example_data', 'morphology', '89_L5_CDK20050712_nr6L5B_dend_PC_neuron_transform_registered_C2.hoc'))
     }  # TODO: fix fixed params morphology example
     return fixed_params
 
@@ -172,7 +167,7 @@ def get_Simulator(fixed_params, step=False):
         See :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011` for more information.
     """
     s = Simulator()
-    s.setup.cell_param_generator = get_L5tt_template
+    s.setup.cell_param_generator = get_L5tt_template_v2
     s.setup.params_modify_funs.append(
         ['fixed_params',
          partial(set_fixed_params, fixed_params=fixed_params)])
