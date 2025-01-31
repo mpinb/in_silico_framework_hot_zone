@@ -1,14 +1,5 @@
 [project]
 authors = [{name = "Bjorge Meulemeester", email = "bjorge.meulemeester@mpinb.mpg.de"}]
-dependencies = [
-  "bluepyopt==1.9.126", 
-  "sumatra==0.7.4", 
-  "tables>=3.8.0,<4", 
-  "redis>=5.2.0,<6", 
-  "pyarrow==12.0.1", 
-  "blosc>=1.11.1,<2", 
-  "pandas-msgpack @ https://github.com/abast/pandas-msgpack.git"
-]
 description = "Add a short description here"
 name = "in_silico_framework"
 requires-python = ">=3.8, <3.10"
@@ -35,7 +26,6 @@ flask = "1.1.4.*"
 markupsafe = "2.0.1.*"
 neuron = "7.8.2.*"
 scikit-learn = "0.23.2.*"
-simpleitk = ">=2.4.0,<3"
 pypdf2 = ">=3.0.1,<4"
 mock = ">=5.1.0,<6"
 scandir = ">=1.10.0,<2"
@@ -57,6 +47,19 @@ jupyterlab = ">=3.5.3,<4"
 jupyter-scatter = ">=0.19.1,<0.20"
 cmasher = ">=1.6.3,<2"
 ipywidgets = ">=8.1.5,<9"
+simpleitk = ">=2.2.1,<3"
+zarr = ">=2.15.0,<3"
+scikit-image = ">=0.19.2,<0.20"
+
+[tool.pixi.pypi-dependencies]
+bluepyopt = "==1.9.126"
+sumatra = "==0.7.4"
+redis = ">=5.2.0,<6"
+pyarrow = "==12.0.1" 
+blosc = ">=1.11.1,<2" 
+scikit-learn = ">=0.23.2"
+seaborn = ">=0.12.2,<0.13"
+pandas-msgpack = { git = "https://github.com/abast/pandas-msgpack.git"}
 
 [tool.pixi.pypi-options]
 no-build-isolation = ["pandas-msgpack"]
