@@ -1,11 +1,10 @@
 import numpy as np
-import pytest
-import signal
-import time
+import pytest, sys, signal, time, six
 from multiprocessing import Process
-import six
 from data_base.IO.LoaderDumper.shared_numpy_store import *
 
+if sys.platform.startswith('darwin'):
+    pytest.skip("Shared numpy stores are not (yet) implemented on OSX", allow_module_level=True)
 
 class TemporaryDirectory:  # just for testing
 
