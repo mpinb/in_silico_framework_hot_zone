@@ -7,7 +7,7 @@ File & data formats
 .am
 ***
 
-The Amira proprietary file format. See `here <https://www.csc.kth.se/~weinkauf/notes/amiramesh.html>`_ for more information.
+The Amira proprietary file format. Refer to the `amira documentation <https://www.csc.kth.se/~weinkauf/notes/amiramesh.html>`_ for more information.
 This flexible format can be used to store 3D scalar meshes, 3D neuron morphology reconstructions, slice image data etc.
 
 Readers:
@@ -20,7 +20,7 @@ Readers:
 .hoc
 ****
 NEURON :cite:`hines2001neuron` file format for neuron morphologies. 
-Documentation can be found `here <https://nrn.readthedocs.io/en/latest/guide/hoc_chapter_11_old_reference.html>`_.
+refer to the `NEURON hoc documentation <https://nrn.readthedocs.io/en/latest/guide/hoc_chapter_11_old_reference.html>`_ for more info.
 The morphology is specified as a tree structure: the different sections of a neuron 
 (pieces separated between branching points or branches endings) are connected in order. 
 Each section is formed by a set of points, defined by their 3D coordinates and the diameter of the 
@@ -55,7 +55,7 @@ Example::
 
 .mod
 ****
-NEURON :cite:`hines2001neuron` file format for neuron mechanisms. Documentation can be found `here <https://neuron.yale.edu/neuron/docs/using-nmodl-files>`_.
+NEURON :cite:`hines2001neuron` file format for neuron mechanisms. refer to the `NEURON NMOL documentation <https://neuron.yale.edu/neuron/docs/using-nmodl-files>`_ for more info.
 Used to define channel and synapse dynamics in NEURON simulations.
 See the folder `mechanisms` in the project source.
 

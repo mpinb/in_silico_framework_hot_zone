@@ -46,7 +46,8 @@ class Rm(object):
         db (str): Path to the database
         tmin (float): Minimum time for the simulation
         tmax (float): Maximum time for the simulation
-        width (float): Width of the temporal kernel. This will be used as the :math:`\tau` domain in e.g. :py:class:`simrun.mod
+        width (float): Width of the temporal kernel. 
+            This will be used as the domain e.g. the :math:`\tau` domain in :py:class:`~simrun.modular_reduced_model_inference.strategy.RaisedCosineBases`
         n_trials (int): Amount of trials
         data_extractors (dict): Dictionary of :py:class:`~simrun.modular_reduced_model_inference.data_extractor._DataExtractor` objects
         strategies (dict): Dictionary of :py:class:`~simrun.modular_reduced_model_inference.strategy.Strategy` objects

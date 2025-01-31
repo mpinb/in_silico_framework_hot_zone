@@ -23,7 +23,8 @@ class LoaderWrapper:
     data_base.basedir folder. It is not used, if the data is stored directly
     in the sqlite database.
     
-    The process of storing data in a subfolder is as follows, errno:
+    The process of storing data in a subfolder is as follows:
+    
     1. The subfolder is generated using the mkdtemp method
     2. the respective dumper puts its data there
     3. the dumper also saves a Loader.pickle file there. This contains an object
@@ -34,11 +35,11 @@ class LoaderWrapper:
         in the data_base
         
     The process of loading in the data is as follows:
-    1. the user request it: db['somekey']
-    2. the LoaderWrapper object is loaded from the backend sql database
-    3. the Loader.pickle file in the respective folder is loaded
-    4. the get-methdod of the unpickled object is called with the
-        absolute path to the folder.
+    
+    1. the user request it: ``db['somekey']``
+    2. the ``LoaderWrapper`` object is loaded from the backend sql database
+    3. the ``Loader.pickle`` file in the respective folder is loaded
+    4. the ``get``-methdod of the unpickled object is called with the absolute path to the folder.
     5. the returned object is returned to the user
     '''
     def __init__(self, relpath):
@@ -218,7 +219,6 @@ class ISFDataBase:
             - ``_registered_to_path``: The path that this database has been registered to on the current filesystem.
             
         _forbidden_keys (list): A list of keys that are not allowed to be used: ``["Loader.json", "metadata.db.lock", "sqlitedict.db.lock", "db_state.json"]``
-        _is_initialized (bool): True if the database has been initialized. This should happen during the initialization.
         _basedir (Path): :py:class:`pathlib.Path` object of :paramref:`basedir`, to use internally.
         
     '''
@@ -778,7 +778,7 @@ class ISFDataBase:
             key (str): The key to save the data under.
             value (obj): The data to save.
             lock (Lock, optional): If you use file locking, provide the lock that grants access. Defaults to None.
-            dumper (module|str|None, optional): 
+            dumper (module | str | None, optional): 
                 The dumper module to use when saving data. 
                 If None is passed, it will use the default dumper :py:mod:`~data_base.isf_data_base.IO.LoaderDumper.to_cloudpickle`. 
                 Defaults to None.

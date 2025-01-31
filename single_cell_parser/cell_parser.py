@@ -890,17 +890,22 @@ class CellParser(object):
         
         Sets up the cell structure :paramref:`label` with a Hodgkin-Huxley membrane that has the following properties:
         
-        * :math:`\\bar{g}_{L} = 0.0003 \\, S/cm^2`
-        * :math:`E_{L} = -54.3 \\, mV`
+        - :math:`\\bar{g}_{L} = 0.0003 \\, S/cm^2`
+        - :math:`E_{L} = -54.3 \\, mV`
         - Soma:
-            * :math:`\\bar{g}_{Na} = 0.003 \\, S/cm^2`
-            * :math:`\\bar{g}_{K} = 0.01 \\, S/cm^2`
+        
+            - :math:`\\bar{g}_{Na} = 0.003 \\, S/cm^2`
+            - :math:`\\bar{g}_{K} = 0.01 \\, S/cm^2`
+            
         - Axon:
-            * :math:`\\bar{g}_{Na} = 3.0 \\, S/cm^2`
-            * :math:`\\bar{g}_{K} = 0.0 \\, S/cm^2`
+        
+            - :math:`\\bar{g}_{Na} = 3.0 \\, S/cm^2`
+            - :math:`\\bar{g}_{K} = 0.0 \\, S/cm^2`
+            
         - Dendrite:
-            * :math:`\\bar{g}_{Na} = 0.003 \\, S/cm^2`
-            * :math:`\\bar{g}_{K} = 0.01 \\, S/cm^2`
+        
+            - :math:`\\bar{g}_{Na} = 0.003 \\, S/cm^2`
+            - :math:`\\bar{g}_{K} = 0.01 \\, S/cm^2`
         
         """
         if self.cell is None:

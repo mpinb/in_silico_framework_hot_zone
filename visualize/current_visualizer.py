@@ -16,7 +16,7 @@ Example:
     >>> ca = CurrentAnalysis(cell)
     >>> ca.plot_areas()
     
-.. figure:: ../../_static/_images/current_analysis.png
+.. figure:: ../../../_static/_images/current_analysis.png
 
     Example of a current analysis plot for a :py:class:`~biophysics_fitting.hay_evaluation_python.BAC` stimulus, simulated with a :py:class:`~biophysics_fitting.simulator.Simulator`.
 

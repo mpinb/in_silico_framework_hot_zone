@@ -82,15 +82,16 @@ class BAC:
         punish_minspikenum (int): The minimum number of spikes required for this stimulus protocol.
         punish_returning_to_rest_tolerance (float): The tolerance for returning to rest (:math:`mV`). Defaults to :math:`2 mV`.
         prefix (str): The prefix for the evaluation metric checks. Defaults to an empty string.
-        definitions (dict): The empirical means and standard deviations for the evaluation metrics. Defaults to:
-            ``{
+        definitions (dict): The empirical means and standard deviations for the evaluation metrics. Defaults to::
+            
+            {
                 'BAC_APheight': ('AP_height', 25.0, 5.0),
                 'BAC_ISI': ('BAC_ISI', 9.901, 0.8517),
                 'BAC_ahpdepth': ('AHP_depth_abs', -65.0, 4.0),
                 'BAC_caSpike_height': ('BAC_caSpike_height', 6.73, 2.54),
                 'BAC_caSpike_width': ('BAC_caSpike_width', 37.43, 1.27),
                 'BAC_spikecount': ('Spikecount', 3.0, 0.01)
-            }``
+            }
     """
 
     def __init__(
@@ -390,7 +391,6 @@ class BAC:
 class bAP:
     """Evaluate the :math:`bAP` stimulus protocol.
     
-    
     These metrics were introduced by :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011`, and illustrated in :cite:t:`Guest_Bast_Narayanan_Oberlaender`.
     
     See also:
@@ -407,14 +407,15 @@ class bAP:
         punish_last_spike_after_deadline (bool): Whether to punish if the last spike is after the deadline. Defaults to ``True``
         punish_minspikenum (int): The minimum number of spikes required for this stimulus protocol.
         punish_returning_to_rest_tolerance (float): The tolerance for returning to rest (:math:`mV`). Defaults to :math:`2 mV`.
-        definitions (dict): The empirical means and standard deviations for the evaluation metrics. Defaults to:
-            ``{
+        definitions (dict): The empirical means and standard deviations for the evaluation metrics. Defaults to::
+            
+            {
                 'bAP_APheight': ('AP_height', 25.0, 5.0),
                 'bAP_APwidth': ('AP_width', 2.0, 0.5),
                 'bAP_att2': ('BPAPatt2', 45.0, 10.0),
                 'bAP_att3': ('BPAPatt3', 36.0, 9.33),
                 'bAP_spikecount': ('Spikecount', 1.0, 0.01)
-            }``
+            }
     """
     def __init__(
         self,
@@ -615,7 +616,7 @@ class bAP:
             dict: Dictionary mapping ``".raw"`` to the backpropagating action potential attenuation.
             
         See also:
-            :py:meth:`~biophysics_fitting.ephys.BPAPatt
+            :py:meth:`~biophysics_fitting.ephys.BPAPatt`
         """
         t, v = voltage_traces['tVec'], voltage_traces['vList'][0]
         v_dend = voltage_traces['vList'][_n]

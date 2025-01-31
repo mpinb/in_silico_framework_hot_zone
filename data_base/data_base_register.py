@@ -29,7 +29,7 @@ LOCAL_DATA_BASE_REGISTER_LOCATION = os.path.dirname(__file__)
 class DataBaseRegister():
     """Two column registry mapping data bases to their locations.
 
-    This registry keeps track of all :py:class:`DataBase` ``id``s and their locations on disk.
+    This registry keeps track of all :py:class:`DataBase` ``id`` tags and their locations on disk.
     This is useful when sharing data with other people, resolving relative database paths, and moving databases to other file systems.
     This registry implements an SQLite backend to store these locations and corresponding database IDs.
         

@@ -32,10 +32,12 @@ class RW:
         param_ranges (pd.DataFrame): parameters as rows and has a ``min_`` and ``max_`` column denoting range of values this parameter may take
         params_to_explore (list): list of parameters that should be explored. If None, all parameters are explored.
         evaluation_function (callable): takes one argument (a new parameter vector), returns inside, evaluation:
+        
             - inside: boolean that indicates if the parameter vector is within experimental constraits
                 (i.e. results in acceptable physiology) or not.
             - evaluation: dictionary that will be saved alongside the parameters. For example, this should contain
                 ephys features.
+        
         MAIN_DIRECTORY (str): output directory in which results are stored.
         min_step_size (float): minimum step size for the random walk
         max_step_size (float): maximum step size for the random walk

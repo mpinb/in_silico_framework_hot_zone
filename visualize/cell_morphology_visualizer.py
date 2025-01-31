@@ -92,7 +92,6 @@ class CMVDataParser:
             None means it has no simulation data. 
             Empty means it has simulation data that has not been initialized yet.
         time_show_syn_activ (float): Time in the simulation during which a synapse activation is shown during the visualization.
-        _has_simulation_data (bool): Test if the cell object has been simulated by checking if it has voltage data.
         """
     def __init__(
         self, 

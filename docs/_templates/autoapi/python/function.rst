@@ -34,6 +34,12 @@
 
    {% if obj.docstring %}
 
-   {{ obj.docstring|indent(3) }}
+   {{ obj.docstring | replace("_", "\_") | indent(3) }}
    {% endif %}
 {% endif %}
+
+.. 
+   Warning: we replace underscores with an escape backslash about 4 lines above to avoid having Sphinx interpret arguments as links.
+   However, this may cause issues with code blocks or other literal text, and malform markdown tables
+   Use with caution?
+..

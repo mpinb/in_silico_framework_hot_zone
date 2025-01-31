@@ -59,7 +59,6 @@ class NetworkMapper:
         connected_cells (dict): dictionary holding indices of all active presynaptic cells ordered by cell type.
         postCell (:py:class:`~single_cell_parser.cell.Cell`): reference to postsynaptic (multi-compartment) cell model.
         nwParam (:py:class:`~sumatra.parameters.NTParameterSet`): network parameter set (see :ref:`network_parameters_format` for more info).
-        nwParam (:py:class:`~sumatra.parameters.NTParameterSet`): network parameter set (see :ref:`network_parameters_format` for more info).
         simParam (:py:class:`~sumatra.parameters.NTParameterSet`): simulation parameter set.
     '''
 

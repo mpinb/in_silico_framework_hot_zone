@@ -6,7 +6,7 @@ of the rat barrel cortex, based on methods and data presented in
 
 This runfile assumes you have downloaded and extracted the barrel cortex model data from
 https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/JZPULNa.
-If this is not the case, please consult ``installer/download_bc_model` and extract.
+If this is not the case, please consult ``installer/download_bc_model`` and extract.
 
 Attention:
     This file is specific to the barrel cortex model data. If you want to use it for other data,

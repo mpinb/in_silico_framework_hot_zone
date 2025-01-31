@@ -1,5 +1,16 @@
 .. _tutorials:
 
+.. toctree::
+   :hidden:
+   :glob:
+
+   tutorials/Introduction_to_ISF.ipynb
+   tutorials/1. neuron models/*
+   tutorials/2. network models/*
+   tutorials/3. multiscale models/*
+   tutorials/4. reduced models/*
+   tutorials/auxiliary notebooks/*
+
 Tutorials
 =========
 
@@ -7,7 +18,7 @@ Tutorials
    :caption: Introduction
    :glob:
 
-   Introduction_to_ISF.ipynb
+   tutorials/Introduction_to_ISF.ipynb
 
 
 .. nbgallery::

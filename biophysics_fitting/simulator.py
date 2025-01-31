@@ -379,7 +379,6 @@ class Simulator_Setup:
             self._check_not_none(cell, 'cell', name)
         return cell, params
 
-
 class Simulator:
     '''This class can be used to transform a parameter vector into simulated voltage traces.
     

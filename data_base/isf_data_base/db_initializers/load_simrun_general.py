@@ -1131,9 +1131,9 @@ def init(
         n_chunks (int, optional):
             Number of chunks to split the :ref:`syn_activation_format` and :ref:`spike_times_format` dataframes into. 
             Default is 5000.
-        client (distributed.Client, optional): 
+        client (dask.distributed.Client, optional): 
             Distributed Client object for parallel parsing of anything that isn't a dask dataframe.
-        scheduler (*.get, optional)
+        scheduler (dask.distributed.Client, optional)
             Scheduler to use for parallellized parsing of dask dataframes. 
             can e.g. be simply the ``distributed.Client.get`` method.
             Default is None.
