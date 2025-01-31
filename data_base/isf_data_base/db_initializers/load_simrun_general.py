@@ -77,13 +77,10 @@ import single_cell_parser as scp
 import single_cell_parser.analyze as sca
 from data_base.isf_data_base import ISFDataBase
 from data_base.isf_data_base.IO.LoaderDumper import (
-    dask_to_categorized_msgpack, 
     pandas_to_pickle,
     to_cloudpickle, 
     to_pickle, 
     pandas_to_parquet, 
-    dask_to_msgpack, 
-    pandas_to_msgpack,
     get_dumper_string_by_dumper_module, 
     dask_to_parquet)
 from data_base.exceptions import DataBaseException
@@ -290,7 +287,7 @@ def read_voltage_traces_by_filenames(
         prefix (str): Path to the directory containing the simulation results.
         fnames (list): list of filenames pointing to voltage trace files
         divisions (list): list of divisions for the dask dataframe. Default is None, letting Dask handle it.
-        repartition (bool): If True, the dask dataframe is repartitioned to 5000 partitions (only if it contains over $10000$ entries).
+        repartition (bool): If True, the dask dataframe is repartitioned to 5000 partitions (only if it contains over :math:`10000` entries).
     
     Returns: 
         dask.DataFrame: A dask dataframe containing the voltage traces.
@@ -329,7 +326,7 @@ def get_voltage_traces_divisions_by_metadata(metadata, repartition=None):
     
     Args:
         metadata (pd.DataFrame): Metadata dataframe containing the simulation trial indices.
-        repartition (bool): If True, the dask dataframe is repartitioned to 5000 partitions (only if it contains over $10000$ entries).
+        repartition (bool): If True, the dask dataframe is repartitioned to 5000 partitions (only if it contains over :math:`10000` entries).
         
     Returns:
         tuple: Tuple containing the divisions for the voltage traces dataframe.
@@ -547,7 +544,7 @@ def load_dendritic_voltage_traces_helper(
             List of divisions for the dask dataframe.
             Default is None, letting Dask handle it.
         repartition (bool):
-            If True, the dask dataframe is repartitioned to 5000 partitions (only if it contains over $10000$ entries).
+            If True, the dask dataframe is repartitioned to 5000 partitions (only if it contains over :math:`10000` entries).
             
     Returns:
         dask.DataFrame: A dask dataframe containing the dendritic voltage traces.
@@ -617,7 +614,7 @@ def load_dendritic_voltage_traces(db, suffix_key_dict, repartition=None):
             Dictionary containing the suffixes of the dendritic voltage trace files.
             The keys are the labels of the recording sites, and the values are the suffixes of the dendritic voltage trace files.
         repartition (bool):
-            If True, the dask dataframe is repartitioned to 5000 partitions (only if it contains over $10000$ entries).
+            If True, the dask dataframe is repartitioned to 5000 partitions (only if it contains over :math:`10000` entries).
             
     Returns:
         dict: Dictionary containing the dask dataframes of the dendritic voltage traces.
@@ -845,7 +842,7 @@ def _build_core(db, repartition=None, metadata_dumper=pandas_to_parquet):
     
     Args:
         db (:py:class:`~data_base.isf_data_base.isf_data_base.ISFDataBase`): The database to which the data should be added.
-        repartition (bool): If True, the dask dataframe is repartitioned to 5000 partitions (only if it contains over $10000$ entries).
+        repartition (bool): If True, the dask dataframe is repartitioned to 5000 partitions (only if it contains over :math:`10000` entries).
         metadata_dumper (function): Function to dump the metadata to disk. Default is :py:mod:`~data_base.isf_data_base.IO.LoaderDumper.pandas_to_parquet`.
         
     Returns:
@@ -893,7 +890,7 @@ def _build_synapse_activation(db, repartition=False, n_chunks=5000):
     
     Args:
         db (:py:class:`~data_base.isf_data_base.isf_data_base.ISFDataBase`): The database to which the data should be added.
-        repartition (bool): If True, the dask dataframe is repartitioned to 5000 partitions (only if it contains over $10000$ entries).
+        repartition (bool): If True, the dask dataframe is repartitioned to 5000 partitions (only if it contains over :math:`10000` entries).
         n_chunks (int): Number of chunks to split the data into. Default is 5000.
         
     Returns:
@@ -998,7 +995,7 @@ def _build_dendritic_voltage_traces(db, suffix_dict=None, repartition=None):
         db (:py:class:`~data_base.isf_data_base.isf_data_base.ISFDataBase`): The database to which the data should be added.
         suffix_dict (dict): Dictionary containing the suffixes of the dendritic voltage trace files. 
             Default is None, and they are inferred from the cell parameter files.
-        repartition (bool): If True, the dask dataframe is repartitioned to 5000 partitions (only if it contains over $10000$ entries).
+        repartition (bool): If True, the dask dataframe is repartitioned to 5000 partitions (only if it contains over :math:`10000` entries).
         
     Returns:
         None    
@@ -1112,7 +1109,7 @@ def init(
             Parse and write the dendritic spike times to the database.
             See also: :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general.add_dendritic_spike_times`
         dendritic_spike_times_threshold (float, optional):
-            Threshold for the dendritic spike times in mV. Default is $-30$.
+            Threshold for the dendritic spike times in mV. Default is :math:`-30`.
             See also: :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general.add_dendritic_spike_times`
         synapse_activation (bool, optional):
             Parse and write the synapse activation data to the database.
@@ -1130,13 +1127,13 @@ def init(
             and will not work if the data folder is deleted or moved or transferred to another machine 
             where the same absolute paths are not valid.
         repartition (bool, optional):
-            If True, the dask dataframe is repartitioned to 5000 partitions (only if it contains over $10000$ entries).
+            If True, the dask dataframe is repartitioned to 5000 partitions (only if it contains over :math:`10000` entries).
         n_chunks (int, optional):
             Number of chunks to split the :ref:`syn_activation_format` and :ref:`spike_times_format` dataframes into. 
             Default is 5000.
-        client (distributed.Client, optional): 
+        client (dask.distributed.Client, optional): 
             Distributed Client object for parallel parsing of anything that isn't a dask dataframe.
-        scheduler (*.get, optional)
+        scheduler (dask.distributed.Client, optional)
             Scheduler to use for parallellized parsing of dask dataframes. 
             can e.g. be simply the ``distributed.Client.get`` method.
             Default is None.
@@ -1240,10 +1237,10 @@ def add_dendritic_voltage_traces(
             If True, the dendritic spike times are added to the database.
             Default is True.
         repartition (bool, optional):
-            If True, the dask dataframe is repartitioned to 5000 partitions (only if it contains over $10000$ entries).
+            If True, the dask dataframe is repartitioned to 5000 partitions (only if it contains over :math:`10000` entries).
             Default is True.
         dendritic_spike_times_threshold (float, optional):
-            Threshold for the dendritic spike times in mV. Default is $-30$.
+            Threshold for the dendritic spike times in mV. Default is :math:`-30`.
             See also: :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general.add_dendritic_spike_times`
         client (:py:class:`~dask.distributed.client.Client`, optional):
             Distributed Client object for parallel computation.
@@ -1270,7 +1267,7 @@ def add_dendritic_spike_times(db, dendritic_spike_times_threshold=-30.):
         db (:py:class:`~data_base.isf_data_base.isf_data_base.ISFDataBase`):
             The database to which the data should be added.
         dendritic_spike_times_threshold (float, optional):
-            Threshold for the dendritic spike times in mV. Default is $-30$.
+            Threshold for the dendritic spike times in mV. Default is :math:`-30`.
             See also: :py:meth:`~data_base.analyze.spike_detection`
     """
     m = db.create_sub_db('dendritic_spike_times')
@@ -1297,11 +1294,12 @@ def _get_dumper(value):
     Raises:
         NotImplementedError: If the dataframe is not a pandas or dask dataframe.
     '''
-    # For the legacy py2.7 version, it still uses the msgpack dumper
-    if isinstance(value, pd.DataFrame):
-        return OPTIMIZED_PANDAS_DUMPER if six.PY3 else pandas_to_msgpack
-    elif isinstance(value, dd.DataFrame):
-        return OPTIMIZED_DASK_DUMPER if six.PY3 else dask_to_msgpack
+    if six.PY2:
+        # For the legacy py2.7 version, it still uses the msgpack dumper
+        from data_base.isf_data_base.IO.LoaderDumper import pandas_to_msgpack, dask_to_msgpack
+        return pandas_to_msgpack if isinstance(value, pd.DataFrame) else dask_to_msgpack
+    elif six.PY3:
+        return OPTIMIZED_PANDAS_DUMPER if isinstance(value, pd.DataFrame) else OPTIMIZED_DASK_DUMPER
     else:
         raise NotImplementedError()
 
@@ -1415,7 +1413,7 @@ def load_initialized_cell_and_evokedNW_from_db(
     
     """
     import dask
-    from data_base.IO.roberts_formats import write_pandas_synapse_activation_to_roberts_format
+    from data_base.isf_data_base.IO.roberts_formats import write_pandas_synapse_activation_to_roberts_format
     neup, netp = load_param_files_from_db(db, sti)
     sa = db['synapse_activation']
     sa = sa.loc[sti].compute()

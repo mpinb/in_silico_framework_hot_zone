@@ -2,7 +2,7 @@
 
 During saving, the data undergoes the following changes:
 
-- Spike times and lda values are kept with an accuracy of $.01$.
+- Spike times and lda values are kept with an accuracy of :math:`.01`.
 - The index of the spike times is reset, i.e. the ``sim_trial_index`` is not kept.
 - The :py:class:`~simrun.reduced_model.get_kernel.ReducedLdaModel` attribute ``db_list``, which normally contains ``DataBase`` instances, 
   is replaced by a list of strings that only contain the unique_id of each database. 
@@ -18,9 +18,9 @@ The output is a database with the following keys:
    * - Key
      - Description
    * - ``st``
-     - Spike times with a precision of $.01$.
+     - Spike times with a precision of :math:`.01`.
    * - ``lda_value_dicts_<index>``
-     - Dictionaries of LDA values with a precision of $.01$.
+     - Dictionaries of LDA values with a precision of :math:`.01`.
    * - ``Rm``
      - The reduced model.
 '''
@@ -33,12 +33,18 @@ from . import parent_classes
 import os, cloudpickle
 from simrun.reduced_model.get_kernel import ReducedLdaModel
 from data_base.data_base import DataBase, get_db_by_unique_id
-from . import pandas_to_parquet, pandas_to_msgpack
-from . import numpy_to_npz
+from . import pandas_to_parquet
+from . import numpy_to_zarr
 import pandas as pd
 import compatibility
 import six
 import json
+
+if six.PY2:
+    from . import numpy_to_msgpack
+    numpy_dumper = numpy_to_msgpack
+elif six.PY3:
+    numpy_dumper = numpy_to_zarr
 
 def check(obj):
     """Check whether the object can be saved with this dumper
@@ -78,8 +84,8 @@ def dump(obj, savedir):
     
     The database will contain the following keys:
     
-    - ``st``: Spike times with a precision of $.01$.
-    - ``lda_value_dicts_<index>``: Dictionaries of LDA values with a precision of $.01$.
+    - ``st``: Spike times with a precision of :math:`.01`.
+    - ``lda_value_dicts_<index>``: Dictionaries of LDA values with a precision of :math:`.01`.
     - ``Rm``: The reduced model.    
     
     Args:
@@ -98,6 +104,7 @@ def dump(obj, savedir):
     db_list = Rm.db_list
 
     if six.PY2:
+        from . import pandas_to_msgpack
         st_dumper = pandas_to_msgpack
     elif six.PY3:
         st_dumper = pandas_to_parquet
@@ -116,7 +123,7 @@ def dump(obj, savedir):
             new_lda_value_dicts.append({})
             for k in list(d.keys()):
                 key = 'lda_value_dicts_' + str(lv)
-                db.set(key, d[k].round(decimals=2), dumper=numpy_to_npz)
+                db.set(key, d[k].round(decimals=2), dumper=numpy_dumper)
                 new_lda_value_dicts[-1][k] = key
                 lv += 1
         Rm.lda_value_dicts = new_lda_value_dicts

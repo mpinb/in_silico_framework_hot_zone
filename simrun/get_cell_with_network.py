@@ -1,13 +1,13 @@
-"""Build a cell with realized synapses from a :ref:`cell_params_format` file and a :ref:`network_params_format` file.
+"""Build a cell with realized synapses from a :ref:`cell_parameters_format` file and a :ref:`network_parameters_format` file.
 """
 
 import Interface as I
 
 
 def get_cell_with_network(neuron_param, network_param, cache=True):
-    """Build a cell with realized synapses from a :ref:`cell_params_format` file and a :ref:`network_params_format` file.
+    """Build a cell with realized synapses from a :ref:`cell_parameters_format` file and a :ref:`network_parameters_format` file.
     
-    This method creates a new network embedding for the :py:class:`~single_cell_parser.cell.Cell` based on the :ref:`network_params_format` file.
+    This method creates a new network embedding for the :py:class:`~single_cell_parser.cell.Cell` based on the :ref:`network_parameters_format` file.
     
     Args:
         neuron_param (str): Path to cell parameter file. 

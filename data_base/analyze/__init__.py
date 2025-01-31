@@ -8,24 +8,22 @@ See also:
 """
 
 
-import barrel_cortex
 from .spike_detection import spike_detection
 from . import spatiotemporal_binning
-
-excitatory = barrel_cortex.excitatory
-inhibitory = barrel_cortex.inhibitory
-
+import logging
+logger = logging.getLogger("ISF").getChild(__name__)
+from config.cell_types import EXCITATORY, INHIBITORY
 
 def split_synapse_activation(
     sa,
     selfcheck=True,
-    excitatory=excitatory,
-    inhibiotry=inhibitory):
-    '''Augment a :ref:`synapse_activation_format` dataframe with a boolean column for excitatory/inhibitory.
+    excitatory=EXCITATORY,
+    inhibitory=INHIBITORY):
+    '''Augment a :ref:`syn_activation_format` dataframe with a boolean column for excitatory/inhibitory.
     
     Args:
         sa (:py:class:`~pandas.DataFrame`): 
-            A :ref:`synapse_activation_format` dataframe.
+            A :ref:`syn_activation_format` dataframe.
             Must contain the column ``synapse_type``.
         selfcheck (bool): If ``True``, check if all cell types are either excitatory or inhibitory.
         excitatory (list): List of excitatory cell types.

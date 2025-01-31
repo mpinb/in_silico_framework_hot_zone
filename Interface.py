@@ -281,8 +281,7 @@ def get_client(client_port=38786, timeout=120):
 print("\n\n")
 print_module_versions()
 
-import barrel_cortex
-from barrel_cortex import excitatory, inhibitory, color_cellTypeColorMap, color_cellTypeColorMap_L6paper, color_cellTypeColorMap_L6paper_with_INH
+from config.cell_types import EXCITATORY, INHIBITORY
 
 import compatibility
 

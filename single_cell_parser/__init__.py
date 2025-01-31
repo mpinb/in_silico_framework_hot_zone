@@ -54,6 +54,7 @@ from sumatra.parameters import NTParameterSet
 import numpy as np
 import warnings
 from data_base.dbopen import dbopen
+from config.cell_types import EXCITATORY
 
 __author__  = "Robert Egger"
 __credits__ = ["Robert Egger", "Arco Bast"]
@@ -227,7 +228,11 @@ def init_neuron_run(simparam, vardt=False, *events):
 
 
 def sec_distance_to_soma(currentSec):
-    '''compute path length from sec(x=0) to soma'''
+    '''Compute the path length from :``sec(x=0)`` to soma
+    
+    Args:
+        currentSec (:py:class:`neuron.h.Section`): The section for which to compute the distance.
+    '''
     parentSec = currentSec.parent
     dist = 0.0
     parentLabel = parentSec.label
@@ -250,17 +255,22 @@ def spines_update_synapse_distribution_file(
         cell, 
         synapse_distribution_file,
         new_synapse_distribution_file):
-    '''Update the :ref:`syn_file_format` file to correctly point to spine heads as excitatory synapse locations. Spines must already exist, so call after create_cell, using the same :ref:`syn_file_format` file that was used to create the cell. new_synfile will be created if it does not already exist.'''
+    '''Update the :ref:`syn_file_format` file to correctly point to spine heads as excitatory synapse locations. 
+    
+    Spines must already exist, so call this after :py:meth:`create_cell`, 
+    using the same :ref:`syn_file_format` file that was used to create the cell. 
+
+    Args:
+        cell (:py:class:`~single_cell_parser.cell.Cell`): The cell object.
+        synapse_distribution_file (str): The path to the original :ref:`syn_file_format` file.
+        new_synfile (str): The path to the new :ref:`syn_file_format` file. 
+            A new_synfile will be created if it does not already exist.
+    '''
     ## update the .syn file
     spine_heads = []
     for sec in cell.sections:
         if sec.label == "SpineHead":
             spine_heads.append(sec)
-
-    excitatory = [
-        'L6cc', 'L2', 'VPM', 'L4py', 'L4ss', 'L4sp', 'L5st', 'L6ct', 'L34',
-        'L6ccinv', 'L5tt', 'Generic'
-    ]
 
     with open(synapse_distribution_file, "r") as synapse_file:
         file_data = synapse_file.readlines()
@@ -271,7 +281,7 @@ def spines_update_synapse_distribution_file(
         if n > 3:  # line 5 is first line containing data
             line_split = line.split("\t")
 
-            if (line_split[0].split("_"))[0] in excitatory:
+            if (line_split[0].split("_"))[0] in EXCITATORY:
 
                 file_data[n] = "\t".join(
                     (line_split[0], str(cell.sections.index(spine_heads[i])),
@@ -288,7 +298,14 @@ def spines_update_network_paramfile(
     network_paramfile, 
     new_network_paramfile
     ):
-    '''Update the network.param file to point to the new synapse distribution file'''
+    '''Update a :ref:`network_parameters_format` file to point to a new :ref:`syn_file_format` file.
+    
+    Args:
+        new_synapse_distribution_file (str): The path to the new :ref:`syn_file_format` file.
+        network_paramfile (str): The path to the original :ref:`network_parameters_format` file.
+        new_network_paramfile (str): The path to the new :ref:`network_parameters_format` file. 
+            A new_network_paramfile will be created if it does not already exist.
+    '''
     network_param = build_parameters(network_paramfile)
     for i in list(network_param.network.keys()):
         network_param.network[i].synapses.distributionFile = new_synapse_distribution_file

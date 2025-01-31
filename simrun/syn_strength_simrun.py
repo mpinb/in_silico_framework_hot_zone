@@ -1,4 +1,10 @@
 '''
+.. deprecated:: 0.1
+    This module is deprecated and will be removed in a future release.
+    It is kept around for reference, but all of this functionality is now
+    handled by the :mod:`simrun.syn_strength_fitting` module.
+
+:skip-doc:
 '''
 
 import sys
@@ -9,6 +15,8 @@ import neuron
 import single_cell_parser as scp
 import single_cell_parser.analyze as sca
 import matplotlib
+from config.isf_logging import logger as isf_logger
+logger = isf_logger.getChild(__name__)
 
 matplotlib.use('agg')
 import matplotlib.pyplot as plt
@@ -18,6 +26,8 @@ h = neuron.h
 
 __author__ = 'Robert Egger'
 __date__ = '2012-08-06'
+
+logger.warning('Deprecation warning: This module is deprecated and will be removed in a future release.')
 
 
 def unitary_connections(modelName,
@@ -340,27 +350,6 @@ def write_sim_results(fname, t, v):
             line += str(v[i])
             line += '\n'
             outputFile.write(line)
-
-
-def scale_apical(cell):
-    '''
-    scale apical diameters depending on
-    distance to soma; therefore only possible
-    after creating complete cell
-    '''
-    dendScale = 2.5
-    for sec in cell.sections:
-        if sec.label == 'ApicalDendrite':
-            dist = cell.distance_to_soma(sec, 1.0)
-            if dist > 1000.0:
-                continue
-            dummy = h.pt3dclear(sec=sec)
-            for i in range(sec.nrOfPts):
-                x, y, z = sec.pts[i]
-                sec.diamList[i] = sec.diamList[i] * dendScale
-                d = sec.diamList[i]
-                dummy = h.pt3dadd(x, y, z, d, sec=sec)
-
 
 if __name__ == '__main__':
     modelName = sys.argv[1]

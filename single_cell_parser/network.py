@@ -59,7 +59,6 @@ class NetworkMapper:
         connected_cells (dict): dictionary holding indices of all active presynaptic cells ordered by cell type.
         postCell (:py:class:`~single_cell_parser.cell.Cell`): reference to postsynaptic (multi-compartment) cell model.
         nwParam (:py:class:`~sumatra.parameters.NTParameterSet`): network parameter set (see :ref:`network_parameters_format` for more info).
-        nwParam (:py:class:`~sumatra.parameters.NTParameterSet`): network parameter set (see :ref:`network_parameters_format` for more info).
         simParam (:py:class:`~sumatra.parameters.NTParameterSet`): simulation parameter set.
     '''
 
@@ -68,7 +67,6 @@ class NetworkMapper:
 
         Args:
             postCell (:py:class:`~single_cell_parser.cell.Cell`): The cell to map synapses onto.
-            nwParam (:py:class:`~sumatra.parameters.NTParameterSet`): The network parameter set (see :ref:`network_parameters_format` for more info).
             nwParam (:py:class:`~sumatra.parameters.NTParameterSet`): The network parameter set (see :ref:`network_parameters_format` for more info).
             simParam (:py:class:`~sumatra.parameters.NTParameterSet`): The simulation parameter set. Default: None.
         '''
@@ -172,7 +170,7 @@ class NetworkMapper:
         
         Args:
             synInfoName (str): 
-                Name of the file containing the synapse activation times.
+                Name of the file containing the :ref:`syn_activation_format` file.
             synWeightName (str): 
                 Name of the file containing the synapse weights. Default: None.
             include_silent_synapses: 
@@ -408,7 +406,7 @@ class NetworkMapper:
         
         Network parameters contains information on how many presynaptic cells per synapse type there are.
         This method simply creates these cells as :py:class:`~single_cell_parser.cell.PointCell`s, but provides no further configuration
-        to these :py:class:`~single_cell_parser.cell.PointCell`s.
+        to these :py:class:`~single_cell_parser.cell.PointCell` objects.
         '''
         # Check if new cells need to be constructed
         createCells = False
@@ -910,7 +908,7 @@ class NetworkMapper:
     def _create_functional_connectivity_map(self):
         '''Connect functional anatomical synapses based on ``convergence``.
          
-        Synapses are connected here to spike generators (:py:class:`~PointCell`s) according to physiological
+        Synapses are connected here to spike generators (:py:class:`~PointCell` objects) according to physiological
         and/or anatomical constraints on connectivity (i.e., convergence of presynaptic cell type).
         Used to create fixed functional realization.
         Used in :py:meth:`~create_functional_realization`
@@ -1042,7 +1040,7 @@ class NetworkMapper:
         the presynaptic cells have been created in :py:meth:`_create_presyn_cells` (step 2),
         and their activity should have been generated in :py:meth:`_activate_presyn_cells` (step 3).
         
-        Assigns synapse weights using :py:meth:`~_assign_synapse_weights`and connect synapses to presynaptic cells with defined activity.
+        Assigns synapse weights using :py:meth:`~_assign_synapse_weights` and connect synapses to presynaptic cells with defined activity.
         
         Args:
             weights (dict): Weights for each synapse type.
@@ -1338,7 +1336,7 @@ def activate_functional_synapse(
         syn (:py:class:`~single_cell_parser.synapse.Synapse`): Synapse object.
         cell (:py:class:`~single_cell_parser.cell.Cell`): Postsynaptic cell.
         preSynCell (:py:class:`~single_cell_parser.cell.PointCell`): Presynaptic cell.
-        synParameters (dict): Synapse parameters.
+        synParameters (dict): Synapse parameters, see also the ``synapses.rerceptors.<syn_type>`` key in the :ref:`network_parameters_format` file.
         tChange (float): Time at which the synapse parameters change (e.g. the release probability due to a spike).
         synParametersChange (dict): Synapse parameters after change (including e.g. the release probability).
         forceSynapseActivation (bool): If True, the synapse is activated regardless of the release probability.
@@ -1398,6 +1396,7 @@ def activate_functional_synapse(
             #            try treating parameters as hoc range variables,
             #            then as hoc global variables
             try:
+                # e.g. syn.receptors['glutamate_syn'].decayampa = 1.0
                 paramStr = 'syn.receptors[\'' + recepStr + '\'].'
                 paramStr += param + '=' + str(recep.parameter[param])
                 exec(paramStr)
