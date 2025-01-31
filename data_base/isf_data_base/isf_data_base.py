@@ -770,7 +770,7 @@ class ISFDataBase:
     def set(self, key, value, lock = None, dumper = None, **kwargs):
         """Main method to save data in a DataBase. 
         
-        The advantage of using this method is that you can specify a dumper and pass additional arguments to the dumper with **kwargs.
+        The advantage of using this method is that you can specify a dumper and pass additional arguments to the dumper with kwargs.
         This method is thread safe, if you provide a lock.
         :py:meth:`__setitem__` calls this method.
 
