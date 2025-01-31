@@ -10,19 +10,18 @@ such that:
 
 The main interface is the function :py:meth:`start_run`.
 
-.. note::
-    
+Note: 
     Part of this module is licensed under the GNU Lesser General Public License version 3.0 as published by the Free Software Foundation:
     
-    Copyright (c) 2016, EPFL/Blue Brain Project
-    Part of this file is part of BluePyOpt <https://github.com/BlueBrain/BluePyOpt>
+    Copyright (c) 2016, EPFL/Blue Brain Project. 
+    Part of this file is part of BluePyOpt <https://github.com/BlueBrain/BluePyOpt>. 
     This library is free software; you can redistribute it and/or modify it under
     the terms of the GNU Lesser General Public License version 3.0 as published
-    by the Free Software Foundation.
-    This library is distributed in the hope that it will be useful, but WITHOUT
-    ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-    FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more
-    details.
+    by the Free Software Foundation. 
+    This library is distributed in the hope that it will be useful, but WITHOUT 
+    ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS 
+    FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more 
+    details. 
     You should have received a copy of the GNU Lesser General Public License
     along with this library; if not, write to the Free Software Foundation, Inc.,
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
@@ -142,6 +141,23 @@ def get_objective_function(db_setup):
 
 
 def get_mymap(db_setup, db_run, c, satisfactory_boundary_dict=None, n_reschedule_on_runtime_error = 3):
+    """Get a map function for evaluating the parameters.
+    
+    This function is a hook into bluePyOpt's optimization.
+    It is used as a mapping function in :py:class:`bluepyopt.optimisations.DEAPOptimisation` during :py:meth:`start_run`.
+    Rather than just returning the combined objectives, it also saves the features and the objectives in the database.
+    This is useful for debugging and for analyzing the optimization results.
+    
+    Args:
+        db_setup (:py:class:`~data_base.data_base.DataBase`): The database containing the setup of the optimization.
+        db_run (:py:class:`~data_base.data_base.DataBase`): The database for the optimization run containing sub-databases.
+        c (:py:class:`~dask.distributed.Client`): The distributed client.
+        satisfactory_boundary_dict (dict | None): A dictionary with the boundaries for the objectives. If a model is found, that has all objectives below the boundary, the optimization is stopped.
+        n_reschedule_on_runtime_error (int): The number of times the optimization is rescheduled if a runtime error occurs.
+        
+    Returns:
+        Callable: The map function for evaluating the parameters. this function is passed to the :py:class:`bluepyopt.optimisations.DEAPOptimisation` object.    
+    """
     # CAVE! get_mymap is doing more than just returning a map function.
     # - the map function ignores the first argument.
     #   The first argument (i.e. the function to be mapped on the iterable) is ignored.
@@ -162,11 +178,8 @@ def get_mymap(db_setup, db_run, c, satisfactory_boundary_dict=None, n_reschedule
         futures = c.map(objective_fun, params_list, pure=False)
         try:
             features_dicts = c.gather(futures)
-        except (I.distributed.client.CancelledError,
-                I.distributed.scheduler.KilledWorker):
-            print(
-                'Futures have been canceled. Waiting for 3 Minutes, then reschedule.'
-            )
+        except (I.distributed.client.CancelledError, I.distributed.scheduler.KilledWorker):
+            print('Futures have been canceled. Waiting for 3 Minutes, then reschedule.')
             del futures
             time.sleep(3 * 60)
             print('Rescheduling ...')
@@ -190,28 +203,34 @@ def get_mymap(db_setup, db_run, c, satisfactory_boundary_dict=None, n_reschedule
                     errstr += 'Parameters are: {}\n'.format(
                         dict(params_pd.iloc[lv]))
                     raise ValueError(errstr)
+        
         # features_dicts = map(objective_fun, params_list) # temp rieke
         features_dicts = c.gather(futures)  #temp rieke
         features_pd = I.pd.DataFrame(features_dicts)
+        
+        # save the parameters and the features in the database
         save_result(db_run, params_pd, features_pd)
+        
+        # combine the objectives
         combined_objectives_dict = list(map(combiner.combine, features_dicts))
-        combined_objectives_lists = [[d[n]
-                                      for n in combiner.setup.names]
-                                     for d in combined_objectives_dict]
+        combined_objectives_lists = [
+            [d[n]
+            for n in combiner.setup.names]
+            for d in combined_objectives_dict
+            ]
 
-        # to label a "good" model if dict with boundaries for different objectives is given
+        # label a "good" model if dict with boundaries for different objectives is given
         if satisfactory_boundary_dict:
-            assert satisfactory_boundary_dict.keys(
-            ) == combined_objectives_dict[0].keys()
+            assert satisfactory_boundary_dict.keys() == combined_objectives_dict[0].keys()
             all_err_below_boundary = [
                 all(dict_[key] <= satisfactory_boundary_dict[key]
-                    for key in dict_.keys())
+                for key in dict_.keys())
                 for dict_ in combined_objectives_dict
-            ]
+                ]
             if any(all_err_below_boundary):
                 db_setup['satisfactory'] = [
                     i for (i, x) in enumerate(all_err_below_boundary) if x
-                ]
+                    ]
 
 
          # all_err_below_3 = [all(x<3 for x in list(dict_.values())) for dict_ in combined_objectives_dict]
@@ -224,7 +243,14 @@ def get_mymap(db_setup, db_run, c, satisfactory_boundary_dict=None, n_reschedule
 
 
 class my_ibea_evaluator(bpop.evaluators.Evaluator):
-    """Graupner-Brunel Evaluator"""
+    """
+    Graupner-Brunel Evaluator
+    
+    .. deprecated:: 0.4.0
+        Evaluation is done with :py:meth:`mymap`.
+    
+    :skip-doc:
+    """
 
     def __init__(self, parameter_df, n_objectives):
         """Constructor"""
@@ -243,7 +269,7 @@ class my_ibea_evaluator(bpop.evaluators.Evaluator):
 
     def evaluate_with_lists(self, param_values):
         return None  # because of serialization issues, evaluate with lists is unused.
-        # Instead, the mymap function defines, which function is used to evaluate the parameters!!!
+        # Instead, the mymap function defines which function is used to evaluate the parameters!!!
 
 
 ############################################################
@@ -523,10 +549,10 @@ def start_run(
     Args:
         db_setup (data_base.DataBase): a DataBase containing the setup of the optimization. It must include:
         
-                - params ... this is a pandas.DataFrame with the parameternames as index and the columns min_ and max_
-                - get_Simulator ... function, that returns a biophysics_fitting.simulator.Simulator object
-                - get_Evaluator ... function, that returns a biophysics_fitting.evaluator.Evaluator object.
-                - get_Combiner ... function, that returns a biophysics_fitting.combiner.Combiner object
+            - params ... this is a pandas.DataFrame with the parameternames as index and the columns min_ and max_
+            - get_Simulator ... function, that returns a biophysics_fitting.simulator.Simulator object
+            - get_Evaluator ... function, that returns a biophysics_fitting.evaluator.Evaluator object.
+            - get_Combiner ... function, that returns a biophysics_fitting.combiner.Combiner object
                 
             get_Simulator, get_Evaluator, get_Combiner accept the db_setup data_base as argument. 
             This allows, that e.g. the Simular can depend on the data_base. Therefore it is e.g. possible, 

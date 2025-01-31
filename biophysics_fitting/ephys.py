@@ -17,13 +17,13 @@ def trace_check(
         vmax=None,  ## added by arco
         name=''):
     """
-    Check the properties of a voltage trace::
+    Check the properties of a voltage trace:
     
-        1. Check that at least minspikenum are present.
-        2. Check if it properly returns to rest.
-        3. Check that there are no spikes before stimulus onset (in soma or dendrite).
-        4. Check if last spike is before deadline.
-        5. Check that the maximum dendritic depolarization before stimulus onset is not too large.
+    1. Check that at least minspikenum are present.
+    2. Check if it properly returns to rest.
+    3. Check that there are no spikes before stimulus onset (in soma or dendrite).
+    4. Check if last spike is before deadline.
+    5. Check that the maximum dendritic depolarization before stimulus onset is not too large.
 
     Args:
         t (array): Time array.
@@ -302,7 +302,6 @@ def AP_width(t, v, thresh):
     w = [t[tk] - t[ti] for ti, tk in zip(*find_crossing(v, thresh))]
     return np.array(w)
 
-
 AP_width_check_1AP = AP_height_check_1AP
 
 
@@ -465,17 +464,6 @@ def BPAPatt_check_relative_height(t, v_soma, v_dend, bAP_thresh=None, stim_onset
         bool: True if the ratio of bAP amplitude at soma and dendrite is greater than 1, False otherwise.
     """
     return BPAPatt(t, v_soma, bAP_thresh, stim_onset) / BPAPatt(t, v_dend, bAP_thresh, stim_onset) > 1
-
-
-def BPAPatt_check_relative_height(
-    t,
-    v_soma,
-    v_dend,
-    bAP_thresh=None,
-    stim_onset=None):
-                                  
-    return BPAPatt(t, v_soma, bAP_thresh, stim_onset) / BPAPatt(
-        t, v_dend, bAP_thresh, stim_onset) > 1
 
 
 def BPAPatt_check_1_AP(t, v_soma, thresh=None, stim_onset=None):

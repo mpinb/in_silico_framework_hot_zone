@@ -2,11 +2,12 @@
 Explore viable biophysical models from a given seedpoint.
 Given the following empirical constraints:
 
-    - a set of biophysical parameters
-    - a morphology
-    - empirically recorded responses to defined stimulus protocols (see e.g. :py:meth:`biophysics_fitting.hay_specification.get_hay_problem_description`).
+- a set of biophysical parameters
+- a morphology
+- empirically recorded responses to defined stimulus protocols (see e.g. :py:meth:`biophysics_fitting.hay_specification.get_hay_problem_description`).
 
-this package provides methods and full workflows that allow you to make random variations on the input biophysical parameters, run the stimulus protocols on the cell, and evaluate how much they deviate from the empirically recorded mean.
+this package provides methods and full workflows that allow you to make random variations on the input biophysical parameters, 
+run the stimulus protocols on the cell, and evaluate how much they deviate from the empirically recorded mean.
 Eventually, this random walk through parameter space can explore very diverse biophysical models that are all within the empirical constraints.
 """
 from functools import partial

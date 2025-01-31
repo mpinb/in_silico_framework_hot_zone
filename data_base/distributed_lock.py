@@ -137,14 +137,14 @@ class InterProcessLockNoWritePermission:
     
     If the user has write permissions to the path, then locking is necessary. Otherwise not, and lock acquire returns True without a lock
     
-    Attributes:
-        lock (:py:class:`~fasteners.InterProcessLock` or None): The lock object if the user has write permissions, None otherwise.
-    
     Args:
         path (str): path to check.
         
     See also:
         [Fasteners InterProcessLock](https://fasteners.readthedocs.io/en/latest/guide/inter_process/)
+    
+    Attributes:
+        lock (:py:class:`~fasteners.InterProcessLock` or None): The lock object if the user has write permissions, None otherwise.
     '''
     def __init__(self, path):
         """
@@ -183,13 +183,14 @@ def get_lock(name):
     
     Reads the locking configuration from the global variable ``SERVER`` and infers the correct lock type.
     The following locks are supported:
+    
     - :py:class:`~data_base.distributed_lock.InterProcessLockNoWritePermission`: for file based locking.
     - :py:class:`redis.lock.Lock`: for redis based locking.
     - :py:class:`kazoo.client.Lock`: for Apache zookeeper based locking.
     
     See also:
-        https://kazoo.readthedocs.io/en/latest/index.html
-        https://redis-py.readthedocs.io/en/stable/
+        `Kazoo documentation <https://kazoo.readthedocs.io/en/latest/index.html>`_ and
+        `Redis documentation <https://redis-py.readthedocs.io/en/stable/>`_
     """
     if 'ISF_DISTRIBUTED_LOCK_BLOCK' in os.environ:
         raise RuntimeError('ISF_DISTRIBUTED_LOCK_BLOCK is defined, which turns off locking.')
@@ -208,14 +209,21 @@ def get_lock(name):
 
 
 def get_read_lock(name):
+    """Fetch the correct read lock, depending on global locking server configuration.
+    
+    Args:
+        name (str): The name of the lock.
+        
+    Returns:
+        :py:class:`~data_base.distributed_lock.InterProcessLockNoWritePermission` | :py:class:`redis.lock` | :py:class:`kazoo.client.Lock`: 
+            The lock object.
+    """
     if 'ISF_DISTRIBUTED_LOCK_BLOCK' in os.environ:
         raise RuntimeError('ISF_DISTRIBUTED_LOCK_BLOCK is defined, which turns off locking.')    
     if SERVER['type'] == 'file':
         return InterProcessLockNoWritePermission(name)
-    
     elif SERVER["type"] == "redis":
         import redis
-
         return redis.lock.Lock(CLIENT, name, timeout=300)
     elif SERVER["type"] == "zookeeper":
         return CLIENT.ReadLock(name)
@@ -226,6 +234,15 @@ def get_read_lock(name):
 
 
 def get_write_lock(name):
+    """Fetch the correct write lock, depending on global locking server configuration.
+    
+    Args:
+        name (str): The name of the lock.
+        
+    Returns:
+        :py:class:`~data_base.distributed_lock.InterProcessLockNoWritePermission` | :py:class:`redis.lock` | :py:class:`kazoo.client.WriteLock`:
+            The lock object.
+    """
     if 'ISF_DISTRIBUTED_LOCK_BLOCK' in os.environ:
         raise RuntimeError('ISF_DISTRIBUTED_LOCK_BLOCK is defined, which turns off locking.')    
     if SERVER['type'] == 'file':

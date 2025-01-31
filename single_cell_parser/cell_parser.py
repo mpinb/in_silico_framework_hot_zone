@@ -39,6 +39,7 @@ class CellParser(object):
         Args:
             hocFilename (str): Path to :ref:`hoc_file_format` file.
         '''
+        assert hocFilename, 'No hoc file specified'
         self.hoc_path = hocFilename
         #         self.hoc_fname = self.hoc_path.split('/')[-1]
 
@@ -819,7 +820,7 @@ class CellParser(object):
                 seg.g_pas = seg.g_pas * F
 
     def _add_spines_ar(self, label, spineParam):
-        '''Adds passive spines to anomalously rectifying membrane :cite:`Waters_Helmchen_2006`.
+        r'''Adds passive spines to anomalously rectifying membrane :cite:`Waters_Helmchen_2006`.
         
         Spines are added according to spine parameters for individual (dendritic) structures
         by scaling :math:`C_m` and :math:`R_{N,0}` by :math:`F` and :math:`1/F` respectively, where
@@ -889,17 +890,22 @@ class CellParser(object):
         
         Sets up the cell structure :paramref:`label` with a Hodgkin-Huxley membrane that has the following properties:
         
-        * :math:`\\bar{g}_{L} = 0.0003 \\, S/cm^2`
-        * :math:`E_{L} = -54.3 \\, mV`
+        - :math:`\\bar{g}_{L} = 0.0003 \\, S/cm^2`
+        - :math:`E_{L} = -54.3 \\, mV`
         - Soma:
-            * :math:`\\bar{g}_{Na} = 0.003 \\, S/cm^2`
-            * :math:`\\bar{g}_{K} = 0.01 \\, S/cm^2`
+        
+            - :math:`\\bar{g}_{Na} = 0.003 \\, S/cm^2`
+            - :math:`\\bar{g}_{K} = 0.01 \\, S/cm^2`
+            
         - Axon:
-            * :math:`\\bar{g}_{Na} = 3.0 \\, S/cm^2`
-            * :math:`\\bar{g}_{K} = 0.0 \\, S/cm^2`
+        
+            - :math:`\\bar{g}_{Na} = 3.0 \\, S/cm^2`
+            - :math:`\\bar{g}_{K} = 0.0 \\, S/cm^2`
+            
         - Dendrite:
-            * :math:`\\bar{g}_{Na} = 0.003 \\, S/cm^2`
-            * :math:`\\bar{g}_{K} = 0.01 \\, S/cm^2`
+        
+            - :math:`\\bar{g}_{Na} = 0.003 \\, S/cm^2`
+            - :math:`\\bar{g}_{K} = 0.01 \\, S/cm^2`
         
         """
         if self.cell is None:

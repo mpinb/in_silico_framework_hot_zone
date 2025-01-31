@@ -1,6 +1,7 @@
 '''Calculate PSPs depending on cell modifications.
 
 Such modifications include:
+
 - A current injection into the soma, to ensure a certain resting potential
 - A coincident current injection triggering a burst, to investigate the effect of bursts on somatic integration of consecutive input
 - Synaptic input, to investigate the effect of one more synapse activation on top of such input to the somatic subthreshold potential
@@ -17,6 +18,9 @@ class PSP_with_current_injection:
     
     The membrane potential is clamped by injecting a current into the soma.
         
+    See also:
+        :py:mod:`single_cell_parser.cell_modify_functions` for available cell modification functions.
+    
     Attributes:
         neuron_param (NTParameterSet): Parameters of the neuron model.
         confile (str): Path to the network connectivity (:ref:`con_file_format`) file.
@@ -34,9 +38,6 @@ class PSP_with_current_injection:
             Limits for the current injection optimization to clamp the membrane potential (in :math:`nA`).
         holding_current (float):
             Current that needs to be injected to hold the somatic potential at :paramref:`target_vm`.
-            
-    See also:
-        :py:mod:`single_cell_parser.cell_modify_functions` for available cell modification functions.
     '''
     def __init__(
         self,
@@ -51,20 +52,20 @@ class PSP_with_current_injection:
         bounds=(0, 0.7)):
         """
         Args:
-        neuron_param (NTParameterSet): Parameters of the neuron model.
-        confile (str): Path to the network connectivity (:ref:`con_file_format`) file.
-        target_vm (float): Membrane potential to clamp the soma to (in :math:`mV`).
-        delay (float): Delay before the current injection starts (in :math:`ms`).
-        duration (float): Duration of the current injection (in :math:`ms`).
-        optimize_for_timepoint (float): 
-            Timepoint for membrane voltage optimization (in :math:`ms`).
-            This usually coincides with the timepoint of a single synapse activation, after the membrane voltage has stabilized.
-        tEnd (float): End time of the simulation (in :math:`ms`).
-        cell_modify_functions (dict):
-            Dictionary of cell modification functions (see :py:mod:`~single_cell_parser.cell_modify_functions`).
-            The keys are the names of the functions, the values are the parameters of the functions.
-        bounds (tuple):
-            Limits for the current injection optimization to clamp the membrane potential (in :math:`nA`).
+            neuron_param (NTParameterSet): Parameters of the neuron model.
+            confile (str): Path to the network connectivity (:ref:`con_file_format`) file.
+            target_vm (float): Membrane potential to clamp the soma to (in :math:`mV`).
+            delay (float): Delay before the current injection starts (in :math:`ms`).
+            duration (float): Duration of the current injection (in :math:`ms`).
+            optimize_for_timepoint (float): 
+                Timepoint for membrane voltage optimization (in :math:`ms`).
+                This usually coincides with the timepoint of a single synapse activation, after the membrane voltage has stabilized.
+            tEnd (float): End time of the simulation (in :math:`ms`).
+            cell_modify_functions (dict):
+                Dictionary of cell modification functions (see :py:mod:`~single_cell_parser.cell_modify_functions`).
+                The keys are the names of the functions, the values are the parameters of the functions.
+            bounds (tuple):
+                Limits for the current injection optimization to clamp the membrane potential (in :math:`nA`).
         """
         self.confile = confile
         self.neuron_param = I.scp.NTParameterSet(neuron_param.as_dict())
@@ -147,7 +148,7 @@ class PSP_with_current_injection:
         I.display.display(I.plt.gcf())
 
     def get_neuron_param_with_current_injection(self):
-        '''Get a :ref:`cell_params_format` file with a current injection.
+        '''Get a :ref:`cell_parameters_format` file with a current injection.
         
         The current injection is set up such that the potential :paramref:`target_vm` is reached at the timepoint :paramref:`optimize_for_timepoint`
         '''
