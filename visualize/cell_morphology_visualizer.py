@@ -92,7 +92,6 @@ class CMVDataParser:
             None means it has no simulation data. 
             Empty means it has simulation data that has not been initialized yet.
         time_show_syn_activ (float): Time in the simulation during which a synapse activation is shown during the visualization.
-        _has_simulation_data (bool): Test if the cell object has been simulated by checking if it has voltage data.
         """
     def __init__(
         self, 
@@ -618,7 +617,7 @@ class CMVDataParser:
             raise ValueError("Color keyword not recognized. Available options are: \"voltage\", \"vm\", \"dendrites\", \"dendritic group\", a color from self.possible_scalars, or a color from matplotlib.colors")
         return_data = self._get_color_per_section(data_per_section) if return_as_color else data_per_section
         return return_data
-    
+        
     def _keyword_is_scalar_data(self, keyword):
         """Check if a keyword is a scalar data type.
         
@@ -626,11 +625,11 @@ class CMVDataParser:
             keyword (str): keyword to check. Example: "grey", "vm", "voltage", "dendrites", "dendritic group"
             
         Returns:
-            bool: True if the keyword is a scalar data type, False if it is a keyword like "voltage".
+            bool: True if the keyword refers to scalar data, False if it is a solid color like "grey".
         """
         if isinstance(keyword, str):
             return keyword in ("voltage", "vm", "synapses", "synapse", "dendrites", "dendritic_group") + tuple(self.possible_scalars)
-        return True
+        return False
     
     def _get_color_per_section(
         self, 
@@ -682,7 +681,6 @@ class CMVDataParser:
         self.norm = mpl.colors.Normalize(self.vmin, self.vmax)
         self.cmap = cmap if cmap is not None else self.cmap
         self.scalar_mappable = mpl.cm.ScalarMappable(norm=self.norm, cmap=self.cmap)
-
 
 class CellMorphologyVisualizer(CMVDataParser):
     """Plot a cell morphology using matplotlib.
@@ -873,19 +871,21 @@ class CellMorphologyVisualizer(CMVDataParser):
             fig: matplotlib figure containing the plot.
         '''
         assert not (self._keyword_is_scalar_data(color) and time_point is None), "Please provide a timepoint at which to plot {}".format(color)
-        if time_point is None:
-            logger.info("No timepoint provided. Plotting at earliest timepoint...")
-            time_point = self.times_to_show[0]
-        assert time_point < self.times_to_show[-1], "Time point exceeds simulation time"
-        logger.info("updating_times_to_show")
-        self._update_times_to_show()
+        
+        legend = None
+        if self._keyword_is_scalar_data(color):
+            if time_point is None:
+                logger.info("No timepoint provided. Plotting at earliest timepoint...")
+                time_point = self.times_to_show[0]
+            assert time_point < self.times_to_show[-1], "Time point exceeds simulation time"
+            logger.info("updating_times_to_show")
+            self._update_times_to_show()
+            if show_legend:
+                legend = self.scalar_mappable
         if show_synapses:
             self._calc_synapses_timeseries()
         
         colors = self._calc_scalar_data_from_keyword(color, time_point, return_as_color=True)
-        legend=None
-        if show_legend and self._keyword_is_scalar_data(color):
-            legend = self.scalar_mappable
         
         fig, ax = get_3d_plot_morphology(
             self._morphology_connected,

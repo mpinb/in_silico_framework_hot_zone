@@ -4,6 +4,7 @@ This module provides methods to run Hay's stimulus protocols, and evaluate the r
 '''
 
 import numpy as np
+import six
 from .ephys import *
 
 __author__ = 'Arco Bast'
@@ -58,12 +59,39 @@ def nan_if_error(fun):
 
 
 class BAC:
-    """
-    This class contains methods to calculate various metrics
-    to assess the accuracy of some simulation based on the voltage trace
-    it produced. These metrics were introduced by Idan Segev, and illustrated in
-    "Ion channel distributions in cortical neurons are optimized for energy-efficient
-    active dendritic computations" by Arco Bast and Marcel Oberlaender :cite:`Guest_Bast_Narayanan_Oberlaender`.
+    """Evaluate the :math:`BAC` stimulus protocol.
+    
+    These metrics were introduced by :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011`, and illustrated in :cite:t:`Guest_Bast_Narayanan_Oberlaender`.
+    
+    See also:
+        :py:meth:`biophysics_fitting.setup_stim.setup_BAC` for more information on the stimulus protocol.
+        
+    Attributes:
+        hot_zone_thresh (float): The threshold for APs in the dendritic voltage trace. Defaults to :math:`-55` mV.
+        soma_thresh (float): The threshold for APs in the somatic voltage trace. Defaults to :math:`-30` mV.
+        ca_max_after_nth_somatic_spike (int): The number of somatic spikes after which the calcium spike maximum should occur. Defaults to :math:`2`.
+        stim_onset (float): The onset of the stimulus (ms). Defaults to :math:`295` ms.
+        stim_duration (float): The duration of the stimulus (ms). Defaults to :math:`45` ms.
+        repolarization (float): The target repolarization voltage after the stimulus. 
+            See :py:meth:`~biophysics_fitting.ephys.BAC_ISI_check_repolarization`.
+            Defaults to :math:`-55` mV.
+        punish (float): The punishment value in units of :math:`\sigma`. 
+            Used as a baseline if the voltage trace cannot be evaluated on a metric (e.g. if it does not contain an AP). 
+            Defaults to :math:`250`.
+        punish_last_spike_after_deadline (bool): Whether to punish if the last spike is after the deadline. Defaults to ``True``
+        punish_minspikenum (int): The minimum number of spikes required for this stimulus protocol.
+        punish_returning_to_rest_tolerance (float): The tolerance for returning to rest (:math:`mV`). Defaults to :math:`2 mV`.
+        prefix (str): The prefix for the evaluation metric checks. Defaults to an empty string.
+        definitions (dict): The empirical means and standard deviations for the evaluation metrics. Defaults to::
+            
+            {
+                'BAC_APheight': ('AP_height', 25.0, 5.0),
+                'BAC_ISI': ('BAC_ISI', 9.901, 0.8517),
+                'BAC_ahpdepth': ('AHP_depth_abs', -65.0, 4.0),
+                'BAC_caSpike_height': ('BAC_caSpike_height', 6.73, 2.54),
+                'BAC_caSpike_width': ('BAC_caSpike_width', 37.43, 1.27),
+                'BAC_spikecount': ('Spikecount', 3.0, 0.01)
+            }
     """
 
     def __init__(
@@ -82,7 +110,26 @@ class BAC:
         prefix='',
         definitions=None
         ):
-
+        """
+        Args:
+            hot_zone_thresh (float): The threshold for APs in the dendritic voltage trace. Defaults to :math:`-55` mV.
+            soma_thresh (float): The threshold for APs in the somatic voltage trace. Defaults to :math:`-30` mV.
+            ca_max_after_nth_somatic_spike (int): The number of somatic spikes after which the calcium spike maximum should occur. Defaults to :math:`2`.
+            stim_onset (float): The onset of the stimulus (ms). Defaults to :math:`295` ms.
+            stim_duration (float): The duration of the stimulus (ms). Defaults to :math:`45` ms.
+            repolarization (float): The target repolarization voltage after the stimulus. 
+                See :py:meth:`~biophysics_fitting.ephys.BAC_ISI_check_repolarization`.
+                Defaults to :math:`-55` mV.
+            punish (float): The punishment value in units of :math:`\sigma`. 
+                Used as a baseline if the voltage trace cannot be evaluated on a metric (e.g. if it does not contain an AP). 
+                Defaults to :math:`250`.
+            punish_last_spike_after_deadline (bool): Whether to punish if the last spike is after the deadline. Defaults to ``True``
+            punish_minspikenum (int): The minimum number of spikes required for this stimulus protocol.
+            punish_returning_to_rest_tolerance (float): The tolerance for returning to rest (:math:`mV`). Defaults to :math:`2 mV`.
+            prefix (str): The prefix for the evaluation metric checks. Defaults to an empty string.
+            definitions (dict): The definitions for the evaluation metrics. See also: :py:attr:`definitions`.
+        """
+        # TODO: punish_max_prestim_dendrite_depo is unused?
         self.hot_zone_thresh = hot_zone_thresh
         self.soma_thresh = soma_thresh
         self.ca_max_after_nth_somatic_spike = ca_max_after_nth_somatic_spike
@@ -105,30 +152,61 @@ class BAC:
         self.prefix = prefix
 
     def get(self, **voltage_traces):
-        import six
+        """Get the full evaluation of the voltage traces for BAC firing.
+        
+        Args:
+            voltage_traces: dictionary with the voltage traces of the soma and dendrite.
+            
+        Returns:
+            dict: dictionary with the evaluation metrics, containing the raw values, normalized values, and checks.
+        """
         spikecount = self.BAC_spikecount(voltage_traces)['.raw']
         out = {}
-        for name, (_, mean, std) in six.iteritems(self.definitions):
+        for evaluation_metric, (_, mean, std) in six.iteritems(self.definitions):
             # special case in the original code were in the case of two somatic spikes
             # 7 is substracted from the mean
-            if spikecount == 2 and name == 'BAC_caSpike_width':
+            if spikecount == 2 and evaluation_metric == 'BAC_caSpike_width':
                 mean = mean - 7.
-            out_current = getattr(self, name)(voltage_traces)
-            out_current['.normalized'] = normalize(out_current['.raw'], mean,
-                                                   std)
-            checks = [v for k, v in six.iteritems(out_current) if 'check' in k]
+            evaluation_current_metric = getattr(self, evaluation_metric)(voltage_traces)
+            evaluation_current_metric['.normalized'] = normalize(evaluation_current_metric['.raw'], mean, std)
+            checks = [v for k, v in six.iteritems(evaluation_current_metric) if 'check' in k]
             if all(checks):
-                out_current[''] = out_current['.normalized']
+                evaluation_current_metric[''] = evaluation_current_metric['.normalized']
             else:
-                out_current[''] = 20.  # *std
-            out_current = {name + k: v for k, v in six.iteritems(out_current)}
-            out.update(out_current)
+                evaluation_current_metric[''] = 20.  # *std
+            evaluation_current_metric = {
+                evaluation_metric + suffix: evaluation_value 
+                for suffix, evaluation_value in six.iteritems(evaluation_current_metric)}
+            out.update(evaluation_current_metric)
         return self.check(out, voltage_traces)
 
     def check(self, out, voltage_traces):
+        """Check for problems in the voltage trace.
+        
+        This should be called after evaluating the voltage traces.
+        it is e.g. the last step in :py:meth:`get`, where it adds the checks to the output dictionary.
+        
+        This method checks if the voltage trace:
+        
+        - has at least 2 APs present.
+        - properly returns to rest.
+        - has no spikes before stimulus onset (in soma or dendrite).
+        - has its last spike before the deadline.
+        - there is no dendritic spike before stimulus onset
+        
+        Args:
+            out: dictionary with the evaluation metrics
+            voltage_traces: dictionary with the voltage traces of the soma and dendrite.
+            
+        Returns:
+            dict: dictionary with the evaluation metrics, containing the raw values, normalized values, and checks.
+        """
         # checking for problems in voltage trace
         t, v = voltage_traces['tVec'], voltage_traces['vList'][0]
         vmax = None  # voltage_traces['vMax']
+        
+        # basic error check - used if trace e.g. does not spike at all.
+        # penalizes low variance, slightly less penalizes higher variance
         err = trace_check_err(
             t,
             v,
@@ -154,26 +232,46 @@ class BAC:
                 for k, v in six.iteritems(err_flags)
                 if not 'last_spike_before_deadline' in k
             }
-        for name in list(self.definitions.keys()):
+        for evaluation_metric_name in list(self.definitions.keys()):
             if not all(relevant_err_flags.values()):
-                out[name] = err
-            elif out[name] > self.punish:
-                out[name] = self.punish * 0.75
+                out[evaluation_metric_name] = err
+            elif out[evaluation_metric_name] > self.punish:
+                out[evaluation_metric_name] = self.punish * 0.75
             # change from hay algorithm by arco: if high depolarization anywhere in the dendrite occurs before stimulus, put highest punish value
             if not err_flags['BAC.check_max_prestim_dendrite_depo']:
-                out[name] = self.punish
+                out[evaluation_metric_name] = self.punish
         out['BAC.err'] = err
         out.update(err_flags)
         out = {self.prefix + k: out[k] for k in out.keys()}
         return out
 
     def BAC_spikecount(self, voltage_traces):
+        """Get the number of spikes in the somatic voltage trace.
+        
+        Args:
+            voltage_traces (dict): dictionary with the voltage traces of the soma and dendrite.
+            
+        Returns:
+            dict: Dictionary mapping ``".raw"`` to the number of spikes in the somatic voltage trace.
+        """
         t, v = voltage_traces['tVec'], voltage_traces['vList'][0]
         return {
             '.raw': nan_if_error(spike_count)(t, v, thresh=self.soma_thresh)
         }
 
     def BAC_APheight(self, voltage_traces):
+        """Get the height of the first action potential in the somatic voltage trace.
+        
+        Args:
+            voltage_traces (dict): dictionary with the voltage traces of the soma and dendrite.
+            
+        Returns:
+            dict: Dictionary mapping ``".check_1AP"`` to whether there is at least one action potential in the somatic voltage trace,
+                and ``".raw"`` to the height of the first action potential in the somatic voltage trace.
+                
+        See also:
+            :py:func:`AP_height`
+        """
         t, v = voltage_traces['tVec'], voltage_traces['vList'][0]
         return {
             '.check_1AP':
@@ -184,6 +282,19 @@ class BAC:
         }
 
     def BAC_ISI(self, voltage_traces):
+        """Get the interspike interval in the somatic voltage trace.
+        
+        Args:
+            voltage_traces (dict): dictionary with the voltage traces of the soma and dendrite.
+            
+        Returns:
+            dict: Dictionary mapping ``".check_2_or_3_APs"`` to whether there are 2 or 3 action potentials in the somatic voltage trace,
+                ``".check_repolarization"`` to whether the voltage trace repolarizes after the stimulus,
+                and ``".raw"`` to the interspike interval in the somatic voltage trace.
+                
+        See also:
+            :py:func:`BAC_ISI`
+        """
         t, v = voltage_traces['tVec'], voltage_traces['vList'][0]
         stim_end = self.stim_onset + self.stim_duration
         r = self.repolarization
@@ -202,6 +313,18 @@ class BAC:
         }
 
     def BAC_ahpdepth(self, voltage_traces):
+        """Get the afterhyperpolarization depth in the somatic voltage trace.
+        
+        Args:
+            voltage_traces (dict): dictionary with the voltage traces of the soma and dendrite.
+            
+        Returns:
+            dict: Dictionary mapping ``".check_2AP"`` to whether there are 2 action potentials in the somatic voltage trace,
+                and ``".raw"`` to the afterhyperpolarization depth in the somatic voltage trace.
+                
+        See also:
+            :py:func:`AHP_depth_abs`
+        """
         t, v = voltage_traces['tVec'], voltage_traces['vList'][0]
         return {
             '.check_2AP':
@@ -213,6 +336,20 @@ class BAC:
         }
 
     def BAC_caSpike_height(self, voltage_traces):
+        """Get the height of the calcium spike in the dendritic voltage trace.
+        
+        Args:
+            voltage_traces (dict): dictionary with the voltage traces of the soma and dendrite.
+            
+        Returns:
+            dict: Dictionary mapping ``".check_1_Ca_AP"`` to whether there is at least one calcium spike in the dendritic voltage trace,
+                ``".check_>=2_Na_AP"`` to whether there are at least two action potentials in the somatic voltage trace,
+                ``".check_ca_max_after_nth_somatic_spike"`` to whether the calcium spike occurs after the nth somatic spike,
+                and ``".raw"`` to the height of the calcium spike in the dendritic voltage trace.
+                
+        See also:
+            :py:func:`BAC_caSpike_height`
+        """
         t, v = voltage_traces['tVec'], voltage_traces['vList'][0]
         v_dend = voltage_traces['vList'][1]
         tend = self.stim_duration + self.stim_onset
@@ -225,6 +362,18 @@ class BAC:
                 '.raw': nan_if_error(BAC_caSpike_height)(t,v,v_dend,ca_thresh=self.hot_zone_thresh,tstim=self.stim_onset)}
 
     def BAC_caSpike_width(self, voltage_traces):
+        """Get the width of the calcium spike in the dendritic voltage trace.
+        
+        Args:
+            voltage_traces (dict): dictionary with the voltage traces of the soma and dendrite.
+            
+        Returns:
+            dict: Dictionary mapping ``".check_1_Ca_AP"`` to whether there is at least one calcium spike in the dendritic voltage trace,
+                and ``".raw"`` to the width of the calcium spike in the dendritic voltage trace.
+                
+        See also:
+            :py:func:`BAC_caSpike_width`
+        """
         t, v = voltage_traces['tVec'], voltage_traces['vList'][0]
         v_dend = voltage_traces['vList'][1]
         return {
@@ -240,7 +389,34 @@ class BAC:
 
 
 class bAP:
-
+    """Evaluate the :math:`bAP` stimulus protocol.
+    
+    These metrics were introduced by :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011`, and illustrated in :cite:t:`Guest_Bast_Narayanan_Oberlaender`.
+    
+    See also:
+        :py:meth:`biophysics_fitting.setup_stim.setup_bAP` for more information on the stimulus protocol.
+        
+    Attributes:
+        soma_thresh (float): The threshold for APs in the somatic voltage trace. Defaults to :math:`-30` mV.
+        stim_onset (float): The onset of the stimulus (ms). Defaults to :math:`295` ms.
+        stim_duration (float): The duration of the stimulus (ms). Defaults to :math:`5` ms.
+        bAP_thresh (float): The threshold for the backpropagating action potential. Defaults to :math:`+2` mV.
+        punish (float): The punishment value in units of :math:`\sigma`. 
+            Used as a baseline if the voltage trace cannot be evaluated on a metric (e.g. if it does not contain an AP). 
+            Defaults to :math:`250 \sigma`.
+        punish_last_spike_after_deadline (bool): Whether to punish if the last spike is after the deadline. Defaults to ``True``
+        punish_minspikenum (int): The minimum number of spikes required for this stimulus protocol.
+        punish_returning_to_rest_tolerance (float): The tolerance for returning to rest (:math:`mV`). Defaults to :math:`2 mV`.
+        definitions (dict): The empirical means and standard deviations for the evaluation metrics. Defaults to::
+            
+            {
+                'bAP_APheight': ('AP_height', 25.0, 5.0),
+                'bAP_APwidth': ('AP_width', 2.0, 0.5),
+                'bAP_att2': ('BPAPatt2', 45.0, 10.0),
+                'bAP_att3': ('BPAPatt3', 36.0, 9.33),
+                'bAP_spikecount': ('Spikecount', 1.0, 0.01)
+            }
+    """
     def __init__(
         self,
         soma_thresh=-30,
@@ -258,7 +434,20 @@ class bAP:
             'bAP_att3': ('BPAPatt3', 36.0, 9.33),
             'bAP_spikecount': ('Spikecount', 1.0, 0.01)
         }):
-
+        """
+        Args:
+            soma_thresh (float): The threshold for APs in the somatic voltage trace. Defaults to :math:`-30\ mV`.
+            stim_onset (float): The onset of the stimulus (:math:`ms`). Defaults to :math:`295\ ms`.
+            stim_duration (float): The duration of the stimulus (:math:`ms`). Defaults to :math:`5\ ms`.
+            bAP_thresh (float): The threshold for the backpropagating action potential. Defaults to :math:`+2\ mV`.
+            punish (float): The punishment value in units of :math:`\sigma`. 
+                Used as a baseline if the voltage trace cannot be evaluated on a metric (e.g. if it does not contain an AP). 
+                Defaults to :math:`250 \sigma`.
+            punish_last_spike_after_deadline (bool): Whether to punish if the last spike is after the deadline. Defaults to ``True``
+            punish_minspikenum (int): The minimum number of spikes required for this stimulus protocol. Defaults to :math:`1`.
+            punish_returning_to_rest_tolerance (float): The tolerance for returning to rest (:math:`mV`). Defaults to :math:`2 mV`.
+            definitions (dict): The definitions for the evaluation metrics. See also: :py:attr:`definitions`.
+        """
         self.soma_thresh = soma_thresh
         self.stim_onset = stim_onset
         self.stim_duration = stim_duration
@@ -270,6 +459,14 @@ class bAP:
         self.punish_returning_to_rest_tolerance = punish_returning_to_rest_tolerance
 
     def get(self, **voltage_traces):
+        """Get the full evaluation of the voltage traces for bAP firing.
+        
+        Args:
+            voltage_traces: dictionary with the voltage traces of the soma and dendrite.
+            
+        Returns:
+            dict: dictionary with the evaluation metrics, containing the raw values, normalized values, and checks.
+        """
         out = {}
         import six
         for name, (_, mean, std) in six.iteritems(self.definitions):
@@ -286,6 +483,25 @@ class bAP:
         return self.check(out, voltage_traces)
 
     def check(self, out, voltage_traces):
+        """Check for problems in the voltage trace.
+        
+        This should be called after evaluating the voltage traces.
+        it is e.g. the last step in :py:meth:`get`, where it adds the checks to the output dictionary.
+        
+        This method checks if the voltage trace:
+        
+        - has at least 1 AP present.
+        - properly returns to rest.
+        - has no spikes before stimulus onset (in soma or dendrite).
+        - has its last spike before the deadline.
+        
+        Args:
+            out: dictionary with the evaluation metrics
+            voltage_traces: dictionary with the voltage traces of the soma and dendrite.
+            
+        Returns:
+            dict: dictionary with the evaluation metrics, containing the raw values, normalized values, and checks.
+        """
         # checking for problems in voltage trace
         t, v = voltage_traces['tVec'], voltage_traces['vList'][0]
         vmax = None  # voltage_traces['vMax']
@@ -325,6 +541,18 @@ class bAP:
         return out
 
     def bAP_APheight(self, voltage_traces):
+        """Get the height of the first action potential in the somatic voltage trace.
+        
+        Args:
+            voltage_traces (dict): dictionary with the voltage traces of the soma and dendrite.
+            
+        Returns:
+            dict: Dictionary mapping ``".check_1AP"`` to whether there is at least one action potential in the somatic voltage trace,
+            and ``".raw"`` to the height of the first action potential in the somatic voltage trace.
+        
+        See also:
+            :py:meth:`~biophysics_fitting.ephys.APheight`
+        """
         t, v = voltage_traces['tVec'], voltage_traces['vList'][0]
         return {
             '.check_1AP':
@@ -335,6 +563,18 @@ class bAP:
         }
 
     def bAP_APwidth(self, voltage_traces):
+        """Get the width of the first action potential in the somatic voltage trace.
+        
+        Args:
+            voltage_traces (dict): dictionary with the voltage traces of the soma and dendrite.
+            
+        Returns:
+            dict: Dictionary mapping ``".check_1AP"`` to whether there is at least one action potential in the somatic voltage trace,
+            and ``".raw"`` to the width of the first action potential in the somatic voltage trace.
+        
+        See also:
+            :py:meth:`~biophysics_fitting.ephys.APwidth`
+        """
         t, v = voltage_traces['tVec'], voltage_traces['vList'][0]
         return {
             '.check_1AP':
@@ -344,12 +584,40 @@ class bAP:
         }
 
     def bAP_spikecount(self, voltage_traces):
+        """Get the number of spikes in the somatic voltage trace.
+        
+        Args:
+            voltage_traces (dict): dictionary with the voltage traces of the soma and dendrite.
+            
+        Returns:
+            dict: Dictionary mapping ``".raw"`` to the number of spikes in the somatic voltage trace.
+        
+        See also:
+            :py:meth:`~biophysics_fitting.ephys.spike_count`
+        """
         t, v = voltage_traces['tVec'], voltage_traces['vList'][0]
         return {
             '.raw': nan_if_error(spike_count)(t, v, thresh=self.soma_thresh)
         }
 
     def _bAP_att(self, voltage_traces, _n=1):
+        """Get the backpropagating action potential attenuation.
+        
+        Args:
+            voltage_traces (dict): dictionary with the voltage traces of the soma and dendrite.
+            _n (int): 
+                The index of the dendritic voltage trace.
+                Index :math:`0` is the somatic voltage trace, 
+                index :math:`1` is the first dendritic voltage trace, and
+                index :math:`2` is the second dendritic voltage trace.
+                Defaults to :math:`1` i.e. the first pipette in the dendrite.
+                
+        Returns:
+            dict: Dictionary mapping ``".raw"`` to the backpropagating action potential attenuation.
+            
+        See also:
+            :py:meth:`~biophysics_fitting.ephys.BPAPatt`
+        """
         t, v = voltage_traces['tVec'], voltage_traces['vList'][0]
         v_dend = voltage_traces['vList'][_n]
         return {
@@ -364,13 +632,46 @@ class bAP:
         }
 
     def bAP_att2(self, voltage_traces):
+        """Get the backpropagating action potential attenuation between the soma and first dendritic pipette location.
+        
+        Args:
+            voltage_traces (dict): dictionary with the voltage traces of the soma and dendrite.
+        
+        Returns:
+            dict: Dictionary mapping ``".raw"`` to the backpropagating action potential attenuation.
+            
+        See also:
+            :py:meth:`~biophysics_fitting.ephys.BPAPatt`    
+        """
         return self._bAP_att(voltage_traces, _n=1)
 
     def bAP_att3(self, voltage_traces):
+        """Get the backpropagating action potential attenuation between the soma and second dendritic pipette location.
+        
+        Args:
+            voltage_traces (dict): dictionary with the voltage traces of the soma and dendrite.
+            
+        Returns:
+            dict: Dictionary mapping ``".raw"`` to the backpropagating action potential attenuation.
+            
+        See also:
+            :py:meth:`~biophysics_fitting.ephys.BPAPatt`
+        """
         return self._bAP_att(voltage_traces, _n=2)
 
 
 def get_evaluate_bAP(**kwargs):
+    """Get the evaluation function for the :math:`bAP` stimulus protocol.
+    
+    Initializes a :py:class:`bAP` object with the given keyword arguments, 
+    and returns a function that evaluates the voltage traces.
+    
+    Args:
+        kwargs: keyword arguments for the :py:class:`bAP` object.
+        
+    Returns:
+        Callable: function that evaluates the voltage traces.
+    """
     bap = bAP(**kwargs)
 
     def fun(**kwargs):
@@ -380,6 +681,17 @@ def get_evaluate_bAP(**kwargs):
 
 
 def get_evaluate_BAC(**kwargs):
+    """Get the evaluation function for the :math:`BAC` stimulus protocol.
+    
+    Initializes a :py:class:`BAC` object with the given keyword arguments,
+    and returns a function that evaluates the voltage traces.
+    
+    Args:
+        kwargs: keyword arguments for the :py:class:`BAC` object.
+        
+    Returns:
+        Callable: function that evaluates the voltage traces.
+    """
     bac = BAC(**kwargs)
 
     def fun(**kwargs):

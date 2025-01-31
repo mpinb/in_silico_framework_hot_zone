@@ -51,7 +51,7 @@ except AssertionError:
 
 logger.info("Loading mechanisms:")
 try:
-    with StreamToLogger(logger=logger, level=10) as sys.stout:
+    with StreamToLogger(logger=logger, level=20) as sys.stout:
         neuron.load_mechanisms(os.path.join(parent, channels))
         neuron.load_mechanisms(os.path.join(parent, netcon))
 except Exception as e:

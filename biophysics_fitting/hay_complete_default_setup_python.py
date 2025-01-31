@@ -204,6 +204,7 @@ def get_Evaluator(
     e = Evaluator()
     bap = hay_evaluation_python.bAP(**bAP_kwargs)
     bac = hay_evaluation_python.BAC(**BAC_kwargs)
+    # TODO add step currents
 
     if interpolate_voltage_trace:
         e.setup.pre_funs.append(interpolate_vt)

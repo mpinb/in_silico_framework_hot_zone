@@ -1,5 +1,15 @@
 '''
 This module provides methods to run Hay's stimulus protocols, and evaluate the resulting voltage traces.
+
+This module calls the evaluation routines written by Etay Hay et al. in NEURON, located
+at MOEA_EH_minimal.
+
+.. deprecated:: 0.4.0
+    This module is deprecated and will be removed in a future release.
+    Evaluating voltage traces according to hay's protocols will be fully translated to Python in a future version, and
+    this module will be removed.
+
+:skip-doc:
 '''
 
 
