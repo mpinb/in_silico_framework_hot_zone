@@ -12,5 +12,17 @@ https://github.com/mpinb/in_silico_framework/assets/38312921/adcc0ea7-154e-4713-
 
 </div>
 
-ISF is a multi-scale simulation environment for generating, simulating and analyzing multi-scale simulations of neuron-network models during *in vivo*-like synaptic activity patterns. 
-It provides extensive neuron modeling and network modeling tools
+ISF is a multi-scale simulation environment for generating, simulating and analyzing neuron-network models during *in-vivo* conditions.
+
+## Documentation
+
+Web-hosted documentation is coming soon. For now, you can self-host using
+
+```bash
+pixi r build_docs
+pixi r host-docs
+```
+
+## Tutorials
+
+Please visit the tutorials (either in `getting_started/tutorials` or on the documentation page) for a walkthrough of ISF's most important workflows.
