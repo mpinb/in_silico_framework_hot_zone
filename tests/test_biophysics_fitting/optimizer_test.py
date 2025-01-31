@@ -385,7 +385,6 @@ def test_ON_HOLD_legacy_simulator_and_new_simulator_give_same_results():
 
     for k in list(features_legacy.keys()):
         assert features_legacy[k] == features_new[k]
-<<<<<<< HEAD
         
 @pytest.mark.skipif(
     sys.platform.startswith('darwin'), reason="The OSX installation runs a newer version of NEURON (>=8.2), which has deviating results form the original results, which were generated with NEURON <= 7.8.2."
@@ -393,20 +392,6 @@ def test_ON_HOLD_legacy_simulator_and_new_simulator_give_same_results():
 def test_reproducability_linux():
     tol = 1.5*1e-6
     # n_decimals = get_n_decimals(sys.platform, neuron.__version__)
-=======
-
-
-def test_reproducability():
-    import sys
-    if sys.platform.startswith('linux'):
-        tol = 1.5*1e-6
-    elif sys.platform.startswith('darwin'):
-        # OSX has updated NEURON version (NEURON 8), and the results are not exactly the same
-        # compared to Robert's original results (NEURON < 7.8.2)
-        tol = 5*1e-2
-    # n_decimals = get_n_decimals(sys.platform, neuron.__version__)
-
->>>>>>> develop
     setup_hay_evaluator(
     )  # this adds a stump cell to the neuron environment,which is
     # necessary to acces the hay evaluate functions. For the vairalbe time step solver,
