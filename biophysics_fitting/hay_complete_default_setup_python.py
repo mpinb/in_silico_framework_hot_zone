@@ -195,7 +195,7 @@ def get_Evaluator(
     StepThree_kwargs={},
     interpolate_voltage_trace=True,
 ):
-    """Get a set up :py:class:`~biophysics_fitting.evaluator.Evaluator` object for the Hay protocol.
+    """Get a :py:class:`~biophysics_fitting.evaluator.Evaluator` object for the Hay protocol.
 
     Sets up an evaluator object for the Hay protocol, including measuring functions for bAP, BAC and three step current stimuli.
 
