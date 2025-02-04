@@ -330,7 +330,7 @@ class PSPs:
         Args:
             measured_data (pd.DataFrame): 
                 A table containing the empirical EPSP statistics (mean, median and maximum) for each celltype.
-                Must contain the keys: ``[EPSP_mean_measured, EPSP_median_measured, EPSP_max_measured]``.
+                Must contain the keys: ``[EPSP_mean_measured, EPSP_median_measured, EPSP_max_measured]`` and the index ``celltype``.
             method (str): ``dynamic_baseline`` or ``constant_baseline``.
             merge_celltype_kwargs (dict): Additional keyword arguments to pass to :py:meth:`~simrun.synaptic_strength_fitting.merge_celltypes`.
             
@@ -554,7 +554,7 @@ def set_ex_synapse_weight(syn, weight):
     """Set the synaptic strength of an excitatory :py:class:`single_cell_parser.synapse.Synapse`.
     
     Args:
-        syn (single_cell_parser.synapse.Synapse): The excitatory synapse to set the synaptic strength for.
+        syn (:py:class:`single_cell_parser.synapse.Synapse`): The excitatory synapse to set the synaptic strength for.
         weight (list): The synaptic strength values for the AMPA and NMDA components.
         
     Returns:

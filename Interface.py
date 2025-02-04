@@ -220,15 +220,8 @@ from biophysics_fitting import hay_complete_default_setup as bfit_hay_complete_d
 from biophysics_fitting import L5tt_parameter_setup as bfit_L5tt_parameter_setup
 from biophysics_fitting.parameters import param_to_kwargs as bfit_param_to_kwargs
 from biophysics_fitting.optimizer import start_run as bfit_start_run
-try:
-    import visualize.linked_views
-    from visualize.linked_views.server import LinkedViewsServer
-    from visualize.linked_views import defaults as LinkedViewsDefaults
-except ImportError:
-    logger.warning('Could not load linked views')
 
 from functools import partial
-
 
 from data_base._module_versions import version_cached
 
