@@ -1,19 +1,20 @@
-import os
-
 import neuron
 import numpy as np
 import pytest
 
+from biophysics_fitting.hay_complete_default_setup import (
+    get_Evaluator as get_hay_Evaluator,
+)
+from biophysics_fitting.hay_complete_default_setup_python import get_Combiner
 from biophysics_fitting.hay_complete_default_setup_python import (
-    get_Combiner,
-    get_Evaluator,
+    get_Evaluator as get_python_evaluator,
 )
 from tests.test_biophysics_fitting import deserialize_voltage_traces
 
 h = neuron.h
 
 
-def get_old_hay_evaluation():
+def get_original_hay_evaluation():
     return {
         "BAC_ahpdepth": 0.14125418811813617,
         "BAC_APheight": 1.0076193107997482,
@@ -72,12 +73,8 @@ def test_hay_evaluation_python(request, step=True):
     ), "The voltage traces should be set in pytest scope by now. Is the test dependency correctly configured?"
     voltage_traces = deserialize_voltage_traces(voltage_traces)
 
-    e = get_Evaluator(step=step)
+    e = get_python_evaluator(step=step)
     evaluation = e.evaluate(voltage_traces)
-
-    # save for later
-    ev_to_save = {k: evaluation[k] for k in get_old_hay_evaluation()}
-    request.config.cache.set("python_hay_evaluation", ev_to_save)
 
     # test if results are within bounds, which they should
     evaluation = get_Combiner(step=step).combine(evaluation)
@@ -88,23 +85,31 @@ def test_hay_evaluation_python(request, step=True):
         )
 
 
-@pytest.mark.dependency(depends=["test_hay_evaluation_python"])
+@pytest.mark.dependency(
+    depends=["tests/test_biophysics_fitting/simulator_test.py::test_simulator"],
+    scope="session",
+)
 def test_hay_evaluation_python_compatibility(request):
     """test if new python translation of hay's hoc code provides the same results"""
-    old_evaluation = get_old_hay_evaluation()
-    new_evaluation = request.config.cache.get("python_hay_evaluation", None)
-    assert new_evaluation is not None
-    for name, old_evaluation in old_evaluation.items():
-        if name not in new_evaluation:
-            raise ValueError(
-                "Could not find {} in new evaluation keys {}".format(
-                    name, new_evaluation.keys()
-                )
-            )
-        diff = np.abs(old_evaluation - new_evaluation[name])
-        rel_diff = diff/old_evaluation
-        assert np.abs(rel_diff) < 1e-3, "New and old evaluation of {} differ by {}%".format(
-            name, rel_diff*100
+    v = request.config.cache.get("shared_voltage_traces", None)
+
+    evaluation_python_translation = get_python_evaluator(
+        step=False, interpolate_voltage_trace=False
+    ).evaluate(v)
+
+    evaluation_hay = get_hay_Evaluator(
+        step=False, interpolate_voltage_trace=False
+    ).evaluate(v)
+
+    diff = {
+        k: evaluation_python_translation[k] - evaluation_hay[k] for k in evaluation_hay
+    }
+    rel_diff = {k: diff[k] / evaluation_hay[k] for k in diff.keys()}
+    for ev, rd in rel_diff.items():
+        assert (
+            np.abs(rd) < 1e-10
+        ), "{stim} is off by more than just a numerical truncation factor: {rd}".format(
+            stim=ev, rd=rd
         )
 
 
@@ -135,4 +140,4 @@ def test_hay_evaluation():
 
 
 if __name__ == "__main__":
-    test_hay_evaluation_python()
+    test_hay_evaluation_python_compatibility()
