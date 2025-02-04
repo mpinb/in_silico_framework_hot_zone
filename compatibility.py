@@ -117,7 +117,6 @@ def register_module_or_pkg_old_name(module_spec, replace_name, replace_with):
     module = importlib.util.module_from_spec(module_spec)
     sys.modules[additional_module_name] = module
     
-    # Execute the module with the lazy loader
     module_spec.loader.exec_module(module)
 
     # Ensure the parent module is aware of its submodule
