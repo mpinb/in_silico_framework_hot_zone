@@ -28,10 +28,10 @@ class Synapse(object):
         secID (int): ID of attached section in cell.sections
         ptID (int): ID of attached point in cell.sections[self.secID].pts
         x (float): Relative coordinate along attached section (from 0 to 1)
-        preCellType (str): Reference to presynaptic cell (PointCell)
-        preCell (PointCell): Reference to presynaptic cell (PointCell)
-        releaseSite (PointCell): Release site of presynaptic cell.
-        postCellType (str): Reference to postsynaptic cell (PointCell)
+        preCellType (str): Type of the presynaptic :py:class:`~single_cell_parser.cell.PointCell`
+        preCell (:py:class:`~single_cell_parser.cell.PointCell`): Reference to presynaptic :py:class:`~single_cell_parser.cell.PointCell`
+        releaseSite (:py:class:`~single_cell_parser.cell.PointCell`): Release site of presynaptic cell.
+        postCellType (str): Postsynaptic cell type.
         coordinates (list): 3D coordinates of synapse location
         receptors (dict): Stores hoc mechanisms
         netcons (list): Stores NetCons
@@ -51,8 +51,8 @@ class Synapse(object):
         Args:
             edgeID (int): ID of attached section in cell.sections
             edgePtID (int): ID of attached point in cell.sections[edgeID].pts
-            preCellType (str): reference to presynaptic cell (PointCell)
-            postCellType (str): reference to postsynaptic cell (PointCell)
+            preCellType (str): reference to presynaptic :py:class:`~single_cell_parser.cell.PointCell`
+            postCellType (str): reference to postsynaptic :py:class:`~single_cell_parser.cell.PointCell`
         '''
         self.secID = edgeID
         self.ptID = edgePtID

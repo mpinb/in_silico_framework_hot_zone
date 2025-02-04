@@ -294,7 +294,7 @@ class NetworkMapper:
 
         Returns:
             None. Writes the resulting :ref:`con_file_format` files and adapted 
-            :ref:`network_parameter_format` file to disk (in contrast to :py:meth:`~create_network`).
+            :ref:`network_parameters_format` file to disk (in contrast to :py:meth:`~create_network`).
         '''
         allParam = self.nwParam
         self.nwParam = allParam.network

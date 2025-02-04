@@ -13,8 +13,8 @@ These :ref:`syn_activation_format` files can afterwards be used to re-run simula
 To generate :ref:`syn_activation_format` files **and** simulate the effect on the postsynaptic neuron model in one go, use the :py:mod:`simrun.run_new_simulations` module instead.
 
 .. hint::
-   If the postsynaptic neuron is not simulated, why does this module need the :ref:`cell_parameters_file`?
-   On the one hand, it needs morphoplogical information in order to connect these synapses. The :ref:`cell_parameters_file` contains 
+   If the postsynaptic neuron is not simulated, why does this module need the :ref:`cell_parameters_format`?
+   On the one hand, it needs morphoplogical information in order to connect these synapses. The :ref:`cell_parameters_format` contains 
    a backlink to the original :ref:`hoc_file_format` file, which contains the morphological information. But then why not start from the :ref:'hoc_file_format' file directly?
    Because this module does in fact create a biophsyically detailed neuron model to pass to :py:class:`~single_cell_parser.network.NetworkMapper` to create the network,
    despite the fact that the postsynaptic activity is not saved.

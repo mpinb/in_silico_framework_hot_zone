@@ -7,6 +7,8 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 import sys, os, fnmatch, ast
+import toml
+
 project_root = os.path.join(os.path.abspath(os.pardir))
 sys.path.insert(0, project_root)
 from docs.parse_notebooks import copy_and_parse_notebooks_to_docs
@@ -16,12 +18,17 @@ from docs.sphinx_hooks import count_documented_members, log_documented_members, 
 from docs.skip_doc import skip_member, MODULES_TO_SKIP
 logger = isf_logger.getChild("DOCS")
 logger.setLevel("INFO")
-
+# Parse pyproject.toml to get the release version
+pyproject_path = os.path.join(project_root, 'pyproject.toml')
+with open(pyproject_path, 'r') as f:
+    pyproject_data = toml.load(f)
+    release = pyproject_data['project']['version']
+    version = release
 project = 'In-Silico Framework (ISF)'
 copyright = '2023, Arco Bast, Robert Egger, Bjorge Meulemeester, Maria Royo Cano, Rieke Fruengel, Matt Keaton, Omar Valerio'
 author = 'Arco Bast, Robert Egger, Bjorge Meulemeester, Maria Royo Cano, Rieke Fruengel, Matt Keaton, Omar Valerio'
-release = '0.4.0-beta'
-version = '0.4.0-beta'
+
+
 
 # copy over tutorials and convert links to python files to sphinx documentation directives
 copy_and_parse_notebooks_to_docs(
