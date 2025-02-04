@@ -362,7 +362,7 @@ class Simulator_Setup:
         This is the main interfac to set up a cell object with biophysical parameters.
         
         Args:
-            params (pd.Series): The parameter vector.
+            params (pd.Series): Biophysical parameters
             
         Returns:
             cell, params: The cell object and the parameter vector.

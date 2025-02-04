@@ -1,98 +1,116 @@
-import neuron, sys, pytest
-from biophysics_fitting.hay_evaluation import (
-    get_hay_problem_description, 
-    get_hay_objective_names, 
-    setup_hay_evaluator,
-    get_hay_params_pdf,
-    )
-from biophysics_fitting.hay_complete_default_setup_python import get_Evaluator, get_Simulator, get_Combiner
-from biophysics_fitting.hay_complete_default_setup import get_fixed_params_example
-from config.isf_logging import StreamToLogger, logger
+import os
+
+import neuron
 import numpy as np
-import pandas as pd
+import pytest
+
+from biophysics_fitting.hay_complete_default_setup_python import (
+    get_Combiner,
+    get_Evaluator,
+)
+from tests.test_biophysics_fitting import deserialize_voltage_traces
+
 h = neuron.h
 
 
-def get_feasible_model_params():
-    pdf = get_hay_params_pdf()
-    x = [
-        1.971849, 0.000363, 0.008663, 0.099860, 0.073318, 0.359781, 0.000530,
-        0.004958, 0.000545, 342.880108, 3.755353, 0.002518, 0.025765, 0.060558,
-        0.082471, 0.922328, 0.000096, 0.000032, 0.005209, 248.822554, 0.000025,
-        0.000047, 0.000074, 0.000039, 0.000436, 0.016033, 0.008445, 0.004921,
-        0.003024, 0.003099, 0.0005, 116.339356
-    ]
-    pdf['x'] = x
-    return pdf
+def get_old_hay_evaluation():
+    return {
+        "BAC_ahpdepth": 0.14125418811813617,
+        "BAC_APheight": 1.0076193107997482,
+        "BAC_ISI": 0.0417182547544436,
+        "BAC_caSpike_height": 0.659560205506027,
+        "BAC_caSpike_width": 0.08894764532934432,
+        "BAC_spikecount": 0.0,
+        "bAP_spikecount": 0.0,
+        "bAP_APheight": 1.7265778138894916,
+        "bAP_APwidth": 2.06628632228842,
+        "bAP_att2": 1.2392743531680608,
+        "bAP_att3": 1.6065100454922565,
+        "mf1": 1.7045454545454546,
+        "AI1": 0.49272740969831885,
+        "ISIcv1": 1.5149115878350792,
+        "DI1": 0.42387678054719374,
+        "TTFS1": 1.559524119613254,
+        "APh1": 0.7270461042321147,
+        "fAHPd1": 1.8012804269742928,
+        "sAHPd1": 1.014632577988536,
+        "sAHPt1": 0.44621364517478956,
+        "APw1": 2.129551711974563,
+        "mf2": 0.0,
+        "AI2": 1.9222306682333696,
+        "ISIcv2": 0.5017877027521275,
+        "DI2": 1.4694554157331052,
+        "TTFS2": 0.12556975559578443,
+        "APh2": 0.9348347507146776,
+        "fAHPd2": 1.4198439942151773,
+        "sAHPd2": 0.3236920651878746,
+        "sAHPt2": 1.1101910558238628,
+        "APw2": 1.5216672210411692,
+        "mf3": 2.2500225002250023,
+        "AI3": 1.6812494124322965,
+        "ISIcv3": 4.012157754318799,
+        "DI3": 2.950213517754278,
+        "TTFS3": 0.08393006742642228,
+        "APh3": 0.5912669610538728,
+        "fAHPd3": 1.1237604895508075,
+        "sAHPd3": 0.09536464568092351,
+        "sAHPt3": 2.0872162603264846,
+        "APw3": 2.22822779962913,
+    }
 
 
-def get_feasible_model_objectives():
-    pdf = get_hay_problem_description()
-    index = get_hay_objective_names()
-    y = [
-        1.647, 3.037, 0., 2.008, 2.228, 0.385, 1.745, 1.507, 0.358, 1.454, 0.,
-        0.568, 0.893, 0.225, 0.75, 2.78, 0.194, 1.427, 3.781, 5.829, 1.29,
-        0.268, 0.332, 1.281, 0.831, 1.931, 0.243, 1.617, 1.765, 1.398, 1.126,
-        0.65, 0.065, 0.142, 5.628, 6.852, 2.947, 1.771, 1.275, 2.079
-    ]
-    s = pd.Series(y, index=index)
-    pdf.set_index('objective', drop=True, inplace=True)
-    pdf['y'] = s
-    return pdf
+@pytest.mark.dependency(
+    depends=["tests/test_biophysics_fitting/simulator_test.py::test_simulator"],
+    scope="session",
+)
+def test_hay_evaluation_python(request, step=True):
+    """Test the evaluation of the Python hay evaluator translation"""
+
+    voltage_traces = request.config.cache.get("shared_voltage_traces", None)
+    assert (
+        voltage_traces is not None
+    ), "The voltage traces should be set in pytest scope by now. Is the test dependency correctly configured?"
+    voltage_traces = deserialize_voltage_traces(voltage_traces)
+
+    e = get_Evaluator(step=step)
+    evaluation = e.evaluate(voltage_traces)
+
+    # save for later
+    ev_to_save = {k: evaluation[k] for k in get_old_hay_evaluation()}
+    request.config.cache.set("python_hay_evaluation", ev_to_save)
+
+    # test if results are within bounds, which they should
+    evaluation = get_Combiner(step=step).combine(evaluation)
+    for stim, ev in evaluation.items():
+        cutoff = 4.5 if "step" in stim.lower() else 3.2
+        assert ev < cutoff, "Sigma cuttof of {} for {} exceeded: {}".format(
+            cutoff, stim, ev
+        )
 
 
-def hay_objective_function(x):
-    '''evaluates L5tt cell Nr. 86 using the channel densities defined in x.
-    x: numpy array of length 32 specifying the free parameters
-    returns: np.array of length 5 representing the 5 objectives'''
-
-    #import Interface as I
-    setup_hay_evaluator()
-
-    # put organism in list, because evaluator needs a list
-    o = h.List()
-    o.append(h.organism[0])
-    # set genome with new channel densities
-    x = h.Vector().from_python(x)
-
-    h.organism[0].set_genome(x)
-    with StreamToLogger(logger, 10) as sys.stdout: 
-        try:
-            h.evaluator.evaluate_population(o)
-        except:
-            return [1000] * 5
-    return pd.Series(np.array(o[0].pass_fitness_vec()), index=get_hay_objective_names())
-
-
-def test_hay_evaluation_python():
-    """Test the evaluation of the Python hay evaluator translation
-    """
-    fixed_params = get_fixed_params_example()
-    fixed_params = {'BAC.hay_measure.recSite': 294.8203371921156,
-        'BAC.stim.dist': 294.8203371921156,
-        'bAP.hay_measure.recSite1': 294.8203371921156,
-        'bAP.hay_measure.recSite2': 474.8203371921156,
-        'hot_zone.min_': 384.8203371921156,
-        'hot_zone.max_': 584.8203371921156,
-        'hot_zone.outsidescale_sections': [23, 24, 25, 26, 27, 28, 29, 31, 32, 33, 34, 35, 37, 38, 40, 42, 43, 44, 46, 48, 50, 51, 52, 54, 56, 58, 60],
-        'morphology.filename': '/gpfs/soma_fs/scratch/meulemeester/project_src/in_silico_framework/getting_started/example_data/simulation_data/biophysics/89/db/morphology/89_L5_CDK20050712_nr6L5B_dend_PC_neuron_transform_registered_C2.hoc'}
-    s = get_Simulator(fixed_params=fixed_params, step=True)
-    e = get_Evaluator(step=True)
-    c = get_Combiner(step=True)
-    
-    x = get_feasible_model_params().x
-    features_dict = s.run(x)
-    evaluation = e.evaluate(features_dict)
-    y = c.combine(evaluation)
-    y_target = get_feasible_model_objectives().y
-    
-    assert np.allclose(y, y_target, rtol=1e-3, atol=1e-3)
-
+@pytest.mark.dependency(depends=["test_hay_evaluation_python"])
+def test_hay_evaluation_python_compatibility(request):
+    """test if new python translation of hay's hoc code provides the same results"""
+    old_evaluation = get_old_hay_evaluation()
+    new_evaluation = request.config.cache.get("python_hay_evaluation", None)
+    assert new_evaluation is not None
+    for name, old_evaluation in old_evaluation.items():
+        if name not in new_evaluation:
+            raise ValueError(
+                "Could not find {} in new evaluation keys {}".format(
+                    name, new_evaluation.keys()
+                )
+            )
+        diff = np.abs(old_evaluation - new_evaluation[name])
+        rel_diff = diff/old_evaluation
+        assert np.abs(rel_diff) < 1e-3, "New and old evaluation of {} differ by {}%".format(
+            name, rel_diff*100
+        )
 
 
 @pytest.mark.skip("This test segfaults, unsure why. It's set for removal either way.")
 def test_hay_evaluation():
-    '''compare the result of the optimization of the hay evaluator with a precomputed result'''
+    """compare the result of the optimization of the hay evaluator with a precomputed result"""
     print(
         "Testing this only works, if you uncomment the following line in MOEA_gui_for_objective_calculation.hoc: "
     )
@@ -105,7 +123,6 @@ def test_hay_evaluation():
     )
     print("comment out the line again.")
 
-    import numpy as np
     x = get_feasible_model_params().x
     y_new = hay_objective_function(x)
     y = get_feasible_model_objectives().y
@@ -115,3 +132,7 @@ def test_hay_evaluation():
         print(y)
         print(y_new[y.index].values)
         raise
+
+
+if __name__ == "__main__":
+    test_hay_evaluation_python()

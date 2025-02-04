@@ -97,13 +97,12 @@ class ModuleFilter(logging.Filter):
 
 
 def pytest_addoption(parser):
-    parser.addoption("--dask_server_port", action="store", default="38786")
+    parser.addoption("--dask_server_port", action="store", default="8786")
 
 
 def is_port_in_use(port):
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         return s.connect_ex(("localhost", port)) == 0
-
 
 def pytest_ignore_collect(path, config):
     """If this evaluates to True, the test is ignored.
@@ -162,7 +161,10 @@ def pytest_configure(config):
     isf_logger.addHandler(isf_logging_file_handler)
 
     c = distributed.Client(
-        "{}:{}".format(socket.gethostname(), config.getoption("--dask_server_port"))
+        "{}:{}".format(
+            "localhost",
+            config.getoption("--dask_server_port"),
+        )
     )
 
     ensure_workers_have_imported_requirements(c)

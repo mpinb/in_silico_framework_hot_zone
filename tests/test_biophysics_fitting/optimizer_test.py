@@ -1,3 +1,5 @@
+"Test optimization run on morphology 86"
+
 # import global variables from context
 from .context import  DATA_DIR
 import os, tempfile, six, shutil, pytest
