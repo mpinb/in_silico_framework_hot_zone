@@ -170,12 +170,15 @@ class NetworkMapper:
         
         Args:
             synInfoName (str): 
-                Name of the file containing the :ref:`syn_activation_format` file.
-            synWeightName (str): 
+                Name of the :ref:`syn_activation_format` file.
+            synWeightName (str, optional): 
                 Name of the file containing the synapse weights. Default: None.
             include_silent_synapses: 
                 Also create synapses that were not active. 
                 This maintains the synapse id, but maybe slightly slower.
+
+        .. deprecated:: 0.1
+           The ``synWeightName`` argument is deprecated.
         '''
         logger.info('***************************')
         logger.info('creating saved network and')
@@ -247,6 +250,8 @@ class NetworkMapper:
                 synx = self.postCell.sections[secID].relPts[ptID]
                 newSyn = self.postCell.add_synapse(secID, ptID, synx, synType)
                 if weights:
+                    # Reading in weights from a synapse weight file
+                    # DEPRECATED
                     newSyn.weight = weights[synType][synID]
                     #===========================================================
                     # testLoc = locations[synType][synID]
@@ -255,6 +260,7 @@ class NetworkMapper:
                     #    raise RuntimeError(errstr)
                     #===========================================================
                 else:
+                    # Getting the weights from the network parameters
                     for recepStr in list(synParameters.receptors.keys()):
                         receptor = synParameters.receptors[recepStr]
                         self._assign_synapse_weights(receptor, recepStr, newSyn)
@@ -1043,7 +1049,9 @@ class NetworkMapper:
         Assigns synapse weights using :py:meth:`~_assign_synapse_weights` and connect synapses to presynaptic cells with defined activity.
         
         Args:
-            weights (dict): Weights for each synapse type.
+            weights (dict | None, optional): 
+                pecific weights for each synapse type.
+                Default: None, in which case they are read from the :ref:`network_parameters_format`.
             full_network (bool): Defines which cell IDS to use.
                 If True: (non-sequential) cell ids from the network embedding are used. 
                 If False, single_cell network embedding from single_cell_input_mapper is used, in which cell ids are sequential.
