@@ -24,6 +24,7 @@ import sys
 import contextlib, io
 import logging
 from .utils import StreamToLogger
+from mechanisms import l5pt
 
 logger = logging.getLogger("ISF").getChild(__name__)
 # moved to the bottom to resolve circular import
@@ -42,9 +43,9 @@ def setup_hay_evaluator():
     necessary to access the Hay evaluate functions. 
     It makes the following current stimuli available for NEURON:
 
-        - bAP
-        - BAC
-        - SquarePulse (for the step currents)
+    - bAP
+    - BAC
+    - SquarePulse (for the step currents)
     
     Args:
         testing (bool): If True, the function will test the reproducibility of the Hay evaluator.
@@ -124,7 +125,6 @@ objectives_BAC = [
     'bAP_att2', 'bAP_att3', 'bAP_spikecount'
 ]
 
-
 def get_cur_stim(stim):
     """Get an input current stimulus from the Hay evaluator.
     
@@ -183,8 +183,7 @@ def hay_evaluate(cur_stim, tvec, vList):
     for v in vList:
         hoc_vList.append(h.Vector().from_python(v))
 
-    with StreamToLogger(
-            logger, 10) as sys.stdout:  # redirect to log with level DEBUG (10)
+    with StreamToLogger(logger, 10) as sys.stdout:
         try:
             x = h.calculator.get_organism_stimulus_error(
                 feature_mean_list.o(cur_stim),
