@@ -6,6 +6,7 @@ The following 3rd party modules are used: pandas, dask, distributed
 import six, yaml, cloudpickle, sys
 import logging
 import pkgutil
+import importlib.util
 from  importlib.util import find_spec, module_from_spec, LazyLoader
 from importlib import import_module
 logger = logging.getLogger("ISF").getChild(__name__)
@@ -113,12 +114,11 @@ def register_module_or_pkg_old_name(module_spec, replace_name, replace_with):
     logger.debug("Registering module \"{}\" under the name \"{}\"".format(module_spec.name, additional_module_name))
     
     # Create a lazy loader for the module
-    loader = LazyLoader(module_spec.loader)
-    module = module_from_spec(module_spec)
+    module = importlib.util.module_from_spec(module_spec)
     sys.modules[additional_module_name] = module
     
     # Execute the module with the lazy loader
-    loader.exec_module(module)
+    module_spec.loader.exec_module(module)
 
     # Ensure the parent module is aware of its submodule
     parent_module_name = additional_module_name.rsplit('.', 1)[0]
