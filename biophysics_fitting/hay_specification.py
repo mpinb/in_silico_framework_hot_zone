@@ -5,9 +5,11 @@ This module provides convenience methods for Hay's model specification (see :cit
 import json
 
 import pandas as pd
+import os
+CWD = os.path.abspath(os.path.dirname(__file__))
 
 # filepath: /home/bgmeulem/Documents/in_silico_framework/biophysics_fitting/hay_specification.py
-with open("path/to/hay_specification.json", "r") as f:
+with open(os.path.join(CWD, "hay_objectives_empirical.json"), "r") as f:
     objectives_empirical = json.load(f)
 
 HAY_BAP_DEFINITIONS = objectives_empirical["HAY_BAP_DEFINITIONS"]
