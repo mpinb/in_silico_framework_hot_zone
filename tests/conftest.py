@@ -40,7 +40,7 @@ from .context import CURRENT_DIR, TEST_DATA_FOLDER
 
 def import_worker_requirements():
     import compatibility
-    import mechanisms
+    import mechanisms.l5pt
     from config.isf_logging import logger
 
 
@@ -103,6 +103,7 @@ def pytest_addoption(parser):
 def is_port_in_use(port):
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         return s.connect_ex(("localhost", port)) == 0
+
 
 def pytest_ignore_collect(path, config):
     """If this evaluates to True, the test is ignored.

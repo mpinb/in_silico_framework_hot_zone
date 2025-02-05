@@ -100,7 +100,8 @@ def serialize_voltage_traces(v):
 def deserialize_voltage_traces(v):
     for stim in v:
         v[stim]["tVec"] = np.array(v[stim]["tVec"])
-        for i, vList in enumerate(v[stim]["vList"]):
-            v[stim]["vList"][i] = np.array(vList)
-        v[stim]["vList"] = np.array(v[stim]["vList"])
+        deserialized_vList = []
+        for vList in v[stim]["vList"]:
+            deserialized_vList.append(np.array(vList))
+        v[stim]["vList"] = np.array(deserialized_vList)
     return v
