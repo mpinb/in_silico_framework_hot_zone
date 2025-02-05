@@ -231,7 +231,8 @@ class Simulator_Setup:
             Callable: The run function for the stimulus.
         """
         l = [x for x in self.stim_run_funs if x[0].split('.')[0] == stim]
-        assert len(l) == 1
+        assert len(l) > 0, "No stimulus run function is configured for simulus {}. Did you configure this stimulus, or was it overridden at some point?".format(stim) 
+        assert len(l) == 1, "Multiple stimulus run functions are configured for stimulus {}. This is not allowed, as i can only run one stimulus at a time.".format(stim)
         return l[0]
 
     def get_stim_response_measure_fun(self, stim):
@@ -265,6 +266,7 @@ class Simulator_Setup:
             (pd.Series): Modified parameters.
         '''
         for name, fun in self.params_modify_funs:
+            logger.info("Applying {} to params".format(name))
             params = fun(params)
         return params
 
@@ -360,7 +362,7 @@ class Simulator_Setup:
         This is the main interfac to set up a cell object with biophysical parameters.
         
         Args:
-            params (pd.Series): The parameter vector.
+            params (pd.Series): Biophysical parameters
             
         Returns:
             cell, params: The cell object and the parameter vector.

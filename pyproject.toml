@@ -18,6 +18,9 @@ requires = ["hatchling"]
 libc = "2.17"
 linux = "3.10.0"
 
+[tool.pixi.activation]
+env = { "PYTHONPATH" = "$PYTHONPATH:$(pwd)" }
+
 [tool.pixi.dependencies]
 # default conda dependencies
 pandas = "1.1.3.*"

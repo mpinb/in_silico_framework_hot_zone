@@ -436,39 +436,3 @@ def execute_in_child_process_kept_alive(fun):
 
     #fun.pool = pool
     return _helper
-
-
-class StreamToLogger(object):
-    """
-    Wrapper for a stream object that redirects writes to a logger instance.
-    Can be used as a context manager::
-
-        >>> with StreamToLogger() as sys.stdout:
-        >>>    do_something()
-    
-    Used for reading in :ref:`hoc_file_format` files that provide output due to various print statements in the `.hoc` file, or capturing NEURON output.
-    """
-
-    def __init__(self, logger, level):
-        self.logger = logger
-        self.level = level
-        self.linebuf = ''
-
-    def write(self, buf):
-        """Write to the logger instead of the original target.
-        
-        Args:
-            buf (str): The buffer to write.
-        """
-        for line in buf.rstrip().splitlines():
-            self.logger.log(self.level, line.rstrip())
-
-    def __enter__(self):
-        return self
-
-    def __exit__(self, *args):
-        self.flush()
-
-    def flush(self):
-        """Flush the buffer."""
-        pass
