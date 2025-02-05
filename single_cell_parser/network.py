@@ -1175,7 +1175,7 @@ class NetworkMapper:
         """Assign synapse weights according to distribution specified in network parameters.
         
         Args:
-            receptor (dict): Receptor parameters from network parameter file.
+            receptor (:py:class:`~sumatra.parameters.NTParameterSet`): Receptor parameters from network parameter file.
             recepStr (str): Receptor name.
             syn (Synapse): Synapse object.
         """
@@ -1344,9 +1344,9 @@ def activate_functional_synapse(
         syn (:py:class:`~single_cell_parser.synapse.Synapse`): Synapse object.
         cell (:py:class:`~single_cell_parser.cell.Cell`): Postsynaptic cell.
         preSynCell (:py:class:`~single_cell_parser.cell.PointCell`): Presynaptic cell.
-        synParameters (dict): Synapse parameters, see also the ``synapses.rerceptors.<syn_type>`` key in the :ref:`network_parameters_format` file.
+        synParameters (:py:class:`~sumatra.parameters.NTParameterSet`): Synapse parameters, see also the ``synapses.rerceptors.<syn_type>`` key in the :ref:`network_parameters_format` file.
         tChange (float): Time at which the synapse parameters change (e.g. the release probability due to a spike).
-        synParametersChange (dict): Synapse parameters after change (including e.g. the release probability).
+        synParametersChange (:py:class:`~sumatra.parameters.NTParameterSet`): Synapse parameters after change (including e.g. the release probability).
         forceSynapseActivation (bool): If True, the synapse is activated regardless of the release probability.
         releaseTimes (list):
             List of synaptic release times.

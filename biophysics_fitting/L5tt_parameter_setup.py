@@ -436,9 +436,6 @@ def set_ephys(cell_param, params=None):
 def set_param(cell_param, params=None):
     """Updates cell_param given a dict of params in the dot naming convention.
     
-    Cell parameters are nested dictionaries, while the input parameters are flat dictionaries,
-    where the hierarchy is defined by dots.
-    
     Example::
 
         cell_param = {'a': {'b': {'c': 2}}}
@@ -447,7 +444,7 @@ def set_param(cell_param, params=None):
         # returns {'a': {'b': {'c': 3}}}
         
     Args:
-        cell_param (dict): The cell parameter nested dictionary.
+        cell_param (:py:class`~sumatra.parameters.NTParameterSet` | dict): The cell parameter nested dictionary.
         params (dict): The parameter flat dictionary.
     
     Returns:
@@ -476,7 +473,7 @@ def set_many_param(cell_param, params=None):
         # Output: {'a': {'b': {'c': True}}}, NOT {'a': {'b': {'c': False}}}
         
     Args:
-        cell_param (dict): The cell parameter nested dictionary.
+        cell_param (:py:class:`~sumatra.parameters.NTParameterSet` | dict): The cell parameter nested dictionary.
         params (dict): The parameter flat dictionary.
         
     Returns:
@@ -504,7 +501,7 @@ def set_hot_zone(cell_param, min_=None, max_=None, outsidescale_sections=None):
     """Insert Ca_LVAst and Ca_HVA channels along the apical dendrite between ``min_`` and ``max_`` distance from the soma.
     
     Args:
-        cell_param (dict): The cell parameter dictionary.
+        cell_param (:py:class:`sumatra.parameters.NTParameterSet` | dict): The cell parameter dictionary.
         min_ (float): The minimum distance from the soma.
         max_ (float): The maximum distance from the soma.
         outsidescale_sections (list): A list of sections where the channels should be inserted.

@@ -47,7 +47,7 @@ class CurrentAnalysis:
     
     Attributes:
         mode (str): 'cell' or 'dict'.
-        cell (dict): The cell object, or a dictionary containing equivalent simulation data.
+        cell (:py:class:`~single_cell_parser.cell.Cell` | dict): The cell object, or a dictionary containing equivalent simulation data.
         t (list): The time vector.
         sec (Section): The section of the cell.
         secID (int): The index of the section.
