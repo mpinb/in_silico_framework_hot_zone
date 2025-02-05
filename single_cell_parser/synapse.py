@@ -8,8 +8,7 @@ See also:
     :py:class:`single_cell_parser.cell.Cell`.
 '''
 from neuron import h
-from collections import Sequence
-import numpy as np
+from sumatra.parameters import NTParameterSet
 
 __author__ = 'Robert Egger'
 __date__ = '2012-03-30'
@@ -33,7 +32,7 @@ class Synapse(object):
         releaseSite (:py:class:`~single_cell_parser.cell.PointCell`): Release site of presynaptic cell.
         postCellType (str): Postsynaptic cell type.
         coordinates (list): 3D coordinates of synapse location
-        receptors (dict): Stores hoc mechanisms
+        receptors (:py:class:`~sumatra.parameters.NTParameterSet`): Stores hoc mechanisms
         netcons (list): Stores NetCons
         weight (float): Synaptic weight
         _active (bool): Activation status
@@ -90,8 +89,11 @@ class Synapse(object):
                 Note that in the context of a synapse, ``spikes`` means release times, which is not necessarily the same as the presynaptic spike times.
             preCell (:py:class:`single_cell_parser.cell.PointCell`): Presynaptic cell.
             targetCell (:py:class:`single_cell_parser.cell.Cell`): Postsynaptic cell.
-            receptors (dict): Dictionary of receptors.
+            receptors (dict | Dict[:py:class:`~sumatra.parameters.NTParameterSet`]): 
+                Dictionary or NTParameterSet of receptors. 
+                Each individual receptor in this collection must be of the type :py:class:`~sumatra.parameters.NTParameterSet`.
         '''
+        assert type(receptors) is NTParameterSet
         self.releaseSite = source
         self.preCell = preCell
         '''careful: point processes not allowed at nodes between sections
