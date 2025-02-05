@@ -4,7 +4,10 @@ See also:
     :py:mod:`~biophysics_fitting.exploration_from_seedpoint.RW`
 """
 
-import Interface as I
+import pandas as pd
+import os
+import dask
+import numpy as np
 from pickle import UnpicklingError
 
 def read_parameters(
@@ -56,12 +59,12 @@ def robust_read_pickle(path):
         pd.DataFrame | pd.Series: the pickled DataFrame if reading was succesful, a pd.Series otherwise. Both contain the key 'init_error', specifying whether or not the read was succesful.
     """
     try:
-        df = I.pd.read_pickle(path) 
+        df = pd.read_pickle(path) 
         df['init_error'] = ''
         return df
     # except (UnpicklingError, EOFError) as e:
     except:
-        return I.pd.Series({"init_error":"Could not read {}".format(1)}).to_frame('init_error')
+        return pd.Series({"init_error":"Could not read {}".format(1)}).to_frame('init_error')
         
 def read_pickle(seed_folder, particle_id):
     """
@@ -74,13 +77,13 @@ def read_pickle(seed_folder, particle_id):
     Returns:
         pd.DataFrame: The results of the RW exploration of a single particle.
     """
-    path = I.os.path.join(seed_folder, str(particle_id))
-    df_names = [p for p in I.os.listdir(path) if p.endswith('.pickle')]
+    path = os.path.join(seed_folder, str(particle_id))
+    df_names = [p for p in os.listdir(path) if p.endswith('.pickle')]
     df_names = sorted(df_names, key=lambda x: int(x.split('.')[0]))
-    dfs = [robust_read_pickle(I.os.path.join(path, p)) for p in df_names]
+    dfs = [robust_read_pickle(os.path.join(path, p)) for p in df_names]
     if len(dfs) == 0:
         return 'empty'
-    df = I.pd.concat(dfs).reset_index(drop=True)
+    df = pd.concat(dfs).reset_index(drop=True)
     df['iteration'] = df.index
     df['particle_id'] = particle_id
     return df
@@ -94,7 +97,7 @@ def read_all(basedir, n_particles_start = 0, n_particles_end = 1000):
         n_particles_start (int): the first particle to read
         n_particles_end (int): the last particle to read
     """
-    fun = I.dask.delayed(read_pickle)
+    fun = dask.delayed(read_pickle)
     ds = [fun(basedir, i) for i in range(n_particles_start, n_particles_end)]
     return ds
 
@@ -116,7 +119,7 @@ class Load:
     def get_df(self):
         """Get the exploration results as a pandas dataframe."""
         if self.df is None:
-            self.df = I.dask.dataframe.from_delayed(self.futures)
+            self.df = dask.dataframe.from_delayed(self.futures)
         return self.df
 
     def get_futures(self):
@@ -158,7 +161,7 @@ def normalize(df, params):
         pd.DataFrame: the normalized dataframe"""
     return (df-params['min'])/(params['max'] - params['min'])
 
-idx = I.pd.IndexSlice
+idx = pd.IndexSlice
 
 def get_param_range_evolution_from_ddf(ddf, params, return_mi_ma = False):
     """Compute the range of parameters explored by a RW exploration, as a fraction of the total parameter range.
@@ -170,7 +173,7 @@ def get_param_range_evolution_from_ddf(ddf, params, return_mi_ma = False):
         
     Returns:
         pd.DataFrame: the range of parameters explored by the RW exploration. If return_mi_ma is True, returns the min and max values of the parameter ranges."""
-    assert(isinstance(params, I.pd.DataFrame))
+    assert(isinstance(params, pd.DataFrame))
     param_names = list(params.index)
     def _helper(df):
         return df[param_names + ['iteration']].groupby('iteration').agg(['max', 'min'])
@@ -253,8 +256,8 @@ def augment_ddf_with_PCA_space(ddf):
         dask.dataframe: the augmented dataframe, containing the additional columns: 'pc0', 'pc1', 'depolarization_index', 'hyperpolarization_index'
     """
     def _helper(df):
-        df['pc0'] = I.np.dot(df[hz_current_columns], pca_components[0])
-        df['pc1'] = I.np.dot(df[hz_current_columns], pca_components[1])
+        df['pc0'] = np.dot(df[hz_current_columns], pca_components[0])
+        df['pc1'] = np.dot(df[hz_current_columns], pca_components[1])
         df['depolarization_index'] = get_depolarization_index(df)
         df['hyperpolarization_index'] = get_hyperpolarization_index(df)
         return df
@@ -296,7 +299,7 @@ hyperpo_channels = [
     'BAC_bifurcation_charges.Im.ik',
     'BAC_bifurcation_charges.SKv3_1.ik']
 
-pca_components = I.np.array([
+pca_components = np.array([
     [ 7.63165639e-01,   6.29498003e-01,  -8.63749227e-02,
       2.74177180e-04,  -1.40787230e-02,   1.16839883e-01],
     [ 5.24587951e-01,  -5.64428021e-01,   5.25520353e-01,

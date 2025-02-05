@@ -89,8 +89,7 @@ def unitary_connections(modelName,
         typeNrCells = len(nwMap.connected_cells[cellType])
         spikeTime = preParam[cellType].spikeT
         recepName = list(preParam[cellType].synapses.receptors.keys())[0]
-        nmdaAmpaRatio = preParam[cellType].synapses.receptors[recepName].weight[
-            1]
+        nmdaAmpaRatio = preParam[cellType].synapses.receptors[recepName].weight[1]
         gExRange = [0.5, 1.0, 1.5, 2.0]  # np.arange(1.6, 2.2, 0.2)
         #    gExRange = [1.0]
 

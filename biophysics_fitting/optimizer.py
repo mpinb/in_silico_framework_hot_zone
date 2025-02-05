@@ -27,14 +27,24 @@ Note:
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 """
 import time
+
 import bluepyopt as bpop
-import numpy
 import deap
+import distributed
+import numpy
+import pandas as pd
+import six
 from bluepyopt.deapext import algorithms
 from bluepyopt.deapext.optimisations import WSListIndividual
-import Interface as I
-import six
+from distributed.client import CancelledError
+from distributed.scheduler import KilledWorker
 
+from data_base.IO.LoaderDumper import \
+    pandas_to_msgpack as dumper_pandas_to_msgpack
+from data_base.IO.LoaderDumper import \
+    pandas_to_parquet as dumper_pandas_to_parquet
+from data_base.IO.LoaderDumper import to_pickle as dumper_to_pickle
+from data_base.utils import wait_until_key_removed
 
 
 def robust_int(x):
@@ -84,14 +94,14 @@ def save_result(db_run, features, objectives):
         None. The results are saved in the database."""
     current_key = get_max_generation(db_run) + 1
     if six.PY2:
-        dumper = I.dumper_pandas_to_msgpack
+        dumper = dumper_pandas_to_msgpack
     elif six.PY3:
-        dumper = I.dumper_pandas_to_parquet
+        dumper = dumper_pandas_to_parquet
     else:
         raise RuntimeError()
     db_run.set(
         str(current_key),
-        I.pd.concat([objectives, features], axis=1),
+        pd.concat([objectives, features], axis=1),
         dumper=dumper)
 
 
@@ -129,7 +139,7 @@ def get_objective_function(db_setup):
     Evaluator = db_setup['get_Evaluator'](db_setup)
 
     def objective_function(param_values):
-        p = I.pd.Series(param_values, index=parameter_df.index)
+        p = pd.Series(param_values, index=parameter_df.index)
         s = Simulator.run(p)
         e = Evaluator.evaluate(s)
         # ret is not a list but a dict!
@@ -174,11 +184,11 @@ def get_mymap(db_setup, db_run, c, satisfactory_boundary_dict=None, n_reschedule
 
     def mymap(func, iterable):
         params_list = list(map(list, iterable))
-        params_pd = I.pd.DataFrame(params_list, columns=params)
+        params_pd = pd.DataFrame(params_list, columns=params)
         futures = c.map(objective_fun, params_list, pure=False)
         try:
             features_dicts = c.gather(futures)
-        except (I.distributed.client.CancelledError, I.distributed.scheduler.KilledWorker):
+        except (distributed.client.CancelledError, distributed.scheduler.KilledWorker):
             print('Futures have been canceled. Waiting for 3 Minutes, then reschedule.')
             del futures
             time.sleep(3 * 60)
@@ -194,7 +204,7 @@ def get_mymap(db_setup, db_run, c, satisfactory_boundary_dict=None, n_reschedule
             else:
                 raise 
         except:
-            I.distributed.wait(futures)
+            distributed.wait(futures)
             for lv, f in enumerate(futures):
                 if not f.status == 'finished':
                     errstr = 'Problem with future number {}\n'.format(lv)
@@ -206,7 +216,7 @@ def get_mymap(db_setup, db_run, c, satisfactory_boundary_dict=None, n_reschedule
         
         # features_dicts = map(objective_fun, params_list) # temp rieke
         features_dicts = c.gather(futures)  #temp rieke
-        features_pd = I.pd.DataFrame(features_dicts)
+        features_pd = pd.DataFrame(features_dicts)
         
         # save the parameters and the features in the database
         save_result(db_run, params_pd, features_pd)
@@ -256,7 +266,7 @@ class my_ibea_evaluator(bpop.evaluators.Evaluator):
         """Constructor"""
         super(my_ibea_evaluator, self).__init__()
         assert isinstance(
-            parameter_df, I.pd.DataFrame
+            parameter_df, pd.DataFrame
         )  # we rely on the fact that the dataframe has an order
         self.parameter_df = parameter_df
         self.params = [
@@ -296,12 +306,12 @@ Copyright (c) 2016, EPFL/Blue Brain Project
 
 # pylint: disable=R0914, R0912
 
-import random
 import logging
+import pickle
+import random
 
 import deap.algorithms
 import deap.tools
-import pickle
 
 logger = logging.getLogger('__main__')
 
@@ -409,7 +419,7 @@ def eaAlphaMuPlusLambdaCheckpoint(
     for gen in range(start_gen + 1, ngen + 1):
 
         if db is not None:
-            I.utils.wait_until_key_removed(db, 'pause')
+            wait_until_key_removed(db, 'pause')
 
         offspring = _get_offspring(parents, toolbox, cxpb, mutpb)
 
@@ -440,7 +450,7 @@ def eaAlphaMuPlusLambdaCheckpoint(
             # save checkpoint in db
             db_run.set('{}_checkpoint'.format(gen),
                             cp,
-                            dumper=I.dumper_to_pickle)
+                            dumper=dumper_to_pickle)
             #pickle.dump(cp, open(cp_filename, "wb"))
             #logger.debug('Wrote checkpoint to %s', cp_filename)
 
