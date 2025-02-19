@@ -9,6 +9,7 @@ See also:
 '''
 from neuron import h
 from sumatra.parameters import NTParameterSet
+from parameters import ParameterSet
 
 __author__ = 'Robert Egger'
 __date__ = '2012-03-30'
@@ -93,7 +94,7 @@ class Synapse(object):
                 Dictionary or NTParameterSet of receptors. 
                 Each individual receptor in this collection must be of the type :py:class:`~sumatra.parameters.NTParameterSet`.
         '''
-        assert type(receptors) is NTParameterSet
+        assert isinstance(receptors, ParameterSet) or isinstance(receptors, NTParameterSet), 'receptors must be a sumatra (NT)ParameterSet, but they are of type %s' % type(receptors)
         self.releaseSite = source
         self.preCell = preCell
         '''careful: point processes not allowed at nodes between sections
