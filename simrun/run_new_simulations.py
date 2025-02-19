@@ -10,10 +10,8 @@ See also:
 '''
 from __future__ import absolute_import
 from ._matplotlib_import import *
-import sys
 import time
 import os, os.path
-import glob
 #for some reason, the neuron import works on the florida servers only works if tables was imported first
 import tables
 import neuron
@@ -263,7 +261,7 @@ def run_new_simulations(
         evokedUpParamName (str): Path to a :ref:`network_parameters_format` file.
         dirPrefix (str): Prefix of the output directory. The final directory name will be ``dirPrefix/results/YYYYMMDD-HHMM_UID.``
         seed (int): Random seed for the simulation.
-        nSweps (int): Number of simulations to run with these parameters.
+        nSweeps (int): Number of simulations to run with these parameters.
             Trial-to-trial variability is introduced by the random seed in terms of
             different network activity and connectivity realizations (see :py:meth:`~single_cell_parser.network.NetworkMapper.created_saved_network2`).
         tStop (float): Duration of each simulation in ms.

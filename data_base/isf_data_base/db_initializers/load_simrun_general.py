@@ -1,11 +1,13 @@
 '''Parse simulation data generated with :py:mod:`simrun` for general purposes.
 
 The output format of :py:mod:`simrun` is a nested folder structure with ``.csv`` and/or ``.npz`` files.
-The voltage traces are written to a single ``.csv`` file (since the amount of timesteps is known in advance),
+The voltage traces are written to a single ``.csv`` file (since the amount of timesteps is known in advance, at least for non-variable timesteps),
 but the synapse and cell activation data is written to a separate file for each simulation trial (the amount 
 of spikes and synapse activations is not known in advance).
 
-This module provides functions to gather and parse this data in efficient data formats, namely pandas and dask dataframes.
+This module provides functions to gather and parse this data to pandas and dask dataframes. It merges al trials in a single dataframe.
+This saves IO time, disk space, and is strongly recommended for HPC systems and other shared filesystems in genereal, as it reduces the amount of inodes required. 
+
 After running :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general.init`, a database is created containing
 the following keys:
 
@@ -17,7 +19,7 @@ the following keys:
     * - ``simresult_path``
       - Filepath to the raw simulation output of :py:mod:`simrun`
     * - ``filelist``
-      - List containing paths to all soma voltage trace files
+      - List containing paths to all original somatic voltage trace files.
     * - ``sim_trial_index``
       - The simulation trial indices as a pandas Series.
     * - ``metadata``
@@ -64,12 +66,18 @@ Individual keys can afterwards be set to permanent, self-contained and efficient
 :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general.load_simrun_general.optimize` on specific database
 keys.
 
+Attention:
+    Note that the database contains symlinks to the original simulation files. This is useful for fast intermediate analysis, but
+    for long-term storage, it happens that the original files are deleted, moved, or archived in favor of the optimized format. 
+    In this case, the symlinks will point to non-existent files.
+
 See also:
     :py:meth:`simrun.run_new_simulations._evoked_activity` for more information on the raw output format of :py:mod:`simrun`.
     :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general.init` for the initialization of the database.
 '''
 
-import os, glob, shutil, fnmatch, hashlib, six, dask, compatibility, scandir, warnings
+import os, glob, fnmatch, hashlib, six, dask, scandir, warnings, shutil, re
+from data_base.dbopen import create_db_path
 import numpy as np
 import pandas as pd
 import dask.dataframe as dd
@@ -77,9 +85,7 @@ import single_cell_parser as scp
 import single_cell_parser.analyze as sca
 from data_base.isf_data_base import ISFDataBase
 from data_base.isf_data_base.IO.LoaderDumper import (
-    pandas_to_pickle,
     to_cloudpickle, 
-    to_pickle, 
     pandas_to_parquet, 
     get_dumper_string_by_dumper_module, 
     dask_to_parquet)
@@ -95,6 +101,13 @@ logger = logging.getLogger("ISF").getChild(__name__)
 DEFAULT_DUMPER = to_cloudpickle
 OPTIMIZED_PANDAS_DUMPER = pandas_to_parquet
 OPTIMIZED_DASK_DUMPER = dask_to_parquet
+
+NEUP_DIR = "parameterfiles_cell_folder"
+NETP_DIR = "parameterfiles_network_folder"
+HOC_DIR = "morphology"
+SYN_DIR = "syn_folder"
+CON_DIR = "con_folder"
+RECSITES_DIR = "recsites_folder"
 
 #-----------------------------------------------------------------------------------------
 # 1: Create filelist containing paths to all soma voltage trace files
@@ -455,11 +468,15 @@ def create_metadata(db):
     """Generate metadata out of a pd.Series containing the sim_trial_index.
     
     Expands the sim_trial_index to a pandas Series containing the path, trial number, 
-    and filename of the voltage traces file.
+    and filename of the voltage traces file. After running this method, the database 
+    contains:
+    
+    - ``sim_trial_index`` A pandas series containing the sim_trial_index.
+    - ``simresult_path`` Path to the simulation results folder.
     
     Args:
-        sim_trial_index (pd.Series): A pandas series containing the sim_trial_index.
-        simresult_path (str): Path to the simulation results folder.
+        db (:py:class:`~data_base.isf_data_base.isf_data_base.ISFDataBase`):
+            The target database that should contain the parsed simulation results.
         
     Returns:
         pd.DataFrame: A pandas dataframe containing the metadata.
@@ -637,7 +654,7 @@ def load_dendritic_voltage_traces(db, suffix_key_dict, repartition=None):
 # 7: load parameterfiles
 #-----------------------------------------------------------------------------------------
 def get_file(self, suffix):
-    """Get the unique file in the current directory with the specified suffix.
+    """Get the filename of the unique file in the current directory with the specified suffix.
     
     This method does not recurse into subdirectories.
     
@@ -664,9 +681,21 @@ def get_file(self, suffix):
     else:
         return os.path.join(self, l[0])
 
+def _hash_file_content(fn):
+    with open(fn, 'rb') as content:
+        h = hashlib.md5(content.read()).hexdigest()
+    return h
 
-def generate_param_file_hashes(simresult_path, sim_trial_index):
-    """Generate a DataFrame containing the paths and hashes of :ref:`cell_parameters_format` and :ref:`network_parameters_format` files.
+def construct_param_filename_hashmap_df(simresult_path, sim_trial_index):
+    """Generate a hashmap for the paths of :ref:`cell_parameters_format` and :ref:`network_parameters_format` files.
+    
+    For each trial, this function fetches the paths of the :ref:`cell_parameters_format` and :ref:`network_parameters_format` files,
+    and creates a hash of their content. This hashmap is used to copy over the parameter files to the database.
+    
+    For any same network embedding, the :ref:`network_parameters_format` file is the same, and for any same biophysically detailed neuron model,
+    the :ref:`cell_parameters_format` file is the same. Many of the simulation trials will therefore share the same parameter files.
+    This is a convenience function to generate a DataFrame containing the paths and hashes of the original simrun parameter files for a collection of simulation trials.
+    As not all trials necessarilly share the same network embedding or neuron model, the DataFrame will likely (but not necessarily) contain different entries across trials.
     
     Args:
         simresult_path (str): Path to the simulation results folder.
@@ -674,52 +703,78 @@ def generate_param_file_hashes(simresult_path, sim_trial_index):
         
     Returns:
         list: list of dask.delayed objects to calculate the pd.DataFrame objects containing the paths to the parameter files and their hashes.
+
+    Example::
+    
+        >>> simresult_path = 'results/date_seed_pid'
+        >>> os.listdir(simresult_path)
+        [
+            'simulation_run000000_synapses.csv', 'simulation_run000000_presynaptic_cells.csv'
+            'simulation_run000001_synapses.csv', 'simulation_run000001_presynaptic_cells.csv'
+            ...
+            pid_neuron_model.param, pid_network_model.param
+        ]
+        >>> delayeds = generate_param_file_hashes(simresult_path, ['path/pid/000000', 'path/pid/000001'])
+        >>> futures = dask.compute(delayeds)
+        >>> result = client.gather(futures)
+        >>> parameterfiles = pd.concat(result)
+        >>> parameterfiles
+                                path_neuron             path_network hash_neuron    hash_network
+        sim_trial_index         
+        0 path/pid/000000       pid_neuron_model.param pid_network_model.param     0b1
+        1 path/pid/000001       pid_neuron_model.param pid_network_model.param     0b2
+        ...
+        
+        
     """
     logging.info("find unique parameterfiles")
 
-    def fun(x):
-        sim_trial_folder = os.path.dirname(x.sim_trial_index)
-        identifier = os.path.basename(sim_trial_folder).split('_')[-1]
-        return sim_trial_folder, identifier
+    def get_simrun_dir_and_pid(row):
+        sim_result_dir = os.path.dirname(row.sim_trial_index)
+        pid = os.path.basename(sim_result_dir).split('_')[-1]
+        return sim_result_dir, pid
 
-    def fun_network(x):
-        sim_trial_folder, identifier = fun(x)
+    def get_original_netp_fn_from_trial(row):
+        sim_result_dir, pid = get_simrun_dir_and_pid(row)
         #return os.path.join(simresult_path, sim_trial_folder, identifier + '_network_model.param')
-        return get_file(os.path.join(simresult_path, sim_trial_folder),
-                        '_network_model.param')
+        return get_file(os.path.join(simresult_path, sim_result_dir),'_network_model.param')
 
-    def fun_neuron(x):
-        sim_trial_folder, identifier = fun(x)
+    def get_original_neup_fn_from_trial(x):
+        sim_result_dir, pid = get_simrun_dir_and_pid(x)
         # return os.path.join(simresult_path, sim_trial_folder, identifier + '_neuron_model.param')
-        return get_file(os.path.join(simresult_path, sim_trial_folder),
-                        '_neuron_model.param')
+        return get_file(os.path.join(simresult_path, sim_result_dir),'_neuron_model.param')
 
     @dask.delayed
     def _helper(df):
         ## todo: crashes if specified folder directly contains the param files
         ## and not a subfolder containing the param files
-        df['path_neuron'] = df.apply(lambda x: fun_neuron(x), axis=1)
-        df['path_network'] = df.apply(lambda x: fun_network(x), axis=1)
-        df['hash_neuron'] = df['path_neuron'].map(
-            lambda x: hashlib.md5(open(x, 'rb').read()).hexdigest())
-        df['hash_network'] = df['path_network'].map(
-            lambda x: hashlib.md5(open(x, 'rb').read()).hexdigest())
+        df['path_neuron'] = df.apply(lambda x: get_original_neup_fn_from_trial(x), axis=1)
+        df['path_network'] = df.apply(lambda x: get_original_netp_fn_from_trial(x), axis=1)
+        df['hash_neuron'] = df['path_neuron'].map(_hash_file_content)
+        df['hash_network'] = df['path_network'].map(_hash_file_content)
         return df
 
     df = pd.DataFrame(dict(sim_trial_index=list(sim_trial_index)))
     ddf = dd.from_pandas(df, npartitions=3000).to_delayed()
     delayeds = [_helper(df) for df in ddf]
-    return delayeds  # dask.delayed(delayeds)
+    return delayeds 
 
 
 #####################################
-# step seven point one: replace paths in param files with relative dbpaths
+# 7.1: replace paths in param files with relative dbpaths
 #####################################
-from data_base.dbopen import create_db_path
 
-def create_db_path_print(path, replace_dict={}):
-    """:skip-doc:"""
+def create_db_path_print(path, replace_dict=None):
+    """
+    :skip-doc:
+    
+    .. deprecated:: 0.5.0
+       This method is deprecated. From v0.4.0 onwards, all parameterfiles are copied to the database,
+       eliminating the need for relative db://-style paths.
+    """
     ## replace_dict: todo
+    if replace_dict is None:
+        replace_dict = {}
     try:
         return create_db_path(path), True
     except DataBaseException as e:
@@ -727,12 +782,22 @@ def create_db_path_print(path, replace_dict={}):
         return path, False
 
 
-def cell_param_to_dbpath(neuron):
-    """
-    :skip-doc:
+def cell_param_paths_to_dbpath(neuron):
+    """Convert all paths in a :ref:`cell_parameters_format` file to db:// paths.
+    
+    This is used when copying over the parameter files to a database.
     
     Used as a :paramref:`transform_fun` in 
     :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general.write_param_files_to_folder`.
+
+    Args:
+        neuron (dict | :py:class:`~sumatra.parameters.NTParameterSet`): Dictionary containing the neuron model parameters.
+    
+    .. deprecated:: 0.5.0
+       This method is deprecated. From v0.4.0 onwards, all parameterfiles are copied to the database,
+       eliminating the need for relative db://-style paths.
+       
+    :skip-doc:
     """
     flag = True
     neuron['neuron']['filename'], flag_ = create_db_path_print(
@@ -750,39 +815,158 @@ def cell_param_to_dbpath(neuron):
     return flag
 
 
-def network_param_to_dbpath(network):
+def _copy_and_transform_neuron_param(neup_fn, target_fn, hoc_fn_map):
+    """Convert all paths in a :ref:`cell_parameters_format` file to point to a hash filename.
+    
+    This function is used as a :paramref:`transform_fun` in 
+    :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general.write_param_files_to_folder`.
+
+    Args:
+        neuron (:py:class:`~sumatra.parameters.NTParameterSet`): Dictionary containing the neuron model parameters.
+
+    Attention:
+        The new filepaths only exist once the relevant parameterfiles are also copied and renamed.
+        This happens during the copying process in :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general.write_param_files_to_folder`.
     """
+    neup = scp.build_parameters(neup_fn)
+    orig_hoc = neup['neuron']['filename']
+    assert orig_hoc in hoc_fn_map, 'The hoc file referenced in the neuron parameter file {} was not found:\n{}'.format(orig_hoc, neup_fn)
+    neup['neuron']['filename']  = hoc_fn_map[orig_hoc]
+    # neup['sim']['recordingSites'] = [os.path.join(RECSITES_DIR, _hash_file_content(r)) for r in neup_fn['sim']['recordingSites']]
+    # if 'channels' in neuron['NMODL_mechanisms']:
+    #     neuron['NMODL_mechanisms']['channels'] = os.path.join(target_dir, os.path.basename(neuron['NMODL_mechanisms']['channels']))
+    neup.save(target_fn)
+    return True
+
+
+def network_param_paths_to_dbpath(network):
+    """Convert all paths in a :ref:`network_parameters_format` file to db:// paths.
+    
+    Used as a :paramref:`transform_fun` in
+    :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general.write_param_files_to_folder`.
+    
+    Args:
+        network (dict | :py:class:`~sumatra.parameters.NTParameterSet`): Dictionary containing the network model parameters.
+        
+    .. deprecated:: 0.5.0
+       This method is deprecated. From v0.4.0 onwards, all parameterfiles are copied to the database,
+       eliminating the need for relative db://-style paths.
+       
     :skip-doc:
     """
-    flag = True
-    network['NMODL_mechanisms']['VecStim'], flag_ = create_db_path_print(
+    all_success = True
+    network['NMODL_mechanisms']['VecStim'], success = create_db_path_print(
         network['NMODL_mechanisms']['VecStim'])
-    flag = flag and flag_
-    network['NMODL_mechanisms']['synapses'], flag_ = create_db_path_print(
+    all_success = all_success and success
+    network['NMODL_mechanisms']['synapses'], success = create_db_path_print(
         network['NMODL_mechanisms']['synapses'])
-    flag = flag and flag_
-    for k in list(network['network'].keys()):
-        if k == 'network_modify_functions':
-            continue
-        network['network'][k]['synapses'][
-            'connectionFile'], flag_ = create_db_path_print(
-                network['network'][k]['synapses']['connectionFile'])
-        flag = flag and flag_
-        network['network'][k]['synapses'][
-            'distributionFile'], flag_ = create_db_path_print(
-                network['network'][k]['synapses']['distributionFile'])
-        flag = flag and flag_
-    return flag
+    all_success = all_success and success
 
+    # Convert all syn and con file paths to db:// paths
+    for cell_type in list(network['network'].keys()):
+        if cell_type == 'network_modify_functions':
+            continue
+        network['network'][cell_type]['synapses'][
+            'connectionFile'], success = create_db_path_print(
+                network['network'][cell_type]['synapses']['connectionFile'])
+        all_success = all_success and success
+        network['network'][cell_type]['synapses'][
+            'distributionFile'], success = create_db_path_print(
+                network['network'][cell_type]['synapses']['distributionFile'])
+        all_success = all_success and success
+    return all_success
+
+
+def _copy_and_transform_network_param(netp_fn, target_fn, syn_fn_map, con_fn_map):
+    """Convert all paths in a :ref:`network_parameters_format` file.
+    
+    This function is used as a :paramref:`transform_fun` in
+    :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general.write_param_files_to_folder`.
+    
+    Args:
+        network (:py:class:`~sumatra.parameters.NTParameterSet`): Dictionary containing the network model parameters.
+
+    Attention:
+        The new filepaths only exist once the relevant parameterfiles are also copied and renamed.
+        This happens during the copying process in :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general.write_param_files_to_folder`.
+    """
+    netp = scp.build_parameters(netp_fn)
+    for cell_type in netp['network']:
+        if not "synapses" in netp['network'][cell_type]:
+            continue
+        orig_con = netp['network'][cell_type]['synapses']['connectionFile']
+        orig_syn = netp['network'][cell_type]['synapses']['distributionFile']
+        assert orig_con in con_fn_map, 'The connection file referenced for {} in the network parameter file {} was not found:\n{}'.format(cell_type, netp_fn, orig_con)
+        assert orig_syn in syn_fn_map, 'The synapse file referenced for {} in the network parameter file {} was not found:\n{}'.format(cell_type, netp_fn, orig_syn)
+        netp['network'][cell_type]['synapses']['connectionFile'] = con_fn_map[orig_con]
+        netp['network'][cell_type]['synapses']['distributionFile'] = syn_fn_map[orig_syn]
+    netp.save(target_fn)
+    return True
+
+    
+def _copy_and_transform_syn(syn_fn, target_fn, hoc_fn_map):
+    """Copy, rename and transform a single :ref:`syn_file_format` file.
+    
+    The :ref:`syn_file_format` file is copied to the target directory, renamed to its hash, and the hoc file name is replaced.
+    
+    Args:
+        syn_fn (str): Path to the synapse distribution file.
+        new_hoc (str): Path to the new hoc file.
+    """
+    with open(syn_fn, 'r') as f:
+        content = f.read()
+    
+    # Use a regular expression to replace the .hoc file name
+    matches = re.findall(r'\b\S+\.hoc\b')
+    assert len(matches) == 1, 'There should be exactly one .hoc file reference in the .syn file, but found {} in {}'.format(len(matches), syn_fn)
+    assert matches[0] in hoc_fn_map, 'The synapse file {} referenced in the connection file {} was not found in the synapse file map'.format(matches[0], syn_fn)
+    content.replace(matches[0], hoc_fn_map[matches[0]])
+
+    with open(target_fn, 'w') as f:
+        f.write(content)
+    return syn_fn
+
+
+def _copy_and_transform_con(con_fn, target_fn, syn_fn_map):
+    """Copy, rename and transform a single :ref:`con_file_format` file.
+    
+    The :ref:`con_file_format` file is copied to the target directory, renamed to its hash, and the synapse distribution file name is replaced.
+    
+    Args:
+        con_fn (str): Path to the connection file.
+        new_syn (str): Path to the new synapse distribution file.
+    """
+    with open(con_fn, 'r') as f:
+        content = f.read()
+    
+    # Use a regular expression to replace the .syn file name
+    matches = re.findall(r'\b\S+\.syn\b')
+    assert len(matches) == 1, 'There should be exactly one .syn file reference in the .con file, but found {} in {}'.format(len(matches), con_fn)
+    assert matches[0] in syn_fn_map, 'The synapse file {} referenced in the connection file {} was not found in the synapse file map'.format(matches[0], con_fn)
+    content.replace(matches[0], syn_fn_map[matches[0]])
+    new_con_fn = os.path.join(target_fn)
+    with open(new_con_fn, 'w') as f:
+        f.write(content)
+    return con_fn
+    
 
 @dask.delayed
-def parallel_copy_helper(df, transform_fun=None):
-    """:skip-doc:"""
-    for name, value in df.iterrows():
-        param = scp.build_parameters(value.from_)
-        #         print 'ready to transform'
-        transform_fun(param)
-        param.save(value.to_)
+def parallel_copy_params(filepath_map_df):
+    """Copy parameterfiles from one location to another, potentially transforming the parameterfile.
+    
+    This method is used in :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general.write_param_files_to_folder`.
+    It copies a file from ``from_`` to ``to_`` and potentially transforms the path name.
+    
+    Args:
+        df (pd.DataFrame): DataFrame containing the filepaths. Must contain the columns ``from_`` and ``to_``.
+        transform_fun (Callable): Function to transform the parameter files. Must take an :py:class:`~sumatra.parameters.NTParameterSet` object as input.
+    """
+    for _, row in filepath_map_df.iterrows():
+        param = scp.build_parameters(row.from_)
+        transform_fun = row.transform_fun
+        if transform_fun is not None:
+            transform_fun(param)
+        param.save(row.to_)
 
         # if transform_fun is None:
         #     shutil.copy(value.from_, value.to_)
@@ -793,21 +977,64 @@ def parallel_copy_helper(df, transform_fun=None):
         #     param.save(value.to_)
 
 
-def write_param_files_to_folder(
-    df,
-    folder,
-    path_column,
-    hash_column,
-    transform_fun=None):
-    """Write the parameter files to a specified folder.
-    
-    Given a dataframe containing filepaths and their respective hashes,
-    this method copies the files to the specified :paramref:`folder`.
-    The files will be copied to the folder and renamed according to their hash.
+def _get_unique_syncons_from_netps(netp_fns):
+    """Get the unique synapse and connection files from a list of network parameter files.
     
     Args:
-        df (pd.DataFrame): DataFrame containing the filepaths and hashes.
-        folder (str): Path to the folder where the files should be copied to.
+        netp_fn (str): Path to the network parameter file.
+        
+    Returns:
+        tuple: Tuple containing the unique synapse and connection files.
+    """
+    syn_files = []
+    con_files = []
+    for netp_fn in netp_fns:
+        netp = scp.build_parameters(netp_fn)
+        for cell_type in list(netp['network'].keys()):
+            if not 'synapses' in netp['network'][cell_type]:
+                continue  # key does not refer to a celltype
+            con_files.append(netp['network'][cell_type]['synapses']['connectionFile'])
+            syn_files.append(netp['network'][cell_type]['synapses']['distributionFile'])
+    return list(set(syn_files)), list(set(con_files))
+
+
+def _get_unique_hoc_fns_from_neups(neup_fns):
+    """Get the unique hoc files from a list of neuron parameter files.
+    
+    Args:
+        neup_fns (str): Path to the neuron parameter file.
+        
+    Returns:
+        list: List containing the unique hoc files.
+    """
+    hoc_files = []
+    for neup_fn in neup_fns:
+        neup = scp.build_parameters(neup_fn)
+        hoc_files.append(neup['neuron']['filename'])
+    return list(set(hoc_files))
+
+
+def _generate_target_filenames(db, dir_name, file_list):
+    return [os.path.join(db.basedir, dir_name, _hash_file_content(fn)) for fn in file_list]
+
+
+def _delayed_copy_paramfiles_to_db(
+    paramfile_hashmap_df,
+    db,
+    neup_path_column="path_neuron",
+    neup_hash_column="hash_neuron",
+    netp_path_column="path_network",
+    netp_hash_column="hash_network"
+):
+    """Copy, transform and rename parameterfiles to a db.
+    
+    This function copies :ref:`cell_parameters_format`, :ref:`network_parameters_format`, :ref:`syn_file_format` files, 
+    and :ref:`con_file_format` files to the database.
+    In the process, it renames each file to its hash and transforms the internal file references in the parameter files accordingly.
+    
+    Args:
+        paramfile_hashmap_df (pd.DataFrame): DataFrame containing the filepaths and hashes.
+        db (:py:class:`~data_base.isf_data_base.isf_data_base.ISFDataBase`): The database to which the data should be added.
         path_column (str): Name of the column containing the filepaths.
         hash_column (str): Name of the column containing the hashes.
         transform_fun (function): Function to transform the parameter files.
@@ -815,17 +1042,45 @@ def write_param_files_to_folder(
     Returns:
         list: List of dask.delayed objects to copy the files.
     """
-    logging.info("move parameterfiles")
-    df = df.drop_duplicates(subset=hash_column)
-    logging.info('number of parameterfiles: {}'.format(len(df)))
-    df2 = pd.DataFrame()
-    df2['from_'] = df[path_column]
-    df2['to_'] = df.apply(
-        lambda x: os.path.join(folder, x[hash_column]),
-        axis=1)
-    ddf = dd.from_pandas(df2, npartitions=200).to_delayed()
-    return [parallel_copy_helper(d, transform_fun=transform_fun) for d in ddf]
+    
+    logger.info("Moving parameterfiles")
+    
+    for target_d in [NEUP_DIR, NETP_DIR, SYN_DIR, CON_DIR]:
+        if target_d in db.keys():
+            del db[target_d]
+        db.create_managed_folder(target_d)
+    
+    cell_param_fns = paramfile_hashmap_df[neup_path_column].drop_duplicates(subset=neup_hash_column)
+    netp_param_fns = paramfile_hashmap_df[netp_path_column].drop_duplicates(subset=netp_hash_column)
+    syn_fns, con_fns = _get_unique_syncons_from_netps(netp_param_fns)
+    hoc_fns = _get_unique_hoc_fns_from_neups(cell_param_fns)
+    logger.info('{} unique network parameter files'.format(len(netp_param_fns)))
+    logger.info('{} unique neuron parameter files'.format(len(cell_param_fns)))
+    logger.info('{} unique .hoc files'.format(len(hoc_fns)))
+    logger.info('{} unique .syn files'.format(len(syn_fns)))
+    logger.info('{} unique .con files'.format(len(con_fns)))
+    
+    # Target filenames in the database for each parameter file
+    hoc_files_target_fns = _generate_target_filenames(db, HOC_DIR, hoc_fns)
+    syn_files_target_fns = _generate_target_filenames(db, SYN_DIR, syn_fns)
+    con_files_target_fns = _generate_target_filenames(db, CON_DIR, con_fns)
+    cell_params_target_fns = _generate_target_filenames(db, NEUP_DIR, cell_param_fns)
+    netp_params_target_fns = _generate_target_filenames(db, NETP_DIR, netp_param_fns)
 
+    # create maps so we can transform file references in the parameter files, syn, and con files.
+    hoc_fn_map = dict(zip(hoc_fns, hoc_files_target_fns))
+    syn_fn_map = dict(zip(syn_fns, syn_files_target_fns))
+    con_fn_map = dict(zip(con_fns, con_files_target_fns))
+    
+    delayed_copy_hocs = [dask.delayed(shutil.copy)(fn, target_fn) for fn, target_fn in zip(hoc_fns, hoc_files_target_fns)]
+    delayed_copy_syns = [dask.delayed(_copy_and_transform_syn)(fn, target_fn, hoc_fn_map) for fn, target_fn in zip(syn_fns, syn_files_target_fns)]
+    delayed_copy_cons = [dask.delayed(_copy_and_transform_con)(fn, target_fn, syn_fn_map) for fn, target_fn in zip(con_fns, con_files_target_fns)]
+    delayed_copy_neups = [dask.delayed(_copy_and_transform_neuron_param)(fn, target_fn) for fn, target_fn in zip(cell_param_fns, cell_params_target_fns)]
+    delayed_copy_netps = [dask.delayed(_copy_and_transform_network_param)(fn, target_fn, syn_fn_map, con_fn_map) for fn, target_fn in zip(netp_param_fns, netp_params_target_fns)]
+
+    return delayed_copy_hocs + delayed_copy_syns + delayed_copy_cons + delayed_copy_neups + delayed_copy_netps
+    
+    
 
 ###########################################################################################
 # Build database using the helper functions above
@@ -956,8 +1211,7 @@ def _get_rec_site_managers(db):
     Raises:
         NotImplementedError: If the cell parameter files of the simulation specify different recording sites for different trials.
     """
-    param_files = glob.glob(os.path.join(db['parameterfiles_cell_folder'],
-                                         '*'))
+    param_files = glob.glob(os.path.join(db[NEUP_DIR],'*'))
     param_files = [p for p in param_files if not p.endswith(('Loader.pickle', 'Loader.json', 'metadata.json'))]
     logging.info(len(param_files))
     rec_sites = []
@@ -1021,11 +1275,11 @@ def _build_dendritic_voltage_traces(db, suffix_dict=None, repartition=None):
 
 
 def _build_param_files(db, client):
-    """Parse parameterfiles and add them to the database.
+    """Copy, transform and rename parameterfiles to a db.
     
-    Paremeterfiles are the files containing the parameters of the cell and network models.
-    These files are copied to the database in the subdirectories ``"parameterfiles_cell_folder"`` 
-    and ``"parameterfiles_network_folder"`` and renamed to their hash.
+    This function copies :ref:`cell_parameters_format`, :ref:`network_parameters_format`, :ref:`syn_file_format` files, 
+    and :ref:`con_file_format` files to the database.
+    In the process, it renames each file to its hash and transforms the internal file references in the parameter files accordingly.
     
     Args:
         db (:py:class:`~data_base.isf_data_base.isf_data_base.ISFDataBase`): 
@@ -1037,37 +1291,30 @@ def _build_param_files(db, client):
     
     See also:
         The :ref:`cell_parameters_format` and :ref:`network_parameters_format` formats.
+        
+    Attention:
+        This function assumes the database keys ``simresult_path`` and ``sim_trial_index`` already exist, which is likely
+        only true when used in the context of the :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general.init` function.
     """
-    logging.info('---moving parameter files---')
-    ds = generate_param_file_hashes(
+    logging.info('Moving parameter files')
+    
+    ds = construct_param_filename_hashmap_df(
         db['simresult_path'],
         db['sim_trial_index'])
     futures = client.compute(ds)
     result = client.gather(futures)
-    df = pd.concat(result)
-    df.set_index('sim_trial_index', inplace=True)
-    if 'parameterfiles_cell_folder' in list(db.keys()):
-        del db['parameterfiles_cell_folder']
-    if 'parameterfiles_network_folder' in list(db.keys()):
-        del db['parameterfiles_network_folder']
+    param_file_hash_df = pd.concat(result)
+    param_file_hash_df.set_index('sim_trial_index', inplace=True)
     
-    ds = write_param_files_to_folder(
-        df,
-        db.create_managed_folder('parameterfiles_cell_folder'),
-        'path_neuron',
-        'hash_neuron',
-        transform_fun=cell_param_to_dbpath)
-    client.gather(client.compute(ds))
-    
-    ds = write_param_files_to_folder(
-        df, 
-        db.create_managed_folder('parameterfiles_network_folder'),
-        'path_network', 
-        'hash_network', 
-        network_param_to_dbpath)
-    client.gather(client.compute(ds))
-
-    db.set('parameterfiles', df, dumper=pandas_to_parquet)
+    ds = _delayed_copy_paramfiles_to_db(
+        paramfile_hashmap_df=param_file_hash_df,
+        db=db,
+        neup_path_column="path_neuron",
+        neup_hash_column="hash_neuron",
+        netp_path_column="path_network",
+        netp_hash_column="hash_network"
+        )
+    db.set('parameterfiles', param_file_hash_df, dumper=pandas_to_parquet)
 
 
 def init(
@@ -1377,8 +1624,8 @@ def load_param_files_from_db(db, sti):
     import single_cell_parser as scp
     x = db['parameterfiles'].loc[sti]
     x_neu, x_net = x['hash_neuron'], x['hash_network']
-    neuf = db['parameterfiles_cell_folder'].join(x_neu)
-    netf = db['parameterfiles_network_folder'].join(x_net)
+    neuf = db[NEUP_DIR].join(x_neu)
+    netf = db[NETP_DIR].join(x_net)
     return scp.build_parameters(neuf), scp.build_parameters(netf)
 
 
