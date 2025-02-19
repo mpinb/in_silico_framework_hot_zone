@@ -380,6 +380,7 @@ class CMVDataParser:
         Returns:
             Nothing. Updates the self.timeseries_voltage attribute
         '''
+        assert self._has_simulation_data(), "Tried to calculate membrane voltage for a cell without simulation data"
         self._update_times_to_show(self.t_start, self.t_stop, self.t_step)
         if len(self.voltage_timeseries) != 0:
             return  # We have already retrieved the voltage timeseries
@@ -410,6 +411,7 @@ class CMVDataParser:
         Returns:
             Nothing. Updates the self.timeseries_voltage attribute
         '''
+        assert self._has_simulation_data(), "Tried to calculate ion dynamics for a cell without simulation data"
         self._update_times_to_show(self.t_start, self.t_stop, self.t_step)
         assert ion_keyword in self.possible_scalars, \
             "Ion keyword \"{}\" not recognised. Possible keywords are: {}".format(ion_keyword, self.possible_scalars)
@@ -475,6 +477,7 @@ class CMVDataParser:
         Returns:
             None. Updates the self.synapses_timeseries attribute.
         '''
+        assert self._has_simulation_data(), "Tried to fetch synapse activity for a cell without simulation data"
         if len(self.synapses_timeseries) != 0:
             return  # We have already retrieved the synapses timeseries
 
@@ -943,7 +946,6 @@ class CellMorphologyVisualizer(CMVDataParser):
             overwrite_frames (bool): whether to overwrite previously existing frames in the images_path directory.
             tpf (float): duration of each frame in ms
         '''
-        assert self._has_simulation_data()
         self._update_times_to_show(t_start, t_stop, t_step)
         if not out_name.endswith(".gif"):
             logger.warning(".gif extension not found in out_name. Adding it...")
@@ -1000,7 +1002,6 @@ class CellMorphologyVisualizer(CMVDataParser):
             codec (str): codec to use for the video. Default is mpeg4.
             tpf (float): duration of each frame in ms
         '''
-        assert self._has_simulation_data()
         self._update_times_to_show(t_start, t_stop, t_step)
         images_path = os.path.realpath(images_path)
         self._write_png_timeseries(
@@ -1055,7 +1056,6 @@ class CellMorphologyVisualizer(CMVDataParser):
             display (bool): whether to display the animation in the notebook.
             tpf: time per frame (in ms)
         '''
-        assert self._has_simulation_data()
         self._update_times_to_show(t_start, t_stop, t_step)
         images_path = os.path.realpath(images_path)
         self._write_png_timeseries(
@@ -1094,8 +1094,7 @@ class CellMorphologyVisualizer(CMVDataParser):
         '''
         scalar_data = {}
 
-        if color is not None and self._has_simulation_data():
-            self._update_times_to_show(t_start, t_stop, t_step)
+        self._update_times_to_show(t_start, t_stop, t_step)
         if isinstance(color, str) and color.lower() in ("voltage", "membrane voltage", "vm"):
             self._calc_voltage_timeseries()
             color_all_timepoints = [
@@ -1127,6 +1126,34 @@ class CellMorphologyVisualizer(CMVDataParser):
         client.gather(futures)
         logger.info("VTK files written to {}".format(out_dir))
 
+    def to_vtk(
+        self,
+        out_dir=".",
+    ):
+        """Write out the cell morphology to a VTK file.
+        
+        Attention:
+            This function does not support time series. It will write out the cell morphology without any scalar data.
+            
+        Args:
+            out_dir (str): path of the directory where the VTK file will be stored.
+
+        Returns:
+            None: writes the .VTK file.
+            
+        """
+        scalar_data = {}
+
+        # add diameters by default
+        scalar_data['diameter'] = self._morphology_unconnected['diameter'].values
+
+        out_name_ = self.cell.name+".vtk"
+        write_vtk_skeleton_file(
+            self._morphology_unconnected,
+            out_name_,
+            out_dir,
+            point_scalar_data=scalar_data)
+        logger.info("VTK files written to {}".format(out_dir))
 
 class CellMorphologyInteractiveVisualizer(CMVDataParser):
     """Plot an interactive 3D render of a cell morphology using Plotly and Dash.
@@ -1486,7 +1513,7 @@ def get_3d_plot_morphology(
     fig = plt.figure(
         figsize=(15, 15), 
         dpi=dpi,
-        num=str(time_point))
+        num=str(time_point) if time_point is not None else None)
     ax = plt.axes(projection='3d', proj_type=proj_type)
     ax.set_xticks([])
     ax.set_yticks([])
