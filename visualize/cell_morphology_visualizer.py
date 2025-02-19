@@ -1147,7 +1147,7 @@ class CellMorphologyVisualizer(CMVDataParser):
         # add diameters by default
         scalar_data['diameter'] = self._morphology_unconnected['diameter'].values
 
-        out_name_ = self.cell.name+".vtk"
+        out_name_ = os.path.basename(self.cell.hoc_path).replace('.hoc', '.vtk')
         write_vtk_skeleton_file(
             self._morphology_unconnected,
             out_name_,
