@@ -3,13 +3,11 @@ A Python translation of the evaluation functions used in :cite:t:`Hay_Hill_Schue
 This module provides methods to run Hay's stimulus protocols, and evaluate the resulting voltage traces.
 """
 
-from typing import Any
-
 import numpy as np
 import six
 from six import iteritems
 
-from biophysics_fitting.hay_specification import (
+from biophysics_fitting.hay.specification import (
     HAY_BAC_DEFINITIONS,
     HAY_BAP_DEFINITIONS,
     HAY_STEP1_DEFINITIONS,
@@ -17,7 +15,7 @@ from biophysics_fitting.hay_specification import (
     HAY_STEP3_DEFINITIONS,
 )
 
-from .ephys import *
+from ..ephys import *
 
 __author__ = "Arco Bast"
 __date__ = "2018-11-08"

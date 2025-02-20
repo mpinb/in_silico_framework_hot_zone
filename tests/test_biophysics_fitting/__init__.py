@@ -2,7 +2,7 @@ import mechanisms.l5pt as l5pt_mechanisms
 import os
 import numpy as np
 import pandas as pd
-from biophysics_fitting.hay_complete_default_setup import get_Simulator as get_hay_Simulator
+from biophysics_fitting.hay.default_setup import get_Simulator as get_hay_Simulator
 from biophysics_fitting.L5tt_parameter_setup import get_L5tt_template_v2
 
 PARENT_DIR = os.path.abspath(os.path.dirname(__file__))

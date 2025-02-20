@@ -3,18 +3,18 @@ import numpy as np
 import pytest
 
 import mechanisms.l5pt
-from biophysics_fitting.hay_complete_default_setup import (
+from biophysics_fitting.hay.default_setup import (
     get_Evaluator as get_hay_Evaluator,
 )
-from biophysics_fitting.hay_complete_default_setup import (
+from biophysics_fitting.hay.default_setup import (
     get_feasible_model_objectives,
     get_feasible_model_params,
 )
-from biophysics_fitting.hay_complete_default_setup_python import get_Combiner
-from biophysics_fitting.hay_complete_default_setup_python import (
+from biophysics_fitting.hay.default_setup import get_Combiner
+from biophysics_fitting.hay.default_setup import (
     get_Evaluator as get_python_evaluator,
 )
-from biophysics_fitting.hay_evaluation import hay_objective_function
+from biophysics_fitting.hay.evaluation import hay_objective_function
 from tests.test_biophysics_fitting import (
     deserialize_voltage_traces,
     get_example_models_89,

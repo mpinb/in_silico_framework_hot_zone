@@ -1,6 +1,7 @@
 "Test optimization run on morphology 86"
 
 # import global variables from context
+from biophysics_fitting.hay import default_setup
 from .context import  DATA_DIR
 import os, tempfile, six, shutil, pytest, sys
 import pandas as pd
@@ -11,7 +12,7 @@ from functools import partial
 from data_base.IO.LoaderDumper import to_cloudpickle, pandas_to_pickle
 from data_base.data_base import DataBase
 from data_base.utils import silence_stdout
-from biophysics_fitting import hay_complete_default_setup, L5tt_parameter_setup
+from biophysics_fitting import L5tt_parameter_setup
 from biophysics_fitting.optimizer import start_run, get_max_generation
 
 # class FakeFuture():
@@ -25,7 +26,7 @@ from biophysics_fitting.optimizer import start_run, get_max_generation
 #         res = dask.compute(*args, get = dask.get)
 #         return [FakeFuture(r) for r in res]
 
-from biophysics_fitting.hay_evaluation import setup_hay_evaluator
+from biophysics_fitting.hay.evaluation import setup_hay_evaluator
 
 
 def set_up_db(step=False):
@@ -51,7 +52,7 @@ def set_up_db(step=False):
         cell_param.cell_modify_functions.scale_apical.scale = params['scale']
         return cell_param
 
-    params = hay_complete_default_setup.get_feasible_model_params().drop('x', axis=1)
+    params = default_setup.get_feasible_model_params().drop('x', axis=1)
     params.index = 'ephys.' + params.index
     params = params.append(
         pd.DataFrame({
@@ -73,7 +74,7 @@ def set_up_db(step=False):
 
     def get_Simulator(db_setup, step=step):
         fixed_params = db_setup['get_fixed_params'](db_setup)
-        s = hay_complete_default_setup.get_Simulator(pd.Series(fixed_params),
+        s = default_setup.get_Simulator(pd.Series(fixed_params),
                                                      step=step)
         s.setup.cell_param_generator = get_template
         s.setup.cell_param_modify_funs.append(('scale_apical', scale_apical))
@@ -81,10 +82,10 @@ def set_up_db(step=False):
         return s
 
     def get_Evaluator(db_setup, step=step):
-        return hay_complete_default_setup.get_Evaluator(step=step)
+        return default_setup.get_Evaluator(step=step)
 
     def get_Combiner(db_setup, step=step):
-        return hay_complete_default_setup.get_Combiner(step=step)
+        return default_setup.get_Combiner(step=step)
 
     tempdir = tempfile.mkdtemp()
     db = DataBase(tempdir)
