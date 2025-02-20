@@ -1332,6 +1332,10 @@ def _build_param_files(db, client):
         )
     futures = client.compute(ds)
     result = client.gather(futures)
+    # after copying the parameterfiles, they are renamed to their hash and the internal file references are transformed
+    param_file_hash_df["path_neuron"] = [os.path.join(db.basedir, NEUP_DIR, hash_neuron + ".param") for hash_neuron in param_file_hash_df['hash_neuron']]
+    param_file_hash_df["path_network"] = [os.path.join(db.basedir, NETP_DIR, hash_network + ".param") for hash_network in param_file_hash_df['hash_network']]
+     
     db.set('parameterfiles', param_file_hash_df, dumper=pandas_to_parquet)
 
 
