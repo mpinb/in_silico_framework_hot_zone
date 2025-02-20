@@ -11,7 +11,6 @@ import numpy as np
 import pandas as pd
 from toolz.dicttoolz import merge
 
-from . import evaluation
 import single_cell_parser as scp
 
 from .. import setup_stim
@@ -29,6 +28,7 @@ from ..L5tt_parameter_setup import (
 from ..parameters import param_to_kwargs, set_fixed_params
 from ..simulator import Simulator, run_fun
 from ..utils import tVec, vmApical, vmMax, vmSoma
+from . import evaluation
 
 __author__ = "Arco Bast"
 __date__ = "2018-11-08"
@@ -346,7 +346,7 @@ def get_Combiner(step=False, include_DI3=True):
             "step_AI_ISIcv", ["AI1", "AI2", "ISIcv1", "ISIcv2", "AI3", "ISIcv3"]
         )
         if include_DI3:
-            c.setup.append("step_doublet_ISI", ["DI1", "DI2, DI3"])
+            c.setup.append("step_doublet_ISI", ["DI1", "DI2", "DI3"])
         else:
             c.setup.append("step_doublet_ISI", ["DI1", "DI2"])
         c.setup.append("step_AP_height", ["APh1", "APh2", "APh3"])

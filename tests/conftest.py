@@ -4,12 +4,8 @@
 # for setting environment variables, use pytest.ini or .env instead
 import logging
 import os
-import socket
-import sys
-
-import dask
+from tests import client as test_dask_client
 import six
-
 from config.isf_logging import logger as isf_logger
 
 # --- Import fixtures
@@ -100,11 +96,6 @@ def pytest_addoption(parser):
     parser.addoption("--dask_server_port", action="store", default="8786")
 
 
-def is_port_in_use(port):
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-        return s.connect_ex(("localhost", port)) == 0
-
-
 def pytest_ignore_collect(path, config):
     """If this evaluates to True, the test is ignored.
 
@@ -129,15 +120,12 @@ def pytest_configure(config):
     """
     pytest configuration
     """
-    import distributed
     import matplotlib
-    import six
 
     matplotlib.use("agg")
     import matplotlib.pyplot as plt
 
     plt.switch_backend("agg")
-    from config.isf_logging import logger as isf_logger
 
     output_thickness = os.path.join(
         CURRENT_DIR, "test_dendrite_thickness", "test_files", "output"
@@ -161,11 +149,7 @@ def pytest_configure(config):
     isf_logging_file_handler.setLevel(logging.INFO)
     isf_logger.addHandler(isf_logging_file_handler)
 
-    c = distributed.Client(
-        "{}:{}".format(
-            "localhost",
-            config.getoption("--dask_server_port"),
-        )
-    )
+    port = config.getoption("--dask_server_port")
+    c = test_dask_client(port)
 
     ensure_workers_have_imported_requirements(c)

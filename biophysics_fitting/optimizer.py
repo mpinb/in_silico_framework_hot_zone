@@ -242,7 +242,6 @@ def get_mymap(db_setup, db_run, c, satisfactory_boundary_dict=None, n_reschedule
                     i for (i, x) in enumerate(all_err_below_boundary) if x
                     ]
 
-
          # all_err_below_3 = [all(x<3 for x in list(dict_.values())) for dict_ in combined_objectives_dict]
          # if any(all_err_below_3):
          #     db_setup['satisfactory'] = [i for (i,x) in enumerate(all_err_below_3) if x]
