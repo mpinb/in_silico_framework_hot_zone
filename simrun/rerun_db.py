@@ -1,4 +1,4 @@
-"""Recreate and resimulate network-embedded neuron simulation from parameterfiles.
+"""Recreate and resimulate network-embedded neuron simulation from a simrun-initialized database.
 
 This module provides a function to resimulate a network-embedded neuron simulation from a simrun-initialized database.
 It allows to modify either the cell or the network with modification functions.
@@ -6,15 +6,6 @@ The database is expected to have been initialized with :py:mod:`data_base.isf_da
 The function :py:func:`rerun_db` takes a database and a directory as input and resimulates the network-embedded neuron simulation for each simulation trial in the database. 
 The results are stored in the specified directory.
 
-Attention:
-    This will not give the exact same result as the existing trial(s). This module re-simulates a neuron-embedded network simulation witht he same parameters
-    as the original simulation. The results will differ due to the stochastic nature of these parameters.
-    To re-run a simulation with the *exact* same synapse activations, refer to :py:mod:`~simrun.run_existing_synapse_activations` instead.
-
-See also:
-    :py:mod:`~simrun.run_existing_synapse_activations` for re-running a simulation with the exact same synapse activations, rather than
-    the same parameters.
-    
 See also:
     :py:mod:`~data_base.isf_data_base.db_initializers.init_simrun_general` for initializing a database from raw :py:mod:`simrun` output.
 

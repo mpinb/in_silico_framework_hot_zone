@@ -1,5 +1,5 @@
 '''
-Rerun a simulation with the exact same synapse activations.
+ongoing activity L2 neuron model
 '''
 from __future__ import absolute_import
 from ._matplotlib_import import *
