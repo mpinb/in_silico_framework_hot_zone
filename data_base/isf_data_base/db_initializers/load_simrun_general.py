@@ -914,16 +914,22 @@ def _copy_and_transform_syn(syn_fn, target_fn, hoc_fn_map):
         new_hoc (str): Path to the new hoc file.
     """
     with open(syn_fn, 'r') as f:
-        content = f.read()
+        content = f.readlines()
     
     # Use a regular expression to replace the .hoc file name
-    matches = re.findall(r'\b\S+\.hoc\b')
-    assert len(matches) == 1, 'There should be exactly one .hoc file reference in the .syn file, but found {} in {}'.format(len(matches), syn_fn)
-    assert matches[0] in hoc_fn_map, 'The synapse file {} referenced in the connection file {} was not found in the synapse file map'.format(matches[0], syn_fn)
-    content.replace(matches[0], hoc_fn_map[matches[0]])
-
+    matches = re.findall(r'\b\S+\.hoc\b', content[1])
+    if len(matches) == 0:
+        logger.warning('No .hoc file reference in {}'.format(syn_fn))
+        assert len(hoc_fn_map) == 1, "Found no .hoc file reference in the .syn file, but there are {} .hoc files in the original results directory. I don't know which .hoc file this .syn file i ssupposed to refer to.".format(len(hoc_fn_map))
+        # simply take the first and only hoc file
+        target_hoc_file = list(hoc_fn_map.values())[0]
+    else: 
+        assert matches[0] in hoc_fn_map, 'The .hoc file {} referenced in the .syn file {} was not found in the .hoc filepath mapping'.format(matches[0], syn_fn)
+        target_hoc_file = hoc_fn_map[matches[0]]
+    
+    content[1] = "# {}\n".format(target_hoc_file)
     with open(target_fn, 'w') as f:
-        f.write(content)
+        f.write(''.join(content))
     return syn_fn
 
 
@@ -937,16 +943,25 @@ def _copy_and_transform_con(con_fn, target_fn, syn_fn_map):
         new_syn (str): Path to the new synapse distribution file.
     """
     with open(con_fn, 'r') as f:
-        content = f.read()
+        content = f.readlines()
     
     # Use a regular expression to replace the .syn file name
-    matches = re.findall(r'\b\S+\.syn\b')
-    assert len(matches) == 1, 'There should be exactly one .syn file reference in the .con file, but found {} in {}'.format(len(matches), con_fn)
-    assert matches[0] in syn_fn_map, 'The synapse file {} referenced in the connection file {} was not found in the synapse file map'.format(matches[0], con_fn)
-    content.replace(matches[0], syn_fn_map[matches[0]])
-    new_con_fn = os.path.join(target_fn)
+    matches = re.findall(r'\b\S+\.syn\b', content[1])
+    
+    # check if the .con file contains a reference to a .syn file. Not always necessary, but important for error handling.
+    if len(matches) == 0:
+        logger.warning('No .syn file reference in {}'.format(con_fn))
+        assert len(syn_fn_map) == 1, "Found no .syn file reference in the .con file, but there are {} .syn files in the original results directory. I don't know which .syn file this .con file is supposed to refer to.".format(len(syn_fn_map))
+        # simply take the first and only synapse file
+        target_syn_file = list(syn_fn_map.values())[0]
+    else: 
+        assert matches[0] in syn_fn_map, 'The synapse file {} referenced in the connection file {} was not found in the synapse file map'.format(matches[0], con_fn)
+        target_syn_file = syn_fn_map[matches[0]]
+    
+    content[1] = "# {}\n".format(target_syn_file)
+    new_con_fn = target_fn
     with open(new_con_fn, 'w') as f:
-        f.write(content)
+        f.write(''.join(content))
     return con_fn
     
 
@@ -1015,7 +1030,8 @@ def _get_unique_hoc_fns_from_neups(neup_fns):
 
 
 def _generate_target_filenames(db, dir_name, file_list):
-    return [os.path.join(db.basedir, dir_name, _hash_file_content(fn)) for fn in file_list]
+    suffixes = ["." + fn.split(".")[-1] for fn in file_list]
+    return [os.path.join(db.basedir, dir_name, _hash_file_content(fn) + suffix) for fn, suffix in zip(file_list, suffixes)]
 
 
 def _delayed_copy_paramfiles_to_db(
@@ -1045,13 +1061,13 @@ def _delayed_copy_paramfiles_to_db(
     
     logger.info("Moving parameterfiles")
     
-    for target_d in [NEUP_DIR, NETP_DIR, SYN_DIR, CON_DIR]:
+    for target_d in [NEUP_DIR, NETP_DIR, SYN_DIR, CON_DIR, HOC_DIR]:
         if target_d in db.keys():
             del db[target_d]
         db.create_managed_folder(target_d)
     
-    cell_param_fns = paramfile_hashmap_df[neup_path_column].drop_duplicates(subset=neup_hash_column)
-    netp_param_fns = paramfile_hashmap_df[netp_path_column].drop_duplicates(subset=netp_hash_column)
+    cell_param_fns = paramfile_hashmap_df.drop_duplicates(subset=neup_hash_column)[neup_path_column]
+    netp_param_fns = paramfile_hashmap_df.drop_duplicates(subset=netp_hash_column)[netp_path_column]
     syn_fns, con_fns = _get_unique_syncons_from_netps(netp_param_fns)
     hoc_fns = _get_unique_hoc_fns_from_neups(cell_param_fns)
     logger.info('{} unique network parameter files'.format(len(netp_param_fns)))
@@ -1075,7 +1091,7 @@ def _delayed_copy_paramfiles_to_db(
     delayed_copy_hocs = [dask.delayed(shutil.copy)(fn, target_fn) for fn, target_fn in zip(hoc_fns, hoc_files_target_fns)]
     delayed_copy_syns = [dask.delayed(_copy_and_transform_syn)(fn, target_fn, hoc_fn_map) for fn, target_fn in zip(syn_fns, syn_files_target_fns)]
     delayed_copy_cons = [dask.delayed(_copy_and_transform_con)(fn, target_fn, syn_fn_map) for fn, target_fn in zip(con_fns, con_files_target_fns)]
-    delayed_copy_neups = [dask.delayed(_copy_and_transform_neuron_param)(fn, target_fn) for fn, target_fn in zip(cell_param_fns, cell_params_target_fns)]
+    delayed_copy_neups = [dask.delayed(_copy_and_transform_neuron_param)(fn, target_fn, hoc_fn_map) for fn, target_fn in zip(cell_param_fns, cell_params_target_fns)]
     delayed_copy_netps = [dask.delayed(_copy_and_transform_network_param)(fn, target_fn, syn_fn_map, con_fn_map) for fn, target_fn in zip(netp_param_fns, netp_params_target_fns)]
 
     return delayed_copy_hocs + delayed_copy_syns + delayed_copy_cons + delayed_copy_neups + delayed_copy_netps
@@ -1314,6 +1330,8 @@ def _build_param_files(db, client):
         netp_path_column="path_network",
         netp_hash_column="hash_network"
         )
+    futures = client.compute(ds)
+    result = client.gather(futures)
     db.set('parameterfiles', param_file_hash_df, dumper=pandas_to_parquet)
 
 
