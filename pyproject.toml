@@ -1,8 +1,8 @@
 [project]
 authors = [{name = "Bjorge Meulemeester", email = "bjorge.meulemeester@mpinb.mpg.de"}]
 
-description = "Add a short description here"
-name = "in_silico_framework"
+description = "An In Silico Framework for the generation, simulation and analysis of neuron-network interactions during in vivo conditions."
+name = "ISF"
 requires-python = "==3.8.*"
 version = "0.4.0-beta"
 
