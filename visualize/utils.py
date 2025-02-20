@@ -1,49 +1,52 @@
 """
-This python file contains multiple useful general methods that can be used for visualisation.
-
-Author: Maria Royo, Bjorge Meulemeester, Rieke Fruengel, Arco Bast
-Date: 05/01/2023
+Visualization utilities.
 """
 
 import os
 import shutil
 import jinja2
 import IPython
-import dask
 import glob
 import numpy as np
-import pandas as pd
 from base64 import b64encode
 import subprocess
 from data_base.utils import mkdtemp
-import math
-
 from mpl_toolkits.mplot3d.proj3d import proj_transform
 from matplotlib.patches import FancyArrowPatch
 from matplotlib.text import Annotation
 from mpl_toolkits.mplot3d.axes3d import Axes3D
+from matplotlib.colors import Normalize
+import matplotlib.cm as cm
 
 
-def write_video_from_images(images,
-                            out_path,
-                            fps=24,
-                            images_format='.png',
-                            quality=5,
-                            codec='mpeg4',
-                            auto_sort_paths=True):
-    '''
-    Creates a video from a set of images. Images must be specified as a list of images, a directory with images or a list of directories with images.
-    Uses glob pattern pmatching if a directory of images is specified (allows for using the "*" as a wildcard). Glob is not enabled by default on Windows machines.
-    If running this command on windows, please set the :@param glob: argument to False and specify a non-glob type match pattern.
+def write_video_from_images(
+    images,
+    out_path,
+    fps=24,
+    images_format='.png',
+    quality=5,
+    codec='mpeg4',
+    auto_sort_paths=True):
+    '''Creates a video from a set of images. 
+    
+    Images must be specified as a list of images, a directory with images or a list of directories with images.
+    Uses glob pattern matching if a directory of images is specified (allows for using the "*" as a wildcard). 
 
+    Note:
+        Globbing is not enabled by default on Windows machines.
+        If running this command on windows, please set the :paramref:`glob` argument to False and specify a non-glob type match pattern.
+    
     Args:
-        - images: list of images, a directory with images or a list of directories with images
-        - out_path: dir where the video will be generated + name of the video
-        - fps: frames per second
-        - images_format: .png, .pdf, .jpg...
-        - quality
-        - codec
-        - auto_sort_paths: paths to images sorted
+        images (list | str): list of images, a directory with images or a list of directories with images
+        out_path (str): dir where the video will be generated + name of the video
+        fps (int): frames per second
+        images_format (str): .png, .pdf, .jpg ...
+        quality (int): quality of the video. Only used with the mpeg4 codec
+        codec (str): codec to use. Default is mpeg4.
+        auto_sort_paths (bool): paths to images sorted
+
+    Returns:
+        None. Writes the video to the specified path.
     '''
     subprocess.call(["module load", "ffmpeg"], shell=True)
 
@@ -104,20 +107,23 @@ def write_video_from_images(images,
         print(' - images_format is specified properly')
 
 
-def write_gif_from_images(images,
-                          out_path,
-                          interval=40,
-                          images_format='.png',
-                          auto_sort_paths=True):
-    '''
-    Creates a gif from a set of images, and saves it to :@param out_path:.
+def write_gif_from_images(
+        images,
+        out_path,
+        interval=40,
+        images_format='.png',
+        auto_sort_paths=True):
+    '''Creates a gif from a set of images, and saves it to :paramref:`out_path`.
 
     Args:
-        - images: list of images, a directory with images or a list of directories with images
-        - out_path: dir where the video will be generated + name of the gif
-        - interval: time interval between frames (ms)
-        - images_format: .png, .pdf, .jpg...
-        - auto_sort_paths: paths to images sorted
+        images (list | str): list of images, a directory with images or a list of directories with images
+        out_path (str): dir where the video will be generated + name of the gif
+        interval (int | float): time interval between frames (ms)
+        images_format (str): .png, .pdf, .jpg ...
+        auto_sort_paths (bool): paths to images sorted
+
+    Returns:
+        None. Writes the gif to the specified path.
     '''
     import six
     if six.PY3:
@@ -180,30 +186,41 @@ def write_gif_from_images(images,
 
 
 def _load_base64(filename, extension='png'):
-    #https://github.com/jakevdp/JSAnimation/blob/master/JSAnimation/html_writer.py
+    """Load a base64 file from a filename.
+
+    Used in :py:meth:`display_animation_from_images` to embed animations.
+    
+    See: https://github.com/jakevdp/JSAnimation/blob/master/JSAnimation/html_writer.py
+    """
     with open(filename, 'rb') as f:
         data = f.read()
-    return 'data:image/{0};base64,{1}'.format(extension,
-                                              b64encode(data).decode('ascii'))
+    return 'data:image/{0};base64,{1}'.format(
+        extension,
+        b64encode(data).decode('ascii'))
 
 
-def display_animation_from_images(files,
-                                  interval=10,
-                                  style=False,
-                                  animID=None,
-                                  embedded=False):
-    '''
-    Creates an IPython animation out of files specified in a globstring or a list of paths.
+def display_animation_from_images(
+    files,
+    interval=10,
+    style=False,
+    animID=None,
+    embedded=False):
+    '''Creates an IPython animation out of files specified in a globstring or a list of paths.
 
     Args:
-    - files: list of images, a directory with images or a list of directories with images
-    - interval: time interval between frames
-    - style ?
-    - animID: unique integer to identify the animation in the javascript environment of IPython
-    - embedded ?
+        files (list | str): list of images, a directory with images or a list of directories with images
+        interval (int | float): time interval between frames in ms.
+        style (bool): whether to use the default style or not.
+        animID (int): unique integer to identify the animation in the javascript environment of IPython
+        embedded (bool): whether to embed the images in the html file or not.
 
-    CAVEAT: the paths need to be relative to the location of the ipynb / html file, since
-    the are resolved in the browser and not by python'''
+    Returns:
+        None. Displays the animation in the notebook.
+
+    Attention: 
+        The paths need to be relative to the location of the ipynb / html file, since
+        the are resolved in the browser and not by python
+    '''
     if animID is None:
         animID = np.random.randint(
             10000000000000)  # needs to be unique within one ipynb
@@ -227,29 +244,47 @@ def display_animation_from_images(files,
 
 
 def find_files_and_order_them(files, files_format='.png'):
-    '''
-    Args:
-    - files: can be:
-        - list of files (path + file name)
-        - directory where different files are
-        - list of directories where files are
-    - files_format: format of the files to get
-    Returns:
-    List of the files contained in the files argument. These files are in order, and takes into account
+    '''Find files in a list of directories or a directory and order them.
+    
+    These files are in order, and takes into account
     if the name of the file is a number (1 would go before 10 even if the number of the file is not 0-padded). 
     If the files param was a list of directories, the files are in order within each directory but the
     directories order is maintained.
+
+    Args:
+        files (list | str): list of files, list of directories, or a directory.
+        files_format (str): format of the files to get (e.g. '.png', '.jpg')
+    
+    Returns:
+        list: List of the files contained in the files argument. 
+    
     Example:
-    if files is a list of directories:
-        [dir_a,  dir_b, dir_c] containing the following files:
-         dir_a | dir_b | dir_c
-           100 | world |     C
-            10 |    30 |     B
-             2 |     5 |     A
-             1 | hello |    70
-          file |   200 |     9
-    the result would be:
-    1, 2, 10, 100, file, 5, 30, 200, hello, world, 9, 70, A, B, C        
+        If files is a list of directories [dir_a,  dir_b, dir_c] containing the following files:
+
+        .. list-table:: Example of directory contents
+           :header-rows: 1
+
+           * - dir_a
+             - dir_b
+             - dir_c
+           * - 100
+             - world
+             - C
+           * - 10
+             - 30
+             - B
+           * - 2
+             - 5
+             - A
+           * - 1
+             - hello
+             - 70
+           * - file
+             - 200
+             - 9
+    
+        The result would be:
+        1, 2, 10, 100, file, 5, 30, 200, hello, world, 9, 70, A, B, C        
     '''
 
     if isinstance(files, str):
@@ -283,13 +318,32 @@ def find_files_and_order_them(files, files_format='.png'):
 
 
 class Arrow3D(FancyArrowPatch):
-    """see https://gist.github.com/WetHat/1d6cd0f7309535311a539b42cccca89c"""
+    """Draw a 3D annotation arrow on a matplotlib 3D plot
+    
+    See: https://gist.github.com/WetHat/1d6cd0f7309535311a539b42cccca89c
+    
+    Attributes:
+        _xyz (tuple): the x, y, z coordinates of the arrow
+        _dxdydz (tuple): the dx, dy, dz coordinate difference of the arrow, i.e. where it points to relative to its origin.
+    """
     def __init__(self, x, y, z, dx, dy, dz, *args, **kwargs):
+        """
+        Args:
+            x (float): x coordinate of the arrow starting point.
+            y (float): y coordinate of the arrow starting point.
+            z (float): z coordinate of the arrow starting point.
+            dx (float): x coordinate difference of the arrow direction.
+            dy (float): y coordinate difference of the arrow direction.
+            dz (float): z coordinate difference of the arrow direction.
+            *args: Additional positional arguments passed to FancyArrowPatch.
+            **kwargs: Additional keyword arguments passed to FancyArrowPatch.
+        """
         super().__init__((0, 0), (0, 0), *args, **kwargs)
         self._xyz = (x, y, z)
         self._dxdydz = (dx, dy, dz)
 
     def draw(self, renderer):
+        """Draw the arrow."""
         x1, y1, z1 = self._xyz
         dx, dy, dz = self._dxdydz
         x2, y2, z2 = (x1 + dx, y1 + dy, z1 + dz)
@@ -299,6 +353,8 @@ class Arrow3D(FancyArrowPatch):
         super().draw(renderer)
 
     def do_3d_projection(self, renderer=None):
+        """Project the arrow onto the Axes3D object.
+        """
         x1, y1, z1 = self._xyz
         dx, dy, dz = self._dxdydz
         x2, y2, z2 = (x1 + dx, y1 + dy, z1 + dz)
@@ -310,18 +366,35 @@ class Arrow3D(FancyArrowPatch):
 
 
 def _arrow3D(ax, x, y, z, dx, dy, dz, *args, **kwargs):
-    '''Add an 3d arrow to an `Axes3D` instance.'''
+    '''Add an 3d arrow to an Axes3D instance.'''
 
     arrow = Arrow3D(x, y, z, dx, dy, dz, *args, **kwargs)
     ax.add_artist(arrow)
 
 
-def draw_arrow(morphology,
-               ax,
-               highlight_section=None,
-               highlight_x=None,
-               highlight_arrow_args=None,
-               arrow_size=50):
+def draw_arrow(
+        morphology,
+        ax,
+        highlight_section=None,
+        highlight_x=None,
+        highlight_arrow_kwargs=None,
+        arrow_size=50):
+    """Highlight a morphology section with an :py:class:`Arrow3D`.
+
+    This method is used by :py:class:`CellMorphologyVisualizer` to annotate morphology sections.
+    
+    Args:
+        morphology (pd.DataFrame): The morphology dataframe containing the coordinates of the sections.
+        ax (matplotlib.axes.Axes): The matplotlib axes object to draw the arrow on.
+        highlight_section (int, optional): The section index to highlight. If None, no section is highlighted. Default is None.
+        highlight_x (float, optional): The x-coordinate within the section to place the arrow. If None, the arrow is placed at the section's midpoint. Default is None.
+        highlight_arrow_kwargs (dict, optional): Additional keyword arguments to pass to the :py:class:`Arrow3D` constructor. Default is None.
+        arrow_size (int, optional): The size of the arrow. Default is 50.
+    
+    Returns:
+        None
+    
+    """
 
     assert type(
         highlight_section
@@ -331,13 +404,13 @@ def draw_arrow(morphology,
         'sec_n'], "The given section id is not present in the cell morphology"
 
     setattr(Axes3D, 'arrow3D', _arrow3D)
-    if highlight_arrow_args is None:
-        highlight_arrow_args = {}
+    if highlight_arrow_kwargs is None:
+        highlight_arrow_kwargs = {}
 
     # overwrite defaults if they were set
     x = dict(mutation_scale=20, ec='black', fc='white')
-    x.update(highlight_arrow_args)
-    highlight_arrow_args = x
+    x.update(highlight_arrow_kwargs)
+    highlight_arrow_kwargs = x
 
     morphology = morphology.copy()
     morphology = morphology.fillna(0)  # soma section gets 0 as section ID
@@ -358,9 +431,9 @@ def draw_arrow(morphology,
     start_x, start_y, start_z = x, y, z
     dx, dy, dz = 0, 0, 0
     ddx = ddy = 0
-    if 'orientation' in highlight_arrow_args:
-        orientation = highlight_arrow_args['orientation']
-        del highlight_arrow_args['orientation']
+    if 'orientation' in highlight_arrow_kwargs:
+        orientation = highlight_arrow_kwargs['orientation']
+        del highlight_arrow_kwargs['orientation']
         if 'x' in orientation:
             start_x += arrow_size
             dx -= arrow_size
@@ -375,10 +448,10 @@ def draw_arrow(morphology,
         start_z += arrow_size
         dz -= arrow_size
 
-    if 'rotation' in highlight_arrow_args:
+    if 'rotation' in highlight_arrow_kwargs:
         print("rotating arrow")
-        alpha = highlight_arrow_args['rotation']
-        del highlight_arrow_args['rotation']
+        alpha = highlight_arrow_kwargs['rotation']
+        del highlight_arrow_kwargs['rotation']
         dx2, dz2 = np.dot(
             np.array([[np.cos(alpha), -np.sin(alpha)],
                       [np.sin(alpha), np.cos(alpha)]]), [dx, dz])
@@ -388,21 +461,24 @@ def draw_arrow(morphology,
         dz = dz2
 
     #print(start_x, start_y)
-    ax.arrow3D(start_x, start_y, start_z, dx, dy, dz, **highlight_arrow_args)
+    ax.arrow3D(start_x, start_y, start_z, dx, dy, dz, **highlight_arrow_kwargs)
 
 
-def segments_to_poly(segments, diameters, n_faces):
-    """
-    Given a list of segments, this methods converts them to polygons that neatly connect without seam
 
+def value_to_color(v, vmin=0, vmax=1):
+    '''Map a value to a color.
+        
+    See: https://stackoverflow.com/questions/15140072/how-to-map-number-to-color-using-matplotlibs-colormap
+    
     Args:
-        segments: a 2D list defining pairs of points. Each point pair defines a single segment
-        diameters: diameters associated with the segments
-        n_faces: amount of faces in the polygon tube
-    """
-
-    polygons = []
-    for i in range(len(segments)):
+        v (float): The value to map to a color.
+        vmin (float): The minimum value of the range. Default is 0.
+        vmax (float): The maximum value of the range. Default is 1.
         
-        
-        prev_poly
+    Returns:
+        tuple: The RGBA color tuple.
+    '''
+    norm = Normalize(vmin=vmin, vmax=vmax)
+    cmap = cm.inferno
+    m = cm.ScalarMappable(norm=norm, cmap=cmap)
+    return m.to_rgba(v)[:-1]

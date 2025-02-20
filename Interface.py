@@ -1,20 +1,19 @@
 '''
-This module gives API access to all subpackages and submodules in ISF::
+Interface gives API access to all subpackages and submodules in ISF:
 
-    - :py:mod:`biophysics_fitting`
-    - :py:mod:`data_base`
-    - :py:mod:`dendrite_thickness`
-    - :py:mod:`NEURON mechanisms`
-    - :py:mod:`simrun`
-    - :py:mod:`single_cell_parser`
-    - :py:mod:`singlecell_input_mapper`
-    - :py:mod:`spike_analysis`
-    - :py:mod:`visualize`
+- :py:mod:`biophysics_fitting`
+- :py:mod:`data_base`
+- :py:mod:`simrun`
+- :py:mod:`single_cell_parser`
+- :py:mod:`singlecell_input_mapper`
+- :py:mod:`spike_analysis`
+- :py:mod:`visualize`
 
 The recommended use is to import it in a jupyter notebook in the following manner::
 
     import Interface as I
     
+Take a look at the :ref:`tutorials` for examples on how to use the Interface API.
 '''
 import matplotlib
 
@@ -131,16 +130,16 @@ load_initialized_cell_and_evokedNW_from_db = db_init_simrun_general.load_initial
 #for compatibility, deprecated!
 synapse_activation_binning_dask = db_init_synapse_activation_binning.synapse_activation_postprocess_dask
 db_init_crossing_over = db_init_roberts_simulations = db_init_simrun_general
-mdb_init_crossing_over = db_init_crossing_over
 
-#--------------- mdb
-from data_base.db_initializers import load_simrun_general as db_init_simrun_general
-from data_base.db_initializers import synapse_activation_binning as db_init_synapse_activation_binning
-load_param_files_from_mdb = db_init_simrun_general.load_param_files_from_db
-load_initialized_cell_and_evokedNW_from_mdb = db_init_simrun_general.load_initialized_cell_and_evokedNW_from_db
+#-------------- mdb: deprecated. Use db instead.
+mdb_init_crossing_over = db_init_crossing_over
+from data_base.model_data_base.mdb_initializers import load_simrun_general as mdb_init_simrun_general
+from data_base.model_data_base.mdb_initializers import synapse_activation_binning as mdb_init_synapse_activation_binning
+load_param_files_from_mdb = mdb_init_simrun_general.load_param_files_from_mdb
+load_initialized_cell_and_evokedNW_from_mdb = mdb_init_simrun_general.load_initialized_cell_and_evokedNW_from_mdb
 #for compatibility, deprecated!
 synapse_activation_binning_dask = db_init_synapse_activation_binning.synapse_activation_postprocess_dask
-db_init_crossing_over = db_init_roberts_simulations = db_init_simrun_general
+mdb_init_crossing_over = mdb_init_roberts_simulations = mdb_init_simrun_general
 
 from data_base.analyze import split_synapse_activation  #, color_cellTypeColorMap, excitatory, inhibitory
 from data_base.utils import silence_stdout
@@ -173,13 +172,16 @@ try:
         as simrun_generate_synapse_activations
     from simrun.run_new_simulations import run_new_simulations \
         as simrun_run_new_simulations
-    from simrun.sim_trail_to_cell_object import simtrail_to_cell_object \
-        as simrun_simtrail_to_cell_object
-    from simrun.sim_trail_to_cell_object import trail_to_cell_object \
-        as simrun_trail_to_cell_object
+    from simrun.sim_trial_to_cell_object import simtrial_to_cell_object \
+        as simrun_simtrial_to_cell_object
+    from simrun.sim_trial_to_cell_object import trial_to_cell_object \
+        as simrun_trial_to_cell_object
     from simrun.parameters_to_cell import parameters_to_cell as simrun_parameters_to_cell
     from simrun.rerun_db import rerun_db as simrun_rerun_db
+    # compatibility
     simrun_rerun_mdb = simrun_rerun_db
+    simrun_simtrail_to_cell_object = simrun_simtrial_to_cell_object
+    simrun_trial_to_cell_object = simrun_trial_to_cell_object
 
 except ImportError:
     logger.warning("Could not import full-compartmental-model simulator")
@@ -209,7 +211,7 @@ from singlecell_input_mapper.ongoing_network_param_from_template import create_n
            as create_ongoing_network_parameter
 
 if not 'ISF_MINIMIZE_IO' in os.environ:
-    if get_versions()['dirty']: warnings.warn('The source folder has uncommited changes!')
+    if get_versions()['dirty']: logger.attention('The source folder has uncommited changes!')
 
 defaultdict_defaultdict = lambda: defaultdict(lambda: defaultdict_defaultdict())
 
@@ -218,15 +220,8 @@ from biophysics_fitting import hay_complete_default_setup as bfit_hay_complete_d
 from biophysics_fitting import L5tt_parameter_setup as bfit_L5tt_parameter_setup
 from biophysics_fitting.parameters import param_to_kwargs as bfit_param_to_kwargs
 from biophysics_fitting.optimizer import start_run as bfit_start_run
-try:
-    import visualize.linked_views
-    from visualize.linked_views.server import LinkedViewsServer
-    from visualize.linked_views import defaults as LinkedViewsDefaults
-except ImportError:
-    logger.warning('Could not load linked views')
 
 from functools import partial
-
 
 from data_base._module_versions import version_cached
 
@@ -240,7 +235,7 @@ def print_module_versions():
     logger.info("Loaded modules with __version__ attribute are:\n" + ', '.join(module_versions))
 
 
-def get_client(client_port=38786, timeout=120):
+def get_client(ip=None, client_port=38786, timeout=120):
     """
     Gets the distributed.client object if dask has been setup
     
@@ -254,32 +249,36 @@ def get_client(client_port=38786, timeout=120):
     from socket import gethostbyname, gethostname
     from dask.distributed import Client
     client_port = str(client_port)
-    if "IP_MASTER" in os.environ.keys():
+    if ip is not None:
+        ip = ip
+    elif "IP_MASTER" in os.environ.keys():
         if "IP_MASTER_INFINIBAND" in os.environ.keys():
             ip = os.environ['IP_MASTER_INFINIBAND']
         else:
             ip = os.environ["IP_MASTER"]
     else:
+        logger.warning("No IP passed for dask scheduler. Assuming local scheduler. Inferring IP of current machine...")
         hostname = gethostname()
         ip = gethostbyname(
             hostname
-        )  # fetches the ip of the current host, usually "somnalogin01" or "somalogin02"
+        )  # fetches the ip of the current host
     logger.info("Getting client with ip {}".format(ip))
     c = Client(ip + ':' + client_port, timeout=timeout)
     logger.info("Got client {}".format(c))
     logger.info("Making mechanisms visible on client side")
     def update_path(): sys.path.insert(0, os.path.dirname(__file__))
     def import_mechanisms(): import mechanisms
+    def import_Interface(): import Interface
     c.run(update_path)
     c.run(import_mechanisms)
+    c.run(import_Interface)
     return c
 
 print("\n\n")
 print_module_versions()
 
-import barrel_cortex
-from barrel_cortex import excitatory, inhibitory, color_cellTypeColorMap, color_cellTypeColorMap_L6paper, color_cellTypeColorMap_L6paper_with_INH
+from config.cell_types import EXCITATORY, INHIBITORY
 
 import compatibility
-# Set logging level back to WARNING to suppress verbosity in regular usage
-logger.setLevel(logging.WARNING)
+
+logger.setLevel(logging.ATTENTION)

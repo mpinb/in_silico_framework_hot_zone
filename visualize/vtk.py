@@ -1,4 +1,5 @@
-'''This module contains functions to save simulation data in vtk compatible formats'''
+'''Save simulation data in vtk compatible formats'''
+'''Save simulation data in vtk compatible formats'''
 
 import os
 import numpy as np
@@ -6,13 +7,20 @@ import logging
 logger = logging.getLogger("ISF").getChild(__name__)
 
 
-def convert_amira_surf_to_vtk(surf_file, outname='surface', outdir='.'):
+def convert_amira_surf_to_vtk(
+    surf_file, 
+    outname='surface', 
+    outdir='.'
+    ):
     """Given the path to an amira .surf file, this method converts it to a .vtk surface file.
 
     Args:
         surf_file (str): path to amira .surf file
         outname (str, optional): Name of the output vtk surface file. Defaults to 'surface'.
         outdir (str, optional): Directory to save the file to. Defaults to '.'.
+
+    Returns:
+        None. Writes out a .vtk file to the specified directory.
     """
     with open(surf_file) as f:
         lines = f.readlines()
@@ -55,15 +63,23 @@ def convert_amira_surf_to_vtk(surf_file, outname='surface', outdir='.'):
                 of.write('\n')
 
 
-def write_vtk_pointcloud_file(out_name=None,
-                              out_dir='.',
-                              points=None,
-                              scalar_data=None,
-                              scalar_data_names=None):
-    '''
-    write Amira landmark file
-    landmarkList has to be iterable of tuples,
-    each of which holds 3 float coordinates
+def write_vtk_pointcloud_file(
+    out_name=None,
+    out_dir='.',
+    points=None,
+    scalar_data=None,
+    scalar_data_names=None):
+    '''Write out 3D point data as a VTK point cloud.
+    
+    Args:
+        out_name (str): Name of the output file.
+        out_dir (str): Directory to save the file to.
+        points (list): List of 3D points.
+        scalar_data (list): List of scalar data arrays. Each array should have the same length as the amount of points.
+        scalar_data_names (list): List of names for the scalar data arrays.
+
+    Returns:
+        None. Writes out a .vtk file to the specified directory.
     '''
     if not os.path.exists(out_dir):
         os.makedirs(out_dir)
@@ -129,7 +145,25 @@ def save_cells_landmark_files_vtk(
     outdir,
     celltypes=None,
     tspan = 1, 
-    set_index = ['synapse_ID', 'celltype']):
+    set_index = ['synapse_ID', 'celltype']
+    ):
+    """Save synapse activations as vtk point cloud files for each timepoint.
+    
+    Given a synapse activation dataframe and a synapse location dataframe, 
+    this method saves the synapse locations as vtk point cloud files for each timepoint in :paramref:`times_to_show`.
+
+    Args:
+        sa (pd.DataFrame): Synapse activation dataframe.
+        synapse_location_pdf (pd.DataFrame): Synapse location dataframe.
+        times_to_show (list): List of timepoints to save the data for.
+        outdir (str): Directory to save the files to.
+        celltypes (list, optional): List of celltypes to save the data for. Defaults to None.
+        tspan (int, optional): Time span to show. Defaults to 1.
+        set_index (list, optional): Index to set in the synapse activation dataframe. Defaults to ['synapse_ID', 'celltype'].
+
+    Returns:
+        None. Writes out a .vtk file for each timepoint in :paramref:`times_to_show`.
+    """
 
     assert "celltype" in sa.columns, "Please add a column 'celltype' to the synapse activation dataframe."
     assert "celltype" in synapse_location_pdf.columns, "Please add a column 'celltype' to the synapse location dataframe."
@@ -181,20 +215,27 @@ def save_cells_landmark_files_vtk(
             scalar_data = [out_scalar],
             scalar_data_names = ['celltype'])
 
+
 def write_vtk_skeleton_file(
     lookup_table,
     out_name, 
     out_dir, 
     point_scalar_data=None, 
     n_decimals=2):
-    """_summary_
+    """Write out a .vtk file for a neuron morphology.
+
+    This method is used by :py:meth:`~visualize.cell_morphology_visualizer.CellMorphologyVisualizer.write_vtk_frames`.
 
     Args:
-        out_name (_type_): _description_
-        out_dir (_type_): _description_
-        time_point (_type_): _description_
-        point_scalar_data ({'name': [data_per_point]}, optional): Scalar data for each point in the .vtk file. Each entry in the dictionary is a nested list that defines scalar data for all points in a section.
-        n_decimals (int, optional): _description_. Defaults to 2.
+        lookup_table (pd.DataFrame): 
+            Lookup table for the neuron morphology.
+            Can be accessed from :py:class:`visualize.cell_morphology_visualizer.CellMorphologyVisualizer`.
+        out_name (str): Name of the output file.
+        out_dir (str): Directory to save the file to.
+        point_scalar_data (dict, optional): Dictionary containing scalar data for each point. Defaults to None.
+
+    Returns:
+        None. Writes out a .vtk file to the specified directory.
     """
 
     def header_(out_name_=out_name):
@@ -224,7 +265,6 @@ def write_vtk_skeleton_file(
     for dataname, data in point_scalar_data.items():
         assert len(data) == len(lookup_table), \
             "Length of point scalar data \"{}\" does not match number of points. Scalar data: {}. Amount of points: {}".format(dataname, len(data), len(lookup_table))
-
     
     # write out all data to .vtk file
     with open(
@@ -269,3 +309,61 @@ def write_vtk_skeleton_file(
                 of.write("SCALARS {} float 1\nLOOKUP_TABLE default\n".format(name))
                 of.write(point_scalar_str_(data))
     
+    
+def convert_amira_lattice_to_vtk(
+    surf_file,
+    outname="lattice",
+    outdir="."):
+    """Convert an AMIRA lattice file to vtk structured points.
+
+    Args:
+        surf_file (str): Path to the AMIRA lattice file.
+        outname (str, optional): Name of the output file. Defaults to "lattice".
+        outdir (str, optional): Directory to save the file to. Defaults to ".".
+
+    Returns:
+        None. Writes out a .vtk file to the specified directory.
+    """
+    with open(surf_file) as f:
+        lines = f.readlines()
+
+        header_split = [
+            i for i in range(len(lines)) if "@1" in lines[i]
+        ][1]
+        
+        header = lines[:header_split]
+        
+        co_type_line = [l for l in header if "coordtype" in l.lower()][0]
+        co_type = co_type_line.split()[1].strip('\"')
+        assert co_type == "uniform", "Only uniform lattice files are supported for this method. Coordinate type of given file is {}.".format(co_type)
+        
+        lattice_line = [l for l in header if "define lattice" in l.lower()][0]
+        nx, ny, nz = tuple(int(num) for num in lattice_line.split()[2:])
+        
+        spacing_line = [l for l in header if "spacing" in l.lower()][0]
+        # cast is not necessary as we write out to text, but a good check to see if the data is valid
+        dx, dy, dz = tuple(float(num.rstrip(",")) for num in spacing_line.split()[1:])
+        
+        bounding_box_line = [l for l in header if "boundingbox" in l.lower()][0]
+        minx, maxx, miny, maxy, minz, maxz = [num.rstrip(",") for num in bounding_box_line.split()[1:]]
+        
+        queryline = [l for l in header if "query" in l.lower()][0]
+        query = queryline.split()[1].lstrip("\"").rstrip("\",")
+
+        data = [float(e.rstrip()) for e in lines[header_split+1 : nx*ny*nz+header_split+1]]
+        trail = lines[nx*ny*nz+header_split+1:]
+        assert all([e.rstrip() == "" for e in trail]), "Trailing data in amira lattice file: found {} extra datapoints: {}".format(len(trail), trail)
+
+        with open(os.path.join(outdir, outname) + '.vtk', 'w+', encoding="utf-8") as of:
+            of.write(
+                "# vtk DataFile Version 4.0\nLattice\nASCII\nDATASET STRUCTURED_POINTS\n"
+            )
+            of.write("DIMENSIONS {} {} {}\n".format(nx, ny, nz))
+            of.write("ORIGIN {} {} {}\n".format(minx, miny, minz))
+            of.write("SPACING {} {} {}\n".format(dx, dy, dz))
+
+            of.write('POINT_DATA {}\nSCALARS {} {} {}\n'.format(
+                nx*ny*nz, query, "float", 1))
+            of.write("LOOKUP_TABLE default\n")
+            for d in data:
+                of.write("{}\n".format(d))

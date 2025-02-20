@@ -1,51 +1,73 @@
-#===============================================================================
-# SingleCellInputMapper
-# Tool for estimating connectivity (inputs) of individual neuron morphologies
-# registered into standard barrel cortex model.
-# Based on methods and data presented in:
-# Egger, Dercksen et al., Frontiers Neuroanatomy 2014
-#
-# Inputs:
-# - single neuron morphology
-# - 3D PST densities for normalization of innervation calculations
-# - number of cells per cell type spreadsheets
-# - connections spreadsheet containing PST length/area constants
-# - presynaptic bouton densities of individual axon morphologies
-#   sorted by presynaptic column and cell type
-# Outputs:
-# - summary file containing information about number and presynaptic type
-#   and column of anatomical synapses
-# - AmiraMesh landmark file containing 3D synapse locations of anatomical
-#   synapses of each presynaptic type and column
-# - Synapse location and connectivity file compatible with NeuroSim
-#
-# Author: Robert Egger
-#         Computational Neuroanatomy
-#         Max Planck Institute for Biological Cybernetics
-#         Tuebingen, Germany
-#         Email: robert.egger@tuebingen.mpg.de
-#===============================================================================
+"""Map synapses onto a postsynaptic cell.
 
-#===============================================================================
-# Python standard library imports
-#===============================================================================
+This module provides a full pipeline for creating dense connectome models
+of the rat barrel cortex, based on methods and data presented in 
+:cite:t:`Udvary_Harth_Macke_Hege_De_Kock_Sakmann_Oberlaender_2022`.
+
+This runfile assumes you have downloaded and extracted the barrel cortex model data from
+https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/JZPULNa.
+If this is not the case, please consult ``installer/download_bc_model`` and extract.
+
+Attention:
+    This file is specific to the barrel cortex model data. If you want to use it for other data,
+    you need to adapt the paths to the data accordingly.
+
+Inputs:
+
+- Morphology of the post-synaptic neuron
+- 3D field of synapse densities or synapse counts.
+- Number of cells per cell type in the brain area of interest.
+- Connections spreadsheet containing PST length/area constants of 
+  the post-synaptic cell for normalization.
+- Bouton locations of individual axon tracings.
+
+Attention:
+    This runfile has default values for the barrel cortex, and so assumes that you have downloaded 
+    and extracted the barrel cortex model data from
+    https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/JZPULNa.
+    If this is not the case, please consult ``installer/download_bc_model`` and extract,
+    or adapt the paths in this file to your data.
+
+This module then uses :py:class:`~singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper`
+to assign synapses to a single post-synaptic cell morphology, based on the inputs mentioned above.
+This happens according to the following pipeline:
+
+1. The bouton density field and PST density fields are converted to scalar fields with defined voxel resolution.
+2. Calculates the overlap between these voxels and the dendrites of the postsynaptic neuron morphology 
+   using Liang-Barsky clipping :cite:`liang1984new`. Only these voxels are further considered for potential synapses.
+3. Calculates a synapse density field by multiplying the bouton density field with the PST density fields
+   at these voxels.
+4. Normalizes the previous synapse density fields using cell-type specific PST length/area constraints and the number of 
+   cells per cell type.
+5. Poisson samples synapses from this normalized synapse density field to realize synapses. 
+   These are randomly placed onto the dendritic branch within that voxel. One such sample is called an "anatomical realization".
+6. (optional) Repeat steps 4 and 5 to create a collection of anatomical realizations. 
+
+Density meshes are accessed using :py:class:`~singlecell_input_mapper.singlecell_input_mapper.scalar_field.ScalarField`.
+:py:class:`~singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseMapper` makes use of 
+:py:class:`~singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseDensity` for steps 2, 3 and 4,
+and finalizes step 5 by itself.
+
+Outputs:
+
+- summary file containing information about number and presynaptic type
+  and column of anatomical synapses
+- AmiraMesh landmark file containing 3D synapse locations of anatomical
+  synapses of each presynaptic type and column
+- Synapse location (:ref:`syn_file_format`) and connectivity (:ref:`con_file_format`) file compatible with :py:mod:`simrun`.
+"""
 from __future__ import absolute_import
 import sys
 import os.path
 import glob
 import time
-
-#===============================================================================
-# required imports
-# numpy: tested with numpy v1.6.2 (not guaranteed to work with lower version)
-# The singlecell_input_mapper module should automatically be loaded if its
-# main folder is located in the same directory as this file. If not, you should
-# add it to the system PYTHONPATH:
-# export PYTHONPATH=/path/to/singlecell_input_mapper:$PYTHONPATH
-#===============================================================================
 import numpy as np
 from . import singlecell_input_mapper as sim
 import getting_started
+
+
+__author__ = 'Robert Egger'
+
 #===============================================================================
 # This is the only line that needs to be adapted to your system.
 # Change the string 'prefix' to the folder where all anatomical data is
@@ -71,7 +93,69 @@ inhTypes = ('SymLocal1','SymLocal2','SymLocal3','SymLocal4','SymLocal5','SymLoca
             'L1','L23Trans','L45Sym','L45Peak','L56Trans')
 
 
-def map_singlecell_inputs(cellName, cellTypeName, nrOfSamples=50):
+def map_singlecell_inputs(
+    cellName, 
+    cellTypeName, 
+    nrOfSamples=50,
+    numberOfCellsSpreadsheetName=numberOfCellsSpreadsheetName,
+    connectionsSpreadsheetName=connectionsSpreadsheetName,
+    ExPSTDensityName=ExPSTDensityName,
+    InhPSTDensityName=InhPSTDensityName,
+    boutonDensityFolderName=boutonDensityFolderName):
+    """Map inputs to a single cell morphology.
+    
+    These inputs need to be organized per anatomical structure. Anatomical structures
+    can be arbitrary spatial regions of the brain tissue, or anatomically well-defined
+    areas, e.g. barrels in a barrel cortex.
+    
+    Steps:
+    
+    1. Loads in the data:
+    
+        - Cell morphology
+        - Number of cells per cell type
+        - Connection probabilities between cell types
+        - PST densities for normalization of innervation calculations
+        
+    2. Loads in the bouton densities:
+    
+        - For each anatomical area
+        - For each presynaptic cell type
+        
+    3. Creates a scalar field (:py:class:`~singlecell_input_mapper.singlecell_input_mapper.scalar_field.ScalarField`)
+       for each bouton density.
+    4. Creates a :py:class:`~singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper` object.
+    5. Creates a network embedding for the cell using 
+       :py:meth:`~singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper.create_network_embedding`.
+    
+    The naming of each anatomical area needs to be consistent between:
+    
+    - The number of cells per cell type spreadsheet
+    - The bouton folders containing axon traces
+    
+    Args:
+        cellName (str): 
+            path to a :ref:`hoc_file_format` file containing the morphology of the cell.
+        cellTypeName (str): 
+            name of the postsynaptic cell type.
+        nrOfSamples (int): 
+            number of samples to use for the network embedding.
+        numberOfCellsSpreadsheetName (str): 
+            Path to the a spreadsheet, containing each neuropil structures as columns, and celltypes row indices.
+            Values indicate how much of each celltype was found in each neuropil structure.
+        connectionsSpreadsheetName (str):
+            Path to a spreadsheet, containing the connection probabilities between each presynaptic and postsynaptic cell type.
+        ExPSTDensityName (str):
+            Path to the PST density file for excitatory synapses.
+        InhPSTDensityName (str):
+            Path to the PST density file for inhibitory synapses.
+        boutonDensityFolderName: 
+            A directory containing the following subdirectory structure:
+            anatomical_area/presynaptic_cell_type/\*.am
+            
+    Returns:
+        None. Writes the results to disk.
+    """
     if not (cellTypeName in exTypes) and not (cellTypeName in inhTypes):
         errstr = 'Unknown cell type %s!'
         raise TypeError(errstr)
@@ -81,8 +165,9 @@ def map_singlecell_inputs(cellName, cellTypeName, nrOfSamples=50):
     print('Loading cell morphology...')
     parser = sim.CellParser(cellName)
     parser.spatialgraph_to_cell()
-    singleCell = parser.get_cell()
+    singleCell = parser.get_cell()  # This is a sim.Cell, not scp.cell
 
+    # --------------------- Read in data ---------------------
     print('Loading spreadsheets and bouton/PST densities...')
     print('    Loading numberOfCells spreadsheet {:s}'.format(
         numberOfCellsSpreadsheetName))
@@ -99,15 +184,22 @@ def map_singlecell_inputs(cellName, cellTypeName, nrOfSamples=50):
     InhPSTDensity = sim.read_scalar_field(InhPSTDensityName)
     InhPSTDensity.resize_mesh()
     boutonDensities = {}
-    columns = list(numberOfCellsSpreadsheet.keys())
-    preCellTypes = numberOfCellsSpreadsheet[columns[0]]
+    anatomical_areas = list(numberOfCellsSpreadsheet.keys())
+    preCellTypes = numberOfCellsSpreadsheet[anatomical_areas[0]]
 
-    for col in columns:
-        boutonDensities[col] = {}
+    # --------------------- Load bouton densities ---------------------
+    for anatomical_area in anatomical_areas:
+        # boutonDensities is a dictionary with anatomical areas as keys
+        # and as value another dictionary mapping the presyn celltype to 
+        # scalar fields of boutons
+        boutonDensities[anatomical_area] = {}
         for preCellType in preCellTypes:
-            boutonDensities[col][preCellType] = []
-            boutonDensityFolder = os.path.join(prefix, boutonDensityFolderName,
-                                               col, preCellType)
+            boutonDensities[anatomical_area][preCellType] = []
+            boutonDensityFolder = os.path.join(
+                prefix, 
+                boutonDensityFolderName,
+                anatomical_area, 
+                preCellType)
             boutonDensityNames = glob.glob(
                 os.path.join(boutonDensityFolder, '*'))
             print('    Loading {:d} bouton densities from {:s}'.format(
@@ -115,15 +207,21 @@ def map_singlecell_inputs(cellName, cellTypeName, nrOfSamples=50):
             for densityName in boutonDensityNames:
                 boutonDensity = sim.read_scalar_field(densityName)
                 boutonDensity.resize_mesh()
-                boutonDensities[col][preCellType].append(boutonDensity)
+                boutonDensities[anatomical_area][preCellType].append(boutonDensity)
 
-    inputMapper = sim.NetworkMapper(singleCell, cellTypeName, numberOfCellsSpreadsheet, connectionsSpreadsheet,\
-                                    ExPSTDensity, InhPSTDensity)
+    inputMapper = sim.NetworkMapper(
+        singleCell, 
+        cellTypeName, 
+        numberOfCellsSpreadsheet, 
+        connectionsSpreadsheet,
+        ExPSTDensity, 
+        InhPSTDensity)
     inputMapper.exCellTypes = exTypes
     inputMapper.inhCellTypes = inhTypes
-    inputMapper.create_network_embedding(cellName,
-                                         boutonDensities,
-                                         nrOfSamples=nrOfSamples)
+    inputMapper.create_network_embedding(
+        cellName,
+        boutonDensities,
+        nrOfSamples=nrOfSamples)
 
     endTime = time.time()
     duration = (endTime - startTime) / 60.0

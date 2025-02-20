@@ -6,65 +6,113 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-import sys
-import os
-# import mock
+import sys, os, fnmatch, ast
+import toml
 
-# MOCK_MODULES = ['neuron', 'cloudpickle', 'tables', 'distributed', 'mechanisms']
-# for mod_name in MOCK_MODULES:
-#     sys.modules[mod_name] = mock.Mock()
-
-project = 'In-Silico Framework (ISF)'
-copyright = '2023, Arco Bast, Amir Najafgholi, Maria Royo Cano, Rieke Fruengel, Matt Keaton, Bjorge Meulemeester, Omar Valerio'
-author = 'Arco Bast, Amir Najafgholi, Maria Royo Cano, Rieke Fruengel, Matt Keaton, Bjorge Meulemeester, Omar Valerio'
-release = '0.0.1'
-version = '0.0.1'
-## Make your modules available in sys.path
 project_root = os.path.join(os.path.abspath(os.pardir))
-sys.path.append(project_root)
-## copy over tutorials
-import shutil
-shutil.rmtree(os.path.join(project_root, 'docs', 'tutorials'), ignore_errors=True)
-shutil.copytree(os.path.join(project_root, 'getting_started', 'tutorials'),
-                os.path.join(project_root, 'docs', 'tutorials'))
-shutil.copy(os.path.join(project_root, 'getting_started', 'Introduction_to_ISF.ipynb'),
-                os.path.join(project_root, 'docs', 'Introduction_to_ISF.ipynb'))
+sys.path.insert(0, project_root)
+from docs.parse_notebooks import copy_and_parse_notebooks_to_docs
+from functools import lru_cache
+from config.isf_logging import logger as isf_logger
+from docs.sphinx_hooks import count_documented_members, log_documented_members, find_first_match, DOCS_STATS
+from docs.skip_doc import skip_member, MODULES_TO_SKIP
+logger = isf_logger.getChild("DOCS")
+logger.setLevel("INFO")
+# Parse pyproject.toml to get the release version
+pyproject_path = os.path.join(project_root, 'pyproject.toml')
+with open(pyproject_path, 'r') as f:
+    pyproject_data = toml.load(f)
+    release = pyproject_data['project']['version']
+    version = release
+project = 'In-Silico Framework (ISF)'
+copyright = '2023, Arco Bast, Robert Egger, Bjorge Meulemeester, Maria Royo Cano, Rieke Fruengel, Matt Keaton, Omar Valerio'
+author = 'Arco Bast, Robert Egger, Bjorge Meulemeester, Maria Royo Cano, Rieke Fruengel, Matt Keaton, Omar Valerio'
+
+
+
+# copy over tutorials and convert links to python files to sphinx documentation directives
+copy_and_parse_notebooks_to_docs(
+    source_dir=os.path.join(project_root, 'getting_started', 'tutorials'),
+    dest_dir=os.path.join(project_root, 'docs', 'tutorials'),
+    api_extension="autoapi",  # change this if using autosummary instead of autoapi, it needs to find target dir of .rst files.
+)
+
+from compatibility import init_data_base_compatibility
+init_data_base_compatibility()  # make db importable before running autosummary or autodoc etc...
 
 
 # -- General configuration ------------------------------------------------
 
-# If your documentation needs a minimal Sphinx version, state it here.
-#needs_sphinx = '1.0'
-
-# Add any Sphinx extension module names here, as strings. They can be
-# extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
-# ones.
 extensions = [
-    'sphinx.ext.autodoc',
-    'sphinx.ext.todo',
-    'sphinx_paramlinks',
+    'sphinx.ext.autodoc',      # Core library for html generation from docstrings
+    # 'sphinx.ext.autosummary',  # Create neat summary tables --> this has now been overridden in templates/macros.rst for more control.
+    'autoapi.extension',        # improvement over autodoc, but still requires autodoc
+    'sphinx.ext.napoleon',     # Preprocess docstrings to convert Google-style docstrings to reST
+    'sphinx_paramlinks',       # Parameter links
+    'sphinx.ext.todo',         # To-do notes
     'sphinx.ext.viewcode',
-    'sphinx.ext.coverage',
-    'sphinx.ext.intersphinx',
-    'sphinx.ext.autosummary',
-    'sphinx.ext.napoleon',
-    'nbsphinx',  # for rendering tutorial notebooks
-    'sphinxcontrib.bibtex'  # for citations
+    'sphinx.ext.intersphinx',  # Link to other project's documentation, for e.g. NEURON classes as attributes in docstrings
+    'nbsphinx',                # For rendering tutorial notebooks
+    'nbsphinx_link',           # For linking to sections in tutorial notebooks
+    'sphinxcontrib.bibtex',    # For citations
+    'sphinx.ext.mathjax',      # For math equations
+    'sphinx_copybutton',       # For copying code snippets
+    'sphinx_inline_tabs',      # For inline tabs
+    # 'sphinxext.opengraph',   # For OpenGraph metadata, only enable when the site is actually hosted. See https://github.com/wpilibsuite/sphinxext-opengraph for config options when that happens.
 ]
 
+# Currently unused, but may be neat in the future
+rst_prolog = """
+.. role:: summarylabel
+"""
+
+# -- Settings for omitting members from documentation ----------------------
+autoapi_ignore = MODULES_TO_SKIP
+logger.info("ignoring modules: {}".format(MODULES_TO_SKIP))
+
+
+def autoapi_prepare_jinja_env(jinja_env):
+    """Add custom filters to the Jinja environment."""
+    jinja_env.filters["find_first_match"] = find_first_match
+
+
+def setup(app):
+    # skip members with :skip-doc: tag in their docstrings
+    app.connect('autoapi-skip-member', skip_member)
+    app.connect('autoapi-skip-member', count_documented_members)
+    app.connect('env-updated', log_documented_members)
+
+toc_object_entries_show_parents = 'hide'  # short toc entries
+
+# -- autoapi settings -----------------------------------------------------
+autoapi_dirs = [project_root]
+autoapi_type = "python"
+autoapi_keep_files = True
+autoapi_add_toctree_entry = False  # we use a manual autosummary directive in api_reference.rst thats included in the toctree
+autoapi_generate_api_docs = True
+# generate the .rst stub files. The template directives don't do this. 
+autoapi_options = [
+    "members",
+    "undoc-members",
+    "private-members",
+    "show-module-summary",
+]
+autoapi_own_page_level = 'method'
+
+# -- bibtex files ----------------------------------------------------------
 bibtex_bibfiles = ['bibliography.bib']
 
-# Napoleon settings
+# -- Napoleon settings -----------------------------------------------------
 napoleon_google_docstring = True
-napoleon_include_init_with_doc = False
-napoleon_include_private_with_doc = False
+napoleon_include_init_with_doc = True
+napoleon_include_private_with_doc = True
 napoleon_include_special_with_doc = True
 napoleon_use_admonition_for_examples = False
 napoleon_use_admonition_for_notes = False
 napoleon_use_admonition_for_references = False
 napoleon_use_ivar = False
-napoleon_use_param = True
-napoleon_use_rtype = True
+napoleon_use_param = False  # use a single ":parameters:" section instead of ":param arg1: description" for each argument
+napoleon_use_rtype = True  # if True, separate return type from description. otherwise, it's included in the description inline
 napoleon_preprocess_types = False  # otherwise custom argument types will not work
 napoleon_type_aliases = None
 napoleon_attr_annotations = True
@@ -72,54 +120,49 @@ napoleon_attr_annotations = True
 ## Include Python objects as they appear in source files
 ## Default: alphabetically ('alphabetical')
 # autodoc_member_order = 'bysource'
-## Default flags used by autodoc directives
-autodoc_default_options = {
-    'members': True,
-    'show-inheritance': True,
-}
 
-autoclass_content = 'both'  # document both the class docstring, as well as __init__
+# autoclass_content = 'both'  # document both the class docstring, as well as __init__
 ## Generate autodoc stubs with summaries from code
-autosummary_generate = ['modules.rst']
-autosummary_imported_members = False  # do not show all imported modules per module, this is too bloated
+# autosummary_generate = True
+# autosummary_imported_members = False  # do not show all imported modules per module, this is too bloated
 paramlinks_hyperlink_param = 'name'
 
 # Don't run notebooks
 nbsphinx_execute = 'never'
-pygments_style = "python"
 nbsphinx_codecell_lexer = "python"
 
 # Add any paths that contain templates here, relative to this directory.
+# We have custom templates that produce toctrees for modules and classes on module pages,
+# and separate pages for classes
 templates_path = ['_templates']
-
+autoapi_template_dir = '_templates/autoapi'
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
 # source_suffix = ['.rst', '.md']
 source_suffix = '.rst'
 
 # The encoding of source files.
-#source_encoding = 'utf-8-sig'
+source_encoding = 'utf-8-sig'
 
 # The master toctree document.
 master_doc = 'index'
 
-# List of patterns, relative to source directory, that match files and
-# directories to ignore when looking for source files.
-exclude_patterns = ['_build']
 
 # If true, '()' will be appended to :func: etc. cross-reference text.
 #add_function_parentheses = True
 
 # If true, the current module name will be prepended to all description
 # unit titles (such as .. function::).
-#add_module_names = True
+add_module_names = False  # less verbose for nested packages
 
 # If true, sectionauthor and moduleauthor directives will be shown in the
 # output. They are ignored by default.
 #show_authors = False
 
 # The name of the Pygments (syntax highlighting) style to use.
-pygments_style = 'sphinx'
+sys.path.append(os.path.abspath("./_pygments"))
+pygments_style = 'style.LightStyle'
+pygments_dark_style = 'material'  # furo specific
 
 # A list of ignored prefixes for module index sorting.
 #modindex_common_prefix = []
@@ -134,14 +177,23 @@ todo_include_todos = False
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-html_theme = "furo"
+html_theme = "furo" 
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
 html_theme_options = {
-    "light_logo": "_figures/isf-logo-black.png",
-    "dark_logo": "_figures/isf-logo-white.png",
+    "light_logo": "_images/isf-logo-black.png",
+    "dark_logo": "_images/isf-logo-white.png",
+    "sidebar_hide_name": True,
+    "light_css_variables": {
+        "color-brand-primary": "#000000",  # black instead of blue
+        "color-foreground-secondary": "#797979",  # slightly more muted than default
+    },
+    "dark_css_variables": {
+        "color-brand-primary": "#fefaee",  # Off-white
+        "color-brand-content": "#FFB000",  # Gold instead of dark blue
+    },
 }
 
 # Add any paths that contain custom themes here, relative to this directory.
@@ -170,7 +222,8 @@ html_static_path = ['_static']
 html_css_files = [
     'default.css',  # relative to html_static_path defined above
     'style.css',
-    'downarr.svg'
+    'downarr.svg',
+    'css/custom.css'
 ]
 
 html_js_files = [

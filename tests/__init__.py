@@ -2,17 +2,16 @@ import os
 import neuron
 
 h = neuron.h
-from Interface import scp
+import single_cell_parser as scp
 from data_base.utils import silence_stdout
 import mechanisms.l5pt
 from tests.context import TEST_DATA_FOLDER
-
 
 def setup_current_injection_experiment(
         rangevars=None
         ):
     """
-    Sets up a current injection experiment of some .hoc and .param file.
+    Sets up a current injection experiment of some :ref:`hoc_file_format` and .param file.
     The following parameters define the experiment:
 
     Returns:
@@ -48,7 +47,7 @@ def setup_synapse_activation_experiment(
         rangevars=None
         ):
     """
-    Sets up a current injection experiment of some .hoc and .param file.
+    Sets up a current injection experiment of some :ref:`hoc_file_format` and .param file.
     The following parameters define the experiment:
 
     Returns:

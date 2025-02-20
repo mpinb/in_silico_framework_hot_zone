@@ -1,5 +1,5 @@
 """
-This package contains barrel cortex specific code and data::
+This package contains barrel cortex specific code and data:
 
     - average_barrel_field_L45_border.am: barrel cortex geometry, to be rendered in AMIRA
     - barrel_cortex.py: contains functions specific to barrel cortex simulations, such as synaptic strength readout, methods to move morphologies in barrel cortex...
@@ -55,7 +55,7 @@ def synapse_group_function_L6paper(celltype):
     Groups celltypes in the same fashion as :cite:t:`Egger_Narayanan_Guest_Bast_Udvary_Messore_Das_de_Kock_Oberlaender_2020`
     """
     celltype = celltype.split('_')[0]
-    if celltype in inhibitory:
+    if celltype in INHIBITORY:
         return 'INH'
     else:
         return celltype
@@ -88,7 +88,7 @@ def synapse_group_function_HZpaper(celltype):
     """
     if '_' in celltype:
         celltype = celltype.split('_')[0]
-    if celltype in inhibitory or celltype == 'INH':
+    if celltype in INHIBITORY or celltype == 'INH':
         key = 'INT'
     elif celltype in ('L4ss', 'L4py', 'L4sp'):
         key = 'L4ss'
@@ -108,11 +108,11 @@ def synapse_group_function_HZpaper(celltype):
         raise ValueError(celltype)
     return key
 
-excitatory = [
+EXCITATORY = [
     'L6cc', 'L2', 'VPM', 'L4py', 'L4ss', 'L4sp', 'L5st', 'L6ct', 'L34',
     'L6ccinv', 'L5tt', 'Generic'
 ]
-inhibitory = [
+INHIBITORY = [
     'SymLocal1', 'SymLocal2', 'SymLocal3', 'SymLocal4', 'SymLocal5',
     'SymLocal6', 'L45Sym', 'L1', 'L45Peak', 'L56Trans', 'L23Trans',
     'GenericINH', 'INH'
@@ -126,14 +126,14 @@ inhibitory = [
 
 def get_cell_object_from_hoc(hocpath, setUpBiophysics=True):
     '''
-    Returns a :class:`~single_cell_parser.cell.Cell` object which allows accessing points of individual branches.
+    Returns a :py:class:`~single_cell_parser.cell.Cell` object which allows accessing points of individual branches.
     
     Args:
         hocpath (str): path to hoc file
         setUpBiophysics (bool): whether to set up biophysics
         
     Returns:
-        :class:`~single_cell_parser.cell.Cell`: cell object
+        :py:class:`~single_cell_parser.cell.Cell`: cell object
     '''
     import single_cell_parser as scp
     # import singlecell_input_mapper.singlecell_input_mapper.cell
@@ -315,7 +315,7 @@ def construct_pt3add(values):
     Args:
         values (list): list of values
         
-    Returns
+    Returns:
         str: pt3dadd line
     """
     values = tuple(values)
@@ -692,6 +692,40 @@ def create_9x9(hocpath_C2, outdir):
                 outpath=outpath2,
                 coordinate_system='C2')
 
+columns_centers = {
+    'A1':   [-482.792, 1146.67, 8.05248], 'A2':   [-150.439, 1159.39, -46.9216], 'A3':   [121.05, 1136.53, -90.7421],
+    'A4':   [370.245, 1068.77, -129.452], 'B1':   [-503.922, 749.452, 34.084],   'B2':   [-144.732, 784.712, -4.9134],
+    'B3':   [189.255, 775.615, -55.5768], 'B4':   [492.225, 782.398, -105.589],  'C1':   [-512.055, 407.254, 45.468],
+    'C2':   [-87.1775, 409.522, 20.2263], 'C3':   [347.551, 401.542, -55.1051],  'C4':   [753.731, 415.997, -125.665],
+    'D1':   [-427, 27.3315,	26.6072],     'D2':   [0, 0, 0],    'D3':   [415.574, -2.85455, -47.0356],
+    'D4':   [834.671, 10.8608, -80.889],  'E1':   [-161.326, -442.834, -33.1163],'E2':   [273.711, -492.549, -51.1474],
+    'E3':   [719.237, -485.896, -57.1888], 'E4':   [1125.34, -371.1, -86.3545],  'Alpha':[-755.255, 972.717, 21.974],
+    'Beta': [-885.283, 603.416, 38.9095],  'Gamma':[-841.85, 189.597, 21.1325],  'Delta':[-602.767, -251.788, -7.86675]}
+
+def get_9x9_positions_in_column(hocpath, outdir, resolution, column = 'C2'):
+    """
+    Take the morphology in the hocfile and place it in 9x9 positions in the column. The positions are in the center
+    and the 8 surrounding positions in a 9x9 grid. The depth of the soma is kept as it was in the original morphology
+    relative to the column reference frame.
+    
+    Args:
+        hocpath (str): path to the hoc file of the neuron
+        outdir (str): directory to save the modified hoc files with the morphology of the neuron placed in the 9x9 positions
+        
+    Returns:
+        None
+    """
+    if not os.path.isdir(outdir): os.mkdir(outdir)
+    x, y, z = columns_centers[column]
+    outpath = os.path.join(outdir, 'x_0_y_0.hoc')
+    move_hoc_absolute(hocpath, x, y, z, outpath=outpath) # Places the neuron in the column center
+    # Moves the neuron along the column axis so that it keeps its original depth
+    correct_hoc_depth(hoc_in=outpath, hoc_reference_or_depth=hocpath, coordinate_system_z_move=column, outpath=outpath,
+        measure_fun=partial(get_distance_below_L45_barrel_surface, barrel=column)) 
+    for x in np.arange(-resolution*4, resolution*5, resolution):
+        for y in np.arange(-resolution*4, resolution*5, resolution):
+            outpath2 = os.path.join(outdir, 'x_{}_y_{}.hoc'.format(x, y))
+            move_hoc_xyz(outpath, x, y, 0, outpath=outpath2, coordinate_system=column)
 
 #import getting_started
 #hocpath = scp.build_parameters(getting_started.neuronParam).neuron.filename

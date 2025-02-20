@@ -1,3 +1,11 @@
+"""
+Scale the apical dendrite of morphology 86.
+
+This is used by the Oberlaender lab in Bonn, and is unlikely to be needed by anyone else.
+
+:skip-doc:
+"""
+
 import logging
 
 logger = logging.getLogger("ISF").getChild(__name__)
@@ -5,11 +13,13 @@ logger = logging.getLogger("ISF").getChild(__name__)
 
 def scale_apical_morph_86(cell):
     '''
-    This is the method, robert has used for scaling the apical dendrite of CDK morphology 86
+    This is the method robert has used for scaling the apical dendrite of CDK morphology 86
     
     scale apical diameters depending on
     distance to soma; therefore only possible
     after creating complete cell
+    
+    :skip-doc:
     '''
     import neuron
     h = neuron.h
@@ -20,7 +30,7 @@ def scale_apical_morph_86(cell):
             dist = cell.distance_to_soma(sec, 1.0)
             if dist > 1000.0:
                 continue
-#            for cell 86:
+            # for cell 86:
             if scaleCount > 32:
                 break
             scaleCount += 1
@@ -29,12 +39,10 @@ def scale_apical_morph_86(cell):
                 oldDiam = sec.diamList[i]
                 newDiam = dendScale * oldDiam
                 h.pt3dchange(i, newDiam, sec=sec)
-
-
-#                x, y, z = sec.pts[i]
-#                sec.diamList[i] = sec.diamList[i]*dendScale
-#                d = sec.diamList[i]
-#                dummy = h.pt3dadd(x, y, z, d, sec=sec)
+                # x, y, z = sec.pts[i]
+                # sec.diamList[i] = sec.diamList[i]*dendScale
+                # d = sec.diamList[i]
+                # dummy = h.pt3dadd(x, y, z, d, sec=sec)
 
     logger.info('Scaled {:d} apical sections...'.format(scaleCount))
     return cell

@@ -1,3 +1,5 @@
+"""Convenience functions for the :py:mod:`~biophysics_fitting.exploration_from_seedpoint` module."""
+
 import numpy as np
 import pandas as pd
 from data_base.utils import silence_stdout
@@ -28,8 +30,8 @@ def evaluation_function_incremental_helper(
     and provides an early stopping criterion if a model is not able to match these objectives.
 
     Args:
-        s (:class:`biophysics_fitting.simulator.Simulator`): Simulator object
-        e (:class:`biophysics_fitting.evaluator.Evaluator`): Evaluator object
+        s (:py:class:`~biophysics_fitting.simulator.Simulator`): Simulator object
+        e (:py:class:`~biophysics_fitting.evaluator.Evaluator`): Evaluator object
         stim_order ([str] | [(str)]):
             Order in which stimuli are simulated. 
             List consisting of strings and tuples of strings. 
@@ -85,3 +87,23 @@ def evaluation_function_incremental_helper(
     for aef in additional_evaluation_functions:
         evaluation.update(aef(voltage_traces))
     return True, evaluation
+
+def convert_all_check_columns_bool_to_float(df): 
+    '''Convert all boolean values to float in a pandas dataframe.
+    
+    Only does this for columns that have ``"check"`` in the column name.
+    
+    Args:
+        df (pd.DataFrame): DataFrame
+        
+    Returns:
+        pd.DataFrame: DataFrame with boolean values converted to float.
+    '''
+    check_columns = [col for col in df.columns if 'check' in col]
+    for col in check_columns: 
+        #otherwise the 'True' strings cannot be converted to float and cannot map to bool bc NaN 
+        df[col] = df[col].replace(to_replace = 'True', value = 1.0)
+        df[col] = df[col].replace(to_replace = 'False', value = 0.0)
+        df[col] = df[col].replace({None:np.nan})
+        df[col] = df[col].map(float) 
+    return df

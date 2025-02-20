@@ -9,18 +9,29 @@ These parameters and templates are used to set up the biophysical constraints fo
 # naming converters scp <--> hay
 #########################################
 import six
+from sumatra.parameters import NTParameterSet
+import pandas as pd
 
 
 def hay_param_to_scp_neuron_param(p):
     """Convert a Hay parameter name to a SCP neuron parameter name.
+
+    This function is a simple converter that converts the Hay naming convention to what ISF
+    uses internally in :py:mod:`~single_cell_parser.cell.Cell`
     
     Args:
         p (str): The Hay parameter name.
         
     Returns:
         str: The SCP neuron parameter name.
+
+    Example:
+
+        >>> hay_param_name = "NaTa_t.axon.gNaTa_tbar"
+        >>> hay_param_to_scp_neuron_param(hay_param_name)
+        "NaTa_t.AIS.gNaTa_tbar"  # axon --> AIS
         
-    Note:
+    See also:
         See :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011` for more information.
     """
     p = p.split('.')
@@ -59,22 +70,22 @@ def get_L5tt_template():
     
     This method returns a nested dictionary-like object that can be used to set up a L5PT cell for simulations.
     The values of each key are set to None or default values, and need to be filled in with the actual values.
-    This dictionary-like parameter structure is used by e.g. the :class:`~biophysics_fitting.simulator.Simulator` object.
+    This dictionary-like parameter structure is used by e.g. the :py:class:`~biophysics_fitting.simulator.Simulator` object.
     It provides information on:
     
     - For each section label (for an L5PT: Soma, AIS, ApicalDendrite, Dendrite, Myelin):
-        - neuron.<section_label>.mechanisms: active biophysics of the cell (e.g. ion channel densities)
-        - neuron.<section_label>.properties: passive biophysics of the cell (e.g. membrane capacitance)
+        - ``neuron.<section_label>.mechanisms``: active biophysics of the cell (e.g. ion channel densities)
+        - ``neuron.<section_label>.properties``: passive biophysics of the cell (e.g. membrane capacitance)
     - sim: simulation parameters:
-        - T: temperature
-        - Vinit: initial voltage
-        - dt: time step
-        - recordingSites: recording sites
-        - tStart: start time
-        - tStop: stop time
+        - ``T``: temperature
+        - ``Vinit``: initial voltage
+        - ``dt``: time step
+        - ``recordingSites``: recording sites
+        - ``tStart``: start time
+        - ``tStop``: stop time
             
     Returns:
-        sumatra.parameters.NTParameterSet (dict-like): The template cell parameters.       
+        sumatra.parameters.NTParameterSet: The template cell parameters.       
     
     """
     p = {
@@ -327,13 +338,13 @@ def get_L5tt_template():
 def get_L5tt_template_v2():
     """Get a template cell parameter dictionary for a L5PT cell.
     
-    This method is identical to :py:meth:`get_L5tt_template`, but adds the following specifications::
+    This method is identical to :py:meth:`get_L5tt_template`, but adds the following specifications:
     
-        - The CaDynamics_E2 mechanism is replaced with CaDynamics_E2_v2 (see :py:mod:`mechanisms`).
-        - The SKv3_1 mechanism is set to have a linear spatial distribution with intercept (see :cite:t:`Schaefer_Helmstaedter_Schmitt_Bar_Yehuda_Almog_Ben_Porat_Sakmann_Korngreen_2007`).
+    - The CaDynamics_E2 mechanism is replaced with CaDynamics_E2_v2 (see :py:mod:`mechanisms`).
+    - The SKv3_1 mechanism is set to have a linear spatial distribution with intercept (see :cite:t:`Schaefer_Helmstaedter_Schmitt_Bar_Yehuda_Almog_Ben_Porat_Sakmann_Korngreen_2007`).
         
     Returns:
-        sumatra.NTParameterSet (dict-like): The template cell parameters.
+        sumatra.NTParameterSet: The template cell parameters.
     """
     neup = get_L5tt_template()
     for loc in neup:
@@ -350,7 +361,6 @@ def get_L5tt_template_v2():
     apic_skv31['distance'] = 'relative'
     neup['cell_modify_functions'] = {'scale_apical': {'scale': None}}
             
-    from sumatra.parameters import NTParameterSet
     p = {
         'NMODL_mechanisms': {
             'channels': '/'
@@ -368,11 +378,11 @@ def get_L5tt_template_v2():
 def set_morphology(cell_param, filename=None):
     """Add the morphology to a cell parameter object.
     
-    The morphology is simply a path to a .hoc file in string format.
+    The morphology is simply a path to a :ref:`hoc_file_format` file in string format.
     
     Args:
         cell_param (sumatra.parameters.NTParameterSet | dict): The cell parameter dictionary.
-        filename (str): The path to the .hoc file.
+        filename (str): The path to the :ref:`hoc_file_format` file.
         
     Returns:
         sumatra.parameters.NTParameterSet | dict: The updated cell parameter dictionary."""
@@ -380,24 +390,51 @@ def set_morphology(cell_param, filename=None):
     return cell_param
 
 
+def check_unset_range_mechanisms(cell_param):
+    unset_params = []
+    for k, v in six.iteritems(cell_param):
+        if 'mechanisms' in v:
+            for mech_name, mech_params in six.iteritems(v['mechanisms']['range']):
+                for param_name, param_value in six.iteritems(mech_params):
+                    if param_value is None:
+                        unset_params.append('{}.{}.{}'.format(k, mech_name, param_name))
+    return unset_params
+
 def set_ephys(cell_param, params=None):
     """Updates cell_param file. 
     
     Parameter names reflect the Hay naming convention.
+
+    Args:
+        cell_param (sumatra.parameters.NTParameterSet): The cell parameter dictionary.
+        params (pd.Series): The parameter vector as a pandas Series.
+
+    Raises:
+        AssertionError: If the parameter vector is None or not a pandas Series.
+        AssertionError: If the provided cell parameters lack a field that is however defined in the parameter vector.
+        AssertionError: If some parameters are not set after the update.
+
+    Returns:
+        sumatra.parameters.NTParameterSet: The updated cell_param, with the biphysical parameters set.  
     
-    Note:
+    See also:
         See :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011` for more information.
     """
+    assert (
+        params is not None
+    ), "You must provide the parameter vector here, otherwise all cell parameters will be None."
+    assert type(params) == pd.Series, "params must be a pandas Series"
     for k, v in six.iteritems(params):
-        cell_param[hay_param_to_scp_neuron_param(k)] = float(v)
+        scp_param = hay_param_to_scp_neuron_param(k)
+        assert hasattr(cell_param, scp_param), "The provided cell parameters have no field called: {}".format(scp_param)
+        cell_param[scp_param] = float(v)
+    unset_params = check_unset_range_mechanisms(cell_param)
+    assert len(unset_params) == 0, "The following parameters are not set after set_ephys: {}".format(unset_params)
     return cell_param
 
 
 def set_param(cell_param, params=None):
     """Updates cell_param given a dict of params in the dot naming convention.
-    
-    Cell parameters are nested dictionaries, while the input parameters are flat dictionaries,
-    where the hierarchy is defined by dots.
     
     Example::
 
@@ -407,7 +444,7 @@ def set_param(cell_param, params=None):
         # returns {'a': {'b': {'c': 3}}}
         
     Args:
-        cell_param (dict): The cell parameter nested dictionary.
+        cell_param (:py:class`~sumatra.parameters.NTParameterSet` | dict): The cell parameter nested dictionary.
         params (dict): The parameter flat dictionary.
     
     Returns:
@@ -436,7 +473,7 @@ def set_many_param(cell_param, params=None):
         # Output: {'a': {'b': {'c': True}}}, NOT {'a': {'b': {'c': False}}}
         
     Args:
-        cell_param (dict): The cell parameter nested dictionary.
+        cell_param (:py:class:`~sumatra.parameters.NTParameterSet` | dict): The cell parameter nested dictionary.
         params (dict): The parameter flat dictionary.
         
     Returns:
@@ -464,7 +501,7 @@ def set_hot_zone(cell_param, min_=None, max_=None, outsidescale_sections=None):
     """Insert Ca_LVAst and Ca_HVA channels along the apical dendrite between ``min_`` and ``max_`` distance from the soma.
     
     Args:
-        cell_param (dict): The cell parameter dictionary.
+        cell_param (:py:class:`sumatra.parameters.NTParameterSet` | dict): The cell parameter dictionary.
         min_ (float): The minimum distance from the soma.
         max_ (float): The maximum distance from the soma.
         outsidescale_sections (list): A list of sections where the channels should be inserted.

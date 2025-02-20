@@ -1,10 +1,13 @@
-from data_base.dbopen import dbopen
-import os
+'''Write out anatomical, morphology or simulation data.
 '''
-Created on Mar 8, 2012
 
-@author: regger
-'''
+from data_base.dbopen import dbopen
+from matplotlib import cm
+from matplotlib.colors import Normalize
+import os
+
+__author__  = 'Robert Egger'
+__date__    = '2012-03-08'
 
 labels2int = {\
     "Neuron":                 2,\
@@ -63,10 +66,22 @@ labels2int = {\
 
 
 def write_landmark_file(fname=None, landmarkList=None):
-    '''
-    write Amira landmark file
-    landmarkList has to be iterable of tuples,
-    each of which holds 3 float coordinates
+    '''Write an AMIRA landmark file from 3D coordinates
+
+    Args:
+        fname (str): string, name of the output file
+        landmarkList (list): list of tuples, each of which holds 3 float coordinates
+
+    Returns:
+        None. Writes out the landmark file to :paramref:`fname`
+
+    Raises:
+        RuntimeError: if no file name is given or if the landmark list is empty
+        RuntimeError: if the landmarks have the wrong format (not 3 coordinates)
+
+    Example:
+        >>> landmarkList = [(0.0, 0.0, 0.0), (1.0, 1.0, 1.0)]
+        >>> write_landmark_file('landmarks.landmarkAscii', landmarkList)
     '''
     if fname is None:
         err_str = 'No landmark output file name given'
@@ -102,6 +117,22 @@ def write_landmark_file(fname=None, landmarkList=None):
 
 
 def write_sim_results(fname, t, v):
+    """Write out a voltage trace file.
+    
+    Args:
+        fname (str): The name of the file to write to.
+        t (list): The time points of the voltage trace.
+        v (list): The voltage trace.
+        
+    Returns:
+        None. Writes out the voltage trace file to :paramref:`fname`.
+        
+    Example:
+        
+        >>> t = [0.0, 0.1, 0.2]
+        >>> v = [-65.0, -64.9, -64.8]
+        >>> write_sim_results('voltage_trace.dat', t, v)
+    """
     with dbopen(fname, 'w') as outputFile:
         header = '# t\tvsoma'
         header += '\n\n'
@@ -115,6 +146,22 @@ def write_sim_results(fname, t, v):
 
 
 def write_all_traces(fname, t, vTraces):
+    """Write out a list of voltage traces.
+
+    Args:
+        fname (str): The name of the file to write to.
+        t (list): The time points of the voltage traces.
+        vTraces (list): A list of voltage traces.
+
+    Returns:
+        None. Writes out the voltage traces to :paramref:`fname`.
+    
+    Example:
+
+        >>> t = [0.0, 0.1, 0.2]
+        >>> vTraces = [[-65.0, -64.9, -64.8], [-70.0, -69.9, -69.8]]
+        >>> write_all_traces('voltage_traces.dat', t, vTraces)
+    """
     with dbopen(fname, 'w') as outputFile:
         header = 't'
         for i in range(len(vTraces)):
@@ -131,9 +178,24 @@ def write_all_traces(fname, t, vTraces):
 
 
 def write_cell_synapse_locations(fname=None, synapses=None, cellID=None):
-    '''
-    writes list of all synapses with the locations
-    coded by section ID and section x of cell with ID 'cellID'
+    '''Write a :ref:`syn_file_format` file.
+     
+    :ref:`syn_file_format` files contain a cell's synapses with the locations
+    coded by section ID and section x of cell with ID "cellID".
+
+    See also:
+
+    - :ref:`syn_file_format` for more information on the `.syn` file format.
+    - :py:meth:`single_cell_parser.reader.read_synapse_realization` for the corresponding reader function.
+    - :py:meth:`write_pruned_synapse_locations` for a similar function that includes a `pruned` flag.
+
+    Args:
+        fname (str): The name of the file to write to.
+        synapses (dict): A dictionary of synapses, with keys as synapse types and values as lists of synapses.
+        cellID (str): The ID of the cell.
+
+    Returns:
+        None. Writes out the synapse location file to :paramref:`fname`.
     '''
     if fname is None or synapses is None or cellID is None:
         err_str = 'Incomplete data! Cannot write synapse location file'
@@ -162,10 +224,24 @@ def write_cell_synapse_locations(fname=None, synapses=None, cellID=None):
 
 
 def write_pruned_synapse_locations(fname=None, synapses=None, cellID=None):
-    '''
-    writes list of all synapses with the locations
-    coded by section ID and section x of cell with ID 'cellID'
-    and a pruned flag (1 or 0)
+    '''Write a :ref:`syn_file_format` file with a `pruned` flag.
+
+    :ref:`syn_file_format` files contain a cell's synapses with the locations
+    coded by section ID and section x of cell with ID "cellID" and a pruned flag (1 or 0).
+
+    See also:
+
+    - :ref:`syn_file_format` for more information on the `.syn` file format.
+    - :py:meth:`single_cell_parser.reader.read_pruned_synapse_realization` for the corresponding reader function.
+    - :py:meth:`write_cell_synapse_locations` for a similar function that does not include a `pruned` flag.
+
+    Args:
+        fname (str): The name of the file to write to.
+        synapses (dict): A dictionary of synapses (see :py:meth:`~single_cell_parser.reader.read_pruned_synapse_locations`).
+        cellID (str): The ID of the cell.
+
+    Returns:
+        None. Writes out the synapse location file to :paramref:`fname`.
     '''
     if fname is None or synapses is None or cellID is None:
         err_str = 'Incomplete data! Cannot write synapse location file'
@@ -195,13 +271,30 @@ def write_pruned_synapse_locations(fname=None, synapses=None, cellID=None):
                 outputFile.write(line)
 
 
-def write_functional_realization_map(fname=None,
-                                     functionalMap=None,
-                                     anatomicalID=None):
-    '''
-    writes list of all functional connections
-    coded by tuples (cell type, presynaptic cell index, synapse index).
+def write_functional_realization_map(
+        fname=None,
+        functionalMap=None,
+        anatomicalID=None):
+    '''Write out a :ref:`con_file_format` file.
+
+    Writes list of all functional connections coded by tuples (cell type, presynaptic cell index, synapse index).
     Only valid for anatomical synapse realization given by anatomicalID
+
+    See also:
+
+    - :ref:`con_file_format` for more information on the `.con` file format.
+    - :py:meth:`single_cell_parser.reader.read_functional_realization_map` for the corresponding reader function.
+
+    Args:
+        fname (str): The name of the file to write to.
+        functionalMap (list): 
+            A list of tuples, each containing a cell type, a presynaptic cell ID, and a synapse ID.
+        anatomicalID (str): The ID of the anatomical synapse realization.
+
+    Example:
+
+        >>> functionalMap = [('cell_type_1', 0, 0), ('cell_type_2', 0, 1)]
+        >>> write_functional_realization_map('functional_realization.con', functionalMap, 'syn_file.syn')
     '''
     if fname is None or functionalMap is None or anatomicalID is None:
         err_str = 'Incomplete data! Cannot write functional realization file'
@@ -226,12 +319,55 @@ def write_functional_realization_map(fname=None,
             outputFile.write(line)
 
 
-def write_synapse_activation_file(fname=None,
-                                  cell=None,
-                                  synTypes=None,
-                                  synDistances=None,
-                                  synTimes=None,
-                                  activeSyns=None):
+def write_synapse_activation_file(
+    fname=None,
+    cell=None,
+    synTypes=None,
+    synDistances=None,
+    synTimes=None,
+    activeSyns=None):
+    """Write out a :ref:`syn_activation_format` file.
+
+    Used in :py:meth:`~single_cell_parser.analyze.synanalysis.compute_synapse_distances_times` 
+    to write out a synapse activation file.
+
+    The following information is saved:
+
+    - synapse type: to which presynaptic cell type this synapse belongs to.
+    - synapse ID: unique identifier for the synapse.
+    - soma distance: distance from the synapse to the soma.
+    - section ID: ID of the section of the postsynaptic cell that contains this synapse.
+    - section pt ID: ID of the point in the section that contains this synapse.
+    - dendrite label: label of the dendrite that contains this synapse.
+    - activation times: times at which the synapse was active (ms).
+
+    Args:
+        fname (str): The output file name as a ful path, including the file extension. Preferably unique (see e.g. :py:meth:`~simrun.generate_synapse_activations._evoked_activity` for the generation of unique syapse activation filenames)
+        cell (:py:class:`single_cell_parser.cell.Cell`): Cell object.
+        synTypes (list): list of synapse types.
+        synDistances (dict): dictionary of synapse distances per synapse type.
+        synTimes (dict): dictionary of synapse activation times per synapse type. Values are a list of the activation times for each synapse within that type.
+        activeSyns (dict): dictionary of active synapses per synapse type. Values are a list of booleans indicating whether each synapse of that type is active.
+
+    Returns:
+        None. Writes out the synapse activation file to :paramref:`fname`.
+
+    Example:
+        
+        >>> synTypes = ['cell_type_1']  # 1 synapse type
+        >>> synTimes = {'cell_type_1': [[0.1, 0.2, 0.3], [0.15, 0.25, 0.35], [0.2, 0.3, 0.4]]}  # 3 synapses of that type
+        >>> synDistances = {'cell_type_1': [150.0, 200.0, 250.0]}
+        >>> activeSyns = {'cell_type_1': [True, True, True]}  # all 3 synapses are active
+        >>> write_synapse_activation_file(
+        ...     'synapse_activation.csv', 
+        ...     cell, 
+        ...     synTypes, 
+        ...     synDistances, 
+        ...     synTimes, 
+        ...     activeSyns
+        ... )
+
+    """
     if fname is None or cell is None or synTypes is None or synDistances is None or synTimes is None or activeSyns is None:
         err_str = 'Incomplete data! Cannot write functional realization file'
         raise RuntimeError(err_str)
@@ -272,6 +408,25 @@ def write_synapse_activation_file(fname=None,
 
 
 def write_synapse_weight_file(fname=None, cell=None):
+    """Write out a synapse weight file.
+    
+    This file contains the following information:
+    
+    - synapse type
+    - synapse ID
+    - section ID
+    - section pt ID
+    - receptor type
+    - synapse weights
+    
+    Args:
+        fname (str): The name of the file to write to.
+        cell (:py:class:`single_cell_parser.cell.Cell`): The cell object, containing synapses.
+    
+    Returns:
+        None. Writes out the synapse weight file to :paramref:`fname`.
+        
+    """
     if fname is None or cell is None:
         err_str = 'Incomplete data! Cannot write functional realization file'
         raise RuntimeError(err_str)
@@ -307,10 +462,28 @@ def write_synapse_weight_file(fname=None, cell=None):
 
 
 def write_PSTH(fname=None, PSTH=None, bins=None):
-    '''
-    Write PSTH and time bins of PSTH, where
-    bins contain left and right end of each bin,
-    i.e. len(bins) = len(PSTH) + 1
+    '''Write PSTH and time bins of PSTH, 
+    
+    Bins contain left and right end of each bin, i.e. ``len(bins) = len(PSTH) + 1``
+
+    Args:
+        fname (str): The name of the file to write to.
+        PSTH (list): A list of PSTH values.
+        bins (list): A list of time bins, including begin and end
+        
+    Returns:
+        None. Writes out the PSTH file to :paramref:`fname`.
+
+    Example:
+
+        >>> PSTH = [1, 1, 2]
+        >>> bins = [0.0, 0.1, 0.2, 0.3]
+        >>> write_PSTH('PSTH.param', PSTH, bins)
+        >>> PSTH.param
+        # bin begin	bin end	APs/trial/bin
+        0.0	0.1	1
+        0.1	0.2	1
+        0.2	0.3	2
     '''
     if fname is None or PSTH is None or bins is None:
         err_str = 'Incomplete data! Cannot write PSTH'
@@ -332,11 +505,24 @@ def write_PSTH(fname=None, PSTH=None, bins=None):
 
 
 def write_spike_times_file(fname=None, spikeTimes=None):
-    '''
-    Write file containing trial numbers and all spike
-    times in each trial (may be empty).
-    spikeTimes should be dictionary with trial numbers as keys (integers),
-    and tuples of spike times in each trial as values.
+    '''Write trial numbers and all spike times in each trial (may be empty).
+
+    Args:
+        fname (str): The name of the file to write to.
+        spikeTimes (dict): A dictionary with trial numbers as keys (int) and tuples of spike times in each trial as values.
+    
+    Returns:
+        None. Writes out the spike times file to :paramref:`fname`.
+
+    Example:
+
+        >>> spikeTimes = {0: [0.1, 0.2, 0.3], 1: [], 2: [0.2, 0.3]}
+        >>> write_spike_times_file('spike_times.param', spikeTimes)
+        >>> spike_times.param
+        # trial	spike times
+        0	0.1,0.2,0.3,
+        1	
+        2	0.2,0.3,
     '''
     if fname is None or spikeTimes is None:
         err_str = 'Incomplete data! Cannot write spike times file'
@@ -358,9 +544,25 @@ def write_spike_times_file(fname=None, spikeTimes=None):
 
 
 def write_presynaptic_spike_times(fname=None, cells=None):
-    '''
-    Write cell type, PC and spike times of all connected
-    presynaptic point cells
+    '''Write cell type, presynaptic cell ID and spike times of all connected
+    presynaptic point cells.
+
+    Args:
+        fname (str): The name of the file to write to.
+        cells (dict): A dictionary with cell types as keys and lists of cells as values.
+
+    Returns:
+        None. Writes out the presynaptic spike times file to :paramref:`fname`.
+
+    Example:
+
+        >>> cells = {'cell_type_1': [cell1, cell2], 'cell_type_2': [cell3]}
+        >>> write_presynaptic_spike_times('presynaptic_spikes.param', cells)
+        >>> presynaptic_spikes.param
+        # presynaptic cell type	cell ID	spike times
+        cell_type_1	0	100.4,
+        cell_type_1	1	
+        cell_type_2	0	30.6,205.1,500.0,
     '''
     if fname is None or cells is None:
         err_str = 'Incomplete data! Cannot write presynaptic spike times'
@@ -389,31 +591,45 @@ def write_presynaptic_spike_times(fname=None, cells=None):
                 outputFile.write(line)
 
 
-def write_cell_simulation(fname=None,
-                          cell=None,
-                          traces=None,
-                          tVec=None,
-                          allPoints=False,
-                          step_frames=10,
-                          selected_index=None):
-    '''
-    write Amira SpatialGraph files corresponding to time steps
-    of entire simulation run. Recorded quantities are passed
-    in tuple traces with strings and recorded in Vectors
+def write_cell_simulation(
+        fname=None,
+        cell=None,
+        traces=None,
+        tVec=None,
+        allPoints=False,
+        step_frames=10,
+        selected_index=None):
+    '''Write Amira SpatialGraph files corresponding to time steps of entire simulation run. 
+    
+    Recorded quantities are passed in tuple traces with strings and recorded in Vectors
     attached to Sections of cell
 
-    Typical use case:
-    I.scp.writer.write_cell_simulation('/output/directory',
-                            cell = cell,
-                            traces = ['Vm'],
-                            tVec = cell.tVec,
-                            step_frames = 1,
-                            selected_index=[selected_index],
-                            allPoints = True)
-    Also make sure to have created the cell with allPoints = True.
+    Attention:
+        Make sure to have created the cell with ``allPoints = True``.
+    
+    Attention:
+        Performs interpolation if ``nseg != nrOfPts`` for a Section
 
+    Args:
+        fname (str): The name of the file to write to.
+        cell (:py:class:`single_cell_parser.cell.Cell`): The cell object.
+        traces (list): A list of strings, each representing a recorded quantity.
+        tVec (list): A list of time points.
+        allPoints (bool): If True, all points of the cell are written to the file.
+        step_frames (int): The number of frames to write.
+        selected_index (list): A list of indices of the sections to write.
 
-    TODO: Performs interpolation if nseg != nrOfPts for a Section
+    Example:
+    
+    >>> write_cell_simulation(
+    ...     '/output/directory',
+    ...     cell = cell,
+    ...     traces = ['Vm'],
+    ...     tVec = cell.tVec,
+    ...     step_frames = 1,
+    ...     selected_index=[selected_index],
+    ...     allPoints = True)
+    
     '''
     if fname is None or cell is None or traces is None or tVec is None:
         err_str = 'Incomplete data! Cannot write SpatialGraph simulation results'
@@ -751,6 +967,20 @@ def write_cell_simulation(fname=None,
 
 
 def write_functional_map(fname, functionalMap):
+    """Write a functional map to an AMIRA file.
+    
+    Deprecated. Consider using :py:meth:`visualize.vtk.write_vtk_pointcloud_file` 
+    or :py:meth:`visualize.vtk.write_vtk_frames` for visualization purposes.
+
+    This method may still serve well if you need an AMIRA mesh file.
+    
+    Args:
+        fname (str): The name of the file to write to.
+        functionalMap (dict): A dictionary with cell labels as keys and lists of points as values.
+
+    Returns:
+        None. Writes out the functional map file to :paramref:`fname`.
+    """
     totalNrPts = 0
     for key in list(functionalMap.keys()):
         totalNrPts += len(functionalMap[key])
@@ -972,9 +1202,6 @@ def write_functional_map(fname, functionalMap):
                     outFile.write(line)
 
 
-##############
-# added by arco
-##############
 template_init = '''
 # Amira Project 640
 # AmiraZIBEdition
@@ -1081,19 +1308,19 @@ create HxDisplayVertices "VERTEXVIEWID"
 "VERTEXVIEWID" setPickable 1
 '''
 
-import matplotlib as mpl
-import matplotlib.cm as cm
-
-
-def value_to_color(v, vmin=0, vmax=1):
-    '''https://stackoverflow.com/questions/15140072/how-to-map-number-to-color-using-matplotlibs-colormap'''
-    norm = mpl.colors.Normalize(vmin=vmin, vmax=vmax)
-    cmap = cm.inferno
-    m = cm.ScalarMappable(norm=norm, cmap=cmap)
-    return m.to_rgba(v)[:-1]
-
 
 def generate_landmark_template(landmark_name, c, vertexviewid, len):
+    """Generate a template for a landmark file in Amira.
+    
+    Args:
+        landmark_name (str): The name of the landmark file.
+        c (tuple): The color of the landmark.
+        vertexviewid (int): The vertex view id.
+        len (int): The length of the landmark.
+    
+    Returns:
+        str: The template for the landmark file.
+    """
     return template_landmark\
         .replace('LANDMARKNAME', landmark_name)\
         .replace('RRRR', str(c[0]))\
@@ -1119,12 +1346,26 @@ def generate_landmark_template(landmark_name, c, vertexviewid, len):
 #             lv = lv + 1
 
 
-def write_landmarks_colorcoded_to_folder(basedir,
-                                         landmarks,
-                                         values,
-                                         vmin=0,
-                                         vmax=10,
-                                         vbinsize=.1):
+def write_landmarks_colorcoded_to_folder(
+        basedir,
+        landmarks,
+        values,
+        vmin=0,
+        vmax=10,
+        vbinsize=.1):
+    """Write landmarks to a folder, colorcoded by their values.
+    
+    Args:
+        basedir (str): The directory to write the landmarks to.
+        landmarks (numpy.array): The landmarks to write.
+        values (numpy.array): The values to color the landmarks by.
+        vmin (float): The minimum value to color by.
+        vmax (float): The maximum value to color by.
+        vbinsize (float): The size of the bins to color by.
+        
+    Returns:
+        None. Writes out the landmarks to the directory :paramref:`basedir`.
+    """
     import os
     from itertools import groupby
     # os.makedirs(basedir)
@@ -1148,3 +1389,22 @@ def write_landmarks_colorcoded_to_folder(basedir,
             f.write(generate_landmark_template(landmark_name, c, lv,
                                                len(l) - 1))
             lv = lv + 1
+
+
+def value_to_color(v, vmin=0, vmax=1):
+    '''Map a value to a color.
+        
+    See: https://stackoverflow.com/questions/15140072/how-to-map-number-to-color-using-matplotlibs-colormap
+    
+    Args:
+        v (float): The value to map to a color.
+        vmin (float): The minimum value of the range. Default is 0.
+        vmax (float): The maximum value of the range. Default is 1.
+        
+    Returns:
+        tuple: The RGBA color tuple.
+    '''
+    norm = Normalize(vmin=vmin, vmax=vmax)
+    cmap = cm.inferno
+    m = cm.ScalarMappable(norm=norm, cmap=cmap)
+    return m.to_rgba(v)[:-1]

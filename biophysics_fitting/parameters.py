@@ -1,12 +1,12 @@
 '''
-This module provides convenience methods to fetch parameters with the dot naming convention.
-
-Created on Nov 08, 2018
-
-@author: abast
+Fetch parameters with the dot naming convention.
 '''
 
 import pandas as pd
+from six import iteritems
+
+__author__ = 'Arco Bast'
+__date__ = '2018-11-08'
 
 
 def param_to_kwargs(fun):
@@ -26,14 +26,15 @@ def param_selector(params, s):
     '''Select parameters from a Series with an Index like a.b.c, a.b.d.
 
     params is a series with an index that contains strings seperated by "."
-    Therefore, params can reflect a hierarchy, e.g.::
+    Therefore, params can reflect a hierarchy, e.g.:
     
-    ``` 
+    .. highlight:: python
+    .. code-block:: python
+    
         a.a   1
         a.b   2
         c.x   1
         c.a.b 7
-    ```
     
     This method allows to select from that Series using a string.
     
@@ -76,9 +77,10 @@ def set_fixed_params(params, fixed_params=None):
         fixed_params (dict): The fixed parameters.
         
     Returns:
-        pd.Series: The parameters with the fixed parameters added."""
-    import six
-    for k, v in six.iteritems(fixed_params):
+        pd.Series: The parameters with the fixed parameters added.
+    """
+    assert isinstance(params, pd.Series), 'params should be a pd.Series, but you provided a {}'.format(type(params))
+    for k, v in iteritems(fixed_params):
         if not k in params.index:
             params[k] = v
     return params

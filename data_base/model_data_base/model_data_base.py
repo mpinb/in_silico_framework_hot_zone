@@ -1,7 +1,8 @@
-'''
-Created on Aug 15, 2016
+'''Database class or storing and retrieving data in a robust and efficient way.
 
-@author: arco
+.. deprecated:: 0.2.0
+   This module is deprecated in favor of the newer :mod:`~data_base.isf_data_base` module.
+   
 '''
 from __future__ import absolute_import
 import os, random, string, threading, contextlib, shutil, tempfile, datetime, yaml
@@ -31,7 +32,6 @@ from data_base.sqlite_backend.sqlite_backend import InMemoryBackend
 from collections import defaultdict
 # import model_data_base_register ## moved to end of file since this is a circular import
 
-
 import dask.diagnostics
 import warnings
 import re
@@ -39,6 +39,9 @@ import inspect
 from data_base._version import get_versions
 import six
 import unicodedata
+
+__author__ = 'Arco Bast'
+__date__ = '2016-08-15'
 
 def slugify(value):
     """
@@ -164,7 +167,6 @@ class ModelDataBase(object):
         mdb['voltage_traces']
         mdb['synapse_activation']
         mdb['spike_times']
-        mdb['metadata']
         mdb['cell_activation']
         
         Further more, it is possible to assign new elements to the database
