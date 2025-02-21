@@ -266,15 +266,15 @@ def get_client(ip=None, client_port=38786, timeout=120):
         else:
             ip = os.environ["IP_MASTER"]
     else:
-        logger.warning("No IP passed for dask scheduler. Assuming local scheduler. Inferring IP of current machine...")
+        logger.info("No IP passed for dask scheduler. Assuming local scheduler. Inferring IP of current machine...")
         hostname = gethostname()
         ip = gethostbyname(
             hostname
         )  # fetches the ip of the current host
-    logger.info("Getting client with ip {}".format(ip))
+    logger.info("Getting dask client with ip {}".format(ip))
     c = Client(ip + ':' + client_port, timeout=timeout)
-    logger.info("Got client {}".format(c))
-    logger.info("Making mechanisms visible on client side")
+    logger.info("Got dask client {}".format(c))
+    logger.debug("Making mechanisms visible on client side")
     def update_path(): sys.path.insert(0, os.path.dirname(__file__))
     def import_mechanisms(): import mechanisms
     def import_Interface(): import Interface
