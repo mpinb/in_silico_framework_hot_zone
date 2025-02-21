@@ -1010,7 +1010,7 @@ class ISFDataBase:
         """
         return self._get_str()  # print with default depth and max_lines
 
-    def ls(self, depth=0, max_depth=2, max_lines=20, all_files=False, max_lines_per_key=3):
+    def ls(self, depth=0, max_depth=2, max_lines=20, all_files=False, max_lines_per_key=3, colorize=True):
         """Prints out the content of the database in a tree structure.
         
         In addition to simply printing it out, this method allows to specify how the tree should look.
@@ -1026,9 +1026,9 @@ class ISFDataBase:
         """
         print(self._get_str(
             depth=depth, max_depth=max_depth, max_lines=max_lines, 
-            all_files=all_files, max_lines_per_key=max_lines_per_key))
+            all_files=all_files, max_lines_per_key=max_lines_per_key, colorize=colorize))
     
-    def _get_str(self, depth=0, max_depth=2, max_lines=20, all_files=False, max_lines_per_key=3):
+    def _get_str(self, depth=0, max_depth=2, max_lines=20, all_files=False, max_lines_per_key=3, colorize=True):
         """Fetches a string representation for this db in a tree structure.
         
         This is internal API and should never be called directly.
@@ -1047,10 +1047,17 @@ class ISFDataBase:
         str_.append("Located at {}".format(self._basedir))
         # str_.append("{1}DataBases{0} | {2}Directories{0} | {3}Keys{0}".format(
         #     bcolors.ENDC, bcolors.OKGREEN, bcolors.WARNING, bcolors.OKCYAN) )
-        str_.append(colorize(self._basedir.name, bcolors.OKGREEN))
+        if colorize:
+            str_.append(colorize(self._basedir.name, bcolors.OKGREEN))
+        else:
+            str_.append(self._basedir.name)
         lines = calc_recursive_filetree(
             self, Path(self._basedir), 
-            depth=depth, max_depth=max_depth, max_lines_per_key=max_lines_per_key, all_files=all_files, max_lines=max_lines)
+            depth=depth, max_depth=max_depth, 
+            max_lines_per_key=max_lines_per_key, 
+            all_files=all_files, 
+            max_lines=max_lines,
+            colorize=colorize)
         for line in lines:
             str_.append(line)
         return "\n".join(str_)
