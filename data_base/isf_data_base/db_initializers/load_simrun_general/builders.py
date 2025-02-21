@@ -23,7 +23,7 @@ from .data_parsing import (
     read_voltage_traces_by_filenames,
 )
 from .file_handling import get_max_commas, make_filelist
-from .filepath_resolution import _resolve_neup_reldb_paths
+from data_base.dbopen import resolve_neup_reldb_paths
 from .metadata_utils import create_metadata, get_voltage_traces_divisions_by_metadata
 from .parameter_file_handling import (
     _delayed_copy_transform_paramfiles_to_db,
@@ -231,17 +231,6 @@ def _build_param_files(db, client):
     futures = client.compute(ds)
     result = client.gather(futures)
     
-    # after copying the parameterfiles, they are renamed to their hash and the internal file references are transformed
-    # adapt the paths in the parameterfiles accordingly
-    param_file_hash_df["path_neuron"] = [
-        os.path.join(db.basedir, NEUP_DIR, hash_neuron + ".param")
-        for hash_neuron in param_file_hash_df["hash_neuron"]
-    ]
-    param_file_hash_df["path_network"] = [
-        os.path.join(db.basedir, NETP_DIR, hash_network + ".param")
-        for hash_network in param_file_hash_df["hash_network"]
-    ]
-
     db.set("parameterfiles", param_file_hash_df, dumper=pandas_to_parquet)
 
 
@@ -283,7 +272,7 @@ def _get_rec_site_managers(db):
     # the following code is adapted from simrun
     #############
     neuronParameters = scp.build_parameters(param_files[0])
-    neuronParameters = _resolve_neup_reldb_paths(neuronParameters, db.basedir)
+    neuronParameters = resolve_neup_reldb_paths(neuronParameters, db.basedir)
     rec_sites = neuronParameters.sim.recordingSites
     cellParam = neuronParameters.neuron
     with silence_stdout:

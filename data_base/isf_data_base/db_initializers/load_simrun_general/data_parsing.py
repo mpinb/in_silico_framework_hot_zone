@@ -211,7 +211,7 @@ def load_dendritic_voltage_traces_helper(db, suffix, divisions=None, repartition
         dask.DataFrame: A dask dataframe containing the dendritic voltage traces.
     """
     assert repartition is not None
-    m = db["metadata"]
+    metadata = db["metadata"]
     if not suffix.endswith(".csv"):
         suffix = suffix + ".csv"
     if not suffix.startswith("_"):
@@ -219,46 +219,52 @@ def load_dendritic_voltage_traces_helper(db, suffix, divisions=None, repartition
     # print os.path.join(db['simresult_path'], m.iloc[0].path, m.iloc[0].path.split('_')[-1] + suffix)
 
     # old naming convention
-    if os.path.exists(
-        os.path.join(
-            db["simresult_path"], m.iloc[0].path, m.iloc[0].path.split("_")[-1] + suffix
-        )
-    ):
+    old_path = os.path.join(
+        db["simresult_path"],
+        metadata.iloc[0].path,
+        metadata.iloc[0].path.split("_")[-1] + suffix,
+    )
+    # new-ish naming convention
+    new_path = os.path.join(
+        db["simresult_path"],
+        metadata.iloc[0].path,
+        "seed_" + metadata.iloc[0].path.split("_")[-1] + suffix,
+    )
+    # brand new naming convention
+    brand_new_path = os.path.join(
+        db["simresult_path"],
+        metadata.iloc[0].path,
+        metadata.iloc[0].path.split("_")[-2]
+        + "_"
+        + metadata.iloc[0].path.split("_")[-1]
+        + suffix,
+    )
+
+    if os.path.exists(old_path):
         fnames = [
             os.path.join(x.path, x.path.split("_")[-1] + suffix)
-            for index, x in m.iterrows()
+            for index, x in metadata.iterrows()
         ]
 
-    # new-ish naming convention
-    elif os.path.exists(
-        os.path.join(
-            db["simresult_path"],
-            m.iloc[0].path,
-            "seed_" + m.iloc[0].path.split("_")[-1] + suffix,
-        )
-    ):
+    elif os.path.exists(new_path):
         fnames = [
             os.path.join(x.path, "seed_" + x.path.split("_")[-1] + suffix)
-            for index, x in m.iterrows()
+            for index, x in metadata.iterrows()
         ]
 
-    # brand new naming convention
-    elif os.path.exists(
-        os.path.join(
-            db["simresult_path"],
-            m.iloc[0].path,
-            m.iloc[0].path.split("_")[-2]
-            + "_"
-            + m.iloc[0].path.split("_")[-1]
-            + suffix,
-        )
-    ):
+    elif os.path.exists(brand_new_path):
         fnames = [
             os.path.join(
                 x.path, x.path.split("_")[-2] + "_" + x.path.split("_")[-1] + suffix
             )
-            for index, x in m.iterrows()
+            for index, x in metadata.iterrows()
         ]
+    else:
+        raise FileNotFoundError(
+            "Could not find any files with the suffix {} in the directory {}".format(
+                suffix, db["simresult_path"]
+            )
+        )
 
     # print(suffix)
     fnames = unique(fnames)

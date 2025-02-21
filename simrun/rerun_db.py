@@ -27,13 +27,12 @@ import single_cell_parser as scp
 import single_cell_parser.analyze as sca
 import os
 import time
-import neuron
 import dask
 import numpy as np
-import pandas as pd
 from biophysics_fitting.utils import execute_in_child_process
 from .utils import *
 import logging
+from data_base.dbopen import resolve_netp_reldb_paths, resolve_neup_reldb_paths
 
 logger = logging.getLogger("ISF").getChild(__name__)
 
@@ -162,6 +161,12 @@ def _evoked_activity(
     network_name = parameterfiles.iloc[0].hash_network
     network_param = scp.build_parameters(network_folder.join(network_name))
     additional_network_params = [scp.build_parameters(p) for p in additional_network_params]
+
+    # resolve relative db paths if needed;
+    neuron_param = resolve_neup_reldb_paths(neuron_param, db.basedir)
+    network_param = resolve_netp_reldb_paths(network_param, db.basedir)
+    additional_network_params = [resolve_netp_reldb_paths(p, db.basedir) for p in additional_network_params]
+    
     for fun in network_param_modify_functions:
         network_param = fun(network_param)
     for fun in neuron_param_modify_functions:
@@ -298,7 +303,7 @@ def rerun_db(
     Args:
         db (:py:class:`~data_base.DataBase`): A simrun-initialized database to resimulate.
         stis (list): List of simulation trial indices to be resimulated.
-        outdir (str): Directory where the simulation results are stored, relative to the original simulation results.
+        outdir (str): Directory where the simulation results are stored, relative to the current working directory. Preferably, use an absolute path.
         tStop (float): Time in ms at which the simulation should stop.
         neuron_param_modify_functions (list): List of functions which take :py:class:`NTParameterSet` neuron parameters and may return it changed.
         network_param_modify_functions (list): List of functions which take :py:class:`NTParameterSet` network parameters and may return it changed.
@@ -334,7 +339,7 @@ def rerun_db(
         myfun = execute_in_child_process(myfun)
 
     myfun = dask.delayed(myfun)
-    logger.info('outdir is', outdir)
+    logger.info('Outdir is: {}'.format(outdir))
     for stis in sim_trial_index_array:
         d = myfun(
             db,

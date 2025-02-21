@@ -230,7 +230,47 @@ def resolve_db_path(path, db_basedir=None):
     else:
         return path
 
-    
+
+def resolve_neup_reldb_paths(neup, db_basedir):
+    """Convert all relative database paths in a :ref:`cell_parameters_format` file to absolute paths.
+
+    Args:
+        neup (dict): Dictionary containing the neuron model parameters.
+        db_basedir (str): Path to the database directory.
+
+    Returns:
+        :py:class:`~sumatra.parameters.NTParameterSet`: The modified neuron parameter set, with absolute paths.
+    """
+    neup["neuron"]["filename"] = resolve_reldb_path(
+        neup["neuron"]["filename"], db_basedir
+    )
+    for i, recsite_fn in enumerate(neup["sim"]["recordingSites"]):
+        neup["sim"]["recordingSites"][i] = resolve_reldb_path(recsite_fn, db_basedir)
+    return neup
+
+
+def resolve_netp_reldb_paths(netp, db_basedir):
+    """Convert all relative database paths in a :ref:`network_parameters_format` file to absolute paths.
+
+    Args:
+        netp (dict): Dictionary containing the network model parameters.
+        db_basedir (str): Path to the database directory.
+
+    Returns:
+        :py:class:`~sumatra.parameters.NTParameterSet`: The modified network parameter set, with absolute paths.
+    """
+    for cell_type in list(netp["network"].keys()):
+        if not "synapses" in netp["network"][cell_type]:
+            continue
+        netp["network"][cell_type]["synapses"]["connectionFile"] = resolve_reldb_path(
+            netp["network"][cell_type]["synapses"]["connectionFile"], db_basedir
+        )
+        netp["network"][cell_type]["synapses"]["distributionFile"] = resolve_reldb_path(
+            netp["network"][cell_type]["synapses"]["distributionFile"], db_basedir
+        )
+    return netp
+
+
 class dbopen:
     '''Context manager to open files in databases
     

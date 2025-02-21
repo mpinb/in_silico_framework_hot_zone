@@ -98,7 +98,7 @@ def construct_param_filename_hashmap_df(simresult_path, sim_trial_index):
     return delayeds
 
 
-def _copy_and_transform_neuron_param(neup_fn, target_fn, hoc_fn_map):
+def _copy_and_transform_neuron_param(neup_fn, target_fn, hoc_fn_map, recsites_fn_map):
     """Convert all paths in a :ref:`cell_parameters_format` file to point to a hash filename.
 
     This function is used as a :paramref:`transform_fun` in
@@ -112,7 +112,7 @@ def _copy_and_transform_neuron_param(neup_fn, target_fn, hoc_fn_map):
         This happens during the copying process in :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general.write_param_files_to_folder`.
     """
     neup = scp.build_parameters(neup_fn)
-    neup = _convert_neup_fns_to_reldb(neup, hoc_fn_map)
+    neup = _convert_neup_fns_to_reldb(neup, hoc_fn_map, recsites_fn_map)
     neup.save(target_fn)
     return True
 
@@ -226,11 +226,14 @@ def _get_unique_landmark_fns_from_neups(neup_fns):
     return list(set(landmark_files))
 
 
-def _generate_target_filenames(db, dir_name, file_list):
-    suffixes = ["." + fn.split(".")[-1] for fn in file_list]
+def _generate_target_filenames(db, dir_name, file_list, hash_rename=True):
+    if hash_rename:
+        new_fns = [_hash_file_content(fn) for fn in file_list]
+    else:
+        new_fns = [os.path.basename(fn) for fn in file_list]
     return [
-        os.path.join(db.basedir, dir_name, _hash_file_content(fn) + suffix)
-        for fn, suffix in zip(file_list, suffixes)
+        os.path.join(db.basedir, dir_name, base_fn)
+        for base_fn in new_fns
     ]
 
 
@@ -276,17 +279,18 @@ def _delayed_copy_transform_paramfiles_to_db(
     logger.info("{} unique .con files".format(len(con_fns)))
 
     # Target filenames in the database for each parameter file
-    hoc_files_target_fns = _generate_target_filenames(db, HOC_DIR, hoc_fns)
-    landmark_files_target_fns = _generate_target_filenames(db, RECSITES_DIR, landmark_fns)
-    syn_files_target_fns = _generate_target_filenames(db, SYN_DIR, syn_fns)
-    con_files_target_fns = _generate_target_filenames(db, CON_DIR, con_fns)
-    cell_params_target_fns = _generate_target_filenames(db, NEUP_DIR, cell_param_fns)
-    netp_params_target_fns = _generate_target_filenames(db, NETP_DIR, netp_param_fns)
+    hoc_files_target_fns = _generate_target_filenames(db, HOC_DIR, hoc_fns, hash_rename=False)
+    landmark_files_target_fns = _generate_target_filenames(db, RECSITES_DIR, landmark_fns, hash_rename=False)
+    syn_files_target_fns = _generate_target_filenames(db, SYN_DIR, syn_fns, hash_rename=True)
+    con_files_target_fns = _generate_target_filenames(db, CON_DIR, con_fns, hash_rename=True)
+    cell_params_target_fns = _generate_target_filenames(db, NEUP_DIR, cell_param_fns, hash_rename=True)
+    netp_params_target_fns = _generate_target_filenames(db, NETP_DIR, netp_param_fns, hash_rename=True)
 
     # create maps so we can transform file references in the parameter files, syn, and con files.
     hoc_fn_map = dict(zip(hoc_fns, hoc_files_target_fns))
     syn_fn_map = dict(zip(syn_fns, syn_files_target_fns))
     con_fn_map = dict(zip(con_fns, con_files_target_fns))
+    recsites_fn_map = dict(zip(landmark_fns, landmark_files_target_fns))
 
     delayed_copy_hocs = [
         dask.delayed(shutil.copy)(fn, target_fn)
@@ -305,7 +309,7 @@ def _delayed_copy_transform_paramfiles_to_db(
         for fn, target_fn in zip(con_fns, con_files_target_fns)
     ]
     delayed_copy_neups = [
-        dask.delayed(_copy_and_transform_neuron_param)(fn, target_fn, hoc_fn_map)
+        dask.delayed(_copy_and_transform_neuron_param)(fn, target_fn, hoc_fn_map, recsites_fn_map)
         for fn, target_fn in zip(cell_param_fns, cell_params_target_fns)
     ]
     delayed_copy_netps = [

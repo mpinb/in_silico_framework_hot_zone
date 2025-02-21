@@ -10,9 +10,14 @@ import logging
 logger = logging.getLogger("ISF").getChild(__name__)
 
 
-def _convert_neup_fns_to_reldb(neup, hoc_fn_map):
-    """Convert all paths in a :ref:`cell_parameters_format` file to point to a hash filename."""
+def _convert_neup_fns_to_reldb(neup, hoc_fn_map, recsites_fn_map):
+    """Convert all paths in a :ref:`cell_parameters_format` file to point to a hash filename.
+    
+    See also:
+        :py:meth:`~data_base.dbopen.resolve_neup_reldb_paths` to resolve the relative database paths in the neuron parameter file.
+    """
     orig_hoc = neup["neuron"]["filename"]
+    original_recsite_fns = neup["sim"]["recordingSites"]
     assert (
         orig_hoc in hoc_fn_map
     ), "The hoc file referenced in the neuron parameter file was not found:\n{}".format(
@@ -21,14 +26,27 @@ def _convert_neup_fns_to_reldb(neup, hoc_fn_map):
     new_hoc_fn = hoc_fn_map[orig_hoc]
     rel_hoc_fn = create_reldb_path(new_hoc_fn)
     neup["neuron"]["filename"] = rel_hoc_fn
-    # neup['sim']['recordingSites'] = [os.path.join(RECSITES_DIR, _hash_file_content(r)) for r in neup_fn['sim']['recordingSites']]
+
+    for i, recsite_fn in enumerate(original_recsite_fns):
+        assert (
+            recsite_fn in recsites_fn_map
+        ), "The recording site file referenced in the neuron parameter file was not found:\n{}".format(
+            recsite_fn
+        )
+        new_recsite_fn = recsites_fn_map[recsite_fn]
+        rel_recsite_fn = create_reldb_path(new_recsite_fn)
+        neup["sim"]["recordingSites"][i] = rel_recsite_fn
     # if 'channels' in neuron['NMODL_mechanisms']:
     #    neuron['NMODL_mechanisms']['channels'] = os.path.join(target_dir, os.path.basename(neuron['NMODL_mechanisms']['channels']))
     return neup
 
 
 def _convert_netp_fns_to_reldb(netp, syn_fn_map, con_fn_map):
-    """Convert all paths in a :ref:`network_parameters_format` file to point to a hash filename."""
+    """Convert all paths in a :ref:`network_parameters_format` file to point to a hash filename.
+    
+    See also:
+        :py:meth:`~data_base.dbopen.resolve_netp_reldb_paths` to resolve the relative database paths in the network parameter file.
+    """
     for cell_type in list(netp["network"].keys()):
         if not "synapses" in netp["network"][cell_type]:
             continue
@@ -116,44 +134,6 @@ def _convert_con_fns_to_reldb(con_content, syn_fn_map):
     relative_syn_file = create_reldb_path(target_syn_file)
     con_content[1] = "# {}\n".format(relative_syn_file)
     return "\n".join(con_content)
-
-
-def _resolve_neup_reldb_paths(neup, db_basedir):
-    """Convert all relative database paths in a :ref:`cell_parameters_format` file to absolute paths.
-
-    Args:
-        neup (dict): Dictionary containing the neuron model parameters.
-        db_basedir (str): Path to the database directory.
-
-    Returns:
-        :py:class:`~sumatra.parameters.NTParameterSet`: The modified neuron parameter set, with absolute paths.
-    """
-    neup["neuron"]["filename"] = resolve_reldb_path(
-        neup["neuron"]["filename"], db_basedir
-    )
-    return neup
-
-
-def _resolve_netp_reldb_paths(netp, db_basedir):
-    """Convert all relative database paths in a :ref:`network_parameters_format` file to absolute paths.
-
-    Args:
-        netp (dict): Dictionary containing the network model parameters.
-        db_basedir (str): Path to the database directory.
-
-    Returns:
-        :py:class:`~sumatra.parameters.NTParameterSet`: The modified network parameter set, with absolute paths.
-    """
-    for cell_type in list(netp["network"].keys()):
-        if not "synapses" in netp["network"][cell_type]:
-            continue
-        netp["network"][cell_type]["synapses"]["connectionFile"] = resolve_reldb_path(
-            netp["network"][cell_type]["synapses"]["connectionFile"], db_basedir
-        )
-        netp["network"][cell_type]["synapses"]["distributionFile"] = resolve_reldb_path(
-            netp["network"][cell_type]["synapses"]["distributionFile"], db_basedir
-        )
-    return netp
 
 
 def _create_db_path_print(path, replace_dict=None):
