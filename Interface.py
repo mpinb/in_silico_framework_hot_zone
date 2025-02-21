@@ -77,12 +77,21 @@ except ImportError:
 from data_base._version import get_versions
 from data_base._module_versions import version_cached
 
-if not 'ISF_MINIMIZE_IO' in os.environ:
+def _is_running_on_dask_worker():
+    from distributed import get_worker
+    try:
+        get_worker()
+        return True
+    except ValueError:
+        return False
+
+
+if not 'ISF_MINIMIZE_IO' in os.environ and not _is_running_on_dask_worker():
     versions = get_versions()
     __version__ = versions['version']
     __git_revision__ = versions['full-revisionid']
     if __version__ == "0+unknown":
-        raise OSError("Commit not found\nVersion is {}\nRevision_id is {}). Git is not found, or something else went wrong.".format(__version__, __git_revision__))
+        raise OSError("Commit not found\nVersion is {}\nRevision_id is {}. Git is not found, or something else went wrong.".format(__version__, __git_revision__))
     else:
         logger.info("Current version: {version}".format(version = __version__))
         logger.info("Current pid: {pid}".format(pid = os.getpid()))
@@ -149,7 +158,7 @@ from data_base.utils import cache
 from data_base import utils
 from data_base.data_base import get_db_by_unique_id
 from data_base.data_base_register import assimilate_remote_register
-from data_base.dbopen import resolve_db_path, create_db_path
+from data_base.dbopen import resolve_db_path, create_modular_db_path
 
 try:  ##to avoid import errors in distributed system because of missing matplotlib backend
     import matplotlib

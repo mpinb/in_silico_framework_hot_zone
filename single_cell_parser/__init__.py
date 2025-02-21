@@ -80,9 +80,9 @@ def build_parameters(filename, fast_but_security_risk=True):
     Returns:
         NTParameterSet: The parameter file as a NTParameterSet object.
     """
-    from data_base.dbopen import resolve_db_path
+    from data_base.dbopen import resolve_modular_db_path
 
-    filename = resolve_db_path(filename)
+    filename = resolve_modular_db_path(filename)
 
     if fast_but_security_risk:
         # taking advantage of the fact that sumatra NTParameterSet produces

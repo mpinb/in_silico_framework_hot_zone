@@ -9,10 +9,13 @@ However, for development and testing purposes, it may be of use to explicitly op
 
 from __future__ import absolute_import
 import os
-from data_base.data_base import DataBase, get_db_by_unique_id, is_model_data_base
+from data_base.data_base import DataBase, get_db_by_unique_id, is_model_data_base, is_data_base
 from data_base.exceptions import DataBaseException
 import cloudpickle
 from six.moves import cPickle
+import logging
+logger = logging.getLogger("ISF").getChild(__name__)
+
 
 def cache(function):
     """Cache the result of a function.
@@ -47,12 +50,82 @@ def cache(function):
     return wrapper
 
 
-
-def resolve_db_path(path):
-    """Resolve the path of a database.
+def resolve_reldb_path(path, db_basedir=None):
+    """Resolve a relative database path
     
-    Resolve a path of the form ``db://<unique_id>/<managed_folder>/<file>`` to
-    the absolute path of the file on the current filesystem.
+    Relative database paths are of the form ``reldb://...``.
+    They are used for references to files that are known to be within the same database.
+    Figuring out the absolute file location is then a matter of finding the shared parent database path.
+    
+    This method takes a relative path and a database, and returns the absolute path.
+    
+    Attention:
+        Relative database paths always refer to the first parent database in the path.
+        If the database is a sub-database, the path will be relative to the sub-database, not
+        the parent database.
+    Args:
+        path (str): The relative path of the form ``reldb://...``.
+        db (:py:class:`~data_base.data_base.DataBase`): The database.
+        
+    Returns:
+        str: The resolved path.
+    """
+    if not path.startswith('reldb://'):
+        return path
+    
+    assert db_basedir is not None, "If the path is in reldb:// format, a database object must be provided in order to resolve it."
+
+    abs_path = os.path.join(db_basedir, *path.split('/')[2:])
+    assert os.path.exists(abs_path), "The resolved path {} does not exist.".format(abs_path)
+    return abs_path
+
+
+def create_reldb_path(path):
+    """Create a relative database path
+    
+    Relative database paths are of the form ``reldb://...``.
+    They are used for references to files that are known to be within the same database.
+    Figuring out the absolute file location is then a matter of finding the shared parent database path.
+    
+    This method takes an absolute path and a database, and returns the relative path.
+
+    Attention:
+        Relative database paths always refer to the first parent database in the path.
+        If the database is a sub-database, the path will be relative to the sub-database, not
+        the parent database.
+    
+    Args:
+        path (str): The absolute path.
+        db (:py:class:`~data_base.data_base.DataBase`): The database.
+        
+    Returns:
+        str: The relative path of the form ``reldb://...``.
+    """
+    if path.startswith('reldb://'):
+        logger.debug('Path {} already in reldb:// format'.format(path))
+        return path
+    
+    parent_db_path = path
+    while not is_data_base(parent_db_path):
+        parent_db_path = os.path.dirname(parent_db_path)
+        if parent_db_path == '/':
+            raise DataBaseException(
+                "The path {} does not seem to be within a DataBase!".format(path))
+
+    relpath = os.path.relpath(path, parent_db_path)
+    return os.path.join('reldb://', relpath)
+    
+    
+def resolve_modular_db_path(path):
+    """Resolve the path of a database.
+
+    Modular database paths are filepaths of the form ``mdb://<unique_id>/...``.
+    These are used to be independent of the location of the database on the hard drive.
+    This has been useful for migrating data between different file systems.
+    These relative paths are registered to an actual path in the data base registry upon creation.
+    Migrating databases then consists of simply re-registering the database to the new location.
+    
+    This method checks the current registry for the absolute path of the database on the current filesystem.
     
     Args:
         path (str): The path to resolve.
@@ -61,12 +134,13 @@ def resolve_db_path(path):
         str: The resolved path.
     """
     if '/gpfs01/bethge/home/regger/data/' in path:
-        print('found CIN cluster prefix')
-        print('old path', path)
+        logger.debug('found CIN cluster prefix')
+        logger.debug('old path', path)
         path = path.replace(
             '/gpfs01/bethge/home/regger/data/',
             '/nas1/Data_regger/AXON_SAGA/Axon4/PassiveTouch/')  # TODO: make this more general
-        print('new path', path)
+        logger.debug('new path', path)
+    
     if not path.startswith('mdb://'):
         return path
 
@@ -85,12 +159,11 @@ def resolve_db_path(path):
         "However, this Database does not contain the key {}".format(path_splitted[1]))
     return os.path.join(managed_folder, *path_splitted[2:])
 
-
 @cache
-def create_db_path(path):
+def create_modular_db_path(path):
     """Create a database path from a given path.
     
-    Database paths are of the form ``db://<unique_id>/<key>/<subfolder>``.
+    Modular database paths are of the form ``mdb://<unique_id>/...``.
     The point of these paths is to be independent of their location on the hard drive,
     and can thus be transferred to other file systems, and resolved afterwards using the database registry.
     
@@ -102,6 +175,7 @@ def create_db_path(path):
     """
     db_path = path
     if path.startswith('mdb://'):
+        logger.debug('Path {} already in mdb:// format'.format(path))
         return path
     
     # Find mother database
@@ -134,12 +208,29 @@ def create_db_path(path):
             "Found a Database at {}. However, there is no key pointing to the subfolder {} in it.".format(
                 db._basedir, path_minus_db_basedir.split('/')[0]))
     return os.path.join(
-        'db://', 
+        'mdb://', 
         db.get_id(), 
         key,
         os.path.relpath(path, db[key]))
 
 
+def resolve_db_path(path, db_basedir=None):
+    """Resolve modular or relative database paths
+    
+    Args:
+        path (str): The path to resolve.
+        
+    Returns:
+        str: The resolved path.
+    """
+    if path.startswith('reldb://'):
+        return resolve_reldb_path(path, db_basedir=db_basedir)
+    elif path.startswith('mdb://'):
+        return resolve_modular_db_path(path)
+    else:
+        return path
+
+    
 class dbopen:
     '''Context manager to open files in databases
     
@@ -171,8 +262,8 @@ class dbopen:
         self.mode = mode
         self.exit_hooks = []
 
-    def __enter__(self):
-        self.path = resolve_db_path(self.path)
+    def __enter__(self, db=None):
+        self.path = resolve_db_path(self.path, db_basedir=db)
         if '.tar/' in self.path:
             t = taropen(self.path, self.mode)
             self.f = t.open()

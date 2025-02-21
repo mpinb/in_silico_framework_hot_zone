@@ -77,3 +77,27 @@ def is_model_data_base(path):
         bool: True if the path contains a :py:class:`~data_base.model_data_base.ModelDataBase`.
     """
     return os.path.exists(os.path.join(path, 'sqlitedict.db'))
+
+def is_isf_data_base(path):
+    """
+    Checks if a given path contains a :py:class:`~data_base.isf_data_base.ISFDataBase`.
+    
+    Args:
+        path (str): The path to check.
+        
+    Returns:
+        bool: True if the path contains a :py:class:`~data_base.isf_data_base.ISFDataBase`.
+    """
+    return os.path.exists(os.path.join(path, 'db_state.json'))
+
+def is_data_base(path):
+    """
+    Checks if a given path contains a :py:class:`~data_base.data_base.DataBase`.
+    
+    Args:
+        path (str): The path to check.
+        
+    Returns:
+        bool: True if the path contains a :py:class:`~data_base.data_base.DataBase`.
+    """
+    return is_model_data_base(path) or is_isf_data_base(path)
