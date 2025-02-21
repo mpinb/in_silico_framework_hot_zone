@@ -11,7 +11,7 @@ import pytest
 
 import single_cell_parser as scp
 from biophysics_fitting import L5tt_parameter_setup
-from biophysics_fitting.hay import default_setup as default_setup
+from biophysics_fitting.hay import default_setup as hay_default_setup
 from biophysics_fitting.optimizer import get_max_generation, start_run
 from data_base import utils
 from data_base.data_base import DataBase
@@ -44,7 +44,7 @@ def set_up_db(step=False):
         cell_param.cell_modify_functions.scale_apical.scale = params["scale"]
         return cell_param
 
-    params = default_setup.get_feasible_model_params().drop("x", axis=1)
+    params = hay_default_setup.get_feasible_model_params().drop("x", axis=1)
     params.index = "ephys." + params.index
     params = params.append(
         pd.DataFrame(
@@ -61,17 +61,17 @@ def set_up_db(step=False):
 
     def get_Simulator(db_setup, step=step):
         fixed_params = db_setup["get_fixed_params"](db_setup)
-        s = default_setup.get_Simulator(pd.Series(fixed_params), step=step)
+        s = hay_default_setup.get_Simulator(pd.Series(fixed_params), step=step)
         s.setup.cell_param_generator = get_template
         s.setup.cell_param_modify_funs.append(("scale_apical", scale_apical))
         # s.setup.cell_modify_funs.append(('scale_apical', param_to_kwargs(scale_apical)))
         return s
 
     def get_Evaluator(db_setup, step=step):
-        return default_setup.get_Evaluator(step=step)
+        return hay_default_setup.get_Evaluator(step=step)
 
     def get_Combiner(db_setup, step=step):
-        return default_setup.get_Combiner(step=step)
+        return hay_default_setup.get_Combiner(step=step)
 
     tempdir = tempfile.mkdtemp()
     db = DataBase(tempdir)
