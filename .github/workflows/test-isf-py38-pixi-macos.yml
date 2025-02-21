@@ -1,4 +1,4 @@
-name: Test pixi (MacOS)
+name: OSX
 on:
   pull_request:
     types: [opened, synchronize]

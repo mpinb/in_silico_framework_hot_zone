@@ -1,4 +1,4 @@
-name: Test pixi (linux)
+name: Linux
 on:
   pull_request:
     types: [opened, synchronize]

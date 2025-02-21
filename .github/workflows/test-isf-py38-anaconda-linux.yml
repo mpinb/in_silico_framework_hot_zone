@@ -1,4 +1,4 @@
-name: Test Anaconda (linux)
+name: Linux (Anaconda)
 on:
   pull_request:
     types: [opened, synchronize]
