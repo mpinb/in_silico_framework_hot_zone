@@ -1064,7 +1064,28 @@ class _Step:
             self, name.rstrip(str(self.step_index))
         ), f"Attribute {name} not found in {self.name}"
         return object.__getattribute__(self, name.rstrip(str(self.step_index)))
+    
+    def __getstate__(self):
+        """Return the state of the object for pickling.
+        
+        This method ensures that this class and children can be pickled, without running
+        into infinite recursion due to the ``__getattr__`` method.
+        This is necessary, since we often want to evaluate the voltage traces in parallel.
+        Parallellization usually requires pickling the object.
+        """
+        state = self.__dict__.copy()
+        # Remove or modify any attributes that cannot be pickled
+        return state
 
+    def __setstate__(self, state):
+        """Restore the state of the object from the pickled state.
+    
+        This method ensures that this class and children can be pickled, without running
+        into infinite recursion due to the ``__getattr__`` method.
+        This is necessary, since we often want to evaluate the voltage traces in parallel.
+        Parallellization usually requires pickling the object.
+        """
+        self.__dict__.update(state)
 
 class StepOne(_Step):
     """Evaluate Step current one.
