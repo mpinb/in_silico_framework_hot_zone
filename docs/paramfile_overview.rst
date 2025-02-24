@@ -56,7 +56,6 @@
         morphology_file -> scim;
         scim -> con [lhead=cluster_syncon];
         con -> scim2 [ltail=cluster_syncon];
-        syn -> scim2 ;
         scim2 -> netp ;
         netp -> simrun ;
 
