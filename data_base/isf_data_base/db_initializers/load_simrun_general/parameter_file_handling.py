@@ -166,7 +166,7 @@ def _copy_and_transform_con(con_fn, target_fn, syn_fn_map):
     with open(con_fn, "r") as f:
         content = f.read()
 
-    content = _convert_con_fns_to_reldb(content, syn_fn_map)
+    content = _convert_con_fns_to_reldb(content, syn_fn_map, con_fn)
     with open(target_fn, "w") as f:
         f.write("".join(content))
     return con_fn
@@ -287,11 +287,12 @@ def _delayed_copy_transform_paramfiles_to_db(
     netp_params_target_fns = _generate_target_filenames(db, NETP_DIR, netp_param_fns, hash_rename=True)
 
     # create maps so we can transform file references in the parameter files, syn, and con files.
-    hoc_fn_map = dict(zip(hoc_fns, hoc_files_target_fns))
     syn_fn_map = dict(zip(syn_fns, syn_files_target_fns))
     con_fn_map = dict(zip(con_fns, con_files_target_fns))
+    hoc_fn_map = dict(zip(hoc_fns, hoc_files_target_fns))
     recsites_fn_map = dict(zip(landmark_fns, landmark_files_target_fns))
 
+        
     delayed_copy_hocs = [
         dask.delayed(shutil.copy)(fn, target_fn)
         for fn, target_fn in zip(hoc_fns, hoc_files_target_fns)
