@@ -35,7 +35,7 @@ with open(pyproject_path, "r") as f:
     pyproject_data = toml.load(f)
     release = pyproject_data["project"]["version"]
     version = release
-project = "In-Silico Framework (ISF)"
+project = "ISF"
 copyright = "2023, Arco Bast, Robert Egger, Bjorge Meulemeester, Maria Royo Cano, Rieke Fruengel, Matt Keaton, Omar Valerio"
 author = "Arco Bast, Robert Egger, Bjorge Meulemeester, Maria Royo Cano, Rieke Fruengel, Matt Keaton, Omar Valerio"
 
@@ -99,7 +99,7 @@ def setup(app):
     app.connect("env-updated", log_documented_members)
 
 
-toc_object_entries_show_parents = "hide"  # short toc entries
+# toc_object_entries_show_parents = "hide"  # short toc entries
 
 # -- autoapi settings -----------------------------------------------------
 autoapi_dirs = [project_root]
@@ -200,17 +200,33 @@ html_theme = "sphinx_immaterial"
 # further.  For a list of options available for each theme, see the
 # documentation.
 html_theme_options = {
-    "light_logo": "_images/isf-logo-black.png",
-    "dark_logo": "_images/isf-logo-white.png",
-    "sidebar_hide_name": True,
-    "light_css_variables": {
-        "color-brand-primary": "#000000",  # black instead of blue
-        "color-foreground-secondary": "#797979",  # slightly more muted than default
-    },
-    "dark_css_variables": {
-        "color-brand-primary": "#fefaee",  # Off-white
-        "color-brand-content": "#FFB000",  # Gold instead of dark blue
-    },
+    "repo_url": "https://github.com/mpinb/in_silico_framework",
+    "palette": [
+        {
+            "media": "(prefers-color-scheme: light)",
+            "scheme": "default",
+            "primary": "indigo",
+            "accent": "pink",
+            "toggle": {
+                "icon": "material/toggle-switch-off-outline",
+                "name": "Switch to dark mode",
+            }
+        },
+        {
+            "media": "(prefers-color-scheme: dark)",
+            "scheme": "slate",
+            "primary": "teal",
+            "accent": "orange",
+            "toggle": {
+                "icon": "material/toggle-switch",
+                "name": "Switch to light mode",
+            }
+        },
+    ],
+    # "sidebar_hide_name": True,
+    'features': [
+        'toc.follow'
+        ],
 }
 
 # Add any paths that contain custom themes here, relative to this directory.
@@ -237,13 +253,9 @@ html_theme_options = {
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ["_static"]
 html_css_files = [
-    "default.css",  # relative to html_static_path defined above
-    "style.css",
-    "downarr.svg",
-    "css/custom.css",
 ]
 
-html_js_files = ["overview.js"]
+html_js_files = []
 
 # Add any extra paths that contain custom files (such as robots.txt or
 # .htaccess) here, relative to this directory. These files are copied
@@ -273,8 +285,9 @@ html_js_files = ["overview.js"]
 
 # If true, links to the reST sources are added to the pages.
 
-## I don't like links to page reST sources
-html_show_sourcelink = True
+# Show a button that triggers a source rst view - useful for debugging
+html_show_sourcelink = False
+
 
 # If true, "Created using Sphinx" is shown in the HTML footer. Default is True.
 # html_show_sphinx = True
