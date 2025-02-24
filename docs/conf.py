@@ -6,16 +6,23 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-import sys, os, fnmatch, ast
+import ast
+import fnmatch
+import os
+import sys
+
 import toml
 
 project_root = os.path.join(os.path.abspath(os.pardir))
 sys.path.insert(0, project_root)
-from docs.parse_notebooks import copy_and_parse_notebooks_to_docs
 from functools import lru_cache
+
 from config.isf_logging import logger as isf_logger
-from docs.sphinx_hooks import count_documented_members, log_documented_members, find_first_match, DOCS_STATS
-from docs.skip_doc import skip_member, MODULES_TO_SKIP
+from docs.parse_notebooks import copy_and_parse_notebooks_to_docs
+from docs.skip_doc import MODULES_TO_SKIP, skip_member
+from docs.sphinx_hooks import (DOCS_STATS, count_documented_members,
+                               find_first_match, log_documented_members)
+
 logger = isf_logger.getChild("DOCS")
 logger.setLevel("INFO")
 # Parse pyproject.toml to get the release version
@@ -38,6 +45,7 @@ copy_and_parse_notebooks_to_docs(
 )
 
 from compatibility import init_data_base_compatibility
+
 init_data_base_compatibility()  # make db importable before running autosummary or autodoc etc...
 
 
@@ -58,8 +66,11 @@ extensions = [
     'sphinx.ext.mathjax',      # For math equations
     'sphinx_copybutton',       # For copying code snippets
     'sphinx_inline_tabs',      # For inline tabs
+    'sphinx.ext.graphviz'
     # 'sphinxext.opengraph',   # For OpenGraph metadata, only enable when the site is actually hosted. See https://github.com/wpilibsuite/sphinxext-opengraph for config options when that happens.
 ]
+
+graphviz_output_format = 'svg'
 
 # Currently unused, but may be neat in the future
 rst_prolog = """
