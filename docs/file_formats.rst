@@ -4,62 +4,7 @@
 File & data formats
 ###################
 
-.. _am_file_format:
-
-.am
-***
-
-The Amira proprietary VTK-like file format. Refer to the `amira documentation <https://www.csc.kth.se/~weinkauf/notes/amiramesh.html>`_ for more information.
-This flexible format can be used to store 3D scalar meshes, 3D neuron morphology reconstructions, slice image data etc.
-
-Readers:
-
-- :py:mod:`~single_cell_parser.reader.read_scalar_field`
-- :py:mod:`~single_cell_parser.reader.read_landmark_file`
-
-.. _hoc_file_format:
-
-.hoc
-****
-NEURON :cite:`hines2001neuron` file format for neuron morphologies. 
-refer to the `NEURON hoc documentation <https://nrn.readthedocs.io/en/latest/guide/hoc_chapter_11_old_reference.html>`_ for more info.
-The morphology is specified as a tree structure: the different sections of a neuron 
-(pieces separated between branching points or branches endings) are connected in order. 
-Each section is formed by a set of points, defined by their 3D coordinates and the diameter of the 
-neuron structure at that point ``(pt3dadd -> x, y, z, diameter)``.
-
-Readers:
-
-- :py:mod:`~single_cell_parser.cell_parser`
-- :py:meth:`~single_cell_parser.reader.read_hoc_file`
-
-Example::
-
-    {create soma}
-    {access soma}
-    {nseg = 1}
-    {pt3dclear()}
-    {pt3dadd(1.933390,221.367004,-450.045990,12.542000)}
-    {pt3dadd(2.321820,221.046997,-449.989990,13.309400)}
-    ...
-    {pt3dadd(13.961900,210.149002,-447.901001,3.599700)}
-
-    {create BasalDendrite_1_0}
-    {connect BasalDendrite_1_0(0), soma(0.009696)}
-    {access BasalDendrite_1_0}
-    {nseg = 1}
-    {pt3dclear()}
-    {pt3dadd(6.369640, 224.735992, -452.399994, 2.040000)}
-    {pt3dadd(6.341550, 222.962997, -451.906006, 2.040000)}
-    ...
-
-.. _mod_file_format:
-
-.mod
-****
-NEURON :cite:`hines2001neuron` file format for neuron mechanisms. refer to the `NEURON NMOL documentation <https://neuron.yale.edu/neuron/docs/using-nmodl-files>`_ for more info.
-Used to define channel and synapse dynamics in NEURON simulations.
-See the folder `mechanisms` in the project source.
+.. include:: paramfile_overview.rst
 
 .. _syn_file_format:
 
@@ -606,3 +551,61 @@ The parsed dataframe is usually created by the :py:meth:`data_base.isf_data_base
      - -75.034002
      - -75.049797
      - ...
+
+
+.. _hoc_file_format:
+
+.hoc
+****
+NEURON :cite:`hines2001neuron` file format for neuron morphologies. 
+refer to the `NEURON hoc documentation <https://nrn.readthedocs.io/en/latest/guide/hoc_chapter_11_old_reference.html>`_ for more info.
+The morphology is specified as a tree structure: the different sections of a neuron 
+(pieces separated between branching points or branches endings) are connected in order. 
+Each section is formed by a set of points, defined by their 3D coordinates and the diameter of the 
+neuron structure at that point ``(pt3dadd -> x, y, z, diameter)``.
+
+Readers:
+
+- :py:mod:`~single_cell_parser.cell_parser`
+- :py:meth:`~single_cell_parser.reader.read_hoc_file`
+
+Example::
+
+    {create soma}
+    {access soma}
+    {nseg = 1}
+    {pt3dclear()}
+    {pt3dadd(1.933390,221.367004,-450.045990,12.542000)}
+    {pt3dadd(2.321820,221.046997,-449.989990,13.309400)}
+    ...
+    {pt3dadd(13.961900,210.149002,-447.901001,3.599700)}
+
+    {create BasalDendrite_1_0}
+    {connect BasalDendrite_1_0(0), soma(0.009696)}
+    {access BasalDendrite_1_0}
+    {nseg = 1}
+    {pt3dclear()}
+    {pt3dadd(6.369640, 224.735992, -452.399994, 2.040000)}
+    {pt3dadd(6.341550, 222.962997, -451.906006, 2.040000)}
+    ...
+
+.. _mod_file_format:
+
+.mod
+****
+NEURON :cite:`hines2001neuron` file format for neuron mechanisms. refer to the `NEURON NMOL documentation <https://neuron.yale.edu/neuron/docs/using-nmodl-files>`_ for more info.
+Used to define channel and synapse dynamics in NEURON simulations.
+See the folder `mechanisms` in the project source.
+
+.. _am_file_format:
+
+.am
+***
+
+The Amira proprietary VTK-like file format. Refer to the `amira documentation <https://www.csc.kth.se/~weinkauf/notes/amiramesh.html>`_ for more information.
+This flexible format can be used to store 3D scalar meshes, 3D neuron morphology reconstructions, slice image data etc.
+
+Readers:
+
+- :py:mod:`~single_cell_parser.reader.read_scalar_field`
+- :py:mod:`~single_cell_parser.reader.read_landmark_file`

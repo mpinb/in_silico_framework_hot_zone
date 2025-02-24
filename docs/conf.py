@@ -41,11 +41,11 @@ author = "Arco Bast, Robert Egger, Bjorge Meulemeester, Maria Royo Cano, Rieke F
 
 
 # copy over tutorials and convert links to python files to sphinx documentation directives
-copy_and_parse_notebooks_to_docs(
-    source_dir=os.path.join(project_root, "getting_started", "tutorials"),
-    dest_dir=os.path.join(project_root, "docs", "tutorials"),
-    api_extension="autoapi",  # change this if using autosummary instead of autoapi, it needs to find target dir of .rst files.
-)
+# copy_and_parse_notebooks_to_docs(
+#     source_dir=os.path.join(project_root, "getting_started", "tutorials"),
+#     dest_dir=os.path.join(project_root, "docs", "tutorials"),
+#     api_extension="autoapi",  # change this if using autosummary instead of autoapi, it needs to find target dir of .rst files.
+# )
 
 from compatibility import init_data_base_compatibility
 
@@ -70,6 +70,8 @@ extensions = [
     "sphinx_copybutton",  # For copying code snippets
     "sphinx_inline_tabs",  # For inline tabs
     "sphinx.ext.graphviz",
+    "sphinx_immaterial",
+    "sphinx_immaterial.graphviz",
     # 'sphinxext.opengraph',   # For OpenGraph metadata, only enable when the site is actually hosted. See https://github.com/wpilibsuite/sphinxext-opengraph for config options when that happens.
 ]
 
@@ -192,7 +194,7 @@ todo_include_todos = False
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-html_theme = "furo"
+html_theme = "sphinx_immaterial"
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the

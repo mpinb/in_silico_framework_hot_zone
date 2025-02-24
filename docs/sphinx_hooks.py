@@ -70,7 +70,8 @@ def log_documented_members(app, env):
         logger.info(f"Documented {what}s: {documented}/{included} ({coverage_what:.2f}%)")
         logger.info(f"Skipped {what}s: {DOCS_STATS[what]['skipped']} not included")
     total_documented, total_included = sum([DOCS_STATS[what]['documented'] for what in DOCS_STATS]), sum([DOCS_STATS[what]['included'] for what in DOCS_STATS])
-    logger.info(f"Total documented: {total_documented}/{total_included} ({100 * total_documented / total_included:.2f}%)")
+    ratio = total_documented / total_included if total_included > 0 else 0
+    logger.info(f"Total documented: {total_documented}/{total_included} ({100 * ratio:.2f}%)")
 
 
 def find_first_match(lines, substring):
