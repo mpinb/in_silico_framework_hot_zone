@@ -8,6 +8,7 @@ import pandas as pd
 
 import single_cell_parser as scp
 import single_cell_parser.analyze as sca
+from data_base.dbopen import resolve_neup_reldb_paths
 from data_base.isf_data_base.IO.LoaderDumper import pandas_to_parquet
 from data_base.isf_data_base.IO.roberts_formats import (
     read_pandas_cell_activation_from_roberts_format as read_ca,
@@ -17,13 +18,20 @@ from data_base.isf_data_base.IO.roberts_formats import (
 )
 from data_base.utils import chunkIt, silence_stdout
 
-from . import DEFAULT_DUMPER, NETP_DIR, NEUP_DIR, SYN_DIR, CON_DIR, HOC_DIR, RECSITES_DIR
+from . import (
+    CON_DIR,
+    DEFAULT_DUMPER,
+    HOC_DIR,
+    NETP_DIR,
+    NEUP_DIR,
+    RECSITES_DIR,
+    SYN_DIR,
+)
 from .data_parsing import (
     load_dendritic_voltage_traces,
     read_voltage_traces_by_filenames,
 )
 from .file_handling import get_max_commas, make_filelist
-from data_base.dbopen import resolve_neup_reldb_paths
 from .metadata_utils import create_metadata, get_voltage_traces_divisions_by_metadata
 from .parameter_file_handling import (
     _delayed_copy_transform_paramfiles_to_db,
@@ -169,14 +177,14 @@ def _build_dendritic_voltage_traces(db, suffix_dict=None, repartition=None):
     if suffix_dict is None:
         suffix_dict = _get_rec_site_managers(db)
 
-    out = load_dendritic_voltage_traces(db, suffix_dict, repartition=repartition)
+    dend_vt = load_dendritic_voltage_traces(db, suffix_dict, repartition=repartition)
     if not "dendritic_recordings" in list(db.keys()):
         db.create_sub_db("dendritic_recordings")
 
     sub_db = db["dendritic_recordings"]
 
     for recSiteLabel in list(suffix_dict.keys()):
-        sub_db.set(recSiteLabel, out[recSiteLabel], dumper=DEFAULT_DUMPER)
+        sub_db.set(recSiteLabel, dend_vt[recSiteLabel], dumper=DEFAULT_DUMPER)
     # db.set('dendritic_voltage_traces_keys', out.keys(), dumper = DEFAULT_DUMPER)
 
 
@@ -230,7 +238,7 @@ def _build_param_files(db, client):
     )
     futures = client.compute(ds)
     result = client.gather(futures)
-    
+
     db.set("parameterfiles", param_file_hash_df, dumper=pandas_to_parquet)
 
 
@@ -278,9 +286,9 @@ def _get_rec_site_managers(db):
     with silence_stdout:
         cell = scp.create_cell(cellParam, setUpBiophysics=True)
     recSiteManagers = [sca.RecordingSiteManager(recFile, cell) for recFile in rec_sites]
-    out = {
+    recsite_dend_vt_dict = {
         recSite.label: recSite.label + "_vm_dend_traces.csv"
         for RSManager in recSiteManagers
         for recSite in RSManager.recordingSites
     }
-    return out
+    return recsite_dend_vt_dict

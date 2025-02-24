@@ -217,42 +217,49 @@ def load_dendritic_voltage_traces_helper(db, suffix, divisions=None, repartition
     if not suffix.startswith("_"):
         suffix = "_" + suffix
     # print os.path.join(db['simresult_path'], m.iloc[0].path, m.iloc[0].path.split('_')[-1] + suffix)
-
-    # old naming convention
-    old_path = os.path.join(
-        db["simresult_path"],
-        metadata.iloc[0].path,
-        metadata.iloc[0].path.split("_")[-1] + suffix,
+    absolute_simresult_path = db['simresult_path']
+    relative_simresult_path = metadata.iloc[0].path                 # e.g. results/20250101-1553_seed123456_pid0001
+    example_pid = relative_simresult_path.split("_")[-1]            # e.g. pid7896
+    example_random_seed = relative_simresult_path.split("_")[-2]    # e.g. seed74895461
+    
+    # old naming convention: used PID as a suffix
+    # e.g.: subdirectory/20250101-1553_0001
+    example_old_path = os.path.join(
+        absolute_simresult_path,
+        relative_simresult_path,
+        example_pid + suffix,
     )
-    # new-ish naming convention
-    new_path = os.path.join(
-        db["simresult_path"],
-        metadata.iloc[0].path,
-        "seed_" + metadata.iloc[0].path.split("_")[-1] + suffix,
+    # new-ish naming convention: used PID as a seed
+    # e.g.: subdirectory/20250101-1553_seed0001
+    example_new_path = os.path.join(
+        absolute_simresult_path,
+        relative_simresult_path,
+        "seed_" + example_pid + suffix,
     )
-    # brand new naming convention
-    brand_new_path = os.path.join(
-        db["simresult_path"],
-        metadata.iloc[0].path,
-        metadata.iloc[0].path.split("_")[-2]
+    # brand new naming convention: Use both PID and random seed
+    # e.g.: subdirectoy/20250101-1553_seed123456_pid0001
+    example_brand_new_path = os.path.join(
+        absolute_simresult_path,
+        relative_simresult_path,
+        example_random_seed
         + "_"
-        + metadata.iloc[0].path.split("_")[-1]
+        + example_pid
         + suffix,
     )
 
-    if os.path.exists(old_path):
+    if os.path.exists(example_old_path):
         fnames = [
             os.path.join(x.path, x.path.split("_")[-1] + suffix)
             for index, x in metadata.iterrows()
         ]
 
-    elif os.path.exists(new_path):
+    elif os.path.exists(example_new_path):
         fnames = [
             os.path.join(x.path, "seed_" + x.path.split("_")[-1] + suffix)
             for index, x in metadata.iterrows()
         ]
 
-    elif os.path.exists(brand_new_path):
+    elif os.path.exists(example_brand_new_path):
         fnames = [
             os.path.join(
                 x.path, x.path.split("_")[-2] + "_" + x.path.split("_")[-1] + suffix
@@ -277,8 +284,7 @@ def load_dendritic_voltage_traces_helper(db, suffix, divisions=None, repartition
 def load_dendritic_voltage_traces(db, suffix_key_dict, repartition=None):
     """Load the voltage traces from dendritic recording sites.
 
-    Dendritic recording sites are defined in the cell :ref:`` files
-    (under the key ``sim.recordingSites``).
+    Dendritic recording sites are defined in the :ref:`cell_parameters_format` files (under the key ``sim.recordingSites``).
     The voltage traces for each recording site are read with
     :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general.load_dendritic_voltage_traces_helper`.
 
@@ -295,11 +301,11 @@ def load_dendritic_voltage_traces(db, suffix_key_dict, repartition=None):
         dict: Dictionary containing the dask dataframes of the dendritic voltage traces.
 
     """
-    out = {}
+    recsite_dendvt_dict = {}
     divisions = db["voltage_traces"].divisions
     # suffix_key_dict is of form: {recSite.label:  recSite.label + '_vm_dend_traces.csv'}
-    for key in suffix_key_dict:
-        out[key] = load_dendritic_voltage_traces_helper(
-            db, suffix_key_dict[key], divisions=divisions, repartition=repartition
+    for recsite, dend_vt_fn in suffix_key_dict.items():
+        recsite_dendvt_dict[recsite] = load_dendritic_voltage_traces_helper(
+            db, dend_vt_fn, divisions=divisions, repartition=repartition
         )
-    return out
+    return recsite_dendvt_dict

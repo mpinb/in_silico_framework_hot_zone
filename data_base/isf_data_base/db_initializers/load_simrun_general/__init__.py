@@ -302,8 +302,11 @@ def add_dendritic_voltage_traces(
             Dumper to use for :py:meth:`~data_base.isf_data_base.load_simrun_general.optimize` if :paramref:`optimize` is ``True``.
             Default is :py:mod:`~data_base.isf_data_base.IO.LoaderDumper.pandas_to_msgpack`.
     """
+    # Set a pickle to the dend voltage traces. This is simply a symlink to the original data, not the data itself.
     _build_dendritic_voltage_traces(db, repartition=repartition)
+    
     if rewrite_in_optimized_format:
+        # Actually load and parse the data to a format: this is not a symlink anymore
         optimize(
             db["dendritic_recordings"],
             select=list(db["dendritic_recordings"].keys()),
