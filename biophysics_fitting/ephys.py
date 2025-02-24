@@ -640,7 +640,7 @@ def STEP_coef_var(t, v, stim_end, thresh=None):
     """
     Computes the coefficient of variation (CV) of the Inter-Spike Interval (ISI) of a voltage trace for a step stimulus.
 
-    The CV is calculated as :math:``\frac{\sigma_{ISI}}{\mu_{ISI}}``.
+    The CV is calculated as :math:`\frac{\sigma_{ISI}}{\mu_{ISI}}`.
 
     Note:
         We are considering a population sample (rather than a complete population), and so we must Bessel-correct the standard deviation.
