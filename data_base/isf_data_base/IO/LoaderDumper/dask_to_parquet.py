@@ -117,7 +117,7 @@ class Loader(parent_classes.Loader):
                 if isinstance(divisions, list):
                     divisions = tuple(divisions)  # for py3.9
                 ddf.divisions = divisions
-                print('load dask dataframe with known divisions')
+                logger.info('Load dask dataframe with known divisions')
         
         return ddf
 
