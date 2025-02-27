@@ -48,6 +48,18 @@ While this is not explicit in ISF, you can categorize a test in one of three are
 - Integration tets: Broader-scoped tests that check if a piece of software integrates well with existing code. Example: does my new pipeline work well with ISF's existing `data_base` functionality?
 - End-to-end (E2E) tests: Does my pipeline still operate as expected from start to finish? Example: if I adapt the file format of the cell parameters, can I still run `simrun.run_new_simulations.run_new_simulations()`?
 
+Running test requires additional dependencies, such as `pytest`. These are defined in our `test` environment. To run the test suite in the test environment, we preconfigured the following command:
+
+```bash
+pixi run test
+```
+
+To run any other command in the test environment, you can simply prefix the command with:
+
+```bash
+pixi run -e test my_command
+```
+
 ### Commits
 
 Please keep commits single-purpose with descriptive commit messages. Avoid adding all changes in a single monolithic commit.
