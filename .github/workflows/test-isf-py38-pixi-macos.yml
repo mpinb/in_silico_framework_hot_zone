@@ -6,17 +6,13 @@ on:
       - README.md
       - CHANGELOG.md
       - .gitignore
-  pull_request_target:
-    types:
-      - closed
-    paths-ignore:
-      - README.md
-      - CHANGELOG.md
-      - .gitignore
+    branches:
+      - develop
+    branches-ignore:
+      - master
   push:
     branches:
-      - testing
-      - installer
+      - master
   workflow_dispatch:
 
 jobs:
