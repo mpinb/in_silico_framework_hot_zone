@@ -1,3 +1,5 @@
+.. _installation:
+
 Installation
 ============
 
@@ -31,13 +33,13 @@ ISF works best with a dask server for parallel computing:
 
    pixi run launch_dask_workers
 
-To use ISF, we recommend starting out with a JupyterLab server:
+We recommend to use ISF within a JupyterLab server for interactive use:
 
 .. code-block:: bash
 
    pixi run launch_jupyter_lab_server
 
-Within this JupyterLab server, we recommend to get started with the :ref:`tutorials`.
+To get started with ISF, feel free to consult the :ref:`tutorials`.
 
 Configuration
 -------------

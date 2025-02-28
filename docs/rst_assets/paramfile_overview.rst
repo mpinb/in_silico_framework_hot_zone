@@ -43,7 +43,8 @@
 		style=filled;
                 rankdir="LR";
 		color=lightgrey;
-		con -> syn [label = "", style=dashed, constraint=false];
+		con [constraint=false];
+                syn [constraint=false];
 		label = "";
 	}
 

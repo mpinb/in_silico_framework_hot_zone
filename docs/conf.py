@@ -6,8 +6,6 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-import ast
-import fnmatch
 import os
 import sys
 
@@ -15,12 +13,11 @@ import toml
 
 project_root = os.path.join(os.path.abspath(os.pardir))
 sys.path.insert(0, project_root)
-from functools import lru_cache
 
 from config.isf_logging import logger as isf_logger
-from docs.parse_notebooks import copy_and_parse_notebooks_to_docs
-from docs.skip_doc import MODULES_TO_SKIP, skip_member
-from docs.sphinx_hooks import (
+from docs.utils.parse_notebooks import copy_and_parse_notebooks_to_docs
+from docs.utils.skip_doc import MODULES_TO_SKIP, skip_member
+from docs.utils.sphinx_hooks import (
     DOCS_STATS,
     count_documented_members,
     find_first_match,
@@ -55,23 +52,24 @@ init_data_base_compatibility()  # make db importable before running autosummary 
 # -- General configuration ------------------------------------------------
 
 extensions = [
-    "sphinx.ext.autodoc",  # Core library for html generation from docstrings
+    "sphinx.ext.autodoc",       # Core library for html generation from docstrings
     # 'sphinx.ext.autosummary',  # Create neat summary tables --> this has now been overridden in templates/macros.rst for more control.
-    "autoapi.extension",  # improvement over autodoc, but still requires autodoc
-    "sphinx.ext.napoleon",  # Preprocess docstrings to convert Google-style docstrings to reST
-    "sphinx_paramlinks",  # Parameter links
-    "sphinx.ext.todo",  # To-do notes
+    "autoapi.extension",        # improvement over autodoc, but still requires autodoc
+    "sphinx.ext.napoleon",      # Preprocess docstrings to convert Google-style docstrings to reST
+    "sphinx_paramlinks",        # Parameter links
+    "sphinx.ext.todo",          # To-do notes
     "sphinx.ext.viewcode",
-    "sphinx.ext.intersphinx",  # Link to other project's documentation, for e.g. NEURON classes as attributes in docstrings
-    "nbsphinx",  # For rendering tutorial notebooks
-    "nbsphinx_link",  # For linking to sections in tutorial notebooks
-    "sphinxcontrib.bibtex",  # For citations
-    "sphinx.ext.mathjax",  # For math equations
-    "sphinx_copybutton",  # For copying code snippets
-    "sphinx_inline_tabs",  # For inline tabs
-    "sphinx.ext.graphviz",
-    "sphinx_immaterial",
-    "sphinx_immaterial.graphviz",
+    "sphinx.ext.intersphinx",   # Link to other project's documentation, for e.g. NEURON classes as attributes in docstrings
+    "nbsphinx",                 # For rendering tutorial notebooks
+    "nbsphinx_link",            # For linking to sections in tutorial notebooks
+    "sphinxcontrib.bibtex",     # For citations
+    "sphinx.ext.mathjax",       # For math equations
+    "sphinx_copybutton",        # For copying code snippets
+    "sphinx_inline_tabs",       # For inline tabs
+    "sphinx.ext.graphviz",      # Making graphs
+    "sphinx_immaterial",        # html theme
+    "sphinx_immaterial.graphviz",   # Allow internal reflinking and theming for graphviz
+    "sphinx_design",            # For nice design elements, such as grids and cards
     # 'sphinxext.opengraph',   # For OpenGraph metadata, only enable when the site is actually hosted. See https://github.com/wpilibsuite/sphinxext-opengraph for config options when that happens.
 ]
 
@@ -107,7 +105,6 @@ autoapi_type = "python"
 autoapi_keep_files = True
 autoapi_add_toctree_entry = False  # we use a manual autosummary directive in api_reference.rst thats included in the toctree
 autoapi_generate_api_docs = True
-# generate the .rst stub files. The template directives don't do this.
 autoapi_options = [
     "members",
     "undoc-members",
@@ -199,7 +196,7 @@ html_theme = "sphinx_immaterial"
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
-html_logo = "_static/isf-logo-white.png"
+html_logo = "_static/_images/isf-logo-white.png"
 html_theme_options = {
     "repo_url": "https://github.com/mpinb/in_silico_framework",
     "palette": [
