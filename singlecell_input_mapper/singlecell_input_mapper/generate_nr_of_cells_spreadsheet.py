@@ -82,6 +82,7 @@ def con_file_to_NumberOfConnectedCells_sheet(con_file, write_output=True):
     con_pdf = pd.read_csv(
         con_file, sep="\t", skiprows=3, names=["type", "cell_ID", "synapse_ID"]
     )
+    assert len(con_pdf) > 0, "The .con file is empty: {}".format(con_file)
     # groupb by celltype
     con_pdf = (
         con_pdf.groupby("type")
