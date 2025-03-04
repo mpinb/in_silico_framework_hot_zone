@@ -49,7 +49,6 @@ simpleitk = ">=2.2.1,<3"
 zarr = ">=2.15.0,<3"
 
 [tool.pixi.pypi-dependencies]
-torch = ">=2.4.1,<3"
 bluepyopt = "==1.9.126"
 sumatra = "==0.7.4"
 redis = ">=5.2.0,<6"
