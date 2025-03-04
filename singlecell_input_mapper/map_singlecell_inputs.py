@@ -90,7 +90,7 @@ numberOfCellsSpreadsheetName = os.path.join(prefix, "nrCells.csv")
 connectionsSpreadsheetName = os.path.join(prefix, "ConnectionsV8.csv")
 ExPSTDensityName = os.path.join(prefix, "PST/EXNormalizationPSTs.am")
 InhPSTDensityName = os.path.join(prefix, "PST/INHNormalizationPSTs.am")
-boutonDensityFolderName = "singleaxon_boutons_ascii"
+boutonDensityFolderName = os.path.join(prefix, "singleaxon_boutons_ascii")
 
 exTypes = (
     "VPM",
@@ -230,8 +230,9 @@ def map_singlecell_inputs(
         for preCellType in preCellTypes:
             boutonDensities[anatomical_area][preCellType] = []
             boutonDensityFolder = os.path.join(
-                prefix, boutonDensityFolderName, anatomical_area, preCellType
+                boutonDensityFolderName, anatomical_area, preCellType
             )
+            assert os.path.exists(boutonDensityFolder), "Could not find bouton density folders of the barrel cortex model. Did you download and extract the barrel cortex model?"
             boutonDensityNames = glob.glob(os.path.join(boutonDensityFolder, "*"))
             logger.debug(
                 "    Loading {:d} bouton densities from {:s}".format(

@@ -133,6 +133,8 @@ test = {cmd = [
   "$ISF_DASK_PORT",
   ], description = "Run test suite", env = {ISF_NUM_PYTEST_WORKERS = "5", ISF_DASK_PORT = "8786"}, cwd="tests"}
 
+download_bc_model = {cmd = ["./download_bc_model.sh"], description = "Download ISF's barrel cortex model from Harvard Datverse", cwd="installer"}
+
 [tool.pixi.feature.docs.tasks]
 build_docs = {cmd = ["make", "html"], description = "Build the documentation", cwd="docs"}
 host_docs = {cmd = ["python", "-m", "http.server", "8000"], description = "Host the documentation", cwd="docs/_build/html"}
