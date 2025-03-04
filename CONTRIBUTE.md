@@ -127,3 +127,13 @@ However, we summarize some key concepts below.
   Often, HTML themes offer very functional extensions beyond what one would consider "just a theme". 
   For example, our current HTML theme (last checked 27/02/2025) is `immaterial`, which ships with a reflinking extension for Graphviz.
 - For debugging purposes, you can inspect what the stub files look like in `docs/autoapi` (only if `autoapi_keep_files = True` in `conf.py`)
+
+## Database
+The database system in ISF is modular, meaning that new file formats or entirely new database systems can be implemented if needed.
+we strongly recommend to not adapt the database system though, as it acquires a decent amount of technical debt to maintain them.
+
+Implementing new file formats is easy:
+1. Identify the current database system (should be `data_base.isf_data_base` as of 04/03/2025)
+2. Add a new module to ``IO.LoaderDumper`` containing:
+  a. A writer function under the name ``dump()``
+  b. A reader class under the name ``Loader``
