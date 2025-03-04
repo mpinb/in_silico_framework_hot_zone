@@ -8,8 +8,6 @@ on:
       - .gitignore
     branches:
       - develop
-    branches-ignore:
-      - master
   push:
     branches:
       - master
@@ -69,5 +67,3 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: ./tests/logs/report_py38.xml
           verbose: true
-
-
