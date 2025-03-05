@@ -59,20 +59,20 @@ def _get_max_somadistance(dendrogram_db):
         out = max(out, dendro_section.x_dist_end)
     return out
 
+
 def _get_db_by_sec(dendrogram_db, sec):
     """Get the :py:class:`_DendrogramSection` object by its section ID.
-    
+
     Args:
         sec (int): The section ID.
-        
+
     Returns:
         :py:class:`_DendrogramSection`: The dendrogram section.
     """
     return next(
-        dendro_section
-        for dendro_section in dendrogram_db
-        if dendro_section.sec == sec
+        dendro_section for dendro_section in dendrogram_db if dendro_section.sec == sec
     )
+
 
 class _DendrogramSection:
     """A class to represent a dendrogram section.
@@ -80,8 +80,8 @@ class _DendrogramSection:
     A dendrogram section is a single neuron section, as it is represented in a dendrogram.
     It does not necessarily contain any morphological information.
     The usecase of this class is to be a leightweight dataclass, used in the :py:class:`Dendrogram` and :py:class:`DendrogramStatistics` classes.
-    
-    
+
+
     Attributes:
         name (str): The name of the section.
         x_dist_start (float): The starting distance of the section in :math:`\mu m`.
@@ -117,10 +117,10 @@ class _DendrogramSection:
         self.synapses = {}
         self.main_bifurcation = main_bifurcation
         self.sec_id = sec_id
-    
+
     def _add_synapse(self, label, x):
         """Add a synapse to a dendrogram section.
-        
+
         Args:
             label (str): The label of the synapse.
             x (float): The coordinate of the synapse.
@@ -136,13 +136,13 @@ class Dendrogram:
     Dendrograms are schematic representations of neuron morphologies.
 
     Example::
-    
+
         >>> d = Dendrogram(cell)
         >>> ax = d.plot()
         >>> ax.set_xlabel('Distance from soma ($\mu m$)')
-    
+
     .. figure:: ../../../_static/_images/dendrogram.png
-    
+
     Attributes:
         cell (:py:class:`~single_cell_parser.cell.Cell`): The cell object.
         dendrogram_db (list): A list of :py:class:`_DendrogramSection` objects.
@@ -166,10 +166,10 @@ class Dendrogram:
 
     def plot(self, ax=None):
         """Plot the dendrogram.
-        
+
         Args:
             ax (:py:class:`matplotlib.axes.Axes`): The matplotlib axes object. Default is `None` and a new figure is created.
-            
+
         Returns:
             :py:class:`matplotlib.axes.Axes`: The matplotlib axes object.
         """
@@ -181,10 +181,10 @@ class Dendrogram:
 
     def get_parent_by_name(self, name):
         """Get the parent of a dendrogram section by its name.
-        
+
         Args:
             name (str): The name of the section.
-            
+
         Returns:
             :py:class:`_DendrogramSection`: The parent dendrogram section. None if the section is the soma.
         """
@@ -196,9 +196,9 @@ class Dendrogram:
 
     def _compute_main_bifurcation_section(self):
         """Compute the main bifurcation section of the dendrogram.
-        
+
         The main bifurcation section is highlighted on the dendogram.
-        
+
         :skip-doc:
         """
         try:
@@ -213,7 +213,7 @@ class Dendrogram:
 
     def _cell_to_dendrogram(self, basesec=None, basename="", x_dist_base=0):
         """Convert a cell to a dendrogram.
-        
+
         :skip-doc:
         """
         if basename:
@@ -249,7 +249,7 @@ class Dendrogram:
 
     def _soma_to_dendrogram(self, cell):
         """Convert the soma to a dendrogram.
-        
+
         :skip-doc:
         """
         soma_sections = [s for s in cell.sections if s.label.lower() == "soma"]
@@ -268,13 +268,13 @@ class Dendrogram:
         self, ax, colormap={"Dendrite": "grey", "ApicalDendrite": "r"}
     ):
         """Plot the dendogram on an axes object.
-        
+
         This is the main plotting method used to either plot the dendogram alone, or to plot the
         dendrogram in :py:class:`DendrogramStatistics`.
-        
+
         Args:
             ax (:py:class:`matplotlib.axes.Axes`): The matplotlib axes object.
-            
+
         Returns:
             :py:class:`matplotlib.axes.Axes`: The matplotlib axes object.
         """
@@ -319,10 +319,10 @@ class Dendrogram:
 
 class _DendrogramDendriteStatistics:
     """Compute dendrite statistics from a dendrogram.
-    
+
     Dendrite statistics includes the total amount of dendritic length in a certain bin of soma distance.
     This is useful for calculating synapse statistics as well.
-    
+
     Attributes:
         dendrogram_db (list): A list of :py:class:`_DendrogramSection` objects.
         colormap_synapses (dict): A dictionary mapping color to synapse types. The keys must match the synapse types in the dendrogram.
@@ -331,6 +331,7 @@ class _DendrogramDendriteStatistics:
         dendrite_density (np.array): The dendrite density histogram, i.e. the amount of dendritic length within a range of soma distance.
 
     """
+
     def __init__(self, dendrogram_db, colormap_synapses=None):
         """
         Args:
@@ -347,13 +348,13 @@ class _DendrogramDendriteStatistics:
 
     def plot(self, ax=None):
         """Plot the dendrite statistics.
-        
-        This method is usually not used alone. Its base method 
+
+        This method is usually not used alone. Its base method
         :py:meth:`~DendrogramdendriteStatistics._plot_dendrite_hist` is used to plot the dendrogram statistics.
-        
+
         Args:
             ax (:py:class:`matplotlib.axes.Axes`): The matplotlib axes object. Default is `None` and a new figure is created.
-            
+
         Returns:
             :py:class:`matplotlib.axes.Axes`: The matplotlib axes object.
         """
@@ -362,15 +363,13 @@ class _DendrogramDendriteStatistics:
         self._plot_dendrite_hist(ax, xlim)
         return ax
 
-    def _get_amount_of_dendrite_in_bin(
-        self, min_, max_
-    ):
+    def _get_amount_of_dendrite_in_bin(self, min_, max_):
         """Get the amount of dendritic length in a certain bin of soma distance.
-        
+
         Args:
             min\_ (float): The minimum soma distance.
             max\_ (float): The maximum soma distance.
-            
+
         Returns:
             float: The amount of dendritic length in the bin.
         """
@@ -387,12 +386,12 @@ class _DendrogramDendriteStatistics:
 
     def _plot_dendrite_hist(self, ax, xlim, binsize=50):
         """Base method for plotting a histogram of dendrite length on an :py:class:`matplotlib.axes.Axes` object.
-        
+
         Args:
             ax (:py:class:`matplotlib.axes.Axes`): The matplotlib axes object.
             xlim (tuple): The x-axis limits.
             binsize (float): The size of the bins. Default is `50`.
-            
+
         Returns:
             :py:class:`matplotlib.axes.Axes`: The matplotlib axes object.
         """
@@ -409,11 +408,11 @@ class _DendrogramDendriteStatistics:
 
     def _compute_dendrite_hist(self, dist_end=None, binsize=50):
         """Compute the dendrite density histogram.
-        
+
         Args:
             dist_end (float): The maximum soma distance. Default is `None` and the maximum soma distance is calculated.
             binsize (float): The size of the bins. Default is `50`.
-            
+
         Returns:
             None: Nothing. Updates :paramref:`bins` and :paramref:`dendrite_density`.
         """
@@ -432,10 +431,10 @@ class _DendrogramDendriteStatistics:
 
 class _DendrogramSynapseStatistics:
     """Compute synapse statistics for a :py:class:`~single_cell_parser.cell.Cell` object.
-    
+
     Synaptic statistics include the total amount of synapses binned by soma distance, both unnormalized, as well
     as normalized by total amount of dendritic length.
-    
+
     Attributes:
         dendrogram_db (list): A list of :py:class:`_DendrogramSection` objects.
         cell (:py:class:`~single_cell_parser.cell.Cell`): The cell object.
@@ -447,6 +446,7 @@ class _DendrogramSynapseStatistics:
         synapse_density_basal (np.array): The synapse density histogram for basal dendrites.
         synapse_statistics (dict): A dictionary of synapse statistics
     """
+
     def __init__(self, dendrogram_db, cell, colormap_synapses=None):
         """
         Args:
@@ -468,7 +468,7 @@ class _DendrogramSynapseStatistics:
 
     def _add_synapses(self):
         """Add synapses to the dendrogram sections.
-        
+
         This method iterates the :py:class:`~single_cell_parser.cell.Cell` object, extracts the relevant synapse
         information, and adds it to the corresponding :py:class:`_DendrogramSection` objects.
         It is called upon initialization.
@@ -485,13 +485,13 @@ class _DendrogramSynapseStatistics:
         self, min_, max_, select=["Dendrite", "ApicalDendrite"], label=None
     ):
         """Get the number of synapses in a certain bin of soma distance.
-        
+
         Args:
             min\_ (float): The minimum soma distance.
             max\_ (float): The maximum soma distance.
             select (list): A list of labels to select. Default is `["Dendrite", "ApicalDendrite"]`.
             label (str): The label of the synapse. Default is `None`.
-            
+
         Returns:
             int: The number of synapses in the bin.
         """
@@ -507,11 +507,11 @@ class _DendrogramSynapseStatistics:
 
     def _compute_synapse_hist(self, binsize=50):
         """Compute the synapse density histogram.
-        
+
         Args:
             dist_end (float): The maximum soma distance. Default is `None` and the maximum soma distance is calculated.
             binsize (float): The size of the bins. Default is `50`.
-            
+
         Returns:
             None: Nothing. Updates :paramref:`bins`, :paramref:`synapse_density`, :paramref:`synapse_density_apical`, and :paramref:`synapse_density_basal`.
         """
@@ -546,10 +546,10 @@ class _DendrogramSynapseStatistics:
 
     def _compute_synapse_statistics(self):
         """Compute the synapse statistics.
-        
+
         This method calculates the total amount of synapses in the dendrogram per synapse type.
         While plotting per synapse type is supported, the default behavior is to plot all synapses in black.
-        
+
         Returns:
             None: Nothing. Updates :paramref:`synapse_statistics`.
         """
@@ -562,19 +562,19 @@ class _DendrogramSynapseStatistics:
 
     def _plot_synapse_density_hist(self, ax, xlim, binsize=50):
         """Plot the synapse density histogram on an :py:class:`matplotlib.axes.Axes` object.
-        
+
         If no colormap is provided during initialization, all synapses are plotted in red.
         If a colormap is provided, the synapses are plotted in the respective color.
-        
+
         Attention:
-            If a colormap is provided, but does not contain all synapse types as they appear in 
+            If a colormap is provided, but does not contain all synapse types as they appear in
             :paramref:`~single_cell_parser.cell.Cell.synapses`, the missing synapse types are omitted from the plot.
-        
+
         Args:
             ax (:py:class:`matplotlib.axes.Axes`): The matplotlib axes object.
             xlim (tuple): The x-axis limits.
             binsize (float): The size of the bins. Default is `50`.
-            
+
         Returns:
             :py:class:`matplotlib.axes.Axes`: The matplotlib axes object.
         """
@@ -604,13 +604,13 @@ class _DendrogramSynapseStatistics:
 
     def _plot_synapse_hist(self, ax, dendrite_density):
         """Plot the synapse histogram on an :py:class:`matplotlib.Axes` object.
-        
+
         Args:
             ax (:py:class:`matplotlib.Axes`): The matplotlib axes object.
             dendrite_density (np.array): The dendrite density histogram, containing the total amound of dendritic length in a certain bin of soma distance.
-            
+
         Returns:
-            :py:class:`matplotlib.Axes`: The matplotlib axes object.     
+            :py:class:`matplotlib.Axes`: The matplotlib axes object.
         """
         histogram(
             (self.bins, self.synapse_density / dendrite_density),
@@ -623,13 +623,13 @@ class _DendrogramSynapseStatistics:
 
     def _plot_synapses_dendrogram_overlay(self, ax):
         """Plot the synapses on the dendrogram.
-        
-        Given an :py:class:`~matplotlib.axes.Axes` object containing a dendrogram plot, 
+
+        Given an :py:class:`~matplotlib.axes.Axes` object containing a dendrogram plot,
         this method plots the synapses on the dendrogram as an overlay.
-        
+
         Args:
             ax (:py:class:`matplotlib.Axes`): The matplotlib axes object.
-            
+
         Returns:
             :py:class:`matplotlib.Axes`: The matplotlib axes object.
         """
@@ -652,12 +652,12 @@ class _DendrogramSynapseStatistics:
 
     def plot(self, ax=None):
         """Plot the synapse statistics
-        
+
         Plots out a histogram of the total amount of synapses per bin of soma distance.
-        
+
         Args:
             ax (:py:class:`matplotlib.axes.Axes`): The matplotlib axes object. Default is `None` and a new figure is created.
-                
+
         Returns:
             :py:class:`matplotlib.axes.Axes`: The matplotlib axes object.
         """
@@ -671,27 +671,28 @@ class _DendrogramSynapseStatistics:
 
 class DendrogramStatistics(Dendrogram):
     """Plot dendrogram statistics.
-    
+
     This clats creates a composite plot of a dendogram, as well as dendritic length and synapse statistics.
     These statistics include:
-    
+
     - The total amount of dendritic length in a certain bin of soma distance.
     - The total amount of synapses in a certain bin of soma distance.
     - The total amount of synapses per micron dendritic length.
-    
+
     Example::
-    
+
         >>> d = DendrogramStatistics(cell)
         >>> fig = d.plot()
         >>> plt.show()
-        
+
     .. figure:: ../../../_static/_images/dendrogram_statistics.png
-    
+
     Attributes:
         dendrogram (:py:class:`Dendrogram`): The dendrogram object.
         dend_statistics (:py:class:`_DendrogramDendriteStatistics`): The dendrite statistics object.
         syn_statistics (:py:class:`_DendrogramSynapseStatistics`): The synapse statistics object.
     """
+
     def __init__(self, cell):
         """
         Args:
@@ -707,12 +708,12 @@ class DendrogramStatistics(Dendrogram):
 
     def plot(self, figsize=None, colormap_synapses=None):
         """Plot the dendrogram statistics.
-        
+
         Args:
             figsize (tuple): The figure size. Default is `None`.
             colormap_synapses (dict): A dictionary mapping color to synapse types. The keys must match the synapse types in the dendrogram.
                 Missing keys will be omitted from the visualization alltogether. Default: `None` (plot all synapses in black).
-                
+
         Returns:
             :py:class:`matplotlib.figure.Figure`: The matplotlib figure object.
         """
