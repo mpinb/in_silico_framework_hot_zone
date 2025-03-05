@@ -1,3 +1,10 @@
+"""Plot a dendrogram of a neuron morphology.
+
+Dendrograms are schematic representations of neuron morphologies.
+This module provides a class to plot dendrograms, as well as denddritic length and synapse count statistics.
+
+.. figure:: ../../../_static/_images/dendrogram.png
+"""
 import matplotlib.gridspec as gridspec
 import matplotlib.pyplot as plt
 import numpy as np
