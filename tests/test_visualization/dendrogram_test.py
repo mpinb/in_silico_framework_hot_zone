@@ -1,4 +1,4 @@
-from visualize.dendrogram import Dendrogram
+from visualize.dendrogram import Dendrogram, DendrogramStatistics
 import matplotlib.pyplot as plt
 from tests import setup_synapse_activation_experiment
 
@@ -8,5 +8,10 @@ class TestDendrogram:
     
     def test_dendrogram(self):
         d = Dendrogram(self.cell)
+        ax = d.plot()
+        ax.set_xlabel('Distance from soma ($\mu m$)')
         fig = d.plot()
-        plt.show()
+
+    def test_dendrogram_statistics(self):
+        ds = DendrogramStatistics(self.cell)
+        fig = ds.plot()
