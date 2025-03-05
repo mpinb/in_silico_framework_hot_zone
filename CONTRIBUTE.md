@@ -14,6 +14,11 @@ Contents:
   - [Pull Request Process](#pull-request-process)
 - [Issue Tracking](#issue-tracking)
 - [Documentation](#documentation)
+  - [Documentation format](#documentation-format)
+  - [Common mistakes](#common-mistakes)
+  - [Sphinx](#sphinx)
+- [Database](#database)
+  - [Database Modularity](#database-modularity)
 
 ## Code of Conduct
 
@@ -115,6 +120,70 @@ Our documentation is generated using Sphinx, together with the `autoapi` extensi
 Invoking `pixi run build_docs` triggers the Sphinx build process. This is simply a convenience alias for `make html`.
 If you are adapting the documentation configuration, you may need to delete the `docs/_build` and `docs/tutorials` directories before rebuilding.
 
+### Documentation format
+
+We use the Google-style documentation format. The Google documentation guidelines can be broadly summarized by just a handful of rules:
+
+- The first line is a short description. This will appear in summary tables in the documentation.
+- Attribute blocks, argument blocks and other blocks are indented. Note that indentation also impacts rst (see example below)
+- Arguments and attributes are listed with their type in brackets: `attr_arg (type): descr`
+
+In addition to these guidelines, ISF imposes one additional rule for docstrings:
+
+- Class docstrings always end with a list of their attributes. This is in contrast to the [PEP-257 convention](https://peps.python.org/pep-0257/) where attribute docstrings come after each attribute. We use Jinja templating to parse out the attributes from the Attribute block rather than the PEP-257 convention, because the PEP-257 convention is just honestly quite a bit of work. That being said, you are of course also allowed to use the PEP-257 convention. Just don't mix the two.
+
+Classes tend to be the most documentation work, so we've opted to give you an example class to showcase what you can do with documentation. `rst` directives in the docstring are allowed. most HTML themes also support example blocks, attention blocks, "see also" blocks etc.
+
+```python
+class DocumentMePlease():
+  """A short sentence.
+  
+  This class serves as an example. It shows how a docstring should look like.
+
+  You can use example blocks like below. Mind the fact that code blocks in rst are defined by their indentation and a preceding double colon.
+
+  Example::
+
+      >>> code(
+      ... arg=1
+      ... )
+      output
+      >>> more_code()
+
+  Example:
+
+      Another example, just in text.
+
+  See also:
+      A link to :py:class:`~package.subpackage.module.AnotherClass`
+
+  Attributes:
+      test_attribute (bool): a test attribute
+      esc (bool): Another test attribute
+      attribute_not_arg (int): An attribute that is not in the init docstring.
+  """
+  def __init__(self, test_arg, escape_me_):
+    """
+    Args:
+        test_arg (bool): A test argument.
+        escape_me\_ (bool): An argument ending in an underscore, which should b escaped.
+    """
+    self.test_attribute = test
+    self.esc = escape_me_
+    """esc (bool): This is a PEP-257 docstring example. Because I'm now mixing conventions, this will appear twice"""
+    self.attribute_not_arg = self.test_attribute + self.esc
+```
+
+### Common mistakes
+
+Here are some common things to look out for when writing documentation:
+
+- **Indentation**: rst is strict on indentation. It is also conventionally indented with $3$ spaces rather than $4$. In most cases, rst works fine with $4$ as well (as long as you're consistent), but if you're e.g. adapting the Jinja templates, you will need to stick with the convention.
+- **Newlines**: Sphinx relies heavily on neewlines to recognize blocks. For example, *al* lists (numbered or bullet) must start and end with a newline. This can lead to some weird-looking docstrings if you want e.g. a bullet list inside of an attribute block. But it works.
+- **Forgetting the module-level docstring**: please don't forget it! It's the most easily overlooked, but stands out the most in the final HTML page, as it yields a near-blank page.
+
+### Sphinx
+
 A comprehensive overview of how Sphinx reads in source files (i.e. our Python code) and builds documentation is given at https://www.sphinx-doc.org/en/master/extdev/event_callbacks.html
 However, we summarize some key concepts below.
 
@@ -130,10 +199,35 @@ However, we summarize some key concepts below.
 
 ## Database
 The database system in ISF is modular, meaning that new file formats or entirely new database systems can be implemented if needed.
-we strongly recommend to not adapt the database system though, as it acquires a decent amount of technical debt to maintain them.
 
 Implementing new file formats is easy:
+
 1. Identify the current database system (should be `data_base.isf_data_base` as of 04/03/2025)
 2. Add a new module to ``IO.LoaderDumper`` containing:
   a. A writer function under the name ``dump()``
   b. A reader class under the name ``Loader``
+
+That's it! You can now use this data format to save data:
+
+```python
+db.set("key", my_data, dumper=dumper_module_name)
+db["key"]  # returns my_data
+```
+
+The database will automatically use your `dump()` and `Loader` to save and read your data.
+
+### Database modularity
+
+This codebase has been a little over 15 years in the making (depending on who you ask). Inevitably, data formats have come and passed. `pandas-msgpack` used to be the crème de la crème with its `blosc` compression, until it stopped being maintained. To balance long term support with cutting-edge file formats, we must be modular in our database system.
+
+What do we meean when we say a "modular data base system"? In the past, we have used `model_data_base` instead of `isf_data_base`. `model_data_base` differed from the current database system in the following aspects:
+- It used the `.pickle` format for saving metadata, and `LoaderDumper` information. This introduced the issue that nothing could be refactored, moved or renamed in the source code of the database, or the pickled Loader object would not work anymore. 
+- It used SQLite to save and fetch metadata. This then required filelocking to prevent concurrent writes to the metadata file.
+
+Both issues introduced significant overhead in usage and maintenance. However, simply changing the way it worked would invalidate all old data. As we didn't want to convert exabytes of data when we could still simply read it in, but also wanted to avoid these issues in the future, we opted for the current "modular" approach, where we can use both `isf_data_base`, and `model_data_base` (if necessary), and even extend it to some mysterious third future option (God help us all if we need to, but we could).
+
+This modular approach is possible because we have one wrapper `data_base` package, and a corresponding `DataBase` wrapper class. Give the wrapper class a path to a database, it will infer which database system was used, and give you the correct source code to read, inspect, and write data.
+
+Throughout ISF, all other packages simply rely on the wrapper `data_base`, and do not know which database system will actually take care of saving their precious data. This agnosticism is achieved by dynamically adding the latest `IO` and `db_initializers` subpackages to the Python namespace at runtime, i.e. as soon as `data_base` is imported. Exactly which subpackages are the "latest" can then be configured in the `data_base` package.
+
+You may have noticed that we do **not** recommend changing the database system. It is tedious, and introduces avoidable technical debt. Generally, 99% of all flexibility you could ever want can be achieved by implementing new `LoaderDumper` modules in the current database system.
