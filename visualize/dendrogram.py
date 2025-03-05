@@ -672,7 +672,7 @@ class _DendrogramSynapseStatistics:
 class DendrogramStatistics(Dendrogram):
     """Plot dendrogram statistics.
 
-    This clats creates a composite plot of a dendogram, as well as dendritic length and synapse statistics.
+    This class creates a composite plot of a dendrogram, as well as dendritic length and synapse count statistics.
     These statistics include:
 
     - The total amount of dendritic length in a certain bin of soma distance.
