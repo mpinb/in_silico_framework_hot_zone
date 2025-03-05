@@ -1,5 +1,4 @@
-from collections import defaultdict
-
+import matplotlib.gridspec as gridspec
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.collections import LineCollection
@@ -19,6 +18,13 @@ def range_overlap(beginning1, end1, beginning2, end2, bool_=True):
 def get_dist(x1, x2):
     assert len(x1) == len(x2)
     return np.sqrt(sum((xx1 - xx2) ** 2 for xx1, xx2 in zip(x1, x2)))
+
+
+def _get_max_somadistance(dendrogram_db):
+    out = 0
+    for dendro_section in dendrogram_db:
+        out = max(out, dendro_section.x_dist_end)
+    return out
 
 
 class _DendrogramSection:
@@ -48,19 +54,22 @@ class Dendrogram:
     Dendrograms are schematic representations of neuron morphologies.
     """
 
-    def __init__(self, cell, title="", colormap_synapses=None):
+    def __init__(self, cell, title=""):
         self.cell = cell
         self.title = title
         self.dendrogram_db = []
-        if colormap_synapses:
-            self.colormap_synapses = colormap_synapses
-        else:
-            self.colormap_synapses = defaultdict(lambda: "k")
         self._cell_to_dendrogram(basesec=self.cell.soma)
         self._soma_to_dendrogram(self.cell)
         self.dendrogram_db_by_name = {d_.name: d_ for d_ in self.dendrogram_db}
         self.dendrogram_db_by_sec_id = {int(d_.sec_id): d_ for d_ in self.dendrogram_db}
         self._compute_main_bifurcation_section()
+
+    def _get_db_by_sec(self, sec):
+        return next(
+            dendro_section
+            for dendro_section in self.dendrogram_db
+            if dendro_section.sec == sec
+        )
 
     def plot(self, ax=None):
         if ax is None:
@@ -86,20 +95,6 @@ class Dendrogram:
             dendro_section = self._get_db_by_sec(sec)
             dendro_section.main_bifurcation = True
             self.main_bifur_dist = dendro_section.x_dist_end
-
-    def _get_max_somadistance(self):
-        out = 0
-        for dendro_section in self.dendrogram_db:
-            out = max(out, dendro_section.x_dist_end)
-        self.max_somadist = out
-        return out
-
-    def _get_db_by_sec(self, sec):
-        return next(
-            dendro_section
-            for dendro_section in self.dendrogram_db
-            if dendro_section.sec == sec
-        )
 
     def _cell_to_dendrogram(self, basesec=None, basename="", x_dist_base=0):
         if basename:
@@ -182,7 +177,7 @@ class Dendrogram:
 
         ax.set_title(self.title)
         ax.set_ylabel("branch id")
-        max_x = self._get_max_somadistance()
+        max_x = _get_max_somadistance(self.dendrogram_db)
         ax.set_xlim(-0.01 * max_x, max_x)
         ax.set_ylim(-5, len(self.dendrogram_db))
         ax.spines["top"].set_visible(False)
@@ -205,13 +200,6 @@ class _DendrogramDendriteStatistics:
         self._plot_dendrite_hist(ax, xlim)
         return ax
 
-    def _get_max_somadistance(self):
-        out = 0
-        for dendro_section in self.dendrogram_db:
-            out = max(out, dendro_section.x_dist_end)
-        self.max_somadist = out
-        return out
-
     def _get_amount_of_dendrite_in_bin(
         self, min_, max_, select=["Dendrite", "ApicalDendrite"]
     ):
@@ -228,23 +216,6 @@ class _DendrogramDendriteStatistics:
             )
         return out
 
-    def _plot_synapses_dendrogram_overlay(self, ax):
-        syn_lines = []
-        syn_colors = []
-        for sec_id, dendro_section in enumerate(self.dendrogram_db):
-            for syntype in dendro_section.synapses:
-                for syn in dendro_section.synapses[syntype]:
-                    syn_lines.append(
-                        (
-                            [syn, sec_id + 0.5],
-                            [syn, sec_id - 0.5],
-                        )
-                    )
-                    syn_colors.append(self.colormap_synapses[syntype])
-        syn_line_segments = LineCollection(syn_lines, colors=syn_colors, linewidths=0.3)
-        ax.add_collection(syn_line_segments)
-        return ax
-
     def _plot_dendrite_hist(self, ax, xlim, binsize=50):
         self._compute_dendrite_hist(xlim[1], binsize=binsize)
         histogram(
@@ -259,7 +230,7 @@ class _DendrogramDendriteStatistics:
 
     def _compute_dendrite_hist(self, dist_end=None, binsize=50):
         if dist_end is None:
-            dist_end = self._get_max_somadistance()
+            dist_end = _get_max_somadistance(self.dendrogram_db)
         bins = np.arange(0, dist_end + binsize, binsize)
 
         dendrite_density = [
@@ -291,12 +262,39 @@ class _DendrogramDendriteStatistics:
 
 
 class _DendrogramSynapseStatistics:
-    def __init__(self, dendrogram_db):
+    def __init__(self, dendrogram_db, cell, colormap_synapses=None):
+        if colormap_synapses is None:
+            colormap_synapses = {}
         self.dendrogram_db = dendrogram_db
+        self.cell = cell
         self.bins = None
         self.synapse_density = None
         self.dendrite_density = None
+        self._add_synapses()
         self._compute_synapse_statistics()
+        self._compute_synapse_hist()
+
+    def _get_db_by_sec(self, sec):
+        return next(
+            dendro_section
+            for dendro_section in self.dendrogram_db
+            if dendro_section.sec == sec
+        )
+
+    def _add_synapse(self, dendro_section, label, x):
+        if not label in dendro_section.synapses:
+            dendro_section.synapses[label] = []
+        dendro_section.synapses[label].append(x)
+
+    def _add_synapses(self):
+        """ """
+        for cell_type, synapses in self.cell.synapses.items():
+            for syn in synapses:
+                sec_id = syn.secID
+                sec = self.cell.sections[sec_id]
+                dendro_sec = self._get_db_by_sec(sec)
+                x = sec.L * syn.x + dendro_sec.x_dist_start
+                self._add_synapse(dendro_sec, label=cell_type, x=x)
 
     def get_number_of_synapses_in_bin(
         self, min_, max_, select=["Dendrite", "ApicalDendrite"], label=None
@@ -311,21 +309,9 @@ class _DendrogramSynapseStatistics:
                         out += 1
         return out
 
-    def _plot_synapse_density_hist(self, ax, xlim, binsize=50, dendrite_hist=None):
-        self._compute_synapse_hist(xlim[1], binsize=binsize)
-        histogram(
-            (self.bins, self.synapse_density / dendrite_hist),
-            label="total",
-            colormap={"total": "k"},
-            ax=ax,
-        )
-        ax.legend()
-        ax.set_xlim(xlim)
-        ax.set_ylabel("# syn / micron dendritic length", color="k")
-
     def _compute_synapse_hist(self, dist_end=None, binsize=50):
         if dist_end is None:
-            dist_end = self._get_max_somadistance()
+            dist_end = _get_max_somadistance(self.dendrogram_db)
         bins = np.arange(0, dist_end + binsize, binsize)
 
         synapse_density = [
@@ -362,27 +348,64 @@ class _DendrogramSynapseStatistics:
                     self.synapse_statistics[label] = []
                 self.synapse_statistics[label].extend(dendro_section.synapses[label])
 
-    def _plot_synapse_hist(self, ax, colormap_synapses):
-        for label in self.synapse_statistics:
-            ax.hist(
-                self.synapse_statistics[label],
-                bins=50,
-                color=colormap_synapses.get(label, "k"),
-                alpha=0.5,
-                label=label,
+    def _plot_synapse_density_hist(self, ax, xlim, binsize=50):
+        self._compute_synapse_hist(xlim[1], binsize=binsize)
+        if self.colormap_synapses is None:
+            # Plot all
+            self.colormap_synapses = {"total": "r"}
+            histogram(
+                (self.bins, self.synapse_density),
+                label="total",
+                colormap={"total": "r"},
+                ax=ax,
             )
+        else:
+            # plot per label
+            for label in self.colormap_synapses:
+                histogram(
+                    (self.bins, self.synapse_statistics[label]),
+                    label=label,
+                    colormap=self.colormap_synapses,
+                    ax=ax,
+                )
         ax.legend()
-        ax.set_ylabel("# synapses")
+        ax.set_xlim(xlim)
+        ax.set_ylabel("# syn / micron dendritic length", color="k")
+
+    def _plot_synapse_hist(self, ax, dendrite_density):
+        histogram(
+            (self.bins, self.synapse_density / dendrite_density),
+            label="total",
+            colormap={"total": "k"},
+            ax=ax,
+        )
+        ax.legend()
+        ax.set_ylabel("# syn / micron dendritic length", color="k")
+
+    def _plot_synapses_dendrogram_overlay(self, ax):
+        syn_lines = []
+        syn_colors = []
+        for dendro_section in self.dendrogram_db:
+            sec_id = dendro_section.sec_id
+            for syntype in dendro_section.synapses:
+                for syn in dendro_section.synapses[syntype]:
+                    syn_lines.append(
+                        (
+                            [syn, sec_id + 0.5],
+                            [syn, sec_id - 0.5],
+                        )
+                    )
+                    syn_colors.append(self.colormap_synapses.get(syntype, "k"))
+        syn_line_segments = LineCollection(syn_lines, colors=syn_colors, linewidths=0.3)
+        ax.add_collection(syn_line_segments)
         return ax
 
     def plot(self, ax=None, colormap_synapses=None):
         if ax is None:
             fig = plt.figure(figsize=(8, 10), dpi=200)
             ax = fig.add_subplot(211)
-            ax2 = fig.add_subplot(212)
 
         ax = self._plot_synapse_hist(ax, colormap_synapses=colormap_synapses)
-        xlim = ax.get_xlim()
         return fig
 
 
@@ -393,31 +416,26 @@ class DendrogramStatistics(Dendrogram):
             self.dendrogram.dendrogram_db
         )
         self.syn_statistics = _DendrogramSynapseStatistics(
-            self.dendrogram.dendrogram_db
+            self.dendrogram.dendrogram_db, cell=cell
         )
 
-    def plot(self, colormap_synapses=None):
-        fig = plt.figure()
-        ax = fig.add_subplot(311)
-        ax2 = fig.add_subplot(312)
-        ax3 = fig.add_subplot(313)
+    def plot(self, figsize=None, colormap_synapses=None):
+        self.syn_statistics.colormap_synapses = colormap_synapses
+        if figsize is None:
+            figsize = (8, 10)
+        fig = plt.figure(figsize=figsize)
+        gs = gridspec.GridSpec(3, 1, height_ratios=[2, 1, 1])
+        ax = fig.add_subplot(gs[0])
+        ax2 = fig.add_subplot(gs[1])
+        ax3 = fig.add_subplot(gs[2])
 
         ax = self.dendrogram._plot_dendrogram(ax)
         xlim = ax.get_xlim()
         ax2 = self.dend_statistics._plot_dendrite_hist(ax2, xlim=xlim)
         ax2_2 = ax2.twinx()
-        ax2_2 = self.syn_statistics._plot_synapse_hist(ax2_2, colormap_synapses=colormap_synapses)
-        ax3 = self.syn_statistics._plot_synapse_density_hist(ax3, xlim=xlim, dendrite_hist = self.dend_statistics.dendrite_density)
+        ax2_2 = self.syn_statistics._plot_synapse_density_hist(ax2_2, xlim=xlim)
+        ax3 = self.syn_statistics._plot_synapse_hist(
+            ax3, dendrite_density=self.dend_statistics.dendrite_density
+        )
+        ax = self.syn_statistics._plot_synapses_dendrogram_overlay(ax)
         return fig
-
-
-def plot_dendrogram(cell, title="", colormap_synapses=None):
-    d = Dendrogram(cell, title=title, colormap_synapses=colormap_synapses)
-    fig = d.plot()
-    return fig
-
-
-def plot_dendrogram_synapse_statistics(cell, title="", colormap_synapses=None):
-    d = Dendrogram(cell, title=title, colormap_synapses=colormap_synapses)
-    fig = d.plot(synapses=True)
-    return fig
