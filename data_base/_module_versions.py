@@ -7,12 +7,12 @@ import os
 from ._version import get_versions
 
 def _get_env_manager():
-    if len(shutil.which('conda')) > 0:
-        return 'conda'
-    elif len(shutil.which('pixi')) > 0:
+    if shutil.which('pixi') is not None:
         return 'pixi'
+    elif shutil.which('conda') is not None:
+        return 'conda'
     else:
-        raise ValueError('No environment manager found. Are conda or pixi in your PATH?')
+        raise ValueError('No environment manager found. Are conda or pixi in your $PATH?')
 
 class Versions_cached:
 
