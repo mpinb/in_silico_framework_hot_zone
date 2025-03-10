@@ -9,7 +9,7 @@ However, for development and testing purposes, it may be of use to explicitly op
 
 from __future__ import absolute_import
 import os
-from data_base.data_base import DataBase, get_db_by_unique_id, is_model_data_base
+from data_base.data_base import DataBase, get_db_by_unique_id, _is_legacy_model_data_base
 from data_base.exceptions import DataBaseException
 import cloudpickle
 from six.moves import cPickle
