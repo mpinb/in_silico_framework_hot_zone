@@ -46,6 +46,4 @@ Example:
             "error": null
         }
 """
-import compatibility
-compatibility.init_data_base_compatibility()
 from .data_base import DataBase
