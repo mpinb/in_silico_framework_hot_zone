@@ -17,7 +17,4 @@ test_data_folder = os.path.join(
     "C2_evoked_UpState_INH_PW_1.0_SuW_0.5_C2center/",
 )
 
-# To test model-data_base in the way it existed before, we must register it as a top-level module
-import data_base.model_data_base
 
-sys.modules["model_data_base"] = data_base.model_data_base
