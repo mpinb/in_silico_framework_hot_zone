@@ -26,6 +26,7 @@ from ..IO.LoaderDumper import(
     pandas_to_msgpack as db_pandas_to_msgpack,
 )
 from ..model_data_base import get_progress_bar_function, MdbException
+from ..IO.roberts_formats import _max_commas
 from ..IO.roberts_formats import read_pandas_synapse_activation_from_roberts_format as read_sa
 from ..IO.roberts_formats import read_pandas_cell_activation_from_roberts_format as read_ca
 from data_base.analyze.spike_detection import spike_detection
@@ -254,7 +255,6 @@ def create_metadata(mdb):
 # Step five: rewrite synapse and cell activation data to
 # a  format, that can be read by pandas and attach sim_trail_index to it
 ###########################################
-from model_data_base.IO.roberts_formats import _max_commas
 
 
 def get_max_commas(paths):
