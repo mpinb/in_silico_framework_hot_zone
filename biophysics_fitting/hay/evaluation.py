@@ -1273,3 +1273,85 @@ def get_evaluate_StepThree(**kwargs):
 
     return fun
 
+
+def evaluate_bAP(**kwargs):
+    """Evaluate the :math:`bAP` stimulus protocol.
+
+    Initializes a :py:class:`bAP` object with the default keyword arguments,
+    and calls the evaluation on the voltage traces.
+
+    Args:
+        **kwargs: Additional or overriding keyword arguments for the :py:class:`bAP` object. Defaults to None.
+
+    Returns:
+        dict: Dictionary with evaluation metrics.
+    """
+    bap = bAP()
+    return bap.get(**kwargs)
+
+
+def evaluate_BAC(**kwargs):
+    """Evaluate the :math:`BAC` stimulus protocol.
+
+    Initializes a :py:class:`BAC` object with the default keyword arguments,
+    and calls the evaluation on the voltage traces.
+
+    Args:
+        **kwargs: Additional or overriding keyword arguments for the :py:class:`BAC` object. Defaults to None.
+
+    Returns:
+        dict: Dictionary with evaluation metrics.
+    """
+    bac = BAC()
+    return bac.get(**kwargs)
+
+
+def evaluate_StepOne(**kwargs):
+    """Evaluate the :math:`StepOne` stimulus protocol.
+
+    Initializes a :py:class:`StepOne` object with the default keyword arguments,
+    and calls the evaluation function on the voltage traces.
+
+    Args:
+        **kwargs: Additional or overriding keyword arguments for the :py:class:`StepOne` object. Defaults to None.
+
+    Returns:
+        dict: Dictionary with evaluation metrics.
+    """
+    step = StepOne()
+    return step.get(**kwargs)
+
+
+def evaluate_StepTwo(**kwargs):
+    """Evaluate the :math:`StepTwo` stimulus protocol.
+
+    Initializes a :py:class:`StepTwo` object with the default keyword arguments,
+    and calls the evaluation function on the voltage traces.
+
+    Args:
+        **kwargs: Additional or overriding keyword arguments for the :py:class:`StepTwo` object. Defaults to None.
+
+    Returns:
+        dict: Dictionary with evaluation metrics.
+    """
+    step = StepTwo()
+    return step.get(**kwargs)
+
+
+
+def evaluate_StepThree(**kwargs):
+    """Evaluate the :math:`StepTwo` stimulus protocol.
+
+    Initializes a :py:class:`StepTwo` object with the default keyword arguments,
+    and calls the evaluation function on the voltage traces.
+
+    Args:
+        **kwargs: Additional or overriding keyword arguments for the :py:class:`StepThree` object. Defaults to None.
+
+    Returns:
+        dict: Dictionary with evaluation metrics.
+    """
+    step = StepThree()
+    return step.get(**kwargs)
+
+
