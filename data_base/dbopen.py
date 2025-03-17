@@ -67,7 +67,7 @@ def resolve_db_path(path):
             '/gpfs01/bethge/home/regger/data/',
             '/nas1/Data_regger/AXON_SAGA/Axon4/PassiveTouch/')  # TODO: make this more general
         print('new path', path)
-    if not path.startswith('mdb://'):
+    if not path.startswith('mdb://') and not path.startswith("db://"):
         return path
 
     path_splitted = path.split('//')[1].split('/')
@@ -117,7 +117,7 @@ def create_db_path(path):
                 format(path))
     
     # Instantiate mother database
-    db = DataBase(db_path, nocreate=True)
+    db = DataBase(db_path, nocreate=True, readonly=True)
 
     #print path
     path_minus_db_basedir = os.path.relpath(path, db._basedir)
