@@ -53,8 +53,6 @@ class Cell(object):
         tVec (neuron.h.Vector): a hoc Vector recording time.
         neuron_param: The :ref:`cell_parameters_format`.
         section_adjacency_map (dict): maps each section (by ID) to its parent sections and children sections.
-        evokedNW: The :py:class:`single_cell_parser.network.NetworkMapper` object for evoked network simulations. 
-            Set by e.g. :py:meth:`~single_cell_parser.cell_modify_functions.synaptic_input.synaptic_input`.
     '''
     def __init__(self):
         self.hoc_path = None
