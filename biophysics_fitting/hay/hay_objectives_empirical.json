@@ -70,7 +70,7 @@
         "TTFS3": ["Time to first spike", 7.25, 1.0],
         "APh3": ["AP height", 16.436800000000002, 6.9321999999999999],
         "fAHPd3": [
-            "Fast afterhypoerpolarization depth",
+            "Fast afterhyperpolarization depth",
             -56.557899999999997,
             3.5834000000000001
         ],
