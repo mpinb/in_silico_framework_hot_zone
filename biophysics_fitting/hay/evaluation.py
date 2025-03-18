@@ -1274,7 +1274,7 @@ def get_evaluate_StepThree(**kwargs):
     return fun
 
 
-def evaluate_bAP(**kwargs):
+def hay_evaluate_bAP(**kwargs):
     """Evaluate the :math:`bAP` stimulus protocol.
 
     Initializes a :py:class:`bAP` object with the default keyword arguments,
@@ -1290,7 +1290,7 @@ def evaluate_bAP(**kwargs):
     return bap.get(**kwargs)
 
 
-def evaluate_BAC(**kwargs):
+def hay_evaluate_BAC(**kwargs):
     """Evaluate the :math:`BAC` stimulus protocol.
 
     Initializes a :py:class:`BAC` object with the default keyword arguments,
@@ -1306,7 +1306,7 @@ def evaluate_BAC(**kwargs):
     return bac.get(**kwargs)
 
 
-def evaluate_StepOne(**kwargs):
+def hay_evaluate_StepOne(**kwargs):
     """Evaluate the :math:`StepOne` stimulus protocol.
 
     Initializes a :py:class:`StepOne` object with the default keyword arguments,
@@ -1322,7 +1322,7 @@ def evaluate_StepOne(**kwargs):
     return step.get(**kwargs)
 
 
-def evaluate_StepTwo(**kwargs):
+def hay_evaluate_StepTwo(**kwargs):
     """Evaluate the :math:`StepTwo` stimulus protocol.
 
     Initializes a :py:class:`StepTwo` object with the default keyword arguments,
@@ -1338,8 +1338,7 @@ def evaluate_StepTwo(**kwargs):
     return step.get(**kwargs)
 
 
-
-def evaluate_StepThree(**kwargs):
+def hay_evaluate_StepThree(**kwargs):
     """Evaluate the :math:`StepTwo` stimulus protocol.
 
     Initializes a :py:class:`StepTwo` object with the default keyword arguments,
