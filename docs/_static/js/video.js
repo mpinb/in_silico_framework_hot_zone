@@ -17,5 +17,5 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Listen for theme changes
     const observer = new MutationObserver(updateVideoSource);
-    observer.observe(htmlElement, { attributes: true, attributeFilter: ["data-md-color-scheme"] });
+    observer.observe(htmlElement.lastChild, { attributes: true, attributeFilter: ["data-md-color-scheme"] });
 });
