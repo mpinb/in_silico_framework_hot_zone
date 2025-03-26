@@ -18,7 +18,7 @@ It allows for targeted and mechanistically detailed *in-silico* manipulations ac
 .. raw:: html
 
    <div id="video-player">
-       <video autoplay controls muted width="100%" height="100%" alt="ISF Overview">
+       <video muted="true" autoplay="true" controls="true" width="100%" height="100%" alt="ISF Overview">
            <source id="video-source" src="_static/_videos/sequence.mp4" type="video/mp4">
            Your browser does not support the video tag.
        </video>
