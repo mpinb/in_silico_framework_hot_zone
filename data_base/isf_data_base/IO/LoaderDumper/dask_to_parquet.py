@@ -74,6 +74,7 @@ def save_helper(savedir, delayed_df, n_partitions, partition):
         engine=ENGINE,
         compression=COMPRESSION)
 
+@dask.delayed
 def check_df_suitable_for_pq(delayed_df):
     assert all([type(e) == str for e in delayed_df.columns]), \
         "This method requires that all column names of the dataframe are strings, \
