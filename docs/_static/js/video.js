@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
     const videoPlayer = document.getElementById("video-player");
+    const video = videoPlayer.getElementsByTagName("video")[0];
     const videoSource = document.getElementById("video-source");
     const htmlElement = document.documentElement; // The <html> element
 
@@ -17,7 +18,7 @@ document.addEventListener("DOMContentLoaded", function () {
     updateVideoSource();
     // Ensure the video is muted and autoplay works
     videoPlayer.muted = true; // Explicitly set muted
-    videoPlayer.play().catch((error) => {
+    video.play().catch((error) => {
         console.warn("Autoplay failed:", error);
     });
     // Listen for theme changes
