@@ -195,6 +195,8 @@ html_theme = "sphinx_immaterial"
 # further.  For a list of options available for each theme, see the
 # documentation.
 html_logo = "_static/_images/isf-logo-white.png"
+# ATTENTION: We pin the background color of the theme in _static/css/custom.css
+# This is done to ensure the videos match the background color, even after updating the theme.
 html_theme_options = {
     "repo_url": "https://github.com/mpinb/in_silico_framework",
     "palette": [
@@ -211,7 +213,7 @@ html_theme_options = {
         {
             "media": "(prefers-color-scheme: dark)",
             "scheme": "slate",
-            "primary": "teal",
+            "primary": "indigo",
             "accent": "orange",
             "toggle": {
                 "icon": "material/toggle-switch",
