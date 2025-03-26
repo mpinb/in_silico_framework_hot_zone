@@ -67,6 +67,7 @@ def save_helper(savedir, delayed_df, n_partitions, partition):
     Returns:
         None
     """
+    check_df_suitable_for_pq(delayed_df)
     return delayed_df.to_parquet(
         os.path.join(
             savedir,
@@ -172,8 +173,7 @@ def dump(obj, savedir, schema=None, client=None, repartition = 10000):
     
     # construct delayeds to save the dataframe
     # Note: this converts the column names to string. These are reset to their original dtype at the end
-    obj = df_colnames_to_str(obj)
-    check_df_suitable_for_pq(obj)
+    obj = dask.delayed(df_colnames_to_str)(obj)
     delayeds = obj.to_delayed()
     delayeds = [
         save_helper(savedir, d, len(delayeds), lv)
