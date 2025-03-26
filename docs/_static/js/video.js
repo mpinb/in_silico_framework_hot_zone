@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
+    const videoPlayer = document.getElementById("video-player");
     const videoSource = document.getElementById("video-source");
     const htmlElement = document.documentElement; // The <html> element
 
@@ -18,4 +19,6 @@ document.addEventListener("DOMContentLoaded", function () {
     // Listen for theme changes
     const observer = new MutationObserver(updateVideoSource);
     observer.observe(htmlElement.lastChild, { attributes: true, attributeFilter: ["data-md-color-scheme"] });
+    // Ensure the video autoplays when the page loads
+    videoPlayer.play();
 });
