@@ -23,6 +23,7 @@ from docs.utils.sphinx_hooks import (
     find_first_match,
     log_documented_members,
 )
+import data_base  # trigger db compatibility
 
 logger = isf_logger.getChild("DOCS")
 logger.setLevel("INFO")
