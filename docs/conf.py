@@ -94,6 +94,10 @@ def setup(app):
     app.connect("autoapi-skip-member", count_documented_members)
     app.connect("env-updated", log_documented_members)
 
+    # add custom css and js. fpaths relative to _satic/
+    app.add_css_file('css/custom.css')
+    app.add_js_file('js/video.js')
+
 
 # toc_object_entries_show_parents = "hide"  # short toc entries
 
@@ -251,11 +255,9 @@ html_theme_options = {
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ["_static"]
 html_css_files = [
-    "_static/css/custom.css",
 ]
 
 html_js_files = [
-    "_static/js/video.js",
 ]
 
 # Add any extra paths that contain custom files (such as robots.txt or
