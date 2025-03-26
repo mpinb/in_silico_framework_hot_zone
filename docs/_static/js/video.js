@@ -19,6 +19,8 @@ document.addEventListener("DOMContentLoaded", function () {
     // Listen for theme changes
     const observer = new MutationObserver(updateVideoSource);
     observer.observe(htmlElement.lastChild, { attributes: true, attributeFilter: ["data-md-color-scheme"] });
+    // Ensure controls are visible
+    videoPlayer.controls = true;
     // Ensure the video autoplays when the page loads
     videoPlayer.play();
 });
