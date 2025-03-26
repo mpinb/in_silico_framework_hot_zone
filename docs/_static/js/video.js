@@ -15,7 +15,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Initial check
     updateVideoSource();
-
+    // Ensure the video is muted and autoplay works
+    videoPlayer.muted = true; // Explicitly set muted
+    videoPlayer.play().catch((error) => {
+        console.warn("Autoplay failed:", error);
+    });
     // Listen for theme changes
     const observer = new MutationObserver(updateVideoSource);
     observer.observe(htmlElement.lastChild, { attributes: true, attributeFilter: ["data-md-color-scheme"] });
