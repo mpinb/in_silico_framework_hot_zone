@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Play video after the first user interaction
     function enableAutoplayOnInteraction() {
-        videoPlayer.play().catch((error) => {
+        video.play().catch((error) => {
             console.warn("Autoplay failed after user interaction:", error);
         });
 
