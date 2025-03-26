@@ -44,10 +44,6 @@ copy_and_parse_notebooks_to_docs(
     api_extension="autoapi",  # change this if using autosummary instead of autoapi, it needs to find target dir of .rst files.
 )
 
-from compatibility import init_data_base_compatibility
-
-init_data_base_compatibility()  # make db importable before running autosummary or autodoc etc...
-
 
 # -- General configuration ------------------------------------------------
 
