@@ -14,16 +14,26 @@ document.addEventListener("DOMContentLoaded", function () {
         videoSource.parentElement.load(); // Reload the video with the new source
     }
 
+
+    // Play video after the first user interaction
+    function enableAutoplayOnInteraction() {
+        videoPlayer.play().catch((error) => {
+            console.warn("Autoplay failed after user interaction:", error);
+        });
+
+        // Remove event listeners after the first interaction
+        document.removeEventListener("click", enableAutoplayOnInteraction);
+        document.removeEventListener("keydown", enableAutoplayOnInteraction);
+        document.removeEventListener("mousemove", enableAutoplayOnInteraction);
+    }
+
+    // Add event listeners for user interaction
+    document.addEventListener("click", enableAutoplayOnInteraction);
+    document.addEventListener("keydown", enableAutoplayOnInteraction);
+    document.addEventListener("mousemove", enableAutoplayOnInteraction);
+
     // Initial check
     updateVideoSource();
-    // Ensure the video is muted and autoplay works
-    videoPlayer.muted = true; // Explicitly set muted
-    // Ensure the video autoplays after the source is updated
-    video.addEventListener("loadeddata", function () {
-        video.play().catch((error) => {
-            console.warn("Autoplay failed:", error);
-        });
-    });
 
     // Listen for theme changes
     const observer = new MutationObserver(updateVideoSource);
