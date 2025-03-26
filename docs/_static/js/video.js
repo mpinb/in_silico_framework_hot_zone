@@ -13,6 +13,10 @@ document.addEventListener("DOMContentLoaded", function () {
         videoSource.parentElement.load(); // Reload the video with the new source
     }
 
+    // Ensure the video autoplays after the source is updated
+    videoPlayer.addEventListener("loadeddata", function () {
+        videoPlayer.play();
+    });
     // Initial check
     updateVideoSource();
 
@@ -21,6 +25,4 @@ document.addEventListener("DOMContentLoaded", function () {
     observer.observe(htmlElement.lastChild, { attributes: true, attributeFilter: ["data-md-color-scheme"] });
     // Ensure controls are visible
     videoPlayer.controls = true;
-    // Ensure the video autoplays when the page loads
-    videoPlayer.play();
 });
