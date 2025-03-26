@@ -71,6 +71,7 @@ extensions = [
     "sphinx_immaterial.graphviz",   # Allow internal reflinking and theming for graphviz
     "sphinx_design",            # For nice design elements, such as grids and cards
     # 'sphinxext.opengraph',   # For OpenGraph metadata, only enable when the site is actually hosted. See https://github.com/wpilibsuite/sphinxext-opengraph for config options when that happens.
+    "sphinxcontrib.video"
 ]
 
 graphviz_output_format = "svg"
