@@ -91,6 +91,7 @@ sphinx-inline-tabs = ">=2023.4.21,<2024"
 pandoc = ">=3.6.2,<4"
 graphviz = ">=7.0.5,<13"
 sphinx-design = ">=0.5.0,<0.6"
+sphinxcontrib-video = ">=0.2.1,<0.3"
 
 [dependency-groups]
 # pypi dependencies
