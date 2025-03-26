@@ -9,8 +9,8 @@ It allows for targeted and mechanistically detailed *in-silico* manipulations ac
    :autoplay:
    :width: 100%
    :height: 100%
+   :nocontrols:
    :alt: ISF Overview
-   :caption: ISF Overview
 
 
 .. toctree::
