@@ -1,9 +1,10 @@
 document.addEventListener("DOMContentLoaded", function () {
     const videoSource = document.getElementById("video-source");
-    const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)");
+    const htmlElement = document.documentElement; // The <html> element
 
     function updateVideoSource() {
-        if (prefersDarkScheme.matches) {
+        const theme = htmlElement.lastChild.getAttribute("data-md-color-scheme");
+        if (theme === "slate") {
             videoSource.src = "_static/_videos/sequence_dark.mp4"; // Video for dark theme
         } else {
             videoSource.src = "_static/_videos/sequence.mp4"; // Video for light theme
@@ -15,5 +16,6 @@ document.addEventListener("DOMContentLoaded", function () {
     updateVideoSource();
 
     // Listen for theme changes
-    prefersDarkScheme.addEventListener("change", updateVideoSource);
+    const observer = new MutationObserver(updateVideoSource);
+    observer.observe(htmlElement, { attributes: true, attributeFilter: ["data-md-color-scheme"] });
 });
