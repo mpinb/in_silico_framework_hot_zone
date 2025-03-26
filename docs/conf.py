@@ -23,6 +23,7 @@ from docs.utils.sphinx_hooks import (
     find_first_match,
     log_documented_members,
 )
+import data_base  # trigger db compatibility
 
 logger = isf_logger.getChild("DOCS")
 logger.setLevel("INFO")
@@ -43,10 +44,6 @@ copy_and_parse_notebooks_to_docs(
     dest_dir=os.path.join(project_root, "docs", "tutorials"),
     api_extension="autoapi",  # change this if using autosummary instead of autoapi, it needs to find target dir of .rst files.
 )
-
-from compatibility import init_data_base_compatibility
-
-init_data_base_compatibility()  # make db importable before running autosummary or autodoc etc...
 
 
 # -- General configuration ------------------------------------------------
@@ -71,6 +68,7 @@ extensions = [
     "sphinx_immaterial.graphviz",   # Allow internal reflinking and theming for graphviz
     "sphinx_design",            # For nice design elements, such as grids and cards
     # 'sphinxext.opengraph',   # For OpenGraph metadata, only enable when the site is actually hosted. See https://github.com/wpilibsuite/sphinxext-opengraph for config options when that happens.
+    "sphinxcontrib.video"
 ]
 
 graphviz_output_format = "svg"
@@ -95,6 +93,10 @@ def setup(app):
     app.connect("autoapi-skip-member", skip_member)
     app.connect("autoapi-skip-member", count_documented_members)
     app.connect("env-updated", log_documented_members)
+
+    # add custom css and js. fpaths relative to _satic/
+    app.add_css_file('css/custom.css')
+    app.add_js_file('js/video.js')
 
 
 # toc_object_entries_show_parents = "hide"  # short toc entries
@@ -197,6 +199,8 @@ html_theme = "sphinx_immaterial"
 # further.  For a list of options available for each theme, see the
 # documentation.
 html_logo = "_static/_images/isf-logo-white.png"
+# ATTENTION: We pin the background color of the theme in _static/css/custom.css
+# This is done to ensure the videos match the background color, even after updating the theme.
 html_theme_options = {
     "repo_url": "https://github.com/mpinb/in_silico_framework",
     "palette": [
@@ -213,7 +217,7 @@ html_theme_options = {
         {
             "media": "(prefers-color-scheme: dark)",
             "scheme": "slate",
-            "primary": "teal",
+            "primary": "indigo",
             "accent": "orange",
             "toggle": {
                 "icon": "material/toggle-switch",
@@ -253,7 +257,8 @@ html_static_path = ["_static"]
 html_css_files = [
 ]
 
-html_js_files = []
+html_js_files = [
+]
 
 # Add any extra paths that contain custom files (such as robots.txt or
 # .htaccess) here, relative to this directory. These files are copied

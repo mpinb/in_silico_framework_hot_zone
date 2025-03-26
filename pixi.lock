@@ -346,7 +346,7 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/fa/ff/51e68fce94f24c1acc04eba801100fc770f0882222b68cb0ae5c1f8b5a2b/ipyparallel-9.0.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/47/7f/51deed26600013c9fb6d3c0129a32a1b1b3aa1e2ea8163cfaad647fc8501/neo-0.11.1.tar.gz
       - pypi: https://files.pythonhosted.org/packages/0d/47/a2ede0e136a8ddc288b447c260aa035f3e75251f808aa61f6454b16dfd04/numexpr-2.8.6-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
-      - pypi: git+https://github.com/abast/pandas-msgpack.git@fcb0471e37e1c6b412cedc9cfb28e66c76a47ecc
+      - pypi: git+https://github.com/abast/pandas-msgpack.git#fcb0471e37e1c6b412cedc9cfb28e66c76a47ecc
       - pypi: https://files.pythonhosted.org/packages/40/f1/083c2f2ee6066c39fbdc65d2b0b9669091244852edf8fc5b1399f051ca5b/parameters-0.2.1.tar.gz
       - pypi: https://files.pythonhosted.org/packages/31/69/0fa75151350a9d7b848bfde929673ad505346940ae2713f862647394f0f7/Pebble-5.1.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/e0/a9/023730ba63db1e494a271cb018dcd361bd2c917ba7004c3e49d5daf795a2/py_cpuinfo-9.0.0-py3-none-any.whl
@@ -614,7 +614,7 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/fa/ff/51e68fce94f24c1acc04eba801100fc770f0882222b68cb0ae5c1f8b5a2b/ipyparallel-9.0.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/96/78/3e62ce6bb858d308b69d8c76dd800491dccc15443fdc7e21c9b95b09e430/neo-0.13.3-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/2a/b2/db65da640af421658bfaa455b4f3825f5b6ca693424e971d8d73362ffd50/NEURON-8.2.6-cp38-cp38-macosx_11_0_arm64.whl
-      - pypi: git+https://github.com/abast/pandas-msgpack.git@fcb0471e37e1c6b412cedc9cfb28e66c76a47ecc
+      - pypi: git+https://github.com/abast/pandas-msgpack.git#fcb0471e37e1c6b412cedc9cfb28e66c76a47ecc
       - pypi: https://files.pythonhosted.org/packages/40/f1/083c2f2ee6066c39fbdc65d2b0b9669091244852edf8fc5b1399f051ca5b/parameters-0.2.1.tar.gz
       - pypi: https://files.pythonhosted.org/packages/31/69/0fa75151350a9d7b848bfde929673ad505346940ae2713f862647394f0f7/Pebble-5.1.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/01/7c/427358d04bfcb217a165911bfada09e2d1e74fed04e40eb02c0c317ed2c4/pyarrow-12.0.1-cp38-cp38-macosx_11_0_arm64.whl
@@ -955,6 +955,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/sphinxcontrib-jsmath-1.0.1-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/sphinxcontrib-qthelp-1.0.3-py_0.tar.bz2
       - conda: https://conda.anaconda.org/conda-forge/noarch/sphinxcontrib-serializinghtml-1.1.5-pyhd8ed1ab_2.tar.bz2
+      - conda: https://conda.anaconda.org/conda-forge/noarch/sphinxcontrib-video-0.2.1-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/sphinxext-opengraph-0.9.1-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/stack_data-0.6.2-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/statsmodels-0.13.2-py38h6c62de6_0.tar.bz2
@@ -1040,7 +1041,7 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/fa/ff/51e68fce94f24c1acc04eba801100fc770f0882222b68cb0ae5c1f8b5a2b/ipyparallel-9.0.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/47/7f/51deed26600013c9fb6d3c0129a32a1b1b3aa1e2ea8163cfaad647fc8501/neo-0.11.1.tar.gz
       - pypi: https://files.pythonhosted.org/packages/0d/47/a2ede0e136a8ddc288b447c260aa035f3e75251f808aa61f6454b16dfd04/numexpr-2.8.6-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
-      - pypi: git+https://github.com/abast/pandas-msgpack.git@fcb0471e37e1c6b412cedc9cfb28e66c76a47ecc
+      - pypi: git+https://github.com/abast/pandas-msgpack.git#fcb0471e37e1c6b412cedc9cfb28e66c76a47ecc
       - pypi: https://files.pythonhosted.org/packages/40/f1/083c2f2ee6066c39fbdc65d2b0b9669091244852edf8fc5b1399f051ca5b/parameters-0.2.1.tar.gz
       - pypi: https://files.pythonhosted.org/packages/31/69/0fa75151350a9d7b848bfde929673ad505346940ae2713f862647394f0f7/Pebble-5.1.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/e0/a9/023730ba63db1e494a271cb018dcd361bd2c917ba7004c3e49d5daf795a2/py_cpuinfo-9.0.0-py3-none-any.whl
@@ -1334,6 +1335,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/sphinxcontrib-jsmath-1.0.1-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/sphinxcontrib-qthelp-1.0.3-py_0.tar.bz2
       - conda: https://conda.anaconda.org/conda-forge/noarch/sphinxcontrib-serializinghtml-1.1.5-pyhd8ed1ab_2.tar.bz2
+      - conda: https://conda.anaconda.org/conda-forge/noarch/sphinxcontrib-video-0.2.1-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/sphinxext-opengraph-0.9.1-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/stack_data-0.6.2-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/statsmodels-0.13.5-py38hb39dbe9_2.tar.bz2
@@ -1398,7 +1400,7 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/fa/ff/51e68fce94f24c1acc04eba801100fc770f0882222b68cb0ae5c1f8b5a2b/ipyparallel-9.0.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/96/78/3e62ce6bb858d308b69d8c76dd800491dccc15443fdc7e21c9b95b09e430/neo-0.13.3-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/2a/b2/db65da640af421658bfaa455b4f3825f5b6ca693424e971d8d73362ffd50/NEURON-8.2.6-cp38-cp38-macosx_11_0_arm64.whl
-      - pypi: git+https://github.com/abast/pandas-msgpack.git@fcb0471e37e1c6b412cedc9cfb28e66c76a47ecc
+      - pypi: git+https://github.com/abast/pandas-msgpack.git#fcb0471e37e1c6b412cedc9cfb28e66c76a47ecc
       - pypi: https://files.pythonhosted.org/packages/40/f1/083c2f2ee6066c39fbdc65d2b0b9669091244852edf8fc5b1399f051ca5b/parameters-0.2.1.tar.gz
       - pypi: https://files.pythonhosted.org/packages/31/69/0fa75151350a9d7b848bfde929673ad505346940ae2713f862647394f0f7/Pebble-5.1.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/01/7c/427358d04bfcb217a165911bfada09e2d1e74fed04e40eb02c0c317ed2c4/pyarrow-12.0.1-cp38-cp38-macosx_11_0_arm64.whl
@@ -6731,7 +6733,7 @@ packages:
   - pkg:pypi/pandas?source=hash-mapping
   size: 10472953
   timestamp: 1603237554103
-- pypi: git+https://github.com/abast/pandas-msgpack.git@fcb0471e37e1c6b412cedc9cfb28e66c76a47ecc
+- pypi: git+https://github.com/abast/pandas-msgpack.git#fcb0471e37e1c6b412cedc9cfb28e66c76a47ecc
   name: pandas-msgpack
   version: 0.1.4+14.gfcb0471.dirty
   requires_dist:
@@ -7231,7 +7233,7 @@ packages:
   - pydantic-core==2.27.2
   - typing-extensions>=4.12.2
   - email-validator>=2.0.0 ; extra == 'email'
-  - tzdata ; python_full_version >= '3.9' and platform_system == 'Windows' and extra == 'timezone'
+  - tzdata ; python_full_version >= '3.9' and sys_platform == 'win32' and extra == 'timezone'
   requires_python: '>=3.8'
 - pypi: https://files.pythonhosted.org/packages/f4/20/26c549249769ed84877f862f7bb93f89a6ee08b4bee1ed8781616b7fbb5e/pydantic_core-2.27.2-cp38-cp38-macosx_11_0_arm64.whl
   name: pydantic-core
@@ -8354,6 +8356,18 @@ packages:
   - pkg:pypi/sphinxcontrib-serializinghtml?source=hash-mapping
   size: 27744
   timestamp: 1649381087042
+- conda: https://conda.anaconda.org/conda-forge/noarch/sphinxcontrib-video-0.2.1-pyhd8ed1ab_0.conda
+  sha256: 9637ad8c7b79cfda23bac28dd43ac4cc076a25f37796fd7ba1df3b74a15fba12
+  md5: 59fd21948d389ac14818dbf96a5744c9
+  depends:
+  - python >=3.6.9
+  - sphinx
+  license: Apache-2.0
+  license_family: APACHE
+  purls:
+  - pkg:pypi/sphinxcontrib-video?source=hash-mapping
+  size: 14806
+  timestamp: 1723640998185
 - conda: https://conda.anaconda.org/conda-forge/noarch/sphinxext-opengraph-0.9.1-pyhd8ed1ab_0.conda
   sha256: d2e43a68106690040a0a6c32fd366d46f62683af2cfd55c58d7ee12094b9c8d6
   md5: 286283e05a1eff606f55e7cd70f6d7f7
@@ -8670,7 +8684,7 @@ packages:
   version: 4.67.1
   sha256: 26445eca388f82e72884e0d580d5464cd801a3ea01e63e5601bdff9ba6a48de2
   requires_dist:
-  - colorama ; platform_system == 'Windows'
+  - colorama ; sys_platform == 'win32'
   - pytest>=6 ; extra == 'dev'
   - pytest-cov ; extra == 'dev'
   - pytest-timeout ; extra == 'dev'

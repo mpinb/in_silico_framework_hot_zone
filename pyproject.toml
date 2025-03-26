@@ -91,6 +91,7 @@ sphinx-inline-tabs = ">=2023.4.21,<2024"
 pandoc = ">=3.6.2,<4"
 graphviz = ">=7.0.5,<13"
 sphinx-design = ">=0.5.0,<0.6"
+sphinxcontrib-video = ">=0.2.1,<0.3"
 
 [dependency-groups]
 # pypi dependencies
@@ -136,5 +137,15 @@ test = {cmd = [
 download_bc_model = {cmd = ["./download_bc_model.sh"], description = "Download ISF's barrel cortex model from Harvard Datverse", cwd="installer"}
 
 [tool.pixi.feature.docs.tasks]
-build_docs = {cmd = ["make", "html"], description = "Build the documentation", cwd="docs"}
+# Removing tutorials from doctrees and build is necessary to avoid slow recursion issues when building repeatedly
+remove_tutorial_content = {cmd = [
+  "rm", 
+  "-rf", 
+  "docs/_build/doctrees/_build",
+  "docs/_build/doctrees/tutorials",
+  "docs/_build/html/_build",
+  "docs/_build/html/tutorials",
+  "docs/_build/doctrees/nbsphinx"
+  ], description = "Remove tutorial content from docs"}
+build_docs = {cmd = ["make", "html"], description = "Build the documentation", cwd="docs", depends-on = ["remove_tutorial_content"]}
 host_docs = {cmd = ["python", "-m", "http.server", "8000"], description = "Host the documentation", cwd="docs/_build/html"}
