@@ -17,6 +17,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Play video after the first user interaction
     function enableAutoplayOnInteraction() {
+        videoSource.parentElement.load(); // Reload the video
+        video.muted = true; // Mute the video to allow autoplay
         video.play().catch((error) => {
             console.warn("Autoplay failed after user interaction:", error);
         });
