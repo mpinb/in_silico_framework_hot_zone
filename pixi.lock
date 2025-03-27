@@ -217,7 +217,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/linux-64/openldap-2.6.9-he970967_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/openssl-3.4.1-h7b32b05_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/packaging-24.2-pyhd8ed1ab_2.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-64/pandas-1.4.1-py38h43a58ef_0.tar.bz2
+      - conda: https://conda.anaconda.org/conda-forge/linux-64/pandas-1.1.3-py38hddd6c8b_2.tar.bz2
       - conda: https://conda.anaconda.org/conda-forge/noarch/pandocfilters-1.5.0-pyhd8ed1ab_0.tar.bz2
       - conda: https://conda.anaconda.org/conda-forge/noarch/parso-0.8.4-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/partd-1.4.1-pyhd8ed1ab_0.conda
@@ -523,7 +523,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/openjpeg-2.5.0-h5d4e404_1.tar.bz2
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/openssl-3.4.1-h81ee809_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/packaging-24.2-pyhd8ed1ab_2.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/pandas-1.5.3-py38h61dac83_1.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/pandas-1.1.3-py38h73c04be_2.tar.bz2
       - conda: https://conda.anaconda.org/conda-forge/noarch/pandocfilters-1.5.0-pyhd8ed1ab_0.tar.bz2
       - conda: https://conda.anaconda.org/conda-forge/noarch/parso-0.8.4-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/partd-1.4.1-pyhd8ed1ab_0.conda
@@ -898,7 +898,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/linux-64/openldap-2.6.9-he970967_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/openssl-3.4.1-h7b32b05_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/packaging-24.2-pyhd8ed1ab_2.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-64/pandas-1.4.1-py38h43a58ef_0.tar.bz2
+      - conda: https://conda.anaconda.org/conda-forge/linux-64/pandas-1.1.3-py38hddd6c8b_2.tar.bz2
       - conda: https://conda.anaconda.org/conda-forge/linux-64/pandoc-3.6.4-ha770c72_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/pandocfilters-1.5.0-pyhd8ed1ab_0.tar.bz2
       - conda: https://conda.anaconda.org/conda-forge/linux-64/pango-1.56.3-h861ebed_0.conda
@@ -1301,7 +1301,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/openjpeg-2.5.0-h5d4e404_1.tar.bz2
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/openssl-3.4.1-h81ee809_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/packaging-24.2-pyhd8ed1ab_2.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/pandas-1.5.3-py38h61dac83_1.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/pandas-1.1.3-py38h73c04be_2.tar.bz2
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/pandoc-3.6.4-hce30654_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/pandocfilters-1.5.0-pyhd8ed1ab_0.tar.bz2
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/pango-1.50.14-h6c112b8_0.conda
@@ -6982,40 +6982,41 @@ packages:
   - pkg:pypi/packaging?source=hash-mapping
   size: 60164
   timestamp: 1733203368787
-- conda: https://conda.anaconda.org/conda-forge/linux-64/pandas-1.4.1-py38h43a58ef_0.tar.bz2
-  sha256: 4ea54c047d10d7e45b625d54b253db18c2caf6cdc959d75784860ebaff22fe87
-  md5: 1083ebe2edc30e4fb9568d1f66e3588b
+- conda: https://conda.anaconda.org/conda-forge/linux-64/pandas-1.1.3-py38hddd6c8b_2.tar.bz2
+  sha256: ae89d37906a70c6be1e1caae4622cd78895520d77c31272fb64e4363d6582a49
+  md5: 8f8c64653dcc44cbe8304c13fb972336
   depends:
-  - libgcc-ng >=9.4.0
-  - libstdcxx-ng >=9.4.0
-  - numpy >=1.18.5,<2.0a0
+  - libgcc-ng >=7.5.0
+  - libstdcxx-ng >=7.5.0
+  - numpy >=1.16.5,<2.0a0
   - python >=3.8,<3.9.0a0
   - python-dateutil >=2.7.3
   - python_abi 3.8.* *_cp38
   - pytz >=2017.2
+  - setuptools <60.0.0
   license: BSD-3-Clause
   license_family: BSD
   purls:
   - pkg:pypi/pandas?source=hash-mapping
-  size: 13962258
-  timestamp: 1644670260515
-- conda: https://conda.anaconda.org/conda-forge/osx-arm64/pandas-1.5.3-py38h61dac83_1.conda
-  sha256: 5b582d2818c739d33f7069232fd0cc01ba1810c62522dca11ae6ca7640311a6c
-  md5: cbc70567afb9083f9ed2f48b0308757a
+  size: 11356829
+  timestamp: 1603237383931
+- conda: https://conda.anaconda.org/conda-forge/osx-arm64/pandas-1.1.3-py38h73c04be_2.tar.bz2
+  sha256: 177704f32569a42dda510c6bbef1e6f8e32f9d7de5ea68b39e03303461b86e68
+  md5: 7bd7207a6d7049e20d0d3566415d5000
   depends:
-  - libcxx >=14.0.6
-  - numpy >=1.20.3,<2.0a0
+  - libcxx >=11.0.0
+  - numpy >=1.19.2,<2.0a0
   - python >=3.8,<3.9.0a0
-  - python >=3.8,<3.9.0a0 *_cpython
-  - python-dateutil >=2.8.1
+  - python-dateutil >=2.7.3
   - python_abi 3.8.* *_cp38
-  - pytz >=2020.1
+  - pytz >=2017.2
+  - setuptools <60.0.0
   license: BSD-3-Clause
   license_family: BSD
   purls:
   - pkg:pypi/pandas?source=hash-mapping
-  size: 11206932
-  timestamp: 1680108806620
+  size: 10472953
+  timestamp: 1603237554103
 - conda: https://conda.anaconda.org/conda-forge/linux-64/pandoc-3.6.4-ha770c72_0.conda
   sha256: 16cbcab8a6d9a0cef47b9d3ebeced8a1a75ee54d379649e6260a333d1b2f743c
   md5: 53f2cd4128fa7053bb029bbeafbe3f2e
