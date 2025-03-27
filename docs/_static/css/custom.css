@@ -20,7 +20,7 @@ span.summarylabel {
 }
 
 .nboutput.docutils.container {
-    max-height: 400px;
+    max-height: 600px;
     overflow-y: scroll;
     scrollbar-width: thin;
 }
