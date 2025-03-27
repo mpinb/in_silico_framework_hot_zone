@@ -39,6 +39,22 @@ def convert_links_to_sphinx(content, api_extension="autoapi"):
     return pattern.sub(replace_link, content)    
     
 
+def convert_long_output_to_scrollable(content):
+    """Convert long output to scrollable output in Jupyter Notebook.
+    
+    Args:
+        content (str): The content to convert. Normally a single line of html
+    """
+    # Regular expression to find long output
+    pattern = re.compile(r'(<div class="output_area">.*?</div>)', re.DOTALL)
+    
+    # Replace long output with scrollable output
+    def replace_output(match):
+        return f'<div class="output_scroll">{match.group(1)}</div>'
+    
+    return pattern.sub(replace_output, content)
+
+
 def process_notebook(file_path, api_extension="autoapi"):
     with open(file_path, 'r', encoding='utf-8') as f:
         try:
@@ -50,6 +66,7 @@ def process_notebook(file_path, api_extension="autoapi"):
     for cell in notebook_content['cells']:
         if cell['cell_type'] == 'markdown':
             cell['source'] = [convert_links_to_sphinx(line, api_extension=api_extension) for line in cell['source']]
+            cell['source'] = [convert_long_output_to_scrollable(line) for line in cell['source']]
     
     with open(file_path, 'w', encoding='utf-8') as f:
         json.dump(notebook_content, f, indent=2)
