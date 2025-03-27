@@ -978,6 +978,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/sphinxcontrib-jsmath-1.0.1-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/sphinxcontrib-qthelp-1.0.3-py_0.tar.bz2
       - conda: https://conda.anaconda.org/conda-forge/noarch/sphinxcontrib-serializinghtml-1.1.5-pyhd8ed1ab_2.tar.bz2
+      - conda: https://conda.anaconda.org/conda-forge/noarch/sphinxcontrib-video-0.2.1-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/sphinxext-opengraph-0.9.1-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/stack_data-0.6.2-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/statsmodels-0.13.2-py38h6c62de6_0.tar.bz2
@@ -1376,6 +1377,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/sphinxcontrib-jsmath-1.0.1-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/sphinxcontrib-qthelp-1.0.3-py_0.tar.bz2
       - conda: https://conda.anaconda.org/conda-forge/noarch/sphinxcontrib-serializinghtml-1.1.5-pyhd8ed1ab_2.tar.bz2
+      - conda: https://conda.anaconda.org/conda-forge/noarch/sphinxcontrib-video-0.2.1-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/sphinxext-opengraph-0.9.1-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/stack_data-0.6.2-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/statsmodels-0.13.5-py38hb39dbe9_2.tar.bz2
@@ -8652,6 +8654,18 @@ packages:
   - pkg:pypi/sphinxcontrib-serializinghtml?source=hash-mapping
   size: 27744
   timestamp: 1649381087042
+- conda: https://conda.anaconda.org/conda-forge/noarch/sphinxcontrib-video-0.2.1-pyhd8ed1ab_0.conda
+  sha256: 9637ad8c7b79cfda23bac28dd43ac4cc076a25f37796fd7ba1df3b74a15fba12
+  md5: 59fd21948d389ac14818dbf96a5744c9
+  depends:
+  - python >=3.6.9
+  - sphinx
+  license: Apache-2.0
+  license_family: APACHE
+  purls:
+  - pkg:pypi/sphinxcontrib-video?source=hash-mapping
+  size: 14806
+  timestamp: 1723640998185
 - conda: https://conda.anaconda.org/conda-forge/noarch/sphinxext-opengraph-0.9.1-pyhd8ed1ab_0.conda
   sha256: d2e43a68106690040a0a6c32fd366d46f62683af2cfd55c58d7ee12094b9c8d6
   md5: 286283e05a1eff606f55e7cd70f6d7f7
