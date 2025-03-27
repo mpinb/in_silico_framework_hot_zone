@@ -19,8 +19,8 @@ span.summarylabel {
   }
 }
 
-.nboutput.docutils.container {
-    max-height: 600px;
+.jp-RenderedText {
     overflow-y: scroll;
+    max-height: 600px;
     scrollbar-width: thin;
 }
