@@ -35,7 +35,7 @@ import glob
 from data_base.utils import chunkIt, myrepartition, convertible_to_int 
 import six
 import numpy as np
-from pandas_msgpack import to_msgpack, read_msgpack
+from isf_pandas_msgpack import to_msgpack, read_msgpack
 import json
 from .utils import save_object_meta
 
