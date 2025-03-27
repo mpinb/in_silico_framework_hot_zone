@@ -51,11 +51,6 @@ def dump(obj, savedir, rows_per_file=None):
     saved in each file. This helps with large dataframes which otherwise would hit the 1GB limit of msgpack.'''
     #     obj.to_msgpack(os.path.join(savedir, 'pandas_to_msgpack'), compress = 'blosc')
     import os
-    if not "ISF_IS_TESTING" in os.environ:
-        # Module was not called from within the test suite
-        raise RuntimeError(
-            'pandas-msgpack is not supported anymore in the data_base since Python 3.8')
-    import os
     if rows_per_file is not None:
         row = 0
         lv = 0
