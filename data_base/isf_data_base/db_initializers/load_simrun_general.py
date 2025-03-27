@@ -56,7 +56,7 @@ After initialization, you can access the data from the data_base in the followin
     >>> db['spike_times']
     <spike times dataframe>
     
-If you intialize the database with ``rewrite_in_optimized_format=True`` (default), the keys are written as dask dataframes to the parquet format.
+If you intialize the database with ``rewrite_in_optimized_format=True`` (default), the keys are written as dask dataframes to the msgpack format.
 If ``rewrite_in_optimized_format=False`` instead, these keys are pickled dask dataframes, containing relative links to the
 original ``.csv`` files. In essence, the dask dataframes contain the insturctions to build the dataframe, not the data itself.
 This is useful for fast intermediate analysis. It is not intended and strongly discouraged for long term storage. 
@@ -74,7 +74,6 @@ import glob
 import hashlib
 import logging
 import os
-import shutil
 import warnings
 
 import dask
@@ -82,7 +81,7 @@ import dask.dataframe as dd
 import numpy as np
 import pandas as pd
 import scandir
-import six
+# import six
 
 import single_cell_parser as scp
 import single_cell_parser.analyze as sca
@@ -91,8 +90,14 @@ from data_base.dbopen import create_db_path
 from data_base.exceptions import DataBaseException
 from data_base.isf_data_base import ISFDataBase
 from data_base.isf_data_base.IO.LoaderDumper import (
-    dask_to_parquet, get_dumper_string_by_dumper_module, pandas_to_parquet,
-    pandas_to_pickle, to_cloudpickle, to_pickle)
+    get_dumper_string_by_dumper_module, 
+    # pandas_to_parquet,
+    dask_to_msgpack,
+    pandas_to_msgpack,
+    # pandas_to_pickle, 
+    to_cloudpickle, 
+    # to_pickle
+)
 from data_base.isf_data_base.IO.roberts_formats import _max_commas
 from data_base.isf_data_base.IO.roberts_formats import \
     read_pandas_cell_activation_from_roberts_format as read_ca
@@ -104,8 +109,8 @@ from data_base.utils import chunkIt, mkdtemp, silence_stdout, unique
 logger = logging.getLogger("ISF").getChild(__name__)
 
 DEFAULT_DUMPER = to_cloudpickle
-OPTIMIZED_PANDAS_DUMPER = pandas_to_parquet
-OPTIMIZED_DASK_DUMPER = dask_to_parquet
+OPTIMIZED_PANDAS_DUMPER = pandas_to_msgpack
+OPTIMIZED_DASK_DUMPER = dask_to_msgpack
 
 #-----------------------------------------------------------------------------------------
 # 1: Create filelist containing paths to all soma voltage trace files
@@ -840,7 +845,7 @@ def write_param_files_to_folder(
 ###########################################################################################
 # Build database using the helper functions above
 ###########################################################################################
-def _build_core(db, repartition=None, metadata_dumper=pandas_to_parquet):
+def _build_core(db, repartition=None, metadata_dumper=pandas_to_msgpack):
     """Parse the essential simulation results and add it to :paramref:`db`.
     
     The following data is parsed and added to the database: 
@@ -853,7 +858,7 @@ def _build_core(db, repartition=None, metadata_dumper=pandas_to_parquet):
     Args:
         db (:py:class:`~data_base.isf_data_base.isf_data_base.ISFDataBase`): The database to which the data should be added.
         repartition (bool): If True, the dask dataframe is repartitioned to 5000 partitions (only if it contains over :math:`10000` entries).
-        metadata_dumper (function): Function to dump the metadata to disk. Default is :py:mod:`~data_base.isf_data_base.IO.LoaderDumper.pandas_to_parquet`.
+        metadata_dumper (function): Function to dump the metadata to disk. Default is :py:mod:`~data_base.isf_data_base.IO.LoaderDumper.pandas_to_msgpack`.
         
     Returns:
         None
@@ -1077,7 +1082,7 @@ def _build_param_files(db, client):
         network_param_to_dbpath)
     client.gather(client.compute(ds))
 
-    db.set('parameterfiles', df, dumper=pandas_to_parquet)
+    db.set('parameterfiles', df, dumper=pandas_to_msgpack)
 
 
 def init(
@@ -1149,19 +1154,18 @@ def init(
             Default is None.
         dumper (module, optional):
             Dumper to use for saving pandas dataframes.
-            Default is :py:mod:`~data_base.isf_data_base.IO.LoaderDumper.pandas_to_parquet`.
+            Default is :py:mod:`~data_base.isf_data_base.IO.LoaderDumper.pandas_to_msgpack`.
             
     .. deprecated:: 0.2.0
         The :paramref:`burst_times` argument is deprecated and will be removed in a future version.
     '''
-    # TODO: many aspects are re-written in optimized format, but can be done in a single pass
     assert dumper.__name__.endswith('.IO.LoaderDumper.pandas_to_msgpack') or dumper.__name__.endswith('.IO.LoaderDumper.pandas_to_parquet'), \
             "Please use a pandas-compatible dumper. You used {}.".format(dumper)
-    if dumper.__name__.endswith('pandas_to_msgpack') and six.PY3 and not os.environ.get('ISF_IS_TESTING', False):
-        raise DeprecationWarning(
-            """The pandas_to_msgpack dumper is deprecated for Python 3.8 and onwards. Use pandas_to_parquet instead.\n
-            If you _really_ need to use pandas_to_msgpack for whatever reason, use ISF Py2.7 and pretend to be the test suite by overriding the environment variable ISF_IS_TESTING. 
-            See data_base.IO.LoaderDumper.pandas_to_msgpack.dump""")
+    # if dumper.__name__.endswith('pandas_to_msgpack') and six.PY3 and not os.environ.get('ISF_IS_TESTING', False):
+    #     raise DeprecationWarning(
+    #         """The pandas_to_msgpack dumper is deprecated for Python 3.8 and onwards. Use pandas_to_msgpack instead.\n
+    #         If you _really_ need to use pandas_to_msgpack for whatever reason, use ISF Py2.7 and pretend to be the test suite by overriding the environment variable ISF_IS_TESTING. 
+    #         See data_base.IO.LoaderDumper.pandas_to_msgpack.dump""")
     if burst_times:
         raise ValueError('deprecated!')
     if rewrite_in_optimized_format:
@@ -1293,7 +1297,7 @@ def add_dendritic_spike_times(db, dendritic_spike_times_threshold=-30.):
 def _get_dumper(value):
     '''Infer the best dumper for a dataframe.
     
-    Infers the correct parquet dumper for either a pandas or dask dataframe.
+    Infers the correct msgpack dumper for either a pandas or dask dataframe.
     
     Args:
         value (pd.DataFrame or dd.DataFrame): Dataframe to infer the dumper for.
@@ -1304,15 +1308,24 @@ def _get_dumper(value):
     Raises:
         NotImplementedError: If the dataframe is not a pandas or dask dataframe.
     '''
-    if six.PY2:
-        # For the legacy py2.7 version, it still uses the msgpack dumper
-        from data_base.isf_data_base.IO.LoaderDumper import (dask_to_msgpack,
-                                                             pandas_to_msgpack)
-        return pandas_to_msgpack if isinstance(value, pd.DataFrame) else dask_to_msgpack
-    elif six.PY3:
-        return OPTIMIZED_PANDAS_DUMPER if isinstance(value, pd.DataFrame) else OPTIMIZED_DASK_DUMPER
+    if isinstance(value, pd.DataFrame):
+        return OPTIMIZED_PANDAS_DUMPER
+    elif isinstance(value, dd.DataFrame):
+        return OPTIMIZED_DASK_DUMPER
     else:
-        raise NotImplementedError()
+        raise NotImplementedError(
+            'Cannot infer dumper for {}. Please provide a dumper.'.format(
+                type(value)))
+    # if six.PY2:
+    #     # For the legacy py2.7 version, it still uses the msgpack dumper
+    #     from data_base.isf_data_base.IO.LoaderDumper import (
+    #         dask_to_msgpack,
+    #         pandas_to_msgpack)
+    #     return pandas_to_msgpack if isinstance(value, pd.DataFrame) else dask_to_msgpack
+    # elif six.PY3:
+    #     return OPTIMIZED_PANDAS_DUMPER if isinstance(value, pd.DataFrame) else OPTIMIZED_DASK_DUMPER
+    # else:
+    #     raise NotImplementedError()
 
 
 def optimize(
