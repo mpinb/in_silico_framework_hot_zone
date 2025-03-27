@@ -18,9 +18,3 @@ span.summarylabel {
     --md-default-bg-color: #f0f0f0;
   }
 }
-
-.jp-RenderedText {
-    overflow-y: scroll;
-    max-height: 600px;
-    scrollbar-width: thin;
-}
