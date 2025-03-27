@@ -18,3 +18,9 @@ span.summarylabel {
     --md-default-bg-color: #f0f0f0;
   }
 }
+
+.nboutput.docutils.container {
+    max-height: 400px;
+    overflow-y: scroll;
+    scrollbar-width: thin;
+}
