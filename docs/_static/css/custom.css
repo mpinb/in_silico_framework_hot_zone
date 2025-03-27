@@ -24,3 +24,9 @@ div.nboutput.container div.output_area:has(pre) {
     max-height: 600px;
     scrollbar-width: thin;
 }
+
+/* Override the nbsphinx-gallery class to have wider columns */
+div.nbsphinx-gallery {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+}
+
