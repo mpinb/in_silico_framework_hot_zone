@@ -1,4 +1,4 @@
-"""Recreate and resimulate network-embedded neuron simulation from a simrun-initialized database.
+"""Recreate and resimulate network-embedded neuron simulation from parameterfiles.
 
 This module provides a function to resimulate a network-embedded neuron simulation from a simrun-initialized database.
 It allows to modify either the cell or the network with modification functions.
@@ -6,6 +6,15 @@ The database is expected to have been initialized with :py:mod:`data_base.isf_da
 The function :py:func:`rerun_db` takes a database and a directory as input and resimulates the network-embedded neuron simulation for each simulation trial in the database. 
 The results are stored in the specified directory.
 
+Attention:
+    This will not give the exact same result as the existing trial(s). This module re-simulates a neuron-embedded network simulation witht he same parameters
+    as the original simulation. The results will differ due to the stochastic nature of these parameters.
+    To re-run a simulation with the *exact* same synapse activations, refer to :py:mod:`~simrun.run_existing_synapse_activations` instead.
+
+See also:
+    :py:mod:`~simrun.run_existing_synapse_activations` for re-running a simulation with the exact same synapse activations, rather than
+    the same parameters.
+    
 See also:
     :py:mod:`~data_base.isf_data_base.db_initializers.init_simrun_general` for initializing a database from raw :py:mod:`simrun` output.
 
@@ -18,13 +27,12 @@ import single_cell_parser as scp
 import single_cell_parser.analyze as sca
 import os
 import time
-import neuron
 import dask
 import numpy as np
-import pandas as pd
 from biophysics_fitting.utils import execute_in_child_process
 from .utils import *
 import logging
+from data_base.dbopen import resolve_netp_reldb_paths, resolve_neup_reldb_paths
 
 logger = logging.getLogger("ISF").getChild(__name__)
 
@@ -153,6 +161,12 @@ def _evoked_activity(
     network_name = parameterfiles.iloc[0].hash_network
     network_param = scp.build_parameters(network_folder.join(network_name))
     additional_network_params = [scp.build_parameters(p) for p in additional_network_params]
+
+    # resolve relative db paths if needed;
+    neuron_param = resolve_neup_reldb_paths(neuron_param, db.basedir)
+    network_param = resolve_netp_reldb_paths(network_param, db.basedir)
+    additional_network_params = [resolve_netp_reldb_paths(p, db.basedir) for p in additional_network_params]
+    
     for fun in network_param_modify_functions:
         network_param = fun(network_param)
     for fun in neuron_param_modify_functions:
@@ -289,7 +303,7 @@ def rerun_db(
     Args:
         db (:py:class:`~data_base.DataBase`): A simrun-initialized database to resimulate.
         stis (list): List of simulation trial indices to be resimulated.
-        outdir (str): Directory where the simulation results are stored, relative to the original simulation results.
+        outdir (str): Directory where the simulation results are stored, relative to the current working directory. Preferably, use an absolute path.
         tStop (float): Time in ms at which the simulation should stop.
         neuron_param_modify_functions (list): List of functions which take :py:class:`NTParameterSet` neuron parameters and may return it changed.
         network_param_modify_functions (list): List of functions which take :py:class:`NTParameterSet` network parameters and may return it changed.
@@ -325,7 +339,7 @@ def rerun_db(
         myfun = execute_in_child_process(myfun)
 
     myfun = dask.delayed(myfun)
-    logger.info('outdir is', outdir)
+    logger.info('Outdir is: {}'.format(outdir))
     for stis in sim_trial_index_array:
         d = myfun(
             db,
