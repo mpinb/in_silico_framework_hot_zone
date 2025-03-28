@@ -86,9 +86,11 @@ import single_cell_parser as scp
 from data_base.analyze.spike_detection import spike_detection
 from data_base.isf_data_base import ISFDataBase
 from data_base.isf_data_base.IO.LoaderDumper import (
-    dask_to_parquet,
+    # dask_to_parquet,
+    dask_to_msgpack,
+    pandas_to_msgpack,
     get_dumper_string_by_dumper_module,
-    pandas_to_parquet,
+    # pandas_to_parquet,
     to_cloudpickle,
 )
 from data_base.utils import mkdtemp
@@ -96,8 +98,8 @@ from data_base.utils import mkdtemp
 logger = logging.getLogger("ISF").getChild(__name__)
 
 DEFAULT_DUMPER = to_cloudpickle
-OPTIMIZED_PANDAS_DUMPER = pandas_to_parquet
-OPTIMIZED_DASK_DUMPER = dask_to_parquet
+OPTIMIZED_PANDAS_DUMPER = pandas_to_msgpack
+OPTIMIZED_DASK_DUMPER = dask_to_msgpack
 NEUP_DIR = "parameterfiles_cell_folder"
 NETP_DIR = "parameterfiles_network_folder"
 HOC_DIR = "morphology"
@@ -185,7 +187,7 @@ def init(
             Default is None.
         dumper (module, optional):
             Dumper to use for saving pandas dataframes.
-            Default is :py:mod:`~data_base.isf_data_base.IO.LoaderDumper.pandas_to_parquet`.
+            Default is :py:mod:`~data_base.isf_data_base.IO.LoaderDumper.pandas_to_msgpack`.
 
     .. deprecated:: 0.2.0
         The :paramref:`burst_times` argument is deprecated and will be removed in a future version.
@@ -198,16 +200,6 @@ def init(
     ), "Please use a pandas-compatible dumper. You used {}.".format(
         dumper
     )
-    if (
-        dumper.__name__.endswith("pandas_to_msgpack")
-        and six.PY3
-        and not os.environ.get("ISF_IS_TESTING", False)
-    ):
-        raise DeprecationWarning(
-            """The pandas_to_msgpack dumper is deprecated for Python 3.8 and onwards. Use pandas_to_parquet instead.\n
-            If you _really_ need to use pandas_to_msgpack for whatever reason, use ISF Py2.7 and pretend to be the test suite by overriding the environment variable ISF_IS_TESTING. 
-            See data_base.IO.LoaderDumper.pandas_to_msgpack.dump"""
-        )
     if burst_times:
         raise ValueError("deprecated!")
     if rewrite_in_optimized_format:

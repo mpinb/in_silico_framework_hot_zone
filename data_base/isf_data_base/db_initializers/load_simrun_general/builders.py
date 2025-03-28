@@ -9,7 +9,7 @@ import pandas as pd
 import single_cell_parser as scp
 import single_cell_parser.analyze as sca
 from data_base.dbopen import resolve_neup_reldb_paths
-from data_base.isf_data_base.IO.LoaderDumper import pandas_to_parquet
+from data_base.isf_data_base.IO.LoaderDumper import pandas_to_msgpack
 from data_base.isf_data_base.IO.roberts_formats import (
     read_pandas_cell_activation_from_roberts_format as read_ca,
 )
@@ -41,7 +41,7 @@ from .parameter_file_handling import (
 logger = logging.getLogger("ISF").getChild(__name__)
 
 
-def _build_core(db, repartition=None, metadata_dumper=pandas_to_parquet):
+def _build_core(db, repartition=None, metadata_dumper=pandas_to_msgpack):
     """Parse the essential simulation results and add it to :paramref:`db`.
 
     The following data is parsed and added to the database:
@@ -54,7 +54,7 @@ def _build_core(db, repartition=None, metadata_dumper=pandas_to_parquet):
     Args:
         db (:py:class:`~data_base.isf_data_base.isf_data_base.ISFDataBase`): The database to which the data should be added.
         repartition (bool): If True, the dask dataframe is repartitioned to 5000 partitions (only if it contains over :math:`10000` entries).
-        metadata_dumper (function): Function to dump the metadata to disk. Default is :py:mod:`~data_base.isf_data_base.IO.LoaderDumper.pandas_to_parquet`.
+        metadata_dumper (function): Function to dump the metadata to disk. Default is :py:mod:`~data_base.isf_data_base.IO.LoaderDumper.pandas_to_msgpack`.
 
     Returns:
         None
@@ -239,7 +239,7 @@ def _build_param_files(db, client):
     futures = client.compute(ds)
     result = client.gather(futures)
 
-    db.set("parameterfiles", param_file_hash_df, dumper=pandas_to_parquet)
+    db.set("parameterfiles", param_file_hash_df, dumper=pandas_to_msgpack)
 
 
 def _get_rec_site_managers(db):
