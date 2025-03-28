@@ -100,6 +100,9 @@ class ModuleFilter(logging.Filter):
 
 def pytest_addoption(parser):
     parser.addoption("--dask_server_port", action="store", default="8786")
+    parser.addoption(
+        "--dask_server_ip", action="store", default="localhost"
+    )  # default is localhost
 
 
 def is_port_in_use(port):
@@ -165,7 +168,7 @@ def pytest_configure(config):
 
     c = distributed.Client(
         "{}:{}".format(
-            "localhost",
+            config.getoption("--dask_server_ip", default="localhost"),
             config.getoption("--dask_server_port"),
         )
     )
