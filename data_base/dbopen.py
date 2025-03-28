@@ -9,7 +9,7 @@ However, for development and testing purposes, it may be of use to explicitly op
 
 from __future__ import absolute_import
 import os
-from data_base.data_base import DataBase, get_db_by_unique_id, is_model_data_base, is_data_base
+from data_base.data_base import DataBase, get_db_by_unique_id, _is_legacy_model_data_base
 from data_base.exceptions import DataBaseException
 import cloudpickle
 from six.moves import cPickle
@@ -191,7 +191,7 @@ def create_modular_db_path(path):
                 format(path))
     
     # Instantiate mother database
-    db = DataBase(db_path, nocreate=True)
+    db = DataBase(db_path, nocreate=True, readonly=True)
 
     #print path
     path_minus_db_basedir = os.path.relpath(path, db._basedir)

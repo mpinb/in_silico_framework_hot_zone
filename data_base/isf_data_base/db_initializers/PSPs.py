@@ -8,8 +8,9 @@ I currently leave this undocumented until I (or someone else) can properly docum
 
 import os
 import single_cell_parser as scp
-from data_base.dbopen import create_modular_db_path, resolve_db_path
-from data_base.isf_data_base.IO.LoaderDumper import pandas_to_parquet
+from data_base.dbopen import create_db_path, resolve_db_path
+from data_base.isf_data_base.IO.LoaderDumper import pandas_to_msgpack
+# from data_base.isf_data_base.IO.LoaderDumper import pandas_to_parquet
 
 
 def get_confile_form_network_param(n):
@@ -120,7 +121,7 @@ def init(
     pspdb.set(
         'parameterfiles',
         get_parameterfiles_df_with_confile_and_neuron_param_path(db),
-        dumper=pandas_to_parquet)
+        dumper=pandas_to_msgpack)
     psps_out = []
     keys_out = []
     for index, row in pdf.iterrows():

@@ -14,7 +14,7 @@ import compatibility
 import pandas as pd
 import numpy as np
 from . import parent_classes
-import pandas_msgpack
+import isf_pandas_msgpack
 import json
 
 
@@ -26,14 +26,14 @@ def check(obj):
 class Loader(parent_classes.Loader):
 
     def get(self, savedir):
-        return pandas_msgpack.read_msgpack(
+        return isf_pandas_msgpack.read_msgpack(
             os.path.join(savedir, 'pandas_to_msgpack')).values
 
 
 def dump(obj, savedir):
     obj = pd.DataFrame(obj)
     #     obj.to_msgpack(os.path.join(savedir, 'pandas_to_msgpack'), compress = 'blosc')
-    pandas_msgpack.to_msgpack(os.path.join(savedir, 'pandas_to_msgpack'),
+    isf_pandas_msgpack.to_msgpack(os.path.join(savedir, 'pandas_to_msgpack'),
                               obj,
                               compress='blosc')
 
