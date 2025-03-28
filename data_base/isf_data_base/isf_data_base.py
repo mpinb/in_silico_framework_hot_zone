@@ -418,6 +418,7 @@ class ISFDataBase:
             ValueError: If the key is over 100 characters long.
             ValueError: If the key contains characters that are not allowed (only numeric or latin alphabetic characters, "-" and "_" are allowed)
         """
+        MAX_KEY_LEN = 120
         assert isinstance(key_str_tuple, str) or isinstance(key_str_tuple, tuple), "Any key must be a string or tuple of strings. {} is type {}".format(key_str_tuple, type(key_str_tuple))
         if isinstance(key_str_tuple, str):
             key_str_tuple = key_str_tuple,  # convert to tuple
@@ -425,8 +426,8 @@ class ISFDataBase:
 
         # Check if individual characters are allowed
         for subkey in key_str_tuple:
-            if len(subkey) > 100:
-                raise ValueError('keys must be shorter than 100 characters')
+            if len(subkey) > MAX_KEY_LEN:
+                raise ValueError('keys must be shorter than {} characters, but the following is {} long: {}'.format(MAX_KEY_LEN, len(subkey), subkey))
             allowed_characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_.1234567890'
             for c in subkey:
                 if not c in allowed_characters:
