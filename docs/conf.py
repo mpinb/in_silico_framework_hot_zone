@@ -146,6 +146,10 @@ paramlinks_hyperlink_param = "name"
 # Don't run notebooks
 nbsphinx_execute = "never"
 nbsphinx_codecell_lexer = "python"
+nbsphinx_thumbnails = {
+    "tutorials/Introduction_to_ISF": "_static/_images/isf-logo-black-semi-bg.png",
+    "tutorials/3. multiscale models/3.1 Multiscale modeling": "_static/_images/frame.0000.png"
+}
 
 # Add any paths that contain templates here, relative to this directory.
 # We have custom templates that produce toctrees for modules and classes on module pages,
