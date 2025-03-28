@@ -123,9 +123,9 @@ def _convert_syn_fns_to_reldb(syn_content, hoc_fn_map):
         target_hoc_file = matches[0]
         if not os.path.isabs(target_hoc_file):
             target_hoc_file = find_hoc_file(target_hoc_file)
-        relative_hoc_file = create_reldb_path(target_hoc_file)
-        syn_content[1] = "# {}\n".format(relative_hoc_file)
-        return "\n".join(syn_content)
+    relative_hoc_file = create_reldb_path(target_hoc_file)
+    syn_content[1] = "# {}\n".format(relative_hoc_file)
+    return "\n".join(syn_content)
 
 
 def _convert_con_fns_to_reldb(con_content, syn_fn_map, con_fn):
