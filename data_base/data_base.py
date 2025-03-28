@@ -100,4 +100,4 @@ def is_data_base(path):
     Returns:
         bool: True if the path contains a :py:class:`~data_base.data_base.DataBase`.
     """
-    return is_model_data_base(path) or is_isf_data_base(path)
+    return _is_legacy_model_data_base(path) or is_isf_data_base(path)
