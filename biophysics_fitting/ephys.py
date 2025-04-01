@@ -744,7 +744,7 @@ def STEP_fast_ahp_depth(t, v, thresh=None, time_scale=5, start=1):
             end_ind = np.searchsorted(t, t_spike_1 + time_scale)
 
         # Find minimum V between this spike and the next spike (or next 5 ms)
-        d.append(np.min(v[begin_ind:end_ind]))
+        d.append(np.min(v[begin_ind:end_ind+1]))
 
     d = np.array(d)
     return d
@@ -785,7 +785,7 @@ def STEP_slow_ahp_depth(t, v, thresh=None, time_scale=5, start=1):
         else:
             begin_ind = np.searchsorted(t, t_spike_1 + time_scale)
 
-        d.append(np.min(v[begin_ind:end_ind]))
+        d.append(np.min(v[begin_ind:end_ind+1]))
 
     d = np.array(d)
     return d
@@ -832,7 +832,7 @@ def STEP_slow_ahp_time(t, v, thresh=None, time_scale=5, start=1):
             begin_ind = np.searchsorted(t, t_spike_1 + time_scale)
 
         # Find the index of the minimum voltage value between ti1 and ti2
-        min_v_ind = begin_ind + np.argmin(v[begin_ind:end_ind])
+        min_v_ind = begin_ind + np.argmin(v[begin_ind:end_ind+1])
         t_sahp = t[min_v_ind]
         rel_time = (t_sahp - t_spike_1) / (t_spike_2 - t_spike_1)
         d.append(rel_time)
