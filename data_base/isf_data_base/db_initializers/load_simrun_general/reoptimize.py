@@ -75,7 +75,7 @@ def _reoptimize_key(db, key, new_dumper, client=None):
     except Exception as e:
         if os.path.exists(path_to_key):
             shutil.rmtree(path_to_key)  
-        shutil.move(temp_path, path_to_key)  # move original key to tmp location
+        shutil.move(temp_path, path_to_key)
         raise DataBaseException(f"Failed to re-optimize {key}") from e
 
 
