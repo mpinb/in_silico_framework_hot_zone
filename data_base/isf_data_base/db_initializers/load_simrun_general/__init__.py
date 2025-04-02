@@ -80,32 +80,20 @@ import logging
 import os
 
 import dask.dataframe as dd
-import six
 
 import single_cell_parser as scp
 from data_base.analyze.spike_detection import spike_detection
 from data_base.isf_data_base import ISFDataBase
-from data_base.isf_data_base.IO.LoaderDumper import (
-    # dask_to_parquet,
-    dask_to_msgpack,
-    pandas_to_msgpack,
-    get_dumper_string_by_dumper_module,
-    # pandas_to_parquet,
-    to_cloudpickle,
-)
+from data_base.isf_data_base.IO.LoaderDumper import get_dumper_string_by_dumper_module
 from data_base.utils import mkdtemp
+# from .config import (
+#     OPTIMIZED_CATEGORIZED_DASK_DUMPER,
+#     OPTIMIZED_DASK_DUMPER,
+#     OPTIMIZED_PANDAS_DUMPER
+#     )
 
 logger = logging.getLogger("ISF").getChild(__name__)
 
-DEFAULT_DUMPER = to_cloudpickle
-OPTIMIZED_PANDAS_DUMPER = pandas_to_msgpack
-OPTIMIZED_DASK_DUMPER = dask_to_msgpack
-NEUP_DIR = "parameterfiles_cell_folder"
-NETP_DIR = "parameterfiles_network_folder"
-HOC_DIR = "morphology"
-SYN_DIR = "syn_folder"
-CON_DIR = "con_folder"
-RECSITES_DIR = "recsites_folder"
 
 from .builders import (
     _build_core,
@@ -113,8 +101,9 @@ from .builders import (
     _build_param_files,
     _build_synapse_activation,
 )
-from .parameter_file_handling import load_param_files_from_db
+from .param_file_parser import load_param_files_from_db
 from .utils import _get_dumper
+from .reoptimize import reoptimize_db
 
 
 def init(
@@ -134,7 +123,7 @@ def init(
     dendritic_spike_times_threshold=-30.0,
     client=None,
     n_chunks=5000,
-    dumper=OPTIMIZED_PANDAS_DUMPER,
+    dumper=None,
 ):
     """Initialize a database with simulation data.
 
@@ -234,7 +223,7 @@ def init(
                 repartition=False,
                 scheduler=scheduler,
                 client=client,
-                dumper=dumper,
+                # dumper=OPTIMIZED_CATEGORIZED_DASK_DUMPER,
             )
 
     if dendritic_voltage_traces:
@@ -328,12 +317,12 @@ def add_dendritic_spike_times(db, dendritic_spike_times_threshold=-30.0):
         m.set(
             kk + "_" + str(dendritic_spike_times_threshold),
             st,
-            dumper=OPTIMIZED_PANDAS_DUMPER,
+            dumper=None,
         )
 
 
 def optimize(
-    db, dumper=None, select=None, scheduler=None, repartition=False, client=None
+    db, dumper=None, select=None, scheduler=None, repartition=False, categorized=False, client=None
 ):
     """Rewrite existing data with a new dumper.
 
@@ -379,13 +368,9 @@ def optimize(
                     value, select=list(value.keys()), scheduler=scheduler, client=client
                 )
             else:
-                dumper = _get_dumper(
-                    value,
-                    optimized_pandas_dumper=OPTIMIZED_PANDAS_DUMPER,
-                    optimized_dask_dumper=OPTIMIZED_DASK_DUMPER,
-                )
+                dumper = _get_dumper(value, categorized=categorized)
                 logging.info(
-                    "optimizing {} using dumper {}".format(
+                    "Optimizing {} using dumper {}".format(
                         str(key), get_dumper_string_by_dumper_module(dumper)
                     )
                 )
