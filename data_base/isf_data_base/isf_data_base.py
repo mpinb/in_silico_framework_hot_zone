@@ -285,7 +285,7 @@ class ISFDataBase:
         keys_in_db_without_metadata = set(self.keys()).difference(set(self.metadata.keys()))
         for key_str in keys_in_db_without_metadata:
             key = self._convert_key_to_path(key_str)
-            logger.info("Updating metadata for key {key}".format(key = key.name))
+            logger.debug("Updating metadata for key {key}".format(key = key.name))
             try:
                 dumper = get_dumper_string_by_savedir(str(key))
             except EnvironmentError as e:
