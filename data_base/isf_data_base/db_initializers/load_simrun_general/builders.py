@@ -30,11 +30,12 @@ from .param_file_parser import (
 )
 from .config import (
     NETP_DIR,
-    NETP_DIR,
+    NEUP_DIR,
     HOC_DIR,
     SYN_DIR,
     CON_DIR,
     RECSITES_DIR,
+    DEFAULT_DUMPER
 )
 
 logger = logging.getLogger("ISF").getChild(__name__)
