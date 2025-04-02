@@ -86,11 +86,7 @@ from data_base.analyze.spike_detection import spike_detection
 from data_base.isf_data_base import ISFDataBase
 from data_base.isf_data_base.IO.LoaderDumper import get_dumper_string_by_dumper_module
 from data_base.utils import mkdtemp
-# from .config import (
-#     OPTIMIZED_CATEGORIZED_DASK_DUMPER,
-#     OPTIMIZED_DASK_DUMPER,
-#     OPTIMIZED_PANDAS_DUMPER
-#     )
+from .config import OPTIMIZED_PANDAS_DUMPER
 
 logger = logging.getLogger("ISF").getChild(__name__)
 
@@ -174,21 +170,18 @@ def init(
             Scheduler to use for parallellized parsing of dask dataframes.
             can e.g. be simply the ``distributed.Client.get`` method.
             Default is None.
-        dumper (module, optional):
+        dumper (module, optional, deprecated):
             Dumper to use for saving pandas dataframes.
             Default is :py:mod:`~data_base.isf_data_base.IO.LoaderDumper.pandas_to_msgpack`.
+            This has been deprecated in favor of a central configuration for the dumpers.
 
     .. deprecated:: 0.2.0
         The :paramref:`burst_times` argument is deprecated and will be removed in a future version.
+        
+    .. deprecated:: 0.5.0
+       The :paramref:`dumper` argument is deprecated and will be removed in a future version.
+       Dumpers are configured in the centralized :py:mod:`~data_base.isf_data_base.db_initializers.load_simrun_general.config` module.
     """
-    # TODO: many aspects are re-written in optimized format, but can be done in a single pass
-    assert dumper.__name__.endswith(
-        ".IO.LoaderDumper.pandas_to_msgpack"
-    ) or dumper.__name__.endswith(
-        ".IO.LoaderDumper.pandas_to_parquet"
-    ), "Please use a pandas-compatible dumper. You used {}.".format(
-        dumper
-    )
     if burst_times:
         raise ValueError("deprecated!")
     if rewrite_in_optimized_format:
@@ -201,7 +194,7 @@ def init(
     db["simresult_path"] = simresult_path
 
     if core:
-        _build_core(db, repartition=repartition, metadata_dumper=dumper)
+        _build_core(db, repartition=repartition, metadata_dumper=OPTIMIZED_PANDAS_DUMPER)
         if rewrite_in_optimized_format:
             optimize(
                 db,
@@ -223,7 +216,7 @@ def init(
                 repartition=False,
                 scheduler=scheduler,
                 client=client,
-                # dumper=OPTIMIZED_CATEGORIZED_DASK_DUMPER,
+                categorized=True,
             )
 
     if dendritic_voltage_traces:
@@ -235,14 +228,13 @@ def init(
             dendritic_spike_times_threshold,
             scheduler,
             client,
-            dumper=dumper,
         )
 
     if spike_times:
         # spike times are numbered after this
         logging.info("---spike times---")
         vt = db["voltage_traces"]
-        db.set("spike_times", spike_detection(vt), dumper=dumper)
+        db.set("spike_times", spike_detection(vt))
 
     logging.info("Initialization succesful.")
 
@@ -255,7 +247,6 @@ def add_dendritic_voltage_traces(
     dendritic_spike_times_threshold=-30.0,
     scheduler=None,
     client=None,
-    dumper=None,
 ):
     """Add dendritic voltage traces to the database.
 
@@ -279,9 +270,6 @@ def add_dendritic_voltage_traces(
             See also: :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general.add_dendritic_spike_times`
         client (:py:class:`~dask.distributed.client.Client`, optional):
             Distributed Client object for parallel computation.
-        dumper (module, optional):
-            Dumper to use for :py:meth:`~data_base.isf_data_base.load_simrun_general.optimize` if :paramref:`optimize` is ``True``.
-            Default is :py:mod:`~data_base.isf_data_base.IO.LoaderDumper.pandas_to_msgpack`.
     """
     # Set a pickle to the dend voltage traces. This is simply a symlink to the original data, not the data itself.
     _build_dendritic_voltage_traces(db, repartition=repartition)
@@ -294,7 +282,6 @@ def add_dendritic_voltage_traces(
             repartition=False,
             scheduler=scheduler,
             client=client,
-            dumper=dumper,
         )
     if dendritic_spike_times:
         add_dendritic_spike_times(db, dendritic_spike_times_threshold)
@@ -334,15 +321,19 @@ def optimize(
     Args:
         db (:py:class:`~data_base.isf_data_base.isf_data_base.ISFDataBase`):
             The database to optimize.
-        dumper (module):
-            Dumper to use for re-saving the data in a new format.
-            Default is None, and the dumper is inferred from the data type.
-            See also: :py:meth:`~data_base.isf_data_base.db_initializers._get_dumper`
         select (list, optional):
             List of keys to optimize. Default is None, and all data is optimized:
             ``['synapse_activation', 'cell_activation', 'voltage_traces', 'dendritic_recordings']``.
         client (distributed.Client, optional):
             Distributed Client object for parallel computation.
+        dumper (module, deprecated):
+            Dumper to use for re-saving the data in a new format.
+            Default is None, and the dumper is inferred from the data type.
+            See also: :py:meth:`~data_base.isf_data_base.db_initializers._get_dumper`
+            
+    .. deprecated:: 0.5.0
+        The :paramref:`dumper` argument is deprecated and will be removed in a future version.
+        Dumpers are configured in the centralized :py:mod:`~data_base.isf_data_base.db_initializers.load_simrun_general.config` module.
 
     Returns:
         None

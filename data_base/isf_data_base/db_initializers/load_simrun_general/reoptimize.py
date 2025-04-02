@@ -43,7 +43,7 @@ def _get_dumper_kwargs(d, client=None):
         return {}
     
 
-def reoptimize_key(db, key, new_dumper, client=None):
+def _reoptimize_key(db, key, new_dumper, client=None):
     path_to_key = os.path.join(db.basedir, key)
     temp_key = key+"_reoptimizing"
     temp_path = os.path.join(db.basedir, temp_key)
@@ -60,6 +60,7 @@ def reoptimize_key(db, key, new_dumper, client=None):
             shutil.rmtree(path_to_key)  
         shutil.move(temp_path, path_to_key)  # move original key to tmp location
         raise DataBaseException(f"Failed to re-optimize {key}") from e
+
 
 def reoptimize_db(db, client=None, progress=False, n_db_parents=0, suppress_warnings=False):
     """
@@ -95,7 +96,7 @@ def reoptimize_db(db, client=None, progress=False, n_db_parents=0, suppress_warn
                     continue
                 
                 try:
-                    reoptimize_key(db, key, new_dumper, client=client)
+                    _reoptimize_key(db, key, new_dumper, client=client)
                 except Exception as e:
                     raise DataBaseException(f"Failed to re-optimize {key}") from e
     finally:
