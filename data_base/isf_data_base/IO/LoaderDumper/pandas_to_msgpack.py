@@ -1,13 +1,9 @@
-"""Reads and writes pandas dataframes to msgpack files.
-
-.. deprecated:: 0.2.0
-   The pandas-msgpack format is deprecated and will be removed in a future version.
-   Please consider using the Apache parquet format instead.
+"""Save and load pandas dataframes to msgpack files.
    
 See also:
     :py:mod:`~data_base.isf_data_base.IO.LoaderDumper.pandas_to_parquet` for saving pandas dataframes to parquet files.
 
-:skip-doc:
+This uses a fork of the original `pandas_to_msgpack` package, `available on PyPI <https://pypi.org/project/isf-pandas-msgpack/>`_
 """
 
 
