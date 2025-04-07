@@ -36,7 +36,7 @@ class DataBase(object):
             readonly (bool): If True, the database is read-only.
             nocreate (bool): If True, the database is not created if it does not exist.
         """
-        if is_model_data_base(basedir):
+        if _is_legacy_model_data_base(basedir):
             logger.warning('Reading a legacy-format ModelDataBase. nocreate is set to {}'.format(nocreate))
             logger.warning('Overwriting mdb.set and mdb.get to be compatible with ISF syntax...')
             
@@ -66,7 +66,7 @@ def get_db_by_unique_id(unique_id):
     assert db.get_id() == unique_id, "The unique_id of the database {} does not match the requested unique_id {}. Check for duplicates in your data base registry.".format(db.get_id(), unique_id)
     return db
 
-def is_model_data_base(path):
+def _is_legacy_model_data_base(path):
     """
     Checks if a given path contains a :py:class:`~data_base.model_data_base.ModelDataBase`.
     
@@ -77,3 +77,44 @@ def is_model_data_base(path):
         bool: True if the path contains a :py:class:`~data_base.model_data_base.ModelDataBase`.
     """
     return os.path.exists(os.path.join(path, 'sqlitedict.db'))
+
+def is_isf_data_base(path):
+    """
+    Checks if a given path contains a :py:class:`~data_base.isf_data_base.ISFDataBase`.
+    
+    Args:
+        path (str): The path to check.
+        
+    Returns:
+        bool: True if the path contains a :py:class:`~data_base.isf_data_base.ISFDataBase`.
+    """
+    return os.path.exists(os.path.join(path, 'db_state.json'))
+
+
+def is_data_base(path):
+    """
+    Checks if a given path contains a :py:class:`~data_base.data_base.DataBase`.
+    
+    Args:
+        path (str): The path to check.
+        
+    Returns:
+        bool: True if the path contains a :py:class:`~data_base.data_base.DataBase`.
+    """
+    return _is_legacy_model_data_base(path) or is_isf_data_base(path)
+
+
+def is_sub_data_base(parent_db, key):
+    """
+    Check if a given key is a sub-database of the parent database.
+    
+    Args:
+        parent_db (DataBase): The parent database.
+        key (str): The key to check.
+    
+    Returns:
+        bool: True if the key is a sub-database of the parent database.
+    """
+    sub_db_key_path = os.path.join(parent_db.basedir, key)
+    sub_db_path = os.path.join(sub_db_key_path, "db")
+    return os.path.exists(sub_db_path) and is_data_base(sub_db_path)

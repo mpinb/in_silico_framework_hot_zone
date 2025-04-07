@@ -1,8 +1,14 @@
-from tests import client as test_dask_client
-import pytest
+import pytest, distributed, socket
 
 @pytest.fixture(scope="session")
 def client(pytestconfig):
-    port = pytestconfig.getoption("--dask_server_port")
-    c = test_dask_client(port)
+    # Assume dask server and worker are already started
+    # These are set up in the github workflow file.
+    # If running tests locally, make sure you have a dask scheduler and dask worker running on the ports you want
+    ip = pytestconfig.getoption("--dask_server_ip", default="localhost")
+    c = distributed.Client(
+        '{}:{}'.format(
+            ip, 
+            pytestconfig.getoption("--dask_server_port"))
+        )
     return c
