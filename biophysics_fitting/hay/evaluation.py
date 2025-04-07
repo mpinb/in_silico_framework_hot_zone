@@ -3,13 +3,11 @@ A Python translation of the evaluation functions used in :cite:t:`Hay_Hill_Schue
 This module provides methods to run Hay's stimulus protocols, and evaluate the resulting voltage traces.
 """
 
-from typing import Any
-
 import numpy as np
 import six
 from six import iteritems
 
-from biophysics_fitting.hay_specification import (
+from biophysics_fitting.hay.specification import (
     HAY_BAC_DEFINITIONS,
     HAY_BAP_DEFINITIONS,
     HAY_STEP1_DEFINITIONS,
@@ -17,13 +15,11 @@ from biophysics_fitting.hay_specification import (
     HAY_STEP3_DEFINITIONS,
 )
 
-from .ephys import *
+from ..ephys import *
 
 __author__ = "Arco Bast"
 __date__ = "2018-11-08"
 
-# moved to the bottom to resolve circular import
-# from .hay_complete_default_setup import get_hay_problem_description, get_hay_objective_names, get_hay_params_pdf
 
 objectives_step = [
     "AI1",
@@ -1068,7 +1064,28 @@ class _Step:
             self, name.rstrip(str(self.step_index))
         ), f"Attribute {name} not found in {self.name}"
         return object.__getattribute__(self, name.rstrip(str(self.step_index)))
+    
+    def __getstate__(self):
+        """Return the state of the object for pickling.
+        
+        This method ensures that this class and children can be pickled, without running
+        into infinite recursion due to the ``__getattr__`` method.
+        This is necessary, since we often want to evaluate the voltage traces in parallel.
+        Parallellization usually requires pickling the object.
+        """
+        state = self.__dict__.copy()
+        # Remove or modify any attributes that cannot be pickled
+        return state
 
+    def __setstate__(self, state):
+        """Restore the state of the object from the pickled state.
+    
+        This method ensures that this class and children can be pickled, without running
+        into infinite recursion due to the ``__getattr__`` method.
+        This is necessary, since we often want to evaluate the voltage traces in parallel.
+        Parallellization usually requires pickling the object.
+        """
+        self.__dict__.update(state)
 
 class StepOne(_Step):
     """Evaluate Step current one.
@@ -1077,18 +1094,18 @@ class StepOne(_Step):
     The empirically observed objectives are in this case::
 
         {
-            'mf1': ("Mean frequency", 9.0, 0.88),
-            'AI1': ("Adaptation Index", 0.0035999999999999999, 0.0091000000000000004),
-            'ISIcv1': ("Interspike interval coefficient of variation", 0.12039999999999999, 0.032099999999999997),
-            'DI1': ("Doublet Interspike Interval", 57.75, 33.479999999999997),
-            'TTFS1': ("Time to first spike", 43.25, 7.3200000000000003),
-            'APh1': ("AP height", 26.227399999999999,4.9702999999999999),
-            'fAHPd1': ("Fast after-hyperpolarization depth", -51.951099999999997, 5.8212999999999999),
-            'sAHPd1': ("Slow after-hyperpolarization depth", -58.0443, 4.5814000000000004),
-            'sAHPt1': ("Slow after-hyperpolarization time", 0.23760000000000001, 0.0299),
-            'APw1': ("AP width", 1.3077000000000001, 0.16650000000000001)
+            "mf1": ["Mean frequency", 9.0, 0.88],
+            "AI1": ["Adaptation Index", 0.0036, 0.0091],
+            "ISIcv1": ["Interspike interval coefficient of variation", 0.1204, 0.0321],
+            "DI1": ["Doublet Interspike Interval", 57.75, 33.48],
+            "TTFS1": ["Time to first spike", 43.25, 7.32],
+            "APh1": ["AP height", 26.2274, 4.9703],
+            "fAHPd1": ["Fast after-hyperpolarization depth", -51.9511, 5.8213],
+            "sAHPd1": ["Slow after-hyperpolarization depth", -58.0443, 4.5814],
+            "sAHPt1": ["Slow after-hyperpolarization time", 0.2376, 0.0299],
+            "APw1": ["AP width", 1.3077, 0.1665]
         }
-
+    
     See also:
         :py:class:`_Step` for the template class, and :py:meth:`biophysics_fitting.setup_stim.setp_StepOne` for more information on the stimulus protocol.
     """
@@ -1106,16 +1123,16 @@ class StepTwo(_Step):
     The empirically observed objectives are in this case::
 
         {
-            'mf2': ("Mean frequency", 14.5, 0.56000000000000005),
-            'AI2': ("Adaptation Index", 0.0023, 0.0055999999999999999),
-            'ISIcv2': ("Interspike Interval coeffitient of variation", 0.10829999999999999, 0.036799999999999999),
-            'DI2': ("Doublet interspike interval", 6.625, 8.6500000000000004),
-            'TTFS2': ("Ti;e to first spike", 19.125, 7.3099999999999996),
-            'APh2': ("Ap height", 16.520900000000001,6.1127000000000002),
-            'fAHPd2': ("Fast after-hyperpolarization depth", -54.194899999999997, 5.5705999999999998),
-            'sAHPd2': ("Slow after-hyperpolarization depth", -60.512900000000002, 4.6717000000000004),
-            'sAHPt2': ("Slow after-hyperpolarization time", 0.2787, 0.026599999999999999),
-            'APw2': ("AP width", 1.3833,0.2843)
+            "mf2": ["Mean frequency", 14.5, 0.56],
+            "AI2": ["Adaptation Index", 0.0023, 0.0056],
+            "ISIcv2": ["Interspike Interval coefficient of variation", 0.1083, 0.0368],
+            "DI2": ["Doublet interspike interval", 6.625, 8.65],
+            "TTFS2": ["Time to first spike", 19.125, 7.31],
+            "APh2": ["AP height", 16.5209, 6.1127],
+            "fAHPd2": ["Fast after-hyperpolarization depth", -54.1949, 5.5706],
+            "sAHPd2": ["Slow after-hyperpolarization depth", -60.5129, 4.6717],
+            "sAHPt2": ["Slow after-hyperpolarization time", 0.2787, 0.0266],
+            "APw2": ["AP width", 1.3833, 0.2843]
         }
 
     See also:
@@ -1135,16 +1152,16 @@ class StepThree(_Step):
     The empirically observed objectives are in this case::
 
         {
-            'mf3': ("Mean frequency", 22.5,2.2222),
-            'AI3': ("Adaptation index", 0.0045999999999999999, 0.0025999999999999999),
-            'ISIcv3': ("Interspike interval coefficient of variation", 0.095399999999999999, 0.014),
-            'DI3': ("Doublet interspike interval", 5.38, 0.83),
-            'TTFS3': ("Time to first spike", 7.25,1.0),
-            'APh3': ("AP height", 16.436800000000002, 6.9321999999999999),
-            'fAHPd3': ("Fast afterhypoerpolarization depth", -56.557899999999997, 3.5834000000000001),
-            'sAHPd3': ("Slow after-hyperpolarization depth", -59.99230000000001, 3.9247000000000005),
-            'sAHPt3': ("Slow after-hyperpolarization time",   0.21310000000000001, 0.036799999999999999),
-            'APw3': ("AP zidth", 1.8647, 0.41189999999999999)
+            "mf3": ["Mean frequency", 22.5, 2.2222],
+            "AI3": ["Adaptation index", 0.0046, 0.0026],
+            "ISIcv3": ["Interspike interval coefficient of variation", 0.0954, 0.014],
+            "DI3": ["Doublet interspike interval", 5.38, 0.83],
+            "TTFS3": ["Time to first spike", 7.25, 1.0],
+            "APh3": ["AP height", 16.4368, 6.9322],
+            "fAHPd3": ["Fast after-hyperpolarization depth", -56.5579, 3.5834],
+            "sAHPd3": ["Slow after-hyperpolarization depth", -59.9923, 3.9247],
+            "sAHPt3": ["Slow after-hyperpolarization time", 0.2131, 0.0368],
+            "APw3": ["AP width", 1.8647, 0.4119]
         }
 
     See also:
@@ -1255,4 +1272,85 @@ def get_evaluate_StepThree(**kwargs):
         return step.get(**kwargs)
 
     return fun
+
+
+def hay_evaluate_bAP(**kwargs):
+    """Evaluate the :math:`bAP` stimulus protocol.
+
+    Initializes a :py:class:`bAP` object with the default keyword arguments,
+    and calls the evaluation on the voltage traces.
+
+    Args:
+        **kwargs: Additional or overriding keyword arguments for the :py:class:`bAP` object. Defaults to None.
+
+    Returns:
+        dict: Dictionary with evaluation metrics.
+    """
+    bap = bAP()
+    return bap.get(**kwargs)
+
+
+def hay_evaluate_BAC(**kwargs):
+    """Evaluate the :math:`BAC` stimulus protocol.
+
+    Initializes a :py:class:`BAC` object with the default keyword arguments,
+    and calls the evaluation on the voltage traces.
+
+    Args:
+        **kwargs: Additional or overriding keyword arguments for the :py:class:`BAC` object. Defaults to None.
+
+    Returns:
+        dict: Dictionary with evaluation metrics.
+    """
+    bac = BAC()
+    return bac.get(**kwargs)
+
+
+def hay_evaluate_StepOne(**kwargs):
+    """Evaluate the :math:`StepOne` stimulus protocol.
+
+    Initializes a :py:class:`StepOne` object with the default keyword arguments,
+    and calls the evaluation function on the voltage traces.
+
+    Args:
+        **kwargs: Additional or overriding keyword arguments for the :py:class:`StepOne` object. Defaults to None.
+
+    Returns:
+        dict: Dictionary with evaluation metrics.
+    """
+    step = StepOne()
+    return step.get(**kwargs)
+
+
+def hay_evaluate_StepTwo(**kwargs):
+    """Evaluate the :math:`StepTwo` stimulus protocol.
+
+    Initializes a :py:class:`StepTwo` object with the default keyword arguments,
+    and calls the evaluation function on the voltage traces.
+
+    Args:
+        **kwargs: Additional or overriding keyword arguments for the :py:class:`StepTwo` object. Defaults to None.
+
+    Returns:
+        dict: Dictionary with evaluation metrics.
+    """
+    step = StepTwo()
+    return step.get(**kwargs)
+
+
+def hay_evaluate_StepThree(**kwargs):
+    """Evaluate the :math:`StepTwo` stimulus protocol.
+
+    Initializes a :py:class:`StepTwo` object with the default keyword arguments,
+    and calls the evaluation function on the voltage traces.
+
+    Args:
+        **kwargs: Additional or overriding keyword arguments for the :py:class:`StepThree` object. Defaults to None.
+
+    Returns:
+        dict: Dictionary with evaluation metrics.
+    """
+    step = StepThree()
+    return step.get(**kwargs)
+
 

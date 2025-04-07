@@ -6,7 +6,7 @@ This module provides methods to fetch models from the database, and to select th
 
 import pandas as pd
 from collections import defaultdict
-from .hay_evaluation import objectives_BAC, objectives_step
+from .hay.evaluation import objectives_BAC, objectives_step
 from data_base.utils import convertible_to_int
 
 

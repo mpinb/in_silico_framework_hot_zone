@@ -4,40 +4,41 @@ A Python translation of the setup for in-silico current injection experiments as
 
 from __future__ import absolute_import
 
+import os
+from functools import partial
+
 import numpy as np
 from toolz.dicttoolz import merge
 
-from . import hay_evaluation_python
+import single_cell_parser as scp
 
-# from .simulator import Simulator, run_fun
-# from .L5tt_parameter_setup import get_L5tt_template, set_morphology, set_ephys, set_hot_zone, set_param, set_many_param
-# # moved to bottom to resolve circular import
-# # from .hay_evaluation import hay_evaluate_BAC, hay_evaluate_bAP, hay_evaluate_StepOne, hay_evaluate_StepTwo, hay_evaluate_StepThree
-#
-from .evaluator import Evaluator
-
-# from functools import partial
-# import numpy as np
-# import pandas as pd
-#
-# import single_cell_parser as scp
-#
-# from . import setup_stim
-# from .utils import tVec, vmSoma, vmApical
-# from .parameters import set_fixed_params, param_to_kwargs
-from .parameters import param_to_kwargs
-from .utils import tVec, vmApical, vmMax, vmSoma
-
-#
-# from .combiner import Combiner
-
+from .. import setup_stim
+from ..combiner import Combiner
+from ..evaluator import Evaluator
+from ..L5tt_parameter_setup import (
+    get_L5tt_template,
+    get_L5tt_template_v2,
+    set_ephys,
+    set_hot_zone,
+    set_many_param,
+    set_morphology,
+    set_param,
+)
+from ..parameters import param_to_kwargs, set_fixed_params
+from ..simulator import Simulator, run_fun
+from ..utils import tVec, vmApical, vmMax, vmSoma
+from . import evaluation
+from .specification import (
+    get_hay_params_pdf,
+    get_hay_param_names,
+    get_hay_objective_names,
+    get_feasible_model_params,
+    get_feasible_model_objectives,
+    get_hay_problem_description,
+)
 
 __author__ = "Arco Bast"
 __date__ = "2018-11-08"
-
-################################################
-# Simulator
-################################################
 
 
 def record_bAP(cell, recSite1=None, recSite2=None):
@@ -88,6 +89,9 @@ def record_Step(cell):
 
     This is used to quantify the response of the cell to step currents.
 
+    Args:
+        cell (:py:class:`~single_cell_parser.cell.Cell`): The cell object.
+
     See also:
         See :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011` for more information.
     """
@@ -111,8 +115,68 @@ def get_Simulator(fixed_params, step=False, vInit=False):
     See also:
         See :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011` for more information.
     """
-    s = hay_complete_default_setup.get_Simulator(fixed_params, step=step)
+    s = Simulator()
     s.setup.stim_response_measure_funs = []
+    s.setup.cell_param_generator = get_L5tt_template
+    s.setup.params_modify_funs.append(
+        ["fixed_params", partial(set_fixed_params, fixed_params=fixed_params)]
+    )
+    s.setup.cell_param_modify_funs.append(
+        ["morphology", param_to_kwargs(set_morphology)]
+    )
+    s.setup.cell_param_modify_funs.append(["ephys", set_ephys])
+    s.setup.cell_param_modify_funs.append(["params", set_param])
+    s.setup.cell_param_modify_funs.append(["many_params", set_many_param])
+
+    s.setup.cell_param_modify_funs.append(["hot_zone", param_to_kwargs(set_hot_zone)])
+    s.setup.cell_generator = scp.create_cell
+    # s.setup.cell_modify_funs.append('apical_dendrite_scaling', apical_dendrite_scaling)
+
+    # --- Stimulus setup functions
+    s.setup.stim_setup_funs.append(["bAP.stim", param_to_kwargs(setup_stim.setup_bAP)])
+    s.setup.stim_setup_funs.append(["BAC.stim", param_to_kwargs(setup_stim.setup_BAC)])
+    if step:
+        s.setup.stim_setup_funs.append(
+            ["StepOne.stim", param_to_kwargs(setup_stim.setup_StepOne)]
+        )
+        s.setup.stim_setup_funs.append(
+            ["StepTwo.stim", param_to_kwargs(setup_stim.setup_StepTwo)]
+        )
+        s.setup.stim_setup_funs.append(
+            ["StepThree.stim", param_to_kwargs(setup_stim.setup_StepThree)]
+        )
+
+    # --- Stimulus run functions
+    ## bAP and BAC
+    run_fun_bAP_BAC = partial(
+        run_fun,
+        T=34.0,
+        Vinit=-75.0,
+        dt=0.025,
+        recordingSites=[],
+        tStart=0.0,
+        tStop=600.0,
+        vardt=True,
+    )
+    s.setup.stim_run_funs.append(["bAP.run", param_to_kwargs(run_fun_bAP_BAC)])
+    s.setup.stim_run_funs.append(["BAC.run", param_to_kwargs(run_fun_bAP_BAC)])
+
+    ## Step currents
+    run_fun_Step = partial(
+        run_fun,
+        T=34.0,
+        Vinit=-75.0,
+        dt=0.025,
+        recordingSites=[],
+        tStart=0.0,
+        tStop=3000.0,
+        vardt=True,
+    )
+
+    if step:
+        s.setup.stim_run_funs.append(["StepOne.run", param_to_kwargs(run_fun_Step)])
+        s.setup.stim_run_funs.append(["StepTwo.run", param_to_kwargs(run_fun_Step)])
+        s.setup.stim_run_funs.append(["StepThree.run", param_to_kwargs(run_fun_Step)])
     s.setup.stim_response_measure_funs.append(
         ["bAP.hay_measure", param_to_kwargs(record_bAP)]
     )
@@ -134,9 +198,6 @@ def get_Simulator(fixed_params, step=False, vInit=False):
     return s
 
 
-######################################################
-# Evaluator
-######################################################
 def interpolate_vt(voltage_trace_):
     """Interpolate a voltage trace so that is has fixed time interval
 
@@ -219,8 +280,8 @@ def get_Evaluator(
         See :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011` for more information.
     """
     e = Evaluator()
-    bap = hay_evaluation_python.bAP(**bAP_kwargs)
-    bac = hay_evaluation_python.BAC(**BAC_kwargs)
+    bap = evaluation.bAP(**bAP_kwargs)
+    bac = evaluation.BAC(**BAC_kwargs)
 
     if interpolate_voltage_trace:
         e.setup.pre_funs.append(interpolate_vt)
@@ -230,9 +291,9 @@ def get_Evaluator(
     e.setup.evaluate_funs.append(["bAP.hay_measure", bap.get, "bAP.hay_features"])
 
     if step:
-        step_one = hay_evaluation_python.StepOne(**StepOne_kwargs)
-        step_two = hay_evaluation_python.StepTwo(**StepTwo_kwargs)
-        step_three = hay_evaluation_python.StepThree(**StepThree_kwargs)
+        step_one = evaluation.StepOne(**StepOne_kwargs)
+        step_two = evaluation.StepTwo(**StepTwo_kwargs)
+        step_three = evaluation.StepThree(**StepThree_kwargs)
         e.setup.evaluate_funs.append(
             ["StepOne.hay_measure", step_one.get, "StepOne.hay_features"]
         )
@@ -250,24 +311,80 @@ def get_Evaluator(
     return e
 
 
-##############################################################
-# Combiner
-##############################################################
-
-
-def get_Combiner(step=False):
+def get_Combiner(step=False, include_DI3=True):
     """Get a set up :py:class:`~biophysics_fitting.combiner.Combiner` object for the Hay protocol.
 
     Args:
         step (bool): Whether to include step current measurements.
+        include_DI3 (bool):
+            Whether to include the doublet ISI for the Step3 protocol in the step current measurements.
+            Default: ``True``.
 
     Returns:
-        (:py:class:`~biophysics_fitting.combiner.Combiner`): A combiner object.
+        :py:class:`~biophysics_fitting.combiner.Combiner`: A combiner object.
 
     See also:
         See :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011` for more information.
     """
-    return hay_complete_default_setup.get_Combiner(step=step)
+    # up to 20220325, DI3 has not been included and was not in the fit_features file.
+    c = Combiner()
+    c.setup.append(
+        "bAP_somatic_spike", ["bAP_APwidth", "bAP_APheight", "bAP_spikecount"]
+    )
+    c.setup.append("bAP", ["bAP_att2", "bAP_att3"])
+    c.setup.append("BAC_somatic", ["BAC_ahpdepth", "BAC_APheight", "BAC_ISI"])
+    c.setup.append("BAC_caSpike", ["BAC_caSpike_height", "BAC_caSpike_width"])
+    c.setup.append("BAC_spikecount", ["BAC_spikecount"])
+    if step:
+        c.setup.append("step_mean_frequency", ["mf1", "mf2", "mf3"])
+        c.setup.append(
+            "step_AI_ISIcv", ["AI1", "AI2", "ISIcv1", "ISIcv2", "AI3", "ISIcv3"]
+        )
+        if include_DI3:
+            c.setup.append("step_doublet_ISI", ["DI1", "DI2", "DI3"])
+        else:
+            c.setup.append("step_doublet_ISI", ["DI1", "DI2"])
+        c.setup.append("step_AP_height", ["APh1", "APh2", "APh3"])
+        c.setup.append("step_time_to_first_spike", ["TTFS1", "TTFS2", "TTFS3"])
+        c.setup.append(
+            "step_AHP_depth",
+            ["fAHPd1", "fAHPd2", "fAHPd3", "sAHPd1", "sAHPd2", "sAHPd3"],
+        )
+        c.setup.append("step_AHP_slow_time", ["sAHPt1", "sAHPt2", "sAHPt3"])
+        c.setup.append("step_AP_width", ["APw1", "APw2", "APw3"])
+    c.setup.combinefun = np.max
+    return c
 
 
-from . import hay_complete_default_setup
+def get_fixed_params_example():
+    """Get an example of cell-specific fixed params.
+
+    Fixed parameters are parameters that are required for a stimulus protocol.
+    They are specific to a stimulus protocol, and to the morphology of the cell.
+    This method provides an example of such fixed parameters for a L5PT and the
+    bAP and BAC stimuli.
+
+    Returns:
+        dict: A dictionary with the fixed parameters.
+    """
+    morphology_fn = os.path.abspath(
+        os.path.join(
+            __file__,
+            "..",
+            "..",
+            "getting_started",
+            "example_data",
+            "morphology",
+            "89_L5_CDK20050712_nr6L5B_dend_PC_neuron_transform_registered_C2.hoc",
+        )
+    )
+    fixed_params = {
+        "hot_zone.max_": 614,
+        "hot_zone.min_": 414,
+        "bAP.hay_measure.recSite1": 349,
+        "bAP.hay_measure.recSite2": 529,
+        "BAC.stim.dist": 349,
+        "BAC.hay_measure.recSite": 349,
+        "morphology.filename": morphology_fn,
+    }
+    return fixed_params

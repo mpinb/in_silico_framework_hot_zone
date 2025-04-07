@@ -48,6 +48,7 @@ def get_hay_objective_names():
         "ISIcv3",
         "DI1",
         "DI2",
+        "DI3",
         "APh1",
         "APh2",
         "APh3",
@@ -111,8 +112,11 @@ def get_hay_param_names():
 
 
 def get_hay_params_pdf():
-    """Get the parameter boundaries used in :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011`.
-
+    r"""Get the parameter boundaries used in :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011`.
+    
+    Conductance parameters ($\bar{g}$ or $g_{pas}$) are in units of $S/cm^2$, $\tau$ parameters are in units of $ms$
+    and $\gamma$ parameters are a fraction and unitless.
+    
     Returns:
         pd.DataFrame: The parameter boundaries."""
     d = {
@@ -192,14 +196,19 @@ def get_hay_params_pdf():
 def get_hay_problem_description():
     """Get the problem description used in :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011`.
 
+    This method returns a dataframe that contains the objective names,
+    the average value per objective, and the std per objective.
+    Each objective is associated with a specific input stimulus, given in the 'stim_name' column.
+    This distribution of parametrized responses can be used to quantify a cell's response to a specific stimulus.
+
     The resulting pd.DataFrame contains the following columns:
 
-        - objective: The name of the objective as an acronym, prefixed with the stimulus.
-        - feature: The full name of the objective.
-        - stim_name: The name of the stimulus.
-        - stim_type: The type of the stimulus (bAP, BAC or SquarePulse).
-        - mean: The empirically observed mean value of the feature.
-        - std: The empirically observed standard deviation of the feature.
+    - objective: The name of the objective as an acronym, prefixed with the stimulus.
+    - feature: The full name of the objective.
+    - stim_name: The name of the stimulus.
+    - stim_type: The type of the stimulus (bAP, BAC or SquarePulse).
+    - mean: The empirically observed mean value of the feature.
+    - std: The empirically observed standard deviation of the feature.
 
     The names of the objectives are prefixed with the stimulus name. The suffix
     acronyms mean the following:
@@ -227,34 +236,33 @@ def get_hay_problem_description():
           - height of the Ca2+-spike
         * - caSpike_width
           - Width of the Ca2+-spike
-        * - mf1
+        * - mf[123]
           - Spike frequency
-        * - AI1
+        * - AI[123]
           - Adaptation index
-        * - ISIcv1
+        * - ISIcv[123]
           - Interspike interval: coefficient of variation
-        * - DI1
+        * - DI[123]
           - Initial burst interspike interval (time between first and second AP)
-        * - TTFS1
+        * - TTFS[123]
           - First spike latency
-        * - APh1
+        * - APh[123]
           - AP height
-        * - fAHPd1
+        * - fAHPd[123]
           - Fast AP depth
-        * - sAHPd1
+        * - sAHPd[123]
           - Slow after-hyperpolarization depth
-        * - sAHPt1
+        * - sAHPt[123]
           - Slow after-hyperpolarization time
-        * - APw1
+        * - APw[123]
           - Ap half-width
 
     Returns:
         pd.DataFrame: The problem description, containing the objectives, objective names, stimulus type, mean and std for each objective.
 
     Note:
-        These features are unique to Layer 5 Pyramidal Neurons in the Rat Barrel Cortex.
-        Other celltypes will have different values for these features, and may not even
-        have these features at all. See :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011` for more information.
+        The objectives are specific to the L5PT and the Hay stimulus protocol.
+        See :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011`.
     """
     d = {
         "feature": {
@@ -292,12 +300,13 @@ def get_hay_problem_description():
             31: "mean_frequency2",
             32: "adaptation_index2",
             33: "ISI_CV",
-            34: "time_to_first_spike",
-            35: "AP_height",
-            36: "AHP_depth_abs_fast",
-            37: "AHP_depth_abs_slow",
-            38: "AHP_slow_time",
-            39: "AP_width",
+            34: "doublet_ISI",
+            35: "time_to_first_spike",
+            36: "AP_height",
+            37: "AHP_depth_abs_fast",
+            38: "AHP_depth_abs_slow",
+            39: "AHP_slow_time",
+            40: "AP_width",
         },
         "mean": {
             0: 1.0,
@@ -334,12 +343,13 @@ def get_hay_problem_description():
             31: 22.5,
             32: 0.0045999999999999999,
             33: 0.095399999999999999,
-            34: 7.25,
-            35: 16.436800000000002,
-            36: -56.557899999999997,
-            37: -59.9923,
-            38: 0.21310000000000001,
-            39: 1.8647,
+            34: 5.38,
+            35: 7.25,
+            36: 16.436800000000002,
+            37: -56.557899999999997,
+            38: -59.9923,
+            39: 0.21310000000000001,
+            40: 1.8647,
         },
         "objective": {
             0: "bAP_spikecount",
@@ -376,12 +386,13 @@ def get_hay_problem_description():
             31: "mf3",
             32: "AI3",
             33: "ISIcv3",
-            34: "TTFS3",
-            35: "APh3",
-            36: "fAHPd3",
-            37: "sAHPd3",
-            38: "sAHPt3",
-            39: "APw3",
+            34: "DI3",
+            35: "TTFS3",
+            36: "APh3",
+            37: "fAHPd3",
+            38: "sAHPd3",
+            39: "sAHPt3",
+            40: "APw3",
         },
         "std": {
             0: 0.01,
@@ -418,12 +429,13 @@ def get_hay_problem_description():
             31: 2.2222,
             32: 0.0025999999999999999,
             33: 0.014,
-            34: 1.0,
-            35: 6.9321999999999999,
-            36: 3.5834000000000001,
-            37: 3.9247000000000001,
-            38: 0.036799999999999999,
-            39: 0.41189999999999999,
+            34: 0.83,
+            35: 1.0,
+            36: 6.9321999999999999,
+            37: 3.5834000000000001,
+            38: 3.9247000000000001,
+            39: 0.036799999999999999,
+            40: 0.41189999999999999,
         },
         "stim_name": {
             0: "bAP",
@@ -466,6 +478,7 @@ def get_hay_problem_description():
             37: "StepThree",
             38: "StepThree",
             39: "StepThree",
+            40: "StepThree",
         },
         "stim_type": {
             0: "bAP",
@@ -508,49 +521,32 @@ def get_hay_problem_description():
             37: "SquarePulse",
             38: "SquarePulse",
             39: "SquarePulse",
+            40: "SquarePulse",
         },
     }
 
     return pd.DataFrame.from_dict(d)
 
 
-# def get_hay_problem_description():
-#     setup_hay_evaluator()
-#     sol = h.mc.get_sol()
-#     stim_count = int(h.mc.get_stimulus_num())
-#     stims = [sol.o(cur_stim).get_type().s for cur_stim in range(stim_count)]
-
-#     objective_names = []
-#     feature_types = []
-#     stim_types = []
-#     stim_names = []
-#     mean = []
-#     std = []
-#     for lv in range(int(sol.count())):
-#         for i in range (len(h.evaluator.stimulus_feature_type_list.o(lv))):
-#             objective_names.append(h.evaluator.stimulus_feature_name_list.o(lv).o(i).s)
-#             feature_types.append(h.evaluator.stimulus_feature_type_list.o(lv).o(i).s)
-#             stim_types.append(sol.o(lv).get_type().s)
-#             stim_names.append(sol.o(lv).get_name().s)
-#             mean.append(h.evaluator.feature_mean_list.o(lv)[i])
-#             std.append(h.evaluator.feature_std_list.o(lv)[i])
-#     return I.pd.DataFrame(dict(objective = objective_names,
-#                                feature = feature_types,
-#                                stim_type = stim_types,
-#                                stim_name = stim_names,
-#                                mean = mean, std = std))[['objective', 'feature',
-#                                                          'stim_name', 'stim_type',
-#                                                          'mean', 'std']]
-
-
 def get_feasible_model_params():
-    """Get the parameters of a feasible model.
+    """Get a set of feasible model parameters.
 
-    These are sensible parameters, but have no guarantee to provide a working model.
-    Useful for testing purposes, or as a quick seedpoint for the :py:mod:`biophysics_fitting.optimizer`.
+    This dataframe contains biophysical parameters that are not only within range,
+    but also likely values to find.
+    They are however not guaranteed to yield realistic responses to a stimulus, when
+    applied to a L5PT.
+    In general, the response of a cell with these biophysical parameters
+    heavily depends on the morphology as well.
+
+    Conductance parameters ($\bar{g}$ or $g_{pas}$) are in units of $S/cm^2$, $\tau$ parameters are in units of $ms$
+    and $\gamma$ parameters are a fraction and unitless.
 
     Returns:
-        pd.DataFrame: The parameters of a feasible model.
+        pd.DataFrame: A DataFrame with the parameter names as index, feasible values as column 'x', and the min and max.
+
+    Note:
+        The parameters are specific to the L5PT and the Hay stimulus protocol.
+        See :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011`.
     """
     pdf = get_hay_params_pdf()
     x = [
