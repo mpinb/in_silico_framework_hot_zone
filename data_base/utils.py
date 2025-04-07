@@ -587,7 +587,7 @@ def colorize_key(key):
         c = ""
     return c + key.name + bcolors.ENDC
 
-def colorize(key, bcolor):
+def colorize_str(key, bcolor):
     """Colorize a string with a terminal color.
     
     Simply concatenates the string with escape sequences that colroize the text in a terminal.

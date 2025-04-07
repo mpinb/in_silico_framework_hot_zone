@@ -48,6 +48,7 @@ import yaml
 import os
 from compatibility import YamlLoader
 from config.isf_logging import logger as isf_logger
+from config.file_locking import DEFAULT_CONFIG
 
 logger = isf_logger.getChild(__name__)
 
@@ -56,11 +57,6 @@ logger = isf_logger.getChild(__name__)
 _SERVER = None
 _CLIENT = None
 _CONFIG = None
-DEFAULT_CONFIG = [
-    dict(type="redis", config=dict(host="spock", port=8885, socket_timeout=1)),
-    dict(type="redis", config=dict(host="localhost", port=6379, socket_timeout=1)),
-    dict(type="file"),
-]
 
 def _get_locking_config():
     """Get the locking configuration from the environment variable ``ISF_DISTRIBUTED_LOCK_CONFIG``.

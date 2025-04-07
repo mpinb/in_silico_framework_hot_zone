@@ -126,7 +126,7 @@ def read_object_meta(savedir, raise_=True):
         # Cast to numpy array, set to correct dtype, extract from array again.
         meta.index.name = np.array([meta_json['index_name']]).astype(meta_json['index_name_dtype'])[0]
     else:
-        logger.warning("No index name dtype found in meta file. Index name will be string format. Verify if the column is the desired dtype when resetting the index.")
+        logger.debug("No index name dtype found in meta file. Index name will be string format. Verify if the column is the desired dtype when resetting the index.")
     return meta
 
 def set_object_meta(obj, meta):

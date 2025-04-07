@@ -1,4 +1,4 @@
-name: Test pixi (MacOS)
+name: OSX
 on:
   pull_request:
     types: [opened, synchronize]
@@ -6,17 +6,11 @@ on:
       - README.md
       - CHANGELOG.md
       - .gitignore
-  pull_request_target:
-    types:
-      - closed
-    paths-ignore:
-      - README.md
-      - CHANGELOG.md
-      - .gitignore
+    branches:
+      - develop
   push:
     branches:
-      - testing
-      - installer
+      - master
   workflow_dispatch:
 
 jobs:
@@ -73,5 +67,3 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: ./tests/logs/report_py38.xml
           verbose: true
-
-

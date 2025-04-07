@@ -9,8 +9,8 @@ def get_cell_with_network(neuron_param, network_param, cache=True):
     This method creates a new network embedding for the :py:class:`~single_cell_parser.cell.Cell` based on the :ref:`network_parameters_format` file.
     
     Args:
-        neuron_param (str): Path to cell parameter file. 
-        network_param (str): Path to network parameter file.
+        neuron_param (:py:class:`sumatra.NTParameterSet`): The :ref:`cell_parameters_format`.
+        network_param (:py:class:`sumatra.NTParameterSet`): The :ref:`network_parameters_format`.
     
     Returns:
         callable: A callable that returns a :py:class:`~single_cell_parser.cell.Cell` and :py:class:`~single_cell_parser.network.NetworkMapper` when called.

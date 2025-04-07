@@ -19,16 +19,14 @@ from functools import partial
 import numpy as np
 import dask, six
 from data_base.analyze.temporal_binning import universal as temporal_binning
-from data_base.isf_data_base.IO.LoaderDumper import numpy_to_zarr
+# from data_base.isf_data_base.IO.LoaderDumper import numpy_to_zarr
 from config.cell_types import EXCITATORY, INHIBITORY
 import logging
 logger = logging.getLogger("ISF").getChild(__name__)
 
-if six.PY2:
-    from data_base.isf_data_base.IO.LoaderDumper import numpy_to_msgpack
-    numpy_dumper = numpy_to_msgpack
-elif six.PY3:
-    numpy_dumper = numpy_to_zarr
+from data_base.isf_data_base.IO.LoaderDumper import numpy_to_msgpack
+numpy_dumper = numpy_to_msgpack
+
 
 def prefun(df):
     """Augment a :ref:`syn_activation_format` dataframe with additional columns.

@@ -4,8 +4,15 @@
 # for setting environment variables, use pytest.ini or .env instead
 import logging
 import os
-from tests import client as test_dask_client
+import socket
+import sys
+
+import dask
 import six
+
+# To test model-data_base in the way it existed before, we must register it as a top-level module
+import data_base.model_data_base
+sys.modules["model_data_base"] = data_base.model_data_base
 from config.isf_logging import logger as isf_logger
 
 # --- Import fixtures
@@ -32,7 +39,6 @@ elif (
     )
 
 from .context import CURRENT_DIR, TEST_DATA_FOLDER
-
 
 def import_worker_requirements():
     import compatibility
@@ -94,6 +100,14 @@ class ModuleFilter(logging.Filter):
 
 def pytest_addoption(parser):
     parser.addoption("--dask_server_port", action="store", default="8786")
+    parser.addoption(
+        "--dask_server_ip", action="store", default="localhost"
+    )  # default is localhost
+
+
+def is_port_in_use(port):
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        return s.connect_ex(("localhost", port)) == 0
 
 
 def pytest_ignore_collect(path, config):
@@ -120,12 +134,15 @@ def pytest_configure(config):
     """
     pytest configuration
     """
+    import distributed
     import matplotlib
+    import six
 
     matplotlib.use("agg")
     import matplotlib.pyplot as plt
 
     plt.switch_backend("agg")
+    from config.isf_logging import logger as isf_logger
 
     output_thickness = os.path.join(
         CURRENT_DIR, "test_dendrite_thickness", "test_files", "output"
@@ -149,7 +166,11 @@ def pytest_configure(config):
     isf_logging_file_handler.setLevel(logging.INFO)
     isf_logger.addHandler(isf_logging_file_handler)
 
-    port = config.getoption("--dask_server_port")
-    c = test_dask_client(port)
+    c = distributed.Client(
+        "{}:{}".format(
+            config.getoption("--dask_server_ip", default="localhost"),
+            config.getoption("--dask_server_port"),
+        )
+    )
 
     ensure_workers_have_imported_requirements(c)

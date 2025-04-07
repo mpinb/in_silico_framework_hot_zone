@@ -1,4 +1,4 @@
-name: Test pixi (linux)
+name: Linux
 on:
   pull_request:
     types: [opened, synchronize]
@@ -6,26 +6,20 @@ on:
       - README.md
       - CHANGELOG.md
       - .gitignore
-  pull_request_target:
-    types:
-      - closed
-    paths-ignore:
-      - README.md
-      - CHANGELOG.md
-      - .gitignore
+    branches:
+      - develop
   push:
     branches:
-      - testing
-      - installer
+      - master
   workflow_dispatch:
 
 jobs:
   test:
     name: Test pixi linux
-    runs-on: ubuntu-latest
+    runs-on: ['ibs3005', 'self-hosted']
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
       - name: Install & setup environment
         uses: prefix-dev/setup-pixi@v0.8.0
         with:
