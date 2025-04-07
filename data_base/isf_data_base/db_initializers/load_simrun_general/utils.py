@@ -1,5 +1,11 @@
 import hashlib, six
 import pandas as pd
+import dask.dataframe as dd
+from .config import (
+    OPTIMIZED_CATEGORIZED_DASK_DUMPER,
+    OPTIMIZED_DASK_DUMPER,
+    OPTIMIZED_PANDAS_DUMPER
+)
 
 def _hash_file_content(fn):
     with open(fn, 'rb') as content:
@@ -7,7 +13,7 @@ def _hash_file_content(fn):
     return h
 
 
-def _get_dumper(value, optimized_pandas_dumper, optimized_dask_dumper):
+def _get_dumper(value, categorized=False):
     """Infer the best dumper for a dataframe.
 
     Infers the correct parquet dumper for either a pandas or dask dataframe.
@@ -21,22 +27,18 @@ def _get_dumper(value, optimized_pandas_dumper, optimized_dask_dumper):
     Raises:
         NotImplementedError: If the dataframe is not a pandas or dask dataframe.
     """
-    if six.PY2:
-        # For the legacy py2.7 version, it still uses the msgpack dumper
-        from data_base.isf_data_base.IO.LoaderDumper import (
-            dask_to_msgpack,
-            pandas_to_msgpack,
-        )
-
-        return pandas_to_msgpack if isinstance(value, pd.DataFrame) else dask_to_msgpack
-    elif six.PY3:
-        return (
-            optimized_pandas_dumper
-            if isinstance(value, pd.DataFrame)
-            else optimized_dask_dumper
-        )
+    if isinstance(value, pd.DataFrame):
+        return OPTIMIZED_PANDAS_DUMPER
+    elif isinstance(value, dd.DataFrame):
+        if categorized:
+            return OPTIMIZED_CATEGORIZED_DASK_DUMPER
+        else:
+            return OPTIMIZED_DASK_DUMPER
     else:
-        raise NotImplementedError()
+        raise NotImplementedError(
+            "Dataframe type not supported: {}.\nOnly the following dataframe types are supported: {}".format(
+                type(value), [pd.DataFrame , dd.DataFrame]
+                ))
 
         
 def convert_df_columns_to_str(df):

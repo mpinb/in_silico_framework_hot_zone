@@ -8,8 +8,13 @@ import pandas as pd
 
 import single_cell_parser as scp
 
-from .filepath_resolution import _convert_netp_fns_to_reldb, _convert_neup_fns_to_reldb, _convert_syn_fns_to_reldb, _convert_con_fns_to_reldb
-from . import CON_DIR, HOC_DIR, NETP_DIR, NEUP_DIR, SYN_DIR, RECSITES_DIR
+from .filepath_resolution import (
+    _convert_netp_fns_to_reldb, 
+    _convert_neup_fns_to_reldb, 
+    _convert_syn_fns_to_reldb, 
+    _convert_con_fns_to_reldb
+)
+from .config import CON_DIR, HOC_DIR, NETP_DIR, NEUP_DIR, SYN_DIR, RECSITES_DIR
 from .file_handling import get_file
 from .utils import _hash_file_content
 

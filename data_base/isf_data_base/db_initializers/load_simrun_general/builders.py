@@ -18,24 +18,24 @@ from data_base.isf_data_base.IO.roberts_formats import (
 )
 from data_base.utils import chunkIt, silence_stdout
 
-from . import (
-    CON_DIR,
-    DEFAULT_DUMPER,
-    HOC_DIR,
-    NETP_DIR,
-    NEUP_DIR,
-    RECSITES_DIR,
-    SYN_DIR,
-)
 from .data_parsing import (
     load_dendritic_voltage_traces,
     read_voltage_traces_by_filenames,
 )
 from .file_handling import get_max_commas, make_filelist
 from .metadata_utils import create_metadata, get_voltage_traces_divisions_by_metadata
-from .parameter_file_handling import (
+from .param_file_parser import (
     _delayed_copy_transform_paramfiles_to_db,
     construct_param_filename_hashmap_df,
+)
+from .config import (
+    NETP_DIR,
+    NEUP_DIR,
+    HOC_DIR,
+    SYN_DIR,
+    CON_DIR,
+    RECSITES_DIR,
+    DEFAULT_DUMPER
 )
 
 logger = logging.getLogger("ISF").getChild(__name__)
