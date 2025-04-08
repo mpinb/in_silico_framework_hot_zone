@@ -1538,7 +1538,7 @@ def get_3d_plot_morphology(
     #----------------- plot neuron morphology
     for sec_n in sections:
         points = lookup_table[lookup_table['sec_n'] == sec_n]
-        linewidths = points['diameter'][:-1].values + points['diameter'][1:].values / 2 #* 1.5 + 0.2 
+        linewidths = (points['diameter'][:-1].values + points['diameter'][1:].values) / 2 #* 1.5 + 0.2 
         points = points[['x', 'y', 'z']].values.reshape(-1, 1, 3)
         segments = np.concatenate([points[:-1], points[1:]], axis=1)
         lc = Line3DCollection(
