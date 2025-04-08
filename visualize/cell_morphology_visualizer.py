@@ -886,10 +886,12 @@ class CellMorphologyVisualizer(CMVDataParser):
             self._update_times_to_show()
             if show_legend:
                 legend = self.scalar_mappable
+            colors = self._calc_scalar_data_from_keyword(color, time_point, return_as_color=True)
+        else:
+            colors = color
         if show_synapses:
             self._calc_synapses_timeseries()
         
-        colors = self._calc_scalar_data_from_keyword(color, time_point, return_as_color=True)
         
         fig, ax = get_3d_plot_morphology(
             self._morphology_connected,
