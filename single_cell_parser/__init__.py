@@ -125,7 +125,11 @@ def load_NMODL_parameters(parameters):
 
 
 def create_cell(
-    parameters, scaleFunc=None, allPoints=False, setUpBiophysics=True, silent=False
+    parameters, 
+    scaleFunc=None, 
+    allPoints=False, 
+    setUpBiophysics=True, 
+    silent=False
 ):
     """Creating NEURON cell models from cell parameters.
 
