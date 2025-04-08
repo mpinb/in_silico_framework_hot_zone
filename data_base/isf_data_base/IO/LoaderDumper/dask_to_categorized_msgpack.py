@@ -1,27 +1,21 @@
-'''
-Save and load dask dataframes to msgpack files.
+'''Save and load dask dataframes to msgpack with categorical columns.
 
 This dumper is designed for dataframes with the following properties:
 
-- the index is str
+- The index is str
 - The columns have a lot of repetitive values, so they can be grouped.
  
-If the number of partitions is very big (>10000), it will repartition the 
-dataframe to 5000 partitions. Loading such a dataframe is normaly possible
-within 1 second.
+If the number of partitions is very large (>10000), it will repartition the 
+dataframe to 5000 partitions. 
+Loading such a dataframe is normaly possible within 1 second.
 
 Before saving, all str-columns will be converted to ``pd.Categorical``s
 In each respective partition, if the part of unique values in the respective column is <= 20%. The original datatype
 will be restored if the dataframe is loaded. 
-This therefore only serves as optimization to increase loading speed and
-reduce network traffic for suitable dataframes. Suitable dataframes are for example the synapse_activation dataframe.
-Limitations: This is not tested to work well with dataframes that natively contain categoricals
+This therefore only serves as optimization to increase loading speed and reduce network traffic for suitable dataframes. 
+Suitable dataframes are for example the :ref:`syn_activations_format` dataframe.
 
-.. deprecated:: 0.2.0
-   The pandas-msgpack format is set to be deprecated in the future.
-   Please consider using parquet instead.
-
-:skip-doc:
+This uses a fork of the original `pandas_to_msgpack` package, `available on PyPI <https://pypi.org/project/isf-pandas-msgpack/>`_
 '''
 
 import os, yaml
