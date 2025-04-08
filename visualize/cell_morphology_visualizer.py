@@ -1530,7 +1530,7 @@ def get_3d_plot_morphology(
     ax.azim, ax.dist, ax.elev, ax.roll = camera_position['azim'], camera_position['dist'], camera_position['elev'], camera_position['roll']
 
     #----------------- map color
-    sections = lookup_table['sec_n'].unique()
+    sections = sorted(lookup_table['sec_n'].unique())
     if isinstance(colors, str):
         colors = [colors for _ in sections]
     else:
