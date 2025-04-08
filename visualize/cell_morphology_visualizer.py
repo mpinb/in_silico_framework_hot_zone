@@ -1541,6 +1541,9 @@ def get_3d_plot_morphology(
         linewidths = (points['diameter'][:-1].values + points['diameter'][1:].values) / 2 #* 1.5 + 0.2 
         points = points[['x', 'y', 'z']].values.reshape(-1, 1, 3)
         segments = np.concatenate([points[:-1], points[1:]], axis=1)
+        assert len(segments) == len(colors[sec_n]) or len(colors[sec_n]) == 1, \
+            "Number of colors ({}) does not match number of points ({}) in section ({}). Either provide one color per segment, or group line segment colors by section.".format(
+                len(colors[sec_n]), len(segments), sec_n)
         lc = Line3DCollection(
             segments, 
             linewidths=linewidths, 
