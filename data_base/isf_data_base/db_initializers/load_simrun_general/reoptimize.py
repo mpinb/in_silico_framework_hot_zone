@@ -9,7 +9,7 @@ So all databases optimized with `parquet` could now in principle be re-optimized
 from data_base.data_base import is_sub_data_base
 from data_base.exceptions import DataBaseException
 from .utils import _get_dumper
-import shutil, os
+import shutil, os, random
 import dask.dataframe as dd
 import logging
 from tqdm import tqdm
@@ -62,7 +62,7 @@ def _get_dumper_kwargs(d, client=None):
 
 def _reoptimize_key(db, key, new_dumper, client=None):
     path_to_key = os.path.join(db.basedir, key)
-    temp_key = key+"_reoptimizing"
+    temp_key = key+"_{}_reoptimizing".format(random.randint(0, 100000))
     temp_path = os.path.join(db.basedir, temp_key)
         
     shutil.move(path_to_key, temp_path)  # move original key to tmp location
