@@ -601,7 +601,7 @@ See the folder `mechanisms` in the project source.
 .am
 ***
 
-The Amira proprietary VTK-like file format. Refer to the `amira documentation <https://www.csc.kth.se/~weinkauf/notes/amiramesh.html>`_ for more information.
+The Amira proprietary VTK-like file format. Refer to the `amira documentation <https://assets.thermofisher.com/TFS-Assets/MSD/Product-Guides/users-guide-amira-software-2019.pdf>`_ for more information.
 This flexible format can be used to store 3D scalar meshes, 3D neuron morphology reconstructions, slice image data etc.
 
 Readers:
