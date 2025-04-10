@@ -236,6 +236,7 @@ from biophysics_fitting.hay import default_setup as bfit_hay_complete_default_se
 from biophysics_fitting import L5tt_parameter_setup as bfit_L5tt_parameter_setup
 from biophysics_fitting.parameters import param_to_kwargs as bfit_param_to_kwargs
 from biophysics_fitting.optimizer import start_run as bfit_start_run
+from biophysics_fitting.exploration_from_seedpoint import RW
 
 from functools import partial
 

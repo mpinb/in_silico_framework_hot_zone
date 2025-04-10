@@ -20,6 +20,7 @@ from .utils import get_vector_norm
 from data_base.utils import silence_stdout
 import time
 import sys
+from RW import RW
 
 def evaluation_function_incremental_helper(
         p,
