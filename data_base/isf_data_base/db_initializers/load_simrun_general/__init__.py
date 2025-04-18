@@ -6,7 +6,7 @@ but the synapse and cell activation data is written to a separate file for each 
 of spikes and synapse activations is not known in advance).
 
 This module provides functions to gather and parse this data to pandas and dask dataframes. It merges all trials in a single dataframe.
-This saves IO time, disk space, and is strongly recommended for HPC systems and other shared filesystems in genereal, as it reduces the amount of inodes required. 
+This saves IO time, disk space, and is strongly recommended for HPC systems and other shared filesystems in general, as it reduces the amount of inodes required. 
 
 After running :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general.init`, a database is created containing
 the following keys:
