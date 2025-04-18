@@ -72,7 +72,7 @@ def prediction_rates(
         n (int): Amount of iterations for the prediction rates. One iteration is one train-test split.
         normalize_group_size (bool): If True, randomly subsample the data so that both classes have the same number of samples
         verbosity (int): Level of verbosity. Options are ``0`` (default), ``1``, or ``2``
-        test_size (float): Fraction of the data to use as test data. Default is ``0.4``
+        test_size (float): Fraction of the data to use as test data. Default is :math:`0.4`
         solver (str): Solver to use for LDA. Options are ``("svd", "lsqr", "eigen")``. Default is ``"eigen"``
         return_ (str): Return type. Options are ``("score", "all")``. Default is ``"score"``.
             'score' returns the median of the prediction rates for both classes. 

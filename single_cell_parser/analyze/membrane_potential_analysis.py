@@ -71,8 +71,8 @@ def compute_mean_psp_amplitude(vTraces, tStim, dt, width=35.0, t_delay=15.0):
         vTraces (list): List of voltage traces.
         tStim (float): Timepoint of stimulation (in ms).
         dt (float): Time step of the voltage traces.
-        width (float): Width of the PSP window. Default is 35.0 ms.
-        t_delay (float): Delay of the PSP window (i.e. time between the stimulus and the PSP onset). Default is 15.0 ms.
+        width (float): Width of the PSP window. Default is :math:`35.0 ms`.
+        t_delay (float): Delay of the PSP window (i.e. time between the stimulus and the PSP onset). Default is :math:`15.0 ms`.
 
     Returns:
         tuple: A tuple containing the delay and the mean amplitude of the PSPs.    
@@ -93,8 +93,8 @@ def compute_vm_std_windows(vStd, tStim, dt, width=35.0, window_start_times=None)
         vStd (list): List of standard deviations of the voltage
         tStim (float): Time of stimulation
         dt (float): Time step.
-        width (float): Width of each time window. Default is 35.0 ms.
-        window_start_times (list): List of start times for the time windows. Default is [-50.0, 15.0].
+        width (float): Width of each time window. Default is :math:`35.0 ms`.
+        window_start_times (list): List of start times for the time windows. Default is ``[-50.0, 15.0]``.
         
     Returns:
         tuple: A tuple containing the time windows and the average standard deviations.
@@ -143,7 +143,7 @@ def compute_uPSP_amplitude(t, v, tSyn, isEPSP=True, t_width_baseline=10.0):
             Default is True.
         t_width_baseline (float): 
             Width of the time window to calculate the baseline membrane voltage. 
-            Default is 10.0 ms.
+            Default is :math:`10.0 ms`.
     
     Returns:
         float: Amplitude of the uPSP.
@@ -245,7 +245,7 @@ def PSTH_from_spike_times(
 
     Args:
         spikeTimeVectors (list): List of spike time vectors.
-        binSize (float, optional): Bin size for the PSTH. Default is 1.0 ms.
+        binSize (float, optional): Bin size for the PSTH. Default is `1.0 ms`.
         tBegin (float, optional): Start time of the PSTH. Default is None (min of :paramref:`spikeTimeVectors`).
         tEnd (float, optional): End time of the PSTH. Default is None (max of :paramref:`spikeTimeVectors`).
         aligned (bool, optional): If True, aligns the bins to integer multiples of the bin size. Default is True.

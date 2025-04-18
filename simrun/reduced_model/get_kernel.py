@@ -301,11 +301,11 @@ class ReducedLdaModel():
         Args:
             keys_to_synapse_activation_data (list): 
                 List of keys to the :ref:`syn_activation_format` data for each simrun-inited database that will be used to fit the model.
-            synapse_activation_window_width (int): Width of the synapse activation window. Default is 80.
+            synapse_activation_window_width (int): Width of the synapse activation window in amount of indices. units depend on the chosen time resolution. Default is ``80``. 
             synapse_activation_window_min (int): Start of the synapse activation window. Default is None.
             synapse_activation_window_max (int): End of the synapse activation window. Default is None.
-            output_window_min (int): Start of the prediction time window. Default is 255.
-            output_window_max (int): End of the prediction time window. Default is 265.
+            output_window_min (int): Start of the prediction time window. Default is ``255``.
+            output_window_max (int): End of the prediction time window. Default is ``265.
             refractory_period (int): 
                 Period before the prediction start for which to omit input data. 
                 Input data that has spikes between ``output_window_min - refractory_period`` and ``output_window_min`` 

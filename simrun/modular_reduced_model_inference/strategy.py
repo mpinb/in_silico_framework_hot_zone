@@ -449,13 +449,13 @@ class RaisedCosineBasis(object):
         However, they can equally well be used for spatial or spatiotemporal data.
 
     Attributes:
-        a (int): The steepness of the raised cosine. Default is 2.
-        c (int): The offset of the raised cosine. Default is 1.
+        a (int): The steepness of the raised cosine. Default is :math:`2`.
+        c (int): The offset of the raised cosine. Default is :math:`1`.
         phis (array): The phases of the raised cosine. Default is ``np.arange(1, 11, 0.5)``.
-        width (int): The width of the basis functions. Default is 80.
+        width (int): The width of the basis functions. Default is :math:`80`.
         basis (list): The list of basis functions.
-        reversed_ (bool): Whether to reverse the basis functions. Default is False.
-        backend (module): The backend to use (cupy or numpy). Default is numpy.
+        reversed_ (bool): Whether to reverse the basis functions. Default is ``False``.
+        backend (module): The backend to use (cupy or numpy). Default is ``numpy``.
     """
 
     def __init__(
@@ -468,12 +468,12 @@ class RaisedCosineBasis(object):
         backend=np):
         """
         Args:
-            a (int): The steepness of the raised cosine. Default is 2.
-            c (int): The offset of the raised cosine. Default is 1.
+            a (int): The steepness of the raised cosine. Default is :math:`2`.
+            c (int): The offset of the raised cosine. Default is :math:`1`.
             phis (array): The phases of the raised cosine. Default is ``np.arange(1, 11, 0.5)``.
-            width (int): The width of the basis functions. Default is 80.
-            reversed_ (bool): Whether to reverse the basis functions. Default is False.
-            backend (module): The backend to use (cupy or numpy). Default is numpy.
+            width (int): The width of the basis functions. Default is :math:`80`.
+            reversed_ (bool): Whether to reverse the basis functions. Default is ``False``.
+            backend (module): The backend to use (cupy or numpy). Default is ``numpy``.
         """
         self.a = a
         self.c = c
@@ -486,7 +486,7 @@ class RaisedCosineBasis(object):
 
 
     def compute(self, width=80):
-        r"""Compute the vector of raised cosine basis functions :math:`\mathbf{f}`.
+        """Compute the vector of raised cosine basis functions :math:`\mathbf{f}`.
         
         Each element :math:`f_i` in the vector :math:`\mathbf{f}` is a raised cosine basis function 
         with a different :math:`\phi_i`. The domain of each :math:`f_i` is :math:`[0, width]`.
@@ -583,11 +583,11 @@ class RaisedCosineBasis(object):
         """Calculate a single raised cosine basis function :math:`f_i` over the domain :math:`t`.
         
         Args:
-            a (float): The steepness of the raised cosine. Default is 1.
-            c (float): The offset of the raised cosine. Default is 1.
-            phi (float): The phase of the raised cosine. Default is 0.
+            a (float): The steepness of the raised cosine. Default is :math:`1`.
+            c (float): The offset of the raised cosine. Default is :math:`1`.
+            phi (float): The phase of the raised cosine. Default is :math:`0`.
             t (array): The domain of the raised cosine. Default is :math:`[0, 80]`.
-            backend (module): The backend to use (cupy or numpy). Default is numpy.
+            backend (module): The backend to use (cupy or numpy). Default is ``numpy``.
             
         Returns:
             tuple: The domain :math:`t` and the raised cosine basis function :math:`f_i` over this domain.

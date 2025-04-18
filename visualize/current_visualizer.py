@@ -179,8 +179,8 @@ class CurrentAnalysis:
             normalized (bool): Whether to plot the normalized currents. Default is `False`.
             plot_net (bool): Whether to plot the net current. Default is `False`.
             plot_voltage (bool): Whether to plot the voltage trace. Default is `False`.
-            t_stim (int): The time of the stimulus. Default is 295.
-            select_window_relative_to_stim (tuple): The time window to select relative to the stimulus time. Default is (0, 55).
+            t_stim (int): The time of the stimulus im :math:`ms`. Default is :math:`295 ms`.
+            select_window_relative_to_stim (tuple): The time window to select relative to the stimulus time. Default is ``(0, 55)``.
             
         Returns:
             None

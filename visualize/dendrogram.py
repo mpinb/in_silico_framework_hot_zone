@@ -397,7 +397,7 @@ class _DendrogramDendriteStatistics:
         Args:
             ax (:py:class:`matplotlib.axes.Axes`): The matplotlib axes object.
             xlim (tuple): The x-axis limits.
-            binsize (float): The size of the bins. Default is `50`.
+            binsize (float): The size of the bins in :math:`\mu m`. Default is :math:`50 \mu m`.
 
         Returns:
             :py:class:`matplotlib.axes.Axes`: The matplotlib axes object.
@@ -418,7 +418,7 @@ class _DendrogramDendriteStatistics:
 
         Args:
             dist_end (float): The maximum soma distance. Default is `None` and the maximum soma distance is calculated.
-            binsize (float): The size of the bins. Default is `50`.
+            binsize (float): The size of the bins in :math:`\mu m`. Default is :math:`50 \mu m`.
 
         Returns:
             None: Nothing. Updates :paramref:`bins` and :paramref:`dendrite_density`.
@@ -517,7 +517,7 @@ class _DendrogramSynapseStatistics:
 
         Args:
             dist_end (float): The maximum soma distance. Default is `None` and the maximum soma distance is calculated.
-            binsize (float): The size of the bins. Default is `50`.
+            binsize (float): The size of the bins in :math:`\mu m`. Default is :math:`50 \mu m`.
 
         Returns:
             None: Nothing. Updates :paramref:`bins`, :paramref:`synapse_density`, :paramref:`synapse_density_apical`, and :paramref:`synapse_density_basal`.
@@ -580,7 +580,7 @@ class _DendrogramSynapseStatistics:
         Args:
             ax (:py:class:`matplotlib.axes.Axes`): The matplotlib axes object.
             xlim (tuple): The x-axis limits.
-            binsize (float): The size of the bins. Default is `50`.
+            binsize (float): The size of the bins in :math:`\mu m`. Default is :math:`50 \mu m`.
 
         Returns:
             :py:class:`matplotlib.axes.Axes`: The matplotlib axes object.

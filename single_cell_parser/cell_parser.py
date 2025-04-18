@@ -953,7 +953,7 @@ class CellParser(object):
         '''Determine the number of segments for each section according to the d-lambda rule.
 
         Args:
-            f (float, optional): frequency used for determining discretization. Default is 100.0 Hz.
+            f (float, optional): frequency used for determining discretization. Default is :math:`100.0 Hz`.
             full (bool, optional): Whether or not to use full spatial discretization (one segment per morphology point). Default is False.
             max_seg_length (float, optional): Maximum segment length. Default is None.
             

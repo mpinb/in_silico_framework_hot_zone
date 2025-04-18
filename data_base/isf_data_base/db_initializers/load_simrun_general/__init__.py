@@ -142,7 +142,7 @@ def init(
             Parse and write the dendritic spike times to the database.
             See also: :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general.add_dendritic_spike_times`
         dendritic_spike_times_threshold (float, optional):
-            Threshold for the dendritic spike times in mV. Default is :math:`-30`.
+            Threshold for the dendritic spike times in :math:`mV`. Default is :math:`-30 mV`.
             See also: :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general.add_dendritic_spike_times`
         synapse_activation (bool, optional):
             Parse and write the synapse activation data to the database.
@@ -266,7 +266,7 @@ def add_dendritic_voltage_traces(
             If True, the dask dataframe is repartitioned to 5000 partitions (only if it contains over :math:`10000` entries).
             Default is True.
         dendritic_spike_times_threshold (float, optional):
-            Threshold for the dendritic spike times in mV. Default is :math:`-30`.
+            Threshold for the dendritic spike times in :math:`mV`. Default is :math:`-30 mV`.
             See also: :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general.add_dendritic_spike_times`
         client (:py:class:`~dask.distributed.client.Client`, optional):
             Distributed Client object for parallel computation.
@@ -294,7 +294,7 @@ def add_dendritic_spike_times(db, dendritic_spike_times_threshold=-30.0):
         db (:py:class:`~data_base.isf_data_base.isf_data_base.ISFDataBase`):
             The database to which the data should be added.
         dendritic_spike_times_threshold (float, optional):
-            Threshold for the dendritic spike times in mV. Default is :math:`-30`.
+            Threshold for the dendritic spike times in :math:`mV`. Default is :math:`-30 mV`.
             See also: :py:meth:`~data_base.analyze.spike_detection`
     """
     m = db.create_sub_db("dendritic_spike_times")
