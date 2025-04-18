@@ -14,7 +14,7 @@ Example:
     In this case, the input data are synapse activation patterns, and the target data are spike times.
     The strategy in this case is :py:class:`Strategy_spatiotemporalRaisedCosine`, which defines a linear sum
     of raised cosine basis functions. These functions are to be multiplied with the input data to predict spike probabilities.
-    The free parameters are then the weights of the linear combination of these baiss functions.
+    The free parameters are then the weights of the linear combination of these basis functions.
 '''
 
 from .data_extractor import (
