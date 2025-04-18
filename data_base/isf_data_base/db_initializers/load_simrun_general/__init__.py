@@ -58,7 +58,7 @@ After initialization, you can access the data from the data_base in the followin
     >>> db['spike_times']
     <spike times dataframe>
     
-If you intialize the database with ``rewrite_in_optimized_format=True`` (default), the keys are written as dask dataframes to the parquet format.
+If you intialize the database with ``rewrite_in_optimized_format=True`` (default), the keys are written as dask dataframes to whichever format is configured as the optimized format (see :py:mod:`~data_base.isf_data_base.db_initializers.load_simrun_general.config`).
 If ``rewrite_in_optimized_format=False`` instead, these keys are pickled dask dataframes, containing relative links to the
 original ``.csv`` files. In essence, the dask dataframes contain the insturctions to build the dataframe, not the data itself.
 This is useful for fast intermediate analysis. It is not intended and strongly discouraged for long term storage. 
