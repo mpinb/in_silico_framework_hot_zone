@@ -58,7 +58,7 @@ def get_pdf_selected(
     desired range of the objective, and sorts it by its
     deviation from the empirical mean.
     See :py:mod:`~biophysics_fitting.evaluator.Evaluator` for more information
-    on evaluation voltage traces..
+    on evaluation voltage traces.
     
     Args:
         pdf (pd.DataFrame): A DataFrame with model evaluations.
