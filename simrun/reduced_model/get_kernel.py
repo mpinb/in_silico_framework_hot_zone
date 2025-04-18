@@ -302,8 +302,8 @@ class ReducedLdaModel():
             keys_to_synapse_activation_data (list): 
                 List of keys to the :ref:`syn_activation_format` data for each simrun-inited database that will be used to fit the model.
             synapse_activation_window_width (int): Width of the synapse activation window in amount of indices. units depend on the chosen time resolution. Default is ``80``. 
-            synapse_activation_window_min (int): Start of the synapse activation window. Default is None.
-            synapse_activation_window_max (int): End of the synapse activation window. Default is None.
+            synapse_activation_window_min (int): Start of the synapse activation window. Default is ``None``.
+            synapse_activation_window_max (int): End of the synapse activation window. Default is ``None``.
             output_window_min (int): Start of the prediction time window. Default is ``255``.
             output_window_max (int): End of the prediction time window. Default is ``265.
             refractory_period (int): 
@@ -311,7 +311,7 @@ class ReducedLdaModel():
                 Input data that has spikes between ``output_window_min - refractory_period`` and ``output_window_min`` 
                 will be omitted from the fit & predict process. 
                 Default is 0.
-            normalize_group_size (bool): Subsample data so that both classes have the same number of samples. Default is True.
+            normalize_group_size (bool): Subsample data so that both classes have the same number of samples. Default is ``True``.
             test_size (float): Fraction of the data to use as test data. Default is 0.4.
             verbosity (int): Level of verbosity. Options are ``0``, ``1``, or ``2`` (default).
             lookup_series_stepsize (int): 

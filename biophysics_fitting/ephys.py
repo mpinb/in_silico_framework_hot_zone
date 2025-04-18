@@ -488,7 +488,7 @@ def BPAPatt(t, v_dend, thresh="+2mV", stim_onset=None):
         t (array): Time array.
         v_dend (array): Dendritic voltage array.
         thresh (str or float): Threshold voltage for detecting the bAP. Default is '+2mV'.
-        stim_onset (float): Time of the stimulus onset. Default is None.
+        stim_onset (float): Time of the stimulus onset. Default is ``None``.
 
     Returns:
         float: Amplitude of the bAP at the dendrite.

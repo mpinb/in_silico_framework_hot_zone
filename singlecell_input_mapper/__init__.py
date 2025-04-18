@@ -42,8 +42,8 @@ Activity
 This section is responsible for generating activity patterns for the assigned synapses based in empirically observed PSTHs of the presynaptic neurons.
 ISF distinguishes two kinds of activity:
 
-1. Ongoing activity: the baseline synaptic activity patterns in the absence of the in-vivo condition of interest. The ongoing activity is defined in tandem with the network parameters in a :ref:`network_parameters_format` file.
-2. Evoked activity: the activity patterns in response to a specific in-vivo condition. Its file format is described in :ref:`activity_data_format`. 
+1. Ongoing activity: the baseline synaptic activity patterns in the absence of the in vivo condition of interest. The ongoing activity is defined in tandem with the network parameters in a :ref:`network_parameters_format` file.
+2. Evoked activity: the activity patterns in response to a specific in vivo condition. Its file format is described in :ref:`activity_data_format`. 
 
 The general workflow is as follows:
 

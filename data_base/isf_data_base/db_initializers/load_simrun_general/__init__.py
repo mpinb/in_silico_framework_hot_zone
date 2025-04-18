@@ -169,7 +169,7 @@ def init(
         scheduler (dask.distributed.Client, optional)
             Scheduler to use for parallellized parsing of dask dataframes.
             can e.g. be simply the ``distributed.Client.get`` method.
-            Default is None.
+            Default is ``None``.
         dumper (module, optional, deprecated):
             Dumper to use for saving pandas dataframes.
             Default is :py:mod:`~data_base.isf_data_base.IO.LoaderDumper.pandas_to_msgpack`.
@@ -258,13 +258,13 @@ def add_dendritic_voltage_traces(
             The database to which the data should be added.
         rewrite_in_optimized_format (bool, optional):
             If True, the data is converted to a high performance format.
-            Default is True.
+            Default is ``True``.
         dendritic_spike_times (bool, optional):
             If True, the dendritic spike times are added to the database.
-            Default is True.
+            Default is ``True``.
         repartition (bool, optional):
             If True, the dask dataframe is repartitioned to 5000 partitions (only if it contains over :math:`10000` entries).
-            Default is True.
+            Default is ``True``.
         dendritic_spike_times_threshold (float, optional):
             Threshold for the dendritic spike times in :math:`mV`. Default is :math:`-30 mV`.
             See also: :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general.add_dendritic_spike_times`
@@ -322,13 +322,13 @@ def optimize(
         db (:py:class:`~data_base.isf_data_base.isf_data_base.ISFDataBase`):
             The database to optimize.
         select (list, optional):
-            List of keys to optimize. Default is None, and all data is optimized:
+            List of keys to optimize. Default is ``None``, and all data is optimized:
             ``['synapse_activation', 'cell_activation', 'voltage_traces', 'dendritic_recordings']``.
         client (distributed.Client, optional):
             Distributed Client object for parallel computation.
         dumper (module, deprecated):
             Dumper to use for re-saving the data in a new format.
-            Default is None, and the dumper is inferred from the data type.
+            Default is ``None``, and the dumper is inferred from the data type.
             See also: :py:meth:`~data_base.isf_data_base.db_initializers._get_dumper`
             
     .. deprecated:: 0.5.0
@@ -387,10 +387,10 @@ def load_initialized_cell_and_evokedNW_from_db(
         sti (str):
             For which simulation trial index to load the parameter files.
         allPoints (bool, optional):
-            If True, all points of the cell are used. Default is False.
+            If True, all points of the cell are used. Default is ``False``.
             See also: :py:meth:`single_cell_parser.create_cell`
         reconnect_synapses (bool, optional):
-            If True, the synapses are reconnected to the cell. Default is True.
+            If True, the synapses are reconnected to the cell. Default is ``True``.
             See also: :py:meth:`single_cell_parser.NetworkMapper.reconnect_saved_synapses`
 
     See also:

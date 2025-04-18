@@ -201,7 +201,7 @@ class _Strategy(object):
         
         Args:
             split (array): An array of indices to use for the split.
-            setup (bool): Whether to setup the strategy after setting the split. Default is True.
+            setup (bool): Whether to setup the strategy after setting the split. Default is ``True``.
             
         Returns:
             _Strategy: The strategy object with the split set.
@@ -296,7 +296,7 @@ class _Strategy(object):
         
         Args:
             solver (:py:class:`~simrun.modular_reduced_model_inference.solver.Solver`): The solver to add.
-            setup (bool): Whether to setup the solver. Default is True.
+            setup (bool): Whether to setup the solver. Default is ``True``.
             
         Returns:
             None. Adds the solver to the strategy.
@@ -544,8 +544,8 @@ class RaisedCosineBasis(object):
         """Visualize the basis functions :math:`\mathbf{f}`.
         
         Args:
-            ax (plt.axis): The axis to plot on. Default is None.
-            plot_kwargs (dict): The plot arguments. Default is None.
+            ax (plt.axis): The axis to plot on. Default is ``None``.
+            plot_kwargs (dict): The plot arguments. Default is ``None``.
             
         Returns:
             plt.axis: The axis with the plot.
@@ -563,8 +563,8 @@ class RaisedCosineBasis(object):
         
         Args:
             x (array): The (learnable) input weights for the basis functions.
-            ax (plt.axis): The axis to plot on. Default is None.
-            plot_kwargs (dict): The plot arguments. Default is None.
+            ax (plt.axis): The axis to plot on. Default is ``None``.
+            plot_kwargs (dict): The plot arguments. Default is ``None``.
         """
         if plot_kwargs is None:
             plot_kwargs = {}
@@ -910,8 +910,8 @@ class Strategy_spatiotemporalRaisedCosine(_Strategy):
             
         Args:
             optimizer_output (List[scipy.optimize.OptimizeResult]): An array of optimizer outputs. usually one element per data split.
-            only_succesful (bool): Whether to only plot the successful optimizer outputs. Default is False.
-            normalize (bool): Whether to normalize the basis functions. Default is True.
+            only_succesful (bool): Whether to only plot the successful optimizer outputs. Default is ``False``.
+            normalize (bool): Whether to normalize the basis functions. Default is ``True``.
             
         Returns:
             None: Nothing. Plots the basis functions.

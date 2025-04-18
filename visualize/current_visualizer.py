@@ -53,7 +53,7 @@ class CurrentAnalysis:
         secID (int): The index of the section.
         segID (int): The index of the segment.
         seg (Segment): The segment of the cell.
-        rangeVars (list): The names of the ion currents to plot. Default is `None`, which plots all ion currents.
+        rangeVars (list): The names of the ion currents to plot. Default is ``None``, which plots all ion currents.
         colormap (dict): The colormap for the ion currents.
         depolarizing_currents (np.array): The depolarizing currents.
         hyperpolarizing_currents (np.array): The hyperpolarizing currents.
@@ -79,9 +79,9 @@ class CurrentAnalysis:
             cell_or_dict (dict or Cell): The cell object, or a dictionary containing equivalent simulation data.
             secID (int): The index of the section. Default is 'bifurcation'.
             segID (int): The index of the segment. Default is -1.
-            rangeVars (list): The names of the ion currents to plot. Default is `None`, which plots all ion currents.
-            colormap (dict): The colormap for the ion currents. Default is `None`.
-            tVec (list): The time vector. Default is `None`. Only necessary if :paramref:`cell_or_dict` is a dictionary.
+            rangeVars (list): The names of the ion currents to plot. Default is ``None``, which plots all ion currents.
+            colormap (dict): The colormap for the ion currents. Default is ``None``.
+            tVec (list): The time vector. Default is ``None``. Only necessary if :paramref:`cell_or_dict` is a dictionary.
         """
         # set attributes
         if not isinstance(cell_or_dict, dict):
@@ -175,10 +175,10 @@ class CurrentAnalysis:
         """Plot the ion currents and the net current of a cell simulation.
         
         Args:
-            ax (Axes): The matplotlib axes object. Default is `None`.
-            normalized (bool): Whether to plot the normalized currents. Default is `False`.
-            plot_net (bool): Whether to plot the net current. Default is `False`.
-            plot_voltage (bool): Whether to plot the voltage trace. Default is `False`.
+            ax (Axes): The matplotlib axes object. Default is ``None``.
+            normalized (bool): Whether to plot the normalized currents. Default is ``False``.
+            plot_net (bool): Whether to plot the net current. Default is ``False``.
+            plot_voltage (bool): Whether to plot the voltage trace. Default is ``False``.
             t_stim (int): The time of the stimulus im :math:`ms`. Default is :math:`295 ms`.
             select_window_relative_to_stim (tuple): The time window to select relative to the stimulus time. Default is ``(0, 55)``.
             
@@ -234,8 +234,8 @@ class CurrentAnalysis:
         """Plot the ion currents and the net current of a cell simulation.
         
         Args:
-            ax (Axes): The matplotlib axes object. Default is `None`.
-            legend (bool): Whether to plot the legend. Default is `True`.
+            ax (Axes): The matplotlib axes object. Default is ``None``.
+            legend (bool): Whether to plot the legend. Default is ``True``.
             
         Returns:
             None

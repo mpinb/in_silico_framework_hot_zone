@@ -140,7 +140,7 @@ def compute_uPSP_amplitude(t, v, tSyn, isEPSP=True, t_width_baseline=10.0):
         isEPSP (bool): 
             If True, the uPSP is an excitatory post-synaptic potential (EPSP).
             If False, the uPSP is an inhibitory post-synaptic potential (IPSP). 
-            Default is True.
+            Default is ``True``.
         t_width_baseline (float): 
             Width of the time window to calculate the baseline membrane voltage. 
             Default is :math:`10.0 ms`.
@@ -187,8 +187,8 @@ def simple_spike_detection(
     Args:
         t (array): Time vector
         v (array): Membrane potential vector.
-        tBegin (float, optional): Start time of the detection window. Default is None (begin of voltage trace).
-        tEnd (float, optional): End time of the detection window. Default is None (end of voltage trace).
+        tBegin (float, optional): Start time of the detection window. Default is ``None`` (begin of voltage trace).
+        tEnd (float, optional): End time of the detection window. Default is ``None`` (end of voltage trace).
         threshold (float, optional): Threshold for spike detection (mV). Default is :math:`0.0 mV`.
         mode (str, optional):
             Mode for spike detection. Default is ``regular``.
@@ -246,9 +246,9 @@ def PSTH_from_spike_times(
     Args:
         spikeTimeVectors (list): List of spike time vectors.
         binSize (float, optional): Bin size for the PSTH. Default is `1.0 ms`.
-        tBegin (float, optional): Start time of the PSTH. Default is None (min of :paramref:`spikeTimeVectors`).
-        tEnd (float, optional): End time of the PSTH. Default is None (max of :paramref:`spikeTimeVectors`).
-        aligned (bool, optional): If True, aligns the bins to integer multiples of the bin size. Default is True.
+        tBegin (float, optional): Start time of the PSTH. Default is ``None`` (min of :paramref:`spikeTimeVectors`).
+        tEnd (float, optional): End time of the PSTH. Default is ``None`` (max of :paramref:`spikeTimeVectors`).
+        aligned (bool, optional): If True, aligns the bins to integer multiples of the bin size. Default is ``True``.
 
     Returns:
         tuple: Tuple containing the histogram and the bins.

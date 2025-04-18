@@ -159,7 +159,7 @@ def read_voltage_traces_by_filenames(prefix, fnames, divisions=None, repartition
     Args:
         prefix (str): Path to the directory containing the simulation results.
         fnames (list): list of filenames pointing to voltage trace files
-        divisions (list): list of divisions for the dask dataframe. Default is None, letting Dask handle it.
+        divisions (list): list of divisions for the dask dataframe. Default is ``None``, letting Dask handle it.
         repartition (bool): If True, the dask dataframe is repartitioned to 5000 partitions (only if it contains over :math:`10000` entries).
 
     Returns:
@@ -203,7 +203,7 @@ def load_dendritic_voltage_traces_helper(db, suffix, divisions=None, repartition
             This suffix is used to construct the filenames of the dendritic voltage trace files.
         divisions (list):
             List of divisions for the dask dataframe.
-            Default is None, letting Dask handle it.
+            Default is ``None``, letting Dask handle it.
         repartition (bool):
             If True, the dask dataframe is repartitioned to 5000 partitions (only if it contains over :math:`10000` entries).
 
