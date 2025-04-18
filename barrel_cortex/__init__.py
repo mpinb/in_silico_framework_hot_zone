@@ -72,7 +72,7 @@ color_cellTypeColorMapHotZone = {
 
 def synapse_group_function_HZpaper(celltype):
     """
-    Groups celltypes in the same fashion as :cite:t:`Guest_Bast_Narayanan_Oberlaender`
+    Groups celltypes in the same fashion as :cite:t:`Bast_Guest_Fruengel_Narayanan_de_Kock_Oberlaender_2023`
     This means grouping the following:
     
         - All inhibitory celltypes
