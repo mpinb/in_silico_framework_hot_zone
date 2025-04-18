@@ -78,13 +78,13 @@ def universal(
         distance_column (str): 
             Column name of the distance values.
         spatial_distance_bins (int): 
-            Size of the spatial bins. Default is ``50``.
+            Size of the spatial bins. Default is :math:`50\mu m`.
         min_time (int): 
-            Minimum time value. Default is ``0``.
+            Minimum time value. Default is :math:`0 ms`.
         max_time (int): 
-            Maximum time value. Default is ``300``.
+            Maximum time value. Default is :math:`300ms`.
         time_distance_bins (int): 
-            Size of the time bins. Default is ``1``.
+            Size of the time bins. Default is :math:`1ms`.
             
     Returns:
         :py:class:`~numpy.array`:
