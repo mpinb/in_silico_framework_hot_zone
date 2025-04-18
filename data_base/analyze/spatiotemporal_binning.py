@@ -17,7 +17,7 @@ from ._helper_functions import time_list_from_pd, pd_to_array, map_return_to_ser
 def universal_pd(
     df, 
     distance_column, 
-    spacial_distance_bins = 50, 
+    spatial_distance_bins = 50, 
     min_time = 0,
     max_time = 300, 
     time_distance_bins = 1):
@@ -30,7 +30,7 @@ def universal_pd(
             DataFrame to bin. Must contain a column with the name :paramref:`distance_column` that contains the distance values.
         distance_column (str): 
             Column name of the distance values.
-        spacial_distance_bins (int): 
+        spatial_distance_bins (int): 
             Size of the distance bins. Default is ``50``.
         min_time (int): 
             Minimum time value. Default is ``0``.
@@ -46,7 +46,7 @@ def universal_pd(
     if not isinstance(df, pd.DataFrame):
         raise RuntimeError("expected pandas.DataFrame, got %s" % str(type(df)))
 
-    df = df.assign(zbins = lambda x: np.floor(x[distance_column] / spacial_distance_bins).astype(int))
+    df = df.assign(zbins = lambda x: np.floor(x[distance_column] / spatial_distance_bins).astype(int))
     t_bins = np.arange(min_time, max_time + time_distance_bins, time_distance_bins)
 
     fun = lambda row: np.histogram(row, t_bins)[0]
@@ -64,7 +64,7 @@ def universal_pd(
 def universal(
     df, 
     distance_column, 
-    spacial_distance_bins = 50, 
+    spatial_distance_bins = 50, 
     min_time = 0, 
     max_time = 300, 
     time_distance_bins = 1):
@@ -77,7 +77,7 @@ def universal(
             DataFrame to bin. Must contain a column with the name :paramref:`distance_column` that contains the distance values.
         distance_column (str): 
             Column name of the distance values.
-        spacial_distance_bins (int): 
+        spatial_distance_bins (int): 
             Size of the spatial bins. Default is ``50``.
         min_time (int): 
             Minimum time value. Default is ``0``.
@@ -94,8 +94,8 @@ def universal(
         :py:meth:`~data_base.analyze.spatial_binning.universal_pd`
     '''
 
-    fun = lambda x: universal_pd(x, distance_column, spacial_distance_bins =  \
-                                 spacial_distance_bins, min_time = min_time, \
+    fun = lambda x: universal_pd(x, distance_column, spatial_distance_bins =  \
+                                 spatial_distance_bins, min_time = min_time, \
               max_time = max_time, time_distance_bins = time_distance_bins)
 
     if isinstance(df, pd.DataFrame):

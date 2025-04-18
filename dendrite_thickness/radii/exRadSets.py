@@ -55,25 +55,25 @@ class RadiusCalculatorForManyFiles:
         """
 
         if (os.path.isdir(path_to_am) and os.path.isdir(path_to_tif)):
-            for spacialGraphFile in os.listdir(path_to_am):
-                if spacialGraphFile.endswith(".am"):
+            for spatialGraphFile in os.listdir(path_to_am):
+                if spatialGraphFile.endswith(".am"):
                     points = self.readPoints(
-                        os.path.join(path_to_am, spacialGraphFile))
+                        os.path.join(path_to_am, spatialGraphFile))
                     if points == "error":
                         continue
-                    spacialGraphIndicator = re.findall(r'[sS]\d+',
-                                                       spacialGraphFile)[0]
+                    spatialGraphIndicator = re.findall(r'[sS]\d+',
+                                                       spatialGraphFile)[0]
                     outputFile = os.path.join(
-                        path_to_output_folder, spacialGraphIndicator + "_with_r.am")
+                        path_to_output_folder, spatialGraphIndicator + "_with_r.am")
                     for imageFile in os.listdir(path_to_tif):
-                        if imageFile.startswith(spacialGraphIndicator):
+                        if imageFile.startswith(spatialGraphIndicator):
                             image = self.readImage(path_to_tif + imageFile)
                             # result = radi.radius.getRadiiHalfMax(image, points)
                             result = self.radiusCalculator.getProfileOfThesePoints(
                                 image, points, postMeasurment)
                             print(imageFile)
                             self.writeResult(
-                                os.path.join(path_to_am, spacialGraphFile,
+                                os.path.join(path_to_am, spatialGraphFile,
                                              outputFile, result))
                             break
         else:
@@ -101,7 +101,7 @@ class RadiusCalculatorForManyFiles:
     def readPoints(self, dataFile):
         ''' return points of a am file, by using the function "getSpatialGraphPoints"'''
         try:
-            points = radi.spacialGraph.getSpatialGraphPoints(dataFile)
+            points = radi.spatialGraph.getSpatialGraphPoints(dataFile)
         except IOError as fnf_error:
             print(" ")
             print(fnf_error)
@@ -138,7 +138,7 @@ class RadiusCalculatorForManyFiles:
         radii = result
         radii = [r * 0.092 for r in radii]
         try:
-            radi.spacialGraph.write_spacial_graph_with_thickness(
+            radi.spatialGraph.write_spatial_graph_with_thickness(
                 inputDataFile, outputDataFile, radii)
         except IOError as fnf_error:
             print(" ")

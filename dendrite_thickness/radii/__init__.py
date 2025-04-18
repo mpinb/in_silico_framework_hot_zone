@@ -2,7 +2,7 @@
 #import logging
 #logging.getLogger(__name__).addHandler(logging.NullHandler())
 
-from . import spacialGraph
+from . import spatialGraph
 from . import radius
 from . import exRadSets
 from . import addRadii
