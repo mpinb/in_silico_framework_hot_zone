@@ -423,26 +423,26 @@ class Strategy_ISIexponential(_Strategy):
 
 
 class RaisedCosineBasis(object):
-    r"""Set of raised cosine basis functions to use as a kernel for weighing synaptic activation patterns.
+    """Set of raised cosine basis functions to use as a kernel for weighing synaptic activation patterns.
     
     A raised cosine is defined as:
     
     .. math::
     
-        f_i(x) = \frac{1}{2} cos(a \cdot log(\tau + c) - \phi_i) + \frac{1}{2}
+        f_i(x) = \\frac{1}{2} cos(a \cdot log(\\tau + c) - \phi_i) + \\frac{1}{2}
         
-    where :math:`\tau` is the input dimension (space or time e.g.), :math:`a` is the steepness, :math:`c` is the offset, and :math:`\phi` is the phase.
-    These basis functions can be superimposed using learnable weights :math:`x_i` to form a single filter :math:`\mathbf{w}(\tau)` over the domain :math:`\tau`:
+    where :math:`\\tau` is the input dimension (space or time e.g.), :math:`a` is the steepness, :math:`c` is the offset, and :math:`\phi` is the phase.
+    These basis functions can be superimposed using learnable weights :math:`x_i` to form a single filter :math:`\mathbf{w}(\\tau)` over the domain :math:`\\tau`:
     
     .. math::
     
-        \mathbf{w}(\tau) = \sum_{i} x_i \cdot f_i(\tau)
+        \mathbf{w}(\\tau) = \sum_{i} x_i \cdot f_i(\\tau)
         
     And this filter can then be used to weigh the input data :math:`\mathbf{D}`:
     
     .. math::
     
-        WI(t) = \int_{t-width}^{t}  \mathbf{w}(\tau) \cdot \mathbf{D}(\tau)
+        WI(t) = \int_{t-width}^{t}  \mathbf{w}(\\tau) \cdot \mathbf{D}(\\tau)
         
     Note:
         The notation here heavily implies that the cosine functions are defined over the time domain.
@@ -522,14 +522,14 @@ class RaisedCosineBasis(object):
 
 
     def get_superposition(self, x):
-        r"""Get the weighed sum :math:`\mathbf{w}(\tau)` of the basis functions :math:`f`.
+        """Get the weighed sum :math:`\mathbf{w}(\\tau)` of the basis functions :math:`f`.
         
         The superposition of all basis functions, weighed by the input weights,
         is a single filter of length :paramref:`width` that can be used to weigh the input data: synapse activations.
         
         .. math::
     
-            \mathbf{w}(\tau) = \sum_{i} x_i\ f_i(\tau) = \mathbf{x} \cdot \mathbf{f}(\tau) \\
+            \mathbf{w}(\\tau) = \sum_{i} x_i\ f_i(\\tau) = \mathbf{x} \cdot \mathbf{f}(\\tau)
         
         Args:
             x (array): The (learnable) input weights :math:`\mathbf{x}`
@@ -718,7 +718,7 @@ class Strategy_spatiotemporalRaisedCosine(_Strategy):
         
         .. math::
 
-            WNI(t) = \int_{t-width}^{t} \int_z \mathbf{w}_{\tau}(\tau) \cdot \mathbf{w}_{z}(z) \cdot \mathbf{D} = \int_{t-width}^{t} \int_z \mathbf{x} \cdot \mathbf{y} \cdot \mathbf{f}(t) \cdot \mathbf{g}(z) \cdot \mathbf{D}
+            WNI(t) = \int_{t-width}^{t} \int_z \mathbf{w}_{\\tau}(\\tau) \cdot \mathbf{w}_{z}(z) \cdot \mathbf{D} = \int_{t-width}^{t} \int_z \mathbf{x} \cdot \mathbf{y} \cdot \mathbf{f}(t) \cdot \mathbf{g}(z) \cdot \mathbf{D}
         
         Attention:
             These are not the same basis vectors as in :py:class:`RaisedCosineBasis`.
@@ -727,16 +727,16 @@ class Strategy_spatiotemporalRaisedCosine(_Strategy):
             the weighted net input, but these intermediate basis vectors are different.
             
         Returns:
-            dict: A dictionary of basis vectors for each group. basis vectors are of shape :math:`(n_trials, dim(\mathbf{f}(\tau)), dim(\mathbf{g}(z)))`.
+            dict: A dictionary of basis vectors for each group. basis vectors are of shape :math:`(n_trials, dim(\mathbf{f}(\\tau)), dim(\mathbf{g}(z)))`.
         '''
         
         def _compute_base_vector_array(spatiotemp_SA):
             r"""
             Args:
-                spatiotemp_SA (array): The spatiotemporal synaptic activation patterns of shape :math:`(n_trials, dim(\mathbf{f}(\tau)), dim(\mathbf{g}(z)))`.
+                spatiotemp_SA (array): The spatiotemporal synaptic activation patterns of shape :math:`(n_trials, dim(\mathbf{f}(\\tau)), dim(\mathbf{g}(z)))`.
                 
             Returns:
-                array: The basis vector array of shape :math:`(n_trials, dim(\mathbf{f}(\tau)), dim(\mathbf{g}(z)))`.
+                array: The basis vector array of shape :math:`(n_trials, dim(\mathbf{f}(\\tau)), dim(\mathbf{g}(z)))`.
             """
             _, time_domain, space_domain = spatiotemp_SA.shape
             self.RaisedCosineBasis_spatial.compute(space_domain)
