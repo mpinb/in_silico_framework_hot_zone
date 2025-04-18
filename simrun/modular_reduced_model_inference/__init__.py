@@ -12,7 +12,7 @@ Example:
     :cite:t:`Bast_Fruengel_Kock_Oberlaender_2024` describes how to use a raised cosine basis
     to create a reduced model from synapse activation data.
     In this case, the input data are synapse activation patterns, and the target data are spike times.
-    The strategy in this case is :py:class:`Strategy_spatiotemporalRaisedCosine`, whwich defines a linear sum
+    The strategy in this case is :py:class:`Strategy_spatiotemporalRaisedCosine`, which defines a linear sum
     of raised cosine basis functions. These functions are to be multiplied with the input data to predict spike probabilities.
     The free parameters are then the weights of the linear combination of these baiss functions.
 '''
