@@ -592,7 +592,7 @@ Example::
 
 .mod
 ****
-NEURON :cite:`hines2001neuron` file format for neuron mechanisms. refer to the `NEURON NMOL documentation <https://neuron.yale.edu/neuron/docs/using-nmodl-files>`_ for more info.
+NEURON :cite:`hines2001neuron` file format for neuron mechanisms. refer to the `NEURON NMODL documentation <https://neuron.yale.edu/neuron/docs/using-nmodl-files>`_ for more info.
 Used to define channel and synapse dynamics in NEURON simulations.
 See the folder `mechanisms` in the project source.
 
