@@ -32,7 +32,7 @@ Other ways of network realization are also possible, depending on the empirical 
 If you want to use other methods, please familiarize yourself with the data formats such that you can either:
 
 1. Convert the input data to the required input format for ISF and run the same network realization pipeline. Input file formats are described in more detail in :py:mod:`singlecell_input_mapper.map_singlecell_inputs`.
-2. Create your own network realization, and convert the output to the format used in ISF. These are `.syn` and `.con` files, and described in more detail in the [tutorials](../getting_started/tutorials/2. network models/2.1 Anatomical embedding.ipynb).
+2. Create your own network realization, and convert the output to the format used in ISF. These are :ref:`.syn` and :ref:`.con` files. For more info on how to generate and use these, refer to the network modeling section of the :ref:`tutorials`
 
 .. _activity:
 
