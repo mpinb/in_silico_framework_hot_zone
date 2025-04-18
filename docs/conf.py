@@ -231,7 +231,10 @@ html_theme_options = {
     ],
     # "sidebar_hide_name": True,
     'features': [
-        'toc.follow'
+        "navigation.tabs",          # overridden from default immaterial: tab sections on top
+        # "navigation.tabs.sticky",   # overridden from default behavior: keep tab sections on top visible
+        "navigation.paths",         # show the path to the current page in the sidebar i.e. breadcrumb
+        "navigation.top",           # show a "back to top" button
         ],
 }
 
