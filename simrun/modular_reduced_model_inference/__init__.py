@@ -5,7 +5,7 @@ It is implemented so that it allows for a "modular" inference: fitting can be pe
 This was a necessary requirement when considering both the spatial and temporal dimension of the input snapse activation data.
 
 A strategy defines a reduced model containing a set of free parameters :math:`\mathbf{x}` that are optimized to match the input data.
-It also defines what data needs to be reproduced in the first place, and zhat constitutes a good match between the reduced model and the input data.
+It also defines what data needs to be reproduced in the first place, and what constitutes a good match between the reduced model and the input data.
 For a list of available strategies, see :py:mod:`~simrun.modular_reduced_model_inference.strategy`.
 
 Example:
