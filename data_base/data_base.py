@@ -37,7 +37,7 @@ class DataBase(object):
             nocreate (bool): If True, the database is not created if it does not exist.
         """
         if _is_legacy_model_data_base(basedir):
-            logger.warning('Reading a legacy-format ModelDataBase. nocreate is set to {}'.format(nocreate))
+            logger.warning('Reading a legacy-format ModelDataBase.')
             logger.warning('Overwriting mdb.set and mdb.get to be compatible with ISF syntax...')
             
             nocreate = not os.environ.get('ISF_IS_TESTING', False) # creating old format allowed during testing
