@@ -68,7 +68,7 @@ def _reoptimize_key(db, key, new_dumper, client=None):
     shutil.move(path_to_key, temp_path)  # move original key to tmp location
     
     if hasattr(db, "_sql_backend"):  # mdb compat
-        db._sql_backend[temp_key] = db._sql_backend[key].copy()
+        db._sql_backend[temp_key] = db._sql_backend[key]
         db._sql_backend[temp_key].relpath = temp_key
     
     try:
