@@ -66,14 +66,15 @@ def _reoptimize_key(db, key, new_dumper, client=None):
     temp_path = os.path.join(db.basedir, temp_key)
 
     try:    
+        logger.debug("Reoptimizing `{}` to `{}`".format(key, temp_key))
+        logger.debug("Temporarily moving `{}` to `{}`".format(key, temp_key))
         shutil.move(path_to_key, temp_path)  # move original key to tmp location
 
         if hasattr(db, "_sql_backend"):  # mdb compat
-            db._sql_backend[temp_key] = db._sql_backend[key]
-            db._sql_backend[temp_key].relpath = temp_key
+            dummy = db._sql_backend[key]
+            dummy.relpath = temp_path
+            db._sql_backend[temp_key] = dummy
     
-        logger.debug("Reoptimizing `{}` to `{}`".format(key, temp_key))
-        logger.debug("Temproarily moving `{}` to `{}`".format(key, temp_key))
         d = db[temp_key]
         kwargs = _get_dumper_kwargs(d, client=client)
         logger.debug("Saving `{}` with new dumper `{}`".format(key, new_dumper.__name__))
