@@ -61,17 +61,17 @@ def _get_dumper_kwargs(d, client=None):
 
         
 def _reoptimize_key(db, key, new_dumper, client=None):
-    path_to_key = db._convert_key_to_path(key)
-    temp_key = key+"_{}_reoptimizing".format(random.randint(0, 100000))
-    temp_path = os.path.join(db.basedir, temp_key)
+    try:    
+        path_to_key = db._convert_key_to_path(key)
+
+        temp_key = key+"_{}_reoptimizing".format(random.randint(0, 100000))
+        temp_path = os.path.join(db.basedir, temp_key)
+        shutil.move(path_to_key, temp_path)  # move original key to tmp location
         
-    shutil.move(path_to_key, temp_path)  # move original key to tmp location
+        if hasattr(db, "_sql_backend"):  # mdb compat
+            db._sql_backend[temp_key] = db._sql_backend[key]
+            db._sql_backend[temp_key].relpath = temp_key
     
-    if hasattr(db, "_sql_backend"):  # mdb compat
-        db._sql_backend[temp_key] = db._sql_backend[key]
-        db._sql_backend[temp_key].relpath = temp_key
-    
-    try:
         logger.debug("Reoptimizing `{}` to `{}`".format(key, temp_key))
         logger.debug("Temproarily moving `{}` to `{}`".format(key, temp_key))
         d = db[temp_key]
