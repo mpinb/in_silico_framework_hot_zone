@@ -61,7 +61,7 @@ def _get_dumper_kwargs(d, client=None):
     
 
 def _reoptimize_key(db, key, new_dumper, client=None):
-    path_to_key = os.path.join(db.basedir, key)
+    path_to_key = db._convert_key_to_path(key)
     temp_key = key+"_{}_reoptimizing".format(random.randint(0, 100000))
     temp_path = os.path.join(db.basedir, temp_key)
         
