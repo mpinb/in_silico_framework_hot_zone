@@ -68,7 +68,8 @@ def _reoptimize_key(db, key, new_dumper, client=None):
     shutil.move(path_to_key, temp_path)  # move original key to tmp location
     
     if hasattr(db, "_sql_backend"):  # mdb compat
-        db._sql_backend[temp_key] = db._sql_backend[key]
+        original_relpath = db._sql_backend[key].relpath
+        db._sql_backend[temp_key].relpath = temp_key
     
     try:
         d = db[temp_key]
@@ -79,10 +80,9 @@ def _reoptimize_key(db, key, new_dumper, client=None):
         if os.path.exists(path_to_key):
             shutil.rmtree(path_to_key)  
         shutil.move(temp_path, path_to_key)
-        raise DataBaseException(f"Failed to re-optimize {key}") from e
-    finally:
         if hasattr(db, "_sql_backend"):  # mdb compat
-            del db._sql_backend[temp_key]
+            db._sql_backend[temp_key].relpath = original_relpath
+        raise DataBaseException(f"Failed to re-optimize {key}") from e
 
 
 def reoptimize_db(db, client=None, progress=False, n_db_parents=0, suppress_warnings=False):
