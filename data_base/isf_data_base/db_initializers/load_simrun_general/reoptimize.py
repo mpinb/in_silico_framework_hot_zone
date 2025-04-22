@@ -76,11 +76,12 @@ def _reoptimize_key(db, key, new_dumper, client=None):
         db.set(key, d, dumper=new_dumper, **kwargs)
         shutil.rmtree(temp_path)
         if hasattr(db, "_sql_backend"):  # mdb compat
-            del db._sql_backend(temp_key)
+            del db._sql_backend[temp_key]
     except Exception as e:
         if os.path.exists(path_to_key):
             shutil.rmtree(path_to_key)  
         shutil.move(temp_path, path_to_key)
+        del db._sql_backend[temp_key]
         raise DataBaseException(f"Failed to re-optimize {key}") from e
 
 
