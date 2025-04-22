@@ -58,8 +58,8 @@ def _get_dumper_kwargs(d, client=None):
         return {"client": client}
     else:
         return {}
-    
 
+        
 def _reoptimize_key(db, key, new_dumper, client=None):
     path_to_key = db._convert_key_to_path(key)
     temp_key = key+"_{}_reoptimizing".format(random.randint(0, 100000))
@@ -67,11 +67,16 @@ def _reoptimize_key(db, key, new_dumper, client=None):
         
     shutil.move(path_to_key, temp_path)  # move original key to tmp location
     
+    if hasattr(db, "_sql_backend"):  # mdb compat
+        db._sql_backend[temp_key] = db._sql_backend[key]
+    
     try:
         d = db[temp_key]
         kwargs = _get_dumper_kwargs(d, client=client)
         db.set(key, d, dumper=new_dumper, **kwargs)
         shutil.rmtree(temp_path)
+        if hasattr(db, "_sql_backend"):  # mdb compat
+            del db._sql_backend(temp_key)
     except Exception as e:
         if os.path.exists(path_to_key):
             shutil.rmtree(path_to_key)  
