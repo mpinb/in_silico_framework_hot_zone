@@ -38,12 +38,14 @@ class DataBase(object):
         """
         if _is_legacy_model_data_base(basedir):
             logger.warning('Reading a legacy-format ModelDataBase.')
-            logger.warning('Overwriting mdb.set and mdb.get to be compatible with ISF syntax...')
+            logger.warning('Defining the following methods for compatibility with ISF syntax:\n(old) -> (new)\nmdb.getitem -> mdb.get\nmdb.setitem -> mdb.set\nmdb._get_path -> mdb._convert_key_to_path ')
             
             nocreate = not os.environ.get('ISF_IS_TESTING', False) # creating old format allowed during testing
             db = ModelDataBase(basedir, readonly=readonly, nocreate=nocreate)
             db.set = db.setitem
             db.get = db.getitem
+            db._convert_key_to_path = db._get_path
+            
             db.create_sub_db = db.create_sub_mdb
             return db
         
