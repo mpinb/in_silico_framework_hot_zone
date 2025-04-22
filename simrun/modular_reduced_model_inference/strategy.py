@@ -1,7 +1,7 @@
 """Strategies for creating reduced models.
 
 Strategies are pipelines whose sole purpose is to define a cost function.
-Cost functions are functions :math:`f: D, x \rightarrow c` that take data :math:`D` and parameters :math:`x` as input and return some cost :math:`c`.
+Cost functions are functions :math:`f: D, x \\rightarrow c` that take data :math:`D` and parameters :math:`x` as input and return some cost :math:`c`.
 Solvers then optimize these cost functions to find the best parameters :math:`x` for the given data :math:`D`.
 
 This approach is purposefully kept very general, so that it can be used for a wide range of purposes.
