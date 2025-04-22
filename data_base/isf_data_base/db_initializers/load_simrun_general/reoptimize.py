@@ -72,13 +72,13 @@ def _reoptimize_key(db, key, new_dumper, client=None):
             db._sql_backend[temp_key] = db._sql_backend[key]
             db._sql_backend[temp_key].relpath = temp_key
     
-        logger.info("Reoptimizing `{}` to `{}`".format(key, temp_key))
-        logger.info("Temproarily moving `{}` to `{}`".format(key, temp_key))
+        logger.debug("Reoptimizing `{}` to `{}`".format(key, temp_key))
+        logger.debug("Temproarily moving `{}` to `{}`".format(key, temp_key))
         d = db[temp_key]
         kwargs = _get_dumper_kwargs(d, client=client)
-        logger.info("Saving `{}` with new dumper `{}`".format(key, new_dumper.__name__))
+        logger.debug("Saving `{}` with new dumper `{}`".format(key, new_dumper.__name__))
         db.set(key, d, dumper=new_dumper, **kwargs)
-        logger.info("Removing temporary key `{}`".format(temp_key))
+        logger.debug("Removing temporary key `{}`".format(temp_key))
         shutil.rmtree(temp_path)
     except Exception as e:
         if os.path.exists(path_to_key):
