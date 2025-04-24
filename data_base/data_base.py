@@ -17,6 +17,7 @@ import os
 from .data_base_register import _get_db_register
 from .isf_data_base.isf_data_base import ISFDataBase
 from .model_data_base.model_data_base import ModelDataBase
+from config import isf_is_using_mdb
 
 logger = logging.getLogger('ISF').getChild(__name__)
 DEFAULT_DATA_BASE = ISFDataBase
@@ -36,8 +37,8 @@ class DataBase(object):
             readonly (bool): If True, the database is read-only.
             nocreate (bool): If True, the database is not created if it does not exist.
         """
-        if _is_legacy_model_data_base(basedir):
-            logger.warning('Reading a legacy-format ModelDataBase.')
+        if _is_legacy_model_data_base(basedir) or isf_is_using_mdb() == True:
+            logger.warning('Using a legacy-format ModelDataBase.')
             logger.warning('Defining the following methods for compatibility with ISF syntax:\n(old) -> (new)\nmdb.getitem -> mdb.get\nmdb.setitem -> mdb.set\nmdb._get_path -> mdb._convert_key_to_path ')
             
             nocreate = not os.environ.get('ISF_IS_TESTING', False) # creating old format allowed during testing

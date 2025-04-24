@@ -132,7 +132,23 @@ test = {cmd = [
   "--durations=15",
   "--dask_server_port",
   "$ISF_DASK_PORT",
-  ], description = "Run test suite", env = {ISF_NUM_PYTEST_WORKERS = "5", ISF_DASK_PORT = "8786"}, cwd="tests"}
+  ], description = "Run test suite", env = {ISF_NUM_PYTEST_WORKERS = "4", ISF_DASK_PORT = "8786"}, cwd="tests"}
+
+test_mdb = {cmd = [
+  "export", "ISF_USE_MDB=1",
+  "&&",
+  "pytest", 
+  "-n","$ISF_NUM_PYTEST_WORKERS",
+  "-rsx",
+  "-vv",
+  "--color=yes",
+  "--durations=15",
+  "--dask_server_port",
+  "$ISF_DASK_PORT",
+  "test_data_base/", 
+  ";",
+  "unset", "ISF_USE_MDB"
+  ], description = "Run test suite with MDB", env = {ISF_NUM_PYTEST_WORKERS = "4", ISF_DASK_PORT = "8786"}, cwd="tests"}
 
 download_bc_model = {cmd = ["./download_bc_model.sh"], description = "Download ISF's barrel cortex model from Harvard Datverse", cwd="installer"}
 

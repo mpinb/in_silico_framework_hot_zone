@@ -46,10 +46,6 @@ Example:
             "error": null
         }
 """
-# Register the database IO and initializers submodules/-packages
-import sys
-from data_base.isf_data_base import IO
-sys.modules['data_base.IO'] = IO
 
 # Bring wrapper class to the front
 from .data_base import DataBase
