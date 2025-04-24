@@ -9,11 +9,11 @@ import pandas as pd
 import single_cell_parser as scp
 import single_cell_parser.analyze as sca
 from data_base.dbopen import resolve_neup_reldb_paths
-from data_base.isf_data_base.IO.LoaderDumper import pandas_to_msgpack
-from data_base.isf_data_base.IO.roberts_formats import (
+from data_base.IO.LoaderDumper import pandas_to_msgpack
+from data_base.IO.roberts_formats import (
     read_pandas_cell_activation_from_roberts_format as read_ca,
 )
-from data_base.isf_data_base.IO.roberts_formats import (
+from data_base.IO.roberts_formats import (
     read_pandas_synapse_activation_from_roberts_format as read_sa,
 )
 from data_base.utils import chunkIt, silence_stdout

@@ -1,6 +1,6 @@
 """Central configuration for simrun-initializing databases.
 """
-from data_base.isf_data_base.IO.LoaderDumper import (
+from data_base.IO.LoaderDumper import (
     # dask_to_parquet,
     dask_to_msgpack,
     dask_to_categorized_msgpack,

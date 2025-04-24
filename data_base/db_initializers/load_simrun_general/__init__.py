@@ -83,8 +83,10 @@ import dask.dataframe as dd
 
 import single_cell_parser as scp
 from data_base.analyze.spike_detection import spike_detection
-from data_base.isf_data_base import ISFDataBase
-from data_base.isf_data_base.IO.LoaderDumper import get_dumper_string_by_dumper_module
+from data_base.data_base import DataBase, is_data_base
+from data_base.model_data_base.model_data_base import ModelDataBase
+from data_base.isf_data_base.isf_data_base import ISFDataBase
+from data_base.IO.LoaderDumper import get_dumper_string_by_dumper_module
 from data_base.utils import mkdtemp
 from .config import OPTIMIZED_PANDAS_DUMPER
 
@@ -124,7 +126,7 @@ def init(
     """Initialize a database with simulation data.
 
     Use this function to load simulation data generated with the simrun module
-    into a :py:class:`~data_base.isf_data_base.isf_data_base.ISFDataBase`.
+    into a :py:class:`~data_base.DataBase`.
 
     Args:
         core (bool, optional):
@@ -254,7 +256,7 @@ def add_dendritic_voltage_traces(
     and write the membrane voltage of recorded sites to the database.
 
     Args:
-        db (:py:class:`~data_base.isf_data_base.isf_data_base.ISFDataBase`):
+        db (:py:class:`~data_base.DataBase`):
             The database to which the data should be added.
         rewrite_in_optimized_format (bool, optional):
             If True, the data is converted to a high performance format.
@@ -291,7 +293,7 @@ def add_dendritic_spike_times(db, dendritic_spike_times_threshold=-30.0):
     """Add dendritic spike times to the database.
 
     Args:
-        db (:py:class:`~data_base.isf_data_base.isf_data_base.ISFDataBase`):
+        db (:py:class:`~data_base.DataBase`):
             The database to which the data should be added.
         dendritic_spike_times_threshold (float, optional):
             Threshold for the dendritic spike times in mV. Default is :math:`-30`.
@@ -319,7 +321,7 @@ def optimize(
     (less efficient) dumper.
 
     Args:
-        db (:py:class:`~data_base.isf_data_base.isf_data_base.ISFDataBase`):
+        db (:py:class:`~data_base.DataBase`):
             The database to optimize.
         select (list, optional):
             List of keys to optimize. Default is None, and all data is optimized:
@@ -354,7 +356,7 @@ def optimize(
             continue
         else:
             value = db[key]
-            if isinstance(value, ISFDataBase):
+            if is_data_base(db._convert_key_to_path(key)):
                 optimize(
                     value, select=list(value.keys()), scheduler=scheduler, client=client
                 )
