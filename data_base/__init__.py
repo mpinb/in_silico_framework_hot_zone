@@ -11,13 +11,6 @@ A wide variety of input data and output file formats are supported (see :py:mod:
 
 Simulation results from :py:mod:`single_cell_parser` and :py:mod:`simrun` can be imported and converted to a high performance binary format using the :py:mod:`data_base.db_initializers` subpackage.
 
-Database backends can be easily swapped by changing the import statement in :py:mod:`data_base.data_base`.
-
-1. Future support (or deprecation) for file formats and filesystems can be easily implemented by creating a ``new_database`` subpackage containing a ``IO.LoaderDumper`` subpackage.
-2. Backwards compatibility to old data is guaranteed, as the previous database system is still available and automatically inferred by :py:class:`~data_base.data_base.DataBase`
-
-The current database system is :py:mod:`~data_base.isf_data_base`, which uses the ``JSON`` format for metadata and IO information.
-
 Example:
 
     ``Loader`` contains information on how to load the data. It contains which module to use (assuming it contains a ``Loader`` class)::
@@ -46,6 +39,5 @@ Example:
             "error": null
         }
 """
-
 # Bring wrapper class to the front
 from .data_base import DataBase

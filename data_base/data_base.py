@@ -3,7 +3,8 @@ Modular data base system.
 
 This module infers which data base system should be used based on the content of a given path.
 
-Newly created databases automatically use the newest data base system. Only existing data bases in older formats are opened with the old data base system.
+Newly created databases automatically use the newest data base system. 
+Only existing data bases in older formats are opened with the old data base system.
 If the path points to a database that has been created with an older database system, this module returns the corresponding database object, with associated writers, readers, and file format readers.
 """
 
@@ -23,10 +24,10 @@ logger = logging.getLogger('ISF').getChild(__name__)
 DEFAULT_DATA_BASE = ISFDataBase
 
 class DataBase(object):
-    """Wrapper class that initializes the correct data base class
+    """Wrapper database class 
     
-    As this is a wrapper class, it has no class attributes itself. Its reponsibility is to return the correct DataBase object.
-
+    This class initializes the correct data base class for a given path.
+    
     Returns:
         :py:class:`~data_base.isf_datata_base.ISFDataBase` | :py:class:`~data_base.model_data_base.ModelDataBase`: The correct database object.
     """

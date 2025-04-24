@@ -1,3 +1,17 @@
+"""
+Dynamic IO package for saving and loading data across file formats and data types.
+
+This is a wrapper package for one of (currently) two possible database backends: 
+
+- :py:mod:`data_base.isf_data_base.IO` (default, highly recommended)
+- :py:mod:`data_base.model_data_base.IO` (strongly discouraged)
+
+The former uses JSON for saving metadata and file format information.
+
+The latter used the `.pickle` format for this, which made the saved data fragile to source code API changes, even internal. For this reason it has been
+deprecated, and its use is discouraged. The only reason why it is still here is for backwards compatibility.
+"""
+
 import sys
 import importlib
 import pkgutil
