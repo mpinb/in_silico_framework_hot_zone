@@ -13,7 +13,7 @@ import pandas as pd
 from data_base.utils import silence_stdout, convertible_to_int, chunkIt
 from data_base.analyze.spike_detection import spike_in_interval
 from functools import partial
-from config.cell_types import EXCITATORY, INHIBITORY
+from config.cell_types import EXCITATORY
 
 
 def get_binsize(length, binsize_goal=50):

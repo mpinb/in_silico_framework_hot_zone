@@ -11,11 +11,8 @@ import os
 from functools import partial
 import pandas as pd
 from simrun.somatic_summation_model import ParseVT
-# from ..IO.LoaderDumper import dask_to_parquet
 from data_base.IO.LoaderDumper import dask_to_msgpack
 from config.cell_types import EXCITATORY, INHIBITORY
-# dask_to_parquet = data_base.IO.LoaderDumper.dask_to_parquet
-from collections import defaultdict
 import single_cell_parser as scp
 
 

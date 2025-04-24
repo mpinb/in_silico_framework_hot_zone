@@ -5,7 +5,6 @@ import re
 from data_base.dbopen import (
     create_modular_db_path,
     create_reldb_path,
-    resolve_reldb_path,
 )
 from data_base.exceptions import DataBaseException
 

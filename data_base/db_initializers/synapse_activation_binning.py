@@ -17,10 +17,9 @@ from __future__ import absolute_import
 from collections import defaultdict
 from functools import partial
 import numpy as np
-import dask, six
+import dask
 from data_base.analyze.temporal_binning import universal as temporal_binning
-# from data_base.isf_data_base.IO.LoaderDumper import numpy_to_zarr
-from config.cell_types import EXCITATORY, INHIBITORY
+from config.cell_types import EXCITATORY
 import logging
 logger = logging.getLogger("ISF").getChild(__name__)
 

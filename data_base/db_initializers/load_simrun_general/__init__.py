@@ -83,9 +83,7 @@ import dask.dataframe as dd
 
 import single_cell_parser as scp
 from data_base.analyze.spike_detection import spike_detection
-from data_base.data_base import DataBase, is_data_base
-from data_base.model_data_base.model_data_base import ModelDataBase
-from data_base.isf_data_base.isf_data_base import ISFDataBase
+from data_base.data_base import is_data_base
 from data_base.IO.LoaderDumper import get_dumper_string_by_dumper_module
 from data_base.utils import mkdtemp
 from .config import OPTIMIZED_PANDAS_DUMPER
