@@ -37,8 +37,8 @@ def fresh_db(worker_id):
 
     yield db
     # cleanup
-    db.remove()
-    del db
+    # db.remove()
+    # del db
 
 @pytest.fixture
 def empty_db(worker_id):
@@ -56,8 +56,8 @@ def empty_db(worker_id):
     # cleanup
     for key in db.keys():
         del key
-    db.remove()
-    del db
+    # db.remove()
+    # del db
 
 @pytest.fixture
 def sqlite_db():
