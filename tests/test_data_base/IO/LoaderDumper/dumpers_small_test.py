@@ -131,7 +131,7 @@ def test_reduced_lda_model(empty_db):
         empty_db.set('rm2', Rm_reloaded, dumper=reduced_lda_model)
         Rm_reloaded.get_lookup_series_for_different_refractory_period(10)
 
-@pytest.skipif(isf_is_using_mdb(), "numpy_to_zarr is not implemented for mdb.")
+@pytest.mark.skipif(isf_is_using_mdb(), "numpy_to_zarr is not implemented for mdb.")
 def test_numpy_to_zarr(empty_db):
     from data_base.IO.LoaderDumper import numpy_to_zarr
     small_numpy_dump(np.random.randint(5, size=(100, 100)), empty_db, numpy_to_zarr)
