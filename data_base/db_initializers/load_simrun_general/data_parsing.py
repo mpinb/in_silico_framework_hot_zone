@@ -14,8 +14,8 @@ def read_voltage_traces_from_files_pandas(prefix, fnames):
     """Reads a list of **multiple** voltage trace files and parses it to a single pandas dataframe.
 
     The delayed version of this method is used to construct a dask dataframe containing the voltage traces
-    in :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general.read_voltage_traces_by_filenames`.
-    Each singular file is read using :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general.read_voltage_traces_from_file`.
+    in :py:meth:`~data_base.db_initializers.load_simrun_general.read_voltage_traces_by_filenames`.
+    Each singular file is read using :py:meth:`~data_base.db_initializers.load_simrun_general.read_voltage_traces_from_file`.
 
     Args:
         prefix (str): Path to the directory containing the simulation results.
@@ -25,7 +25,7 @@ def read_voltage_traces_from_files_pandas(prefix, fnames):
         pandas.DataFrame: A pandas dataframe containing the voltage traces.
 
     See also:
-        :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general.read_voltage_traces_by_filenames`.
+        :py:meth:`~data_base.db_initializers.load_simrun_general.read_voltage_traces_by_filenames`.
     """
     dfs = [read_voltage_traces_from_file(prefix, fname) for fname in fnames]
     return pd.concat(dfs, axis=0)
@@ -66,8 +66,8 @@ def read_voltage_traces_from_file(prefix, fname):
         pd.DataFrame: A pandas dataframe containing the voltage traces.
 
     See also:
-        :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general.read_voltage_traces_from_csv` and
-        :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general.read_voltage_traces_from_npz`
+        :py:meth:`~data_base.db_initializers.load_simrun_general.read_voltage_traces_from_csv` and
+        :py:meth:`~data_base.db_initializers.load_simrun_general.read_voltage_traces_from_npz`
     """
     if fname.endswith(".csv"):
         return read_voltage_traces_from_csv(prefix, fname)
@@ -86,7 +86,7 @@ def read_voltage_traces_from_csv(prefix, fname):
         fname (str): Filename pointing to a voltage trace file. The file is expected to be in ``.csv`` format.
 
     See also:
-        :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general.read_voltage_traces_from_file`
+        :py:meth:`~data_base.db_initializers.load_simrun_general.read_voltage_traces_from_file`
 
     Returns:
         pd.DataFrame: A pandas dataframe containing the voltage traces.
@@ -126,7 +126,7 @@ def read_voltage_traces_from_npz(prefix, fname):
         fname (str): Filename pointing to a voltage trace file. The file is expected to be in ``.npz`` format.
 
     See also:
-        :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general.read_voltage_traces_from_file`
+        :py:meth:`~data_base.db_initializers.load_simrun_general.read_voltage_traces_from_file`
     """
     warnings.warn(
         "You are loading voltage traces from npz files. This only works, if you are using a fixed stepsize of 0.025 ms"
@@ -166,7 +166,7 @@ def read_voltage_traces_by_filenames(prefix, fnames, divisions=None, repartition
         dask.DataFrame: A dask dataframe containing the voltage traces.
 
     See also:
-        :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general.read_voltage_traces_from_file`
+        :py:meth:`~data_base.db_initializers.load_simrun_general.read_voltage_traces_from_file`
         is used to read in each single voltage trace file. Consult this method for more information on how the data format
         is parsed.
     """
@@ -193,7 +193,7 @@ def load_dendritic_voltage_traces_helper(db, suffix, divisions=None, repartition
     """Read the dendritic voltage traces of a single recording site across multiple simulation trials.
 
     This method constructs a list of all filenames corresponding to a single recording site and reads them in
-    using :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general.read_voltage_traces_by_filenames`.
+    using :py:meth:`~data_base.db_initializers.load_simrun_general.read_voltage_traces_by_filenames`.
 
     Args:
         db (:py:class:`~data_base.isf_data_base.isf_data_base.ISFDataBase`):
@@ -286,7 +286,7 @@ def load_dendritic_voltage_traces(db, suffix_key_dict, repartition=None):
 
     Dendritic recording sites are defined in the :ref:`cell_parameters_format` files (under the key ``sim.recordingSites``).
     The voltage traces for each recording site are read with
-    :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general.load_dendritic_voltage_traces_helper`.
+    :py:meth:`~data_base.db_initializers.load_simrun_general.load_dendritic_voltage_traces_helper`.
 
     Args:
         db (:py:class:`~data_base.isf_data_base.isf_data_base.ISFDataBase`):

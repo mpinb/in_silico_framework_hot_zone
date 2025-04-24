@@ -9,7 +9,7 @@ I currently leave this undocumented until I (or someone else) can properly docum
 import os
 import single_cell_parser as scp
 from data_base.dbopen import create_db_path, resolve_db_path
-from data_base.isf_data_base.IO.LoaderDumper import pandas_to_msgpack
+from data_base.IO.LoaderDumper import pandas_to_msgpack
 # from data_base.isf_data_base.IO.LoaderDumper import pandas_to_parquet
 
 
@@ -85,7 +85,7 @@ def get_PSP_determinants_from_db(db):
         :py:class:`pandas.DataFrame`: The dataframe with the columns ``confile`` and ``neuron_param_dbpath``.
         
     See also:
-        :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general.init`
+        :py:meth:`~data_base.db_initializers.load_simrun_general.init`
         for initializing a database with :py:mod:`simrun` data.    
     '''
     parameterfiles = get_parameterfiles_df_with_confile_and_neuron_param_path(
@@ -113,7 +113,7 @@ def init(
         >>> db['PSPs']['description_key', PSPClass.__name__, 'neuron_param_path', 'confile_path']
     
     See also:
-        :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general.init`
+        :py:meth:`~data_base.db_initializers.load_simrun_general.init`
         for initializing a database with :py:mod:`simrun` data.
     '''
     pdf = get_PSP_determinants_from_db(db)

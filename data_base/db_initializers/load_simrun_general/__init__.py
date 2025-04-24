@@ -8,7 +8,7 @@ of spikes and synapse activations is not known in advance).
 This module provides functions to gather and parse this data to pandas and dask dataframes. It merges al trials in a single dataframe.
 This saves IO time, disk space, and is strongly recommended for HPC systems and other shared filesystems in genereal, as it reduces the amount of inodes required. 
 
-After running :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general.init`, a database is created containing
+After running :py:meth:`~data_base.db_initializers.load_simrun_general.init`, a database is created containing
 the following keys:
 
 .. list-table::
@@ -63,7 +63,7 @@ If ``rewrite_in_optimized_format=False`` instead, these keys are pickled dask da
 original ``.csv`` files. In essence, the dask dataframes contain the insturctions to build the dataframe, not the data itself.
 This is useful for fast intermediate analysis. It is not intended and strongly discouraged for long term storage. 
 Individual keys can afterwards be set to permanent, self-contained and efficient dask dataframes by calling 
-:py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general.load_simrun_general.optimize` on specific database
+:py:meth:`~data_base.db_initializers.load_simrun_general.load_simrun_general.optimize` on specific database
 keys.
 
 Attention:
@@ -73,7 +73,7 @@ Attention:
 
 See also:
     :py:meth:`simrun.run_new_simulations._evoked_activity` for more information on the raw output format of :py:mod:`simrun`.
-    :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general.init` for the initialization of the database.
+    :py:meth:`~data_base.db_initializers.load_simrun_general.init` for the initialization of the database.
 """
 
 import logging
@@ -129,7 +129,7 @@ def init(
     Args:
         core (bool, optional):
             Parse and write the core data to the database: voltage traces, metadata, sim_trial_index and filelist.
-            See also: :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general._build_core`
+            See also: :py:meth:`~data_base.db_initializers.load_simrun_general._build_core`
         voltage_traces (bool, optional):
             Parse and write the somatic voltage traces to the database.
         spike_times (bool, optional):
@@ -137,19 +137,19 @@ def init(
             See also: :py:meth:`data_base.analyze.spike_detection.spike_detection`
         dendritic_voltage_traces (bool, optional):
             Parse and write the dendritic voltage traces to the database.
-            See also: :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general._build_dendritic_voltage_traces`
+            See also: :py:meth:`~data_base.db_initializers.load_simrun_general._build_dendritic_voltage_traces`
         dendritic_spike_times (bool, optional):
             Parse and write the dendritic spike times to the database.
-            See also: :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general.add_dendritic_spike_times`
+            See also: :py:meth:`~data_base.db_initializers.load_simrun_general.add_dendritic_spike_times`
         dendritic_spike_times_threshold (float, optional):
             Threshold for the dendritic spike times in mV. Default is :math:`-30`.
-            See also: :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general.add_dendritic_spike_times`
+            See also: :py:meth:`~data_base.db_initializers.load_simrun_general.add_dendritic_spike_times`
         synapse_activation (bool, optional):
             Parse and write the synapse activation data to the database.
-            See also: :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general._build_synapse_activation`
+            See also: :py:meth:`~data_base.db_initializers.load_simrun_general._build_synapse_activation`
         parameterfiles (bool, optional):
             Parse and write the parameterfiles to the database.
-            See also: :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general._build_param_files`
+            See also: :py:meth:`~data_base.db_initializers.load_simrun_general._build_param_files`
         rewrite_in_optimized_format (bool, optional):
             If True (default): data is converted to a high performance binary
             format and makes unpickling more robust against version changes of third party libraries.
@@ -180,7 +180,7 @@ def init(
         
     .. deprecated:: 0.5.0
        The :paramref:`dumper` argument is deprecated and will be removed in a future version.
-       Dumpers are configured in the centralized :py:mod:`~data_base.isf_data_base.db_initializers.load_simrun_general.config` module.
+       Dumpers are configured in the centralized :py:mod:`~data_base.db_initializers.load_simrun_general.config` module.
     """
     if burst_times:
         raise ValueError("deprecated!")
@@ -250,7 +250,7 @@ def add_dendritic_voltage_traces(
 ):
     """Add dendritic voltage traces to the database.
 
-    Used in :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general.init` to read, parse
+    Used in :py:meth:`~data_base.db_initializers.load_simrun_general.init` to read, parse
     and write the membrane voltage of recorded sites to the database.
 
     Args:
@@ -267,7 +267,7 @@ def add_dendritic_voltage_traces(
             Default is True.
         dendritic_spike_times_threshold (float, optional):
             Threshold for the dendritic spike times in mV. Default is :math:`-30`.
-            See also: :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general.add_dendritic_spike_times`
+            See also: :py:meth:`~data_base.db_initializers.load_simrun_general.add_dendritic_spike_times`
         client (:py:class:`~dask.distributed.client.Client`, optional):
             Distributed Client object for parallel computation.
     """
@@ -329,11 +329,11 @@ def optimize(
         dumper (module, deprecated):
             Dumper to use for re-saving the data in a new format.
             Default is None, and the dumper is inferred from the data type.
-            See also: :py:meth:`~data_base.isf_data_base.db_initializers._get_dumper`
+            See also: :py:meth:`~data_base.db_initializers._get_dumper`
             
     .. deprecated:: 0.5.0
         The :paramref:`dumper` argument is deprecated and will be removed in a future version.
-        Dumpers are configured in the centralized :py:mod:`~data_base.isf_data_base.db_initializers.load_simrun_general.config` module.
+        Dumpers are configured in the centralized :py:mod:`~data_base.db_initializers.load_simrun_general.config` module.
 
     Returns:
         None

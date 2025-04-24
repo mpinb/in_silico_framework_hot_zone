@@ -48,7 +48,7 @@ def prefun(df):
         :py:class:`pandas.DataFrame`: The modified dataframe with additional columns.
         
     See also:
-        :py:meth:`~data_base.isf_data_base.db_initializers.init`
+        :py:meth:`~data_base.db_initializers.init`
     """
     dummy = df.synapse_type.str.split('_')
     df['celltype'] = dummy.str[0]
@@ -76,7 +76,7 @@ def postfun(s, maxtime=None):
         numpy.array: The processed column of synapse activations.
         
     See also:
-        :py:meth:`~data_base.isf_data_base.db_initializers.init`
+        :py:meth:`~data_base.db_initializers.init`
     """
     # default_value_size = s.dropna().iloc[0].shape
     default_value_size = (maxtime,)
@@ -100,7 +100,7 @@ def applyfun(pdf, maxtime=None):
         numpy.array: The binned synapse activations.
     
     See also:
-        :py:meth:`~data_base.isf_data_base.db_initializers.init`
+        :py:meth:`~data_base.db_initializers.init`
     """
     return temporal_binning(
         pdf,
@@ -134,21 +134,21 @@ def synapse_activation_postprocess_pandas(
         prefun (callable):
             A function to preprocess the synapse activation dataframe before binning.
             The function should take a pandas dataframe and return a pandas dataframe.
-            Default: :py:func:`~data_base.isf_data_base.db_initializers.synapse_activation_binning.prefun`
+            Default: :py:func:`~data_base.db_initializers.synapse_activation_binning.prefun`
         applyfun (callable):
             A function to bin the synapse activations.
             The function should take a pandas dataframe and return a numpy array.
-            Default: :py:func:`~data_base.isf_data_base.db_initializers.synapse_activation_binning.applyfun`
+            Default: :py:func:`~data_base.db_initializers.synapse_activation_binning.applyfun`
         postfun (callable):
             A function to postprocess the binned synapse activations.
             The function should take a pandas series and return a numpy array.
-            Default: :py:func:`~data_base.isf_data_base.db_initializers.synapse_activation_binning.postfun`
+            Default: :py:func:`~data_base.db_initializers.synapse_activation_binning.postfun`
     
     Returns: 
         dict: Dictionary containing numpy arrays, whose rows are sim trials, and columns are time bins. The dictionary keys are defined by :paramref:`groupby`.
         
     See also:
-        :py:meth:`~data_base.isf_data_base.db_initializers.synapse_activation_postprocess_dask` for the delayed version of this method.
+        :py:meth:`~data_base.db_initializers.synapse_activation_postprocess_dask` for the delayed version of this method.
     '''
     if not isinstance(groupby, list):
         groupby = [groupby]
@@ -203,15 +203,15 @@ def merge_results_together(dicts):
 def tree_reduction(delayeds, aggregate_fun, length=7):
     """Recursively aggregate the results of a list of delayed objects.
     
-    This is used in :py:meth:`~data_base.isf_data_base.db_initializers.synapse_activation_postprocess_dask`
-    and :py:meth:`~data_base.isf_data_base.db_initializers.synapse_activation_postprocess_pandas` to aggregate
+    This is used in :py:meth:`~data_base.db_initializers.synapse_activation_postprocess_dask`
+    and :py:meth:`~data_base.db_initializers.synapse_activation_postprocess_pandas` to aggregate
     the resulting synapse binning (which is in dictionary format) to a single dictionary.
     
     Args:
         delayeds (array): 
             list of :py:class:`~dask.delayed` objects
         aggregate_fun (:py:class:`~dask.delayed`): 
-            Function to aggregate the results with (e.g. :py:func:`~data_base.isf_data_base.db_initializers.merge_results_together`)
+            Function to aggregate the results with (e.g. :py:func:`~data_base.db_initializers.merge_results_together`)
         length (int): chunk size for aggregation
         
     Note:
@@ -253,15 +253,15 @@ def synapse_activation_postprocess_dask(
         prefun (callable):
             A function to preprocess the synapse activation dataframe before binning.
             The function should take a pandas dataframe and return a pandas dataframe.
-            Default: :py:func:`~data_base.isf_data_base.db_initializers.synapse_activation_binning.prefun`
+            Default: :py:func:`~data_base.db_initializers.synapse_activation_binning.prefun`
         applyfun (callable):
             A function to bin the synapse activations.
             The function should take a pandas dataframe and return a numpy array.
-            Default: :py:func:`~data_base.isf_data_base.db_initializers.synapse_activation_binning.applyfun`
+            Default: :py:func:`~data_base.db_initializers.synapse_activation_binning.applyfun`
         postfun (callable):
             A function to postprocess the binned synapse activations.
             The function should take a pandas series and return a numpy array.
-            Default: :py:func:`~data_base.isf_data_base.db_initializers.synapse_activation_binning.postfun`
+            Default: :py:func:`~data_base.db_initializers.synapse_activation_binning.postfun`
     
     Returns: 
         :py:class:`dask.delayed`: 
@@ -269,7 +269,7 @@ def synapse_activation_postprocess_dask(
             The dictionary keys are defined by :paramref:`groupby`.
             
     See also:
-        :py:meth:`~data_base.isf_data_base.db_initializers.synapse_activation_postprocess_pandas` for the non-delayed
+        :py:meth:`~data_base.db_initializers.synapse_activation_postprocess_pandas` for the non-delayed
         version of this method.
     '''
     # TODO: make this method out of core
@@ -321,7 +321,7 @@ def save_groupby(db, result, groupby):
         None.
         
     See also:
-        :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general.init` for how to simrun-initialize a database.
+        :py:meth:`~data_base.db_initializers.load_simrun_general.init` for how to simrun-initialize a database.
     '''
     if not isinstance(groupby, list):
         groupby = [groupby]
@@ -366,26 +366,26 @@ def init(
         prefun (callable):
             A function to preprocess the synapse activation dataframe before binning.
             The function should take a pandas dataframe and return a pandas dataframe.
-            Default: :py:func:`~data_base.isf_data_base.db_initializers.synapse_activation_binning.prefun`
+            Default: :py:func:`~data_base.db_initializers.synapse_activation_binning.prefun`
         applyfun (callable):
             A function to bin the synapse activations.
             The function should take a pandas dataframe and return a numpy array.
-            Default: :py:func:`~data_base.isf_data_base.db_initializers.synapse_activation_binning.applyfun`
+            Default: :py:func:`~data_base.db_initializers.synapse_activation_binning.applyfun`
         postfun (callable):
             A function to postprocess the binned synapse activations.
             The function should take a pandas series and return a numpy array.
-            Default: :py:func:`~data_base.isf_data_base.db_initializers.synapse_activation_binning.postfun`
+            Default: :py:func:`~data_base.db_initializers.synapse_activation_binning.postfun`
         
     Returns: 
         None. The binned synapse activation data will be stored in :paramref:`db`.
         
     See also:
-        :py:meth:`~data_base.isf_data_base.db_initializers.prefun`, 
-        :py:meth:`~data_base.isf_data_base.db_initializers.applyfun`, and
-        :py:meth:`~data_base.isf_data_base.db_initializers.postfun` for the default functions that bin the synapse activations.
+        :py:meth:`~data_base.db_initializers.prefun`, 
+        :py:meth:`~data_base.db_initializers.applyfun`, and
+        :py:meth:`~data_base.db_initializers.postfun` for the default functions that bin the synapse activations.
         
     See also:
-        :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general.init` for how to simrun-initialize a database.
+        :py:meth:`~data_base.db_initializers.load_simrun_general.init` for how to simrun-initialize a database.
     '''
     applyfun = partial(applyfun, maxtime=maxtime)
     postfun = partial(postfun, maxtime=maxtime)

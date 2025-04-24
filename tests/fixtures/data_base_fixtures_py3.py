@@ -1,5 +1,5 @@
 import os, shutil, pytest, tempfile
-from data_base.isf_data_base.db_initializers.load_simrun_general import init
+from data_base.db_initializers.load_simrun_general import init
 from data_base.model_data_base.mdb_initializers.load_simrun_general import init as init_mdb
 from data_base.utils import silence_stdout
 from data_base.data_base import DataBase

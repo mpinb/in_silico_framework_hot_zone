@@ -36,7 +36,7 @@ def create_metadata_parallelization_helper(sim_trial_index, simresult_path):
 
     See also:
         This is used in
-        :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general.create_metadata`.
+        :py:meth:`~data_base.db_initializers.load_simrun_general.create_metadata`.
 
     Args:
         sim_trial_index (pd.Series): A pandas series containing the sim_trial_index.

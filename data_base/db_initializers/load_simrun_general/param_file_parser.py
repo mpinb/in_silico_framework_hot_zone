@@ -107,14 +107,14 @@ def _copy_and_transform_neuron_param(neup_fn, target_fn, hoc_fn_map, recsites_fn
     """Convert all paths in a :ref:`cell_parameters_format` file to point to a hash filename.
 
     This function is used as a :paramref:`transform_fun` in
-    :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general.write_param_files_to_folder`.
+    :py:meth:`~data_base.db_initializers.load_simrun_general.write_param_files_to_folder`.
 
     Args:
         neuron (:py:class:`~sumatra.parameters.NTParameterSet`): Dictionary containing the neuron model parameters.
 
     Attention:
         The new filepaths only exist once the relevant parameterfiles are also copied and renamed.
-        This happens during the copying process in :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general.write_param_files_to_folder`.
+        This happens during the copying process in :py:meth:`~data_base.db_initializers.load_simrun_general.write_param_files_to_folder`.
     """
     neup = scp.build_parameters(neup_fn)
     neup = _convert_neup_fns_to_reldb(neup, hoc_fn_map, recsites_fn_map)
@@ -126,14 +126,14 @@ def _copy_and_transform_network_param(netp_fn, target_fn, syn_fn_map, con_fn_map
     """Convert all paths in a :ref:`network_parameters_format` file.
 
     This function is used as a :paramref:`transform_fun` in
-    :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general.write_param_files_to_folder`.
+    :py:meth:`~data_base.db_initializers.load_simrun_general.write_param_files_to_folder`.
 
     Args:
         network (:py:class:`~sumatra.parameters.NTParameterSet`): Dictionary containing the network model parameters.
 
     Attention:
         The new filepaths only exist once the relevant parameterfiles are also copied and renamed.
-        This happens during the copying process in :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general.write_param_files_to_folder`.
+        This happens during the copying process in :py:meth:`~data_base.db_initializers.load_simrun_general.write_param_files_to_folder`.
     """
     netp = scp.build_parameters(netp_fn)
     netp = _convert_netp_fns_to_reldb(netp, syn_fn_map, con_fn_map)

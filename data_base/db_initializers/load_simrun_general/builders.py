@@ -208,7 +208,7 @@ def _build_param_files(db, client):
 
     Attention:
         This function assumes the database keys ``simresult_path`` and ``sim_trial_index`` already exist, which is likely
-        only true when used in the context of the :py:meth:`~data_base.isf_data_base.db_initializers.load_simrun_general.init` function.
+        only true when used in the context of the :py:meth:`~data_base.db_initializers.load_simrun_general.init` function.
     """
     logging.info("Moving parameter files")
 
