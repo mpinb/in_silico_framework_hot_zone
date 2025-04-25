@@ -143,7 +143,7 @@ def reoptimize_db(db, client=None, progress=False, n_db_parents=0, suppress_warn
                 reoptimize_db(db[key], client=client, n_db_parents=n_db_parents+1, progress=progress)
                 continue
             elif db.metadata[key]['dumper'] in DUMPERS_TO_REOPTIMIZE:
-                is_categorizable = key in ("cell_activations", "synapse_activations")
+                is_categorizable = key in ("cell_activation", "synapse_activation")
                 new_dumper = _get_dumper(db[key], categorized=is_categorizable)
                 old_dumper_name = db.metadata[key]['dumper']
                 if _is_legacy_model_data_base(db.basedir):
