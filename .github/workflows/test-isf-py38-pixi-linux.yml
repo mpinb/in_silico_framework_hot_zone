@@ -23,12 +23,12 @@ jobs:
       - name: Install & setup environment
         uses: prefix-dev/setup-pixi@v0.8.0
         with:
-          pixi-version: v0.39.0
+          pixi-version: v0.46.0
           cache: true
           auth-host: prefix.dev
           auth-token: ${{ secrets.PREFIX_DEV_TOKEN }}
           manifest-path: pyproject.toml
-      - name: Test
+      - name: Preliminary setup
         run: |
           echo "------------ Preliminary setup for tests -------------"
           echo "Creating tests/logs/ directory..."
@@ -41,16 +41,30 @@ jobs:
           echo "Using port $port_number and bokeh port $bokeh_port"
           export DASK_CONFIG=./config/dask_config.yml
 
-          echo "------------ Running tests -------------"
           unset DISPLAY
           if [ ! -d "$HOME/tmp" ]; then
             mkdir $HOME/tmp
           fi
           export TMPDIR=$HOME/tmp
-          (pixi r dask-scheduler --port=$port_number --bokeh-port=$bokeh_port --host=localhost> ./tests/logs/dask_scheduler_${{ github.run_id }}.log 2>&1) & \
-          (pixi r dask-worker localhost:$port_number --nthreads 1 --nprocs 10 --memory-limit=100e15 --local-directory="." > ./tests/logs/dask_workers_${{ github.run_id }}.log 2>&1) & \
-          pixi r pytest -n 5 -rsx -vv --color=yes --durations=15 --cov-report xml:tests/logs/report_py38.xml --cov=. --dask_server_port $port_number tests || exit 1;
-          export ISF_USE_MDB=1 && pixi r pytest -n 5 -rsx -vv --color=yes --durations=15 --dask_server_port $port_number tests/test_data_base/; unset ISF_USE_MDB
+
+      - name: Launch Dask scheduler and workers
+        run: |
+          (pixi r dask-scheduler --port=38786 --bokeh-port=38787 --host=localhost > ./tests/logs/dask_scheduler_${{ github.run_id }}.log 2>&1) & \
+          (pixi r dask-worker localhost:38786 --nthreads 1 --nprocs 10 --memory-limit=100e15 --local-directory="." > ./tests/logs/dask_workers_${{ github.run_id }}.log 2>&1) &
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run first test suite
+        run: |
+          pixi r pytest -n 5 -rsx -vv --color=yes --durations=15 --cov-report xml:tests/logs/report_py38.xml --cov=. --dask_server_port 38786 tests || exit 1
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run second test suite
+        run: |
+          export ISF_USE_MDB=1
+          pixi r pytest -n 5 -rsx -vv --color=yes --durations=15 --dask_server_port 38786 tests/test_data_base/
+          unset ISF_USE_MDB
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
