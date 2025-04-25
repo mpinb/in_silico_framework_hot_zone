@@ -1,8 +1,9 @@
 from data_base.IO.roberts_formats import read_pandas_synapse_activation_from_roberts_format, write_pandas_synapse_activation_to_roberts_format
 from tests.test_data_base import test_data_folder
 from pandas.util.testing import assert_frame_equal
-import os, inspect
-if "sim_trail_index" in inspect.signature(write_pandas_synapse_activation_to_roberts_format).parameters:
+import os
+from config import isf_is_using_mdb
+if isf_is_using_mdb():
     sim_triail = "sim_trail_index"
 else:
     sim_triail = "sim_trial_index"
