@@ -231,11 +231,11 @@ html_theme_options = {
     ],
     # "sidebar_hide_name": True,
     "globaltoc_depth": -1,
-    # 'features': [
-        # "navigation.tabs",          # overridden from default immaterial: tab sections on top: broken, unless we upgrade the theme, which requires other upgrades as well.
+    'features': [
+        "navigation.tabs",          # overridden from default immaterial: tab sections on top: broken, unless we upgrade the theme, which requires other upgrades as well.
         # "navigation.sections",      # overridden from default immaterial: nav sidebar left has expanded sections.
         # "navigation.tabs.sticky",   # overridden from default behavior: keep tab sections on top visible
-        # ],
+        ],
 }
 
 # Add any paths that contain custom themes here, relative to this directory.
