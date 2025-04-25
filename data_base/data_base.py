@@ -42,7 +42,9 @@ class DataBase(object):
             logger.warning('Using a legacy-format ModelDataBase.')
             logger.warning('Defining the following methods for compatibility with ISF syntax:\n(old) -> (new)\nmdb.getitem -> mdb.get\nmdb.setitem -> mdb.set\nmdb._get_path -> mdb._convert_key_to_path ')
             
-            nocreate = not os.environ.get('ISF_IS_TESTING', False) # creating old format allowed during testing
+            if nocreate == False and not os.environ.get('ISF_IS_TESTING', False):
+                logger.warning("nocreate=False is deprecated for ModelDataBase. Setting nocreate=True.")
+                nocreate = True
             mdb = ModelDataBase(basedir, readonly=readonly, nocreate=nocreate)
             mdb = _make_mdb_forwards_compatible(mdb)
             return mdb

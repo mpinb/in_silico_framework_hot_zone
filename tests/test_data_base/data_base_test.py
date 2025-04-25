@@ -138,12 +138,8 @@ def test_db_does_not_permit_writes_if_readonly(empty_db):
 
 def test_db_will_not_be_created_if_nocreate(empty_db):
     testpath = tempfile.mkdtemp()
-    with pytest.raises(Exception) as exc_info:
+    with pytest.raises(DataBaseException) as exc_info:
         DataBase(testpath, nocreate=True)
-    assert isinstance(
-        exc_info.value, 
-        (DataBaseException, ModelDataBaseException)
-    )
     DataBase(empty_db.basedir, nocreate=True)
     shutil.rmtree(testpath)
 
