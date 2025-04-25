@@ -23,7 +23,7 @@ from config.cell_types import EXCITATORY
 import logging
 logger = logging.getLogger("ISF").getChild(__name__)
 
-from data_base.isf_data_base.IO.LoaderDumper import numpy_to_msgpack
+from data_base.IO.LoaderDumper import numpy_to_msgpack
 numpy_dumper = numpy_to_msgpack
 
 
