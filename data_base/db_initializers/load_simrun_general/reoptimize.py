@@ -8,7 +8,9 @@ So all databases optimized with `parquet` could now in principle be re-optimized
 
 from data_base.data_base import is_sub_data_base
 from data_base.exceptions import DataBaseException
+from data_base.data_base import _is_legacy_model_data_base
 from .utils import _get_dumper
+import importlib
 import shutil, os, random
 import dask.dataframe as dd
 import logging
@@ -61,13 +63,17 @@ def _get_dumper_kwargs(d, client=None):
 
         
 def _reoptimize_key(db, key, new_dumper, client=None):
-    path_to_key = db._convert_key_to_path(key)
+    # Find the path to the key
+    # can't use wrapper API here, since mdb's will be constructed by the LoaderDumper, which explicitly points to the Mdb class
+    if _is_legacy_model_data_base(db.basedir):
+        path_to_key = db._get_path(key)
+    else:
+        path_to_key = db._convert_key_to_path(key)
     temp_key = key+"_{}_reoptimizing".format(random.randint(0, 100000))
     temp_path = os.path.join(db.basedir, temp_key)
 
     try:    
-        logger.debug("Reoptimizing `{}` to `{}`".format(key, temp_key))
-        logger.debug("Temporarily moving `{}` to `{}`".format(key, temp_key))
+        logger.debug("Temporarily moving `{}` to `{}`".format(path_to_key, temp_path))
         shutil.move(path_to_key, temp_path)  # move original key to tmp location
 
         if hasattr(db, "_sql_backend"):  # mdb compat
@@ -131,6 +137,7 @@ def reoptimize_db(db, client=None, progress=False, n_db_parents=0, suppress_warn
 
     try:
         for key in keys:
+            logger.debug("Checking key `{}`".format(key))
             if is_sub_data_base(db, key):
                 logger.info("Reoptimizing subdatabase {}".format(key))
                 reoptimize_db(db[key], client=client, n_db_parents=n_db_parents+1, progress=progress)
@@ -139,11 +146,15 @@ def reoptimize_db(db, client=None, progress=False, n_db_parents=0, suppress_warn
                 is_categorizable = key in ("cell_activations", "synapse_activations")
                 new_dumper = _get_dumper(db[key], categorized=is_categorizable)
                 old_dumper_name = db.metadata[key]['dumper']
+                if _is_legacy_model_data_base(db.basedir):
+                    new_dumper = importlib.import_module(new_dumper.__name__.replace("isf_data_base", "model_data_base"))
                 
                 if not _check_needs_reoptimization(key, old_dumper_name, new_dumper.__name__):
+                    logger.debug("Skipping `{}` because it does not need re-optimization".format(key))
                     continue
                 
                 try:
+                    logger.debug("Reoptimizing `{}` with new dumper `{}`".format(key, new_dumper.__name__))
                     _reoptimize_key(db, key, new_dumper, client=client)
                 except Exception as e:
                     raise DataBaseException(f"Failed to re-optimize {key}") from e
