@@ -8,7 +8,7 @@ I currently leave this undocumented until I (or someone else) can properly docum
 
 import os
 import single_cell_parser as scp
-from data_base.dbopen import create_db_path, resolve_db_path
+from data_base.dbopen import create_modular_db_path, resolve_db_path
 from data_base.IO.LoaderDumper import pandas_to_msgpack
 # from data_base.isf_data_base.IO.LoaderDumper import pandas_to_parquet
 
