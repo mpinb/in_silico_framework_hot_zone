@@ -106,6 +106,37 @@ def is_data_base(path):
     return _is_legacy_model_data_base(path) or is_isf_data_base(path)
 
 
+def is_sub_isf_data_base(parent_db, key):
+    """
+    Check if a given key is a sub-database of the parent database.
+    
+    Args:
+        parent_db (DataBase): The parent database.
+        key (str): The key to check.
+    
+    Returns:
+        bool: True if the key is a sub-database of the parent database.
+    """
+    sub_db_key_path = parent_db._convert_key_to_path(key)
+    sub_db_path = os.path.join(sub_db_key_path, "db")
+    return os.path.exists(sub_db_path) and is_data_base(sub_db_path)
+
+    
+def is_sub_model_data_base(parent_mdb, key):
+    """
+    Check if a given key is a sub-database of the parent database.
+    
+    Args:
+        parent_db (DataBase): The parent database.
+        key (str): The key to check.
+    
+    Returns:
+        bool: True if the key is a sub-database of the parent database.
+    """
+    sub_db_key_path = parent_mdb._get_path(key)
+    sub_mdb_path = os.path.join(sub_db_key_path, "mdb")
+    return os.path.exists(sub_mdb_path) and is_data_base(sub_mdb_path)
+
 def is_sub_data_base(parent_db, key):
     """
     Check if a given key is a sub-database of the parent database.
@@ -117,6 +148,9 @@ def is_sub_data_base(parent_db, key):
     Returns:
         bool: True if the key is a sub-database of the parent database.
     """
-    sub_db_key_path = os.path.join(parent_db.basedir, key)
-    sub_db_path = os.path.join(sub_db_key_path, "db")
-    return os.path.exists(sub_db_path) and is_data_base(sub_db_path)
+    if _is_legacy_model_data_base(parent_db.basedir):
+        return is_sub_model_data_base(parent_db, key)
+    elif is_isf_data_base(parent_db.basedir):
+        return is_sub_isf_data_base(parent_db, key)
+    else:
+        raise ValueError("Unknown database type. Cannot determine if the key is a sub-database.")
