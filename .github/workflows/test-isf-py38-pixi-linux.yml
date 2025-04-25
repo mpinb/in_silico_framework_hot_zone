@@ -60,7 +60,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: ModelDataBase backwards compatibility test
+      - name: Test ModelDataBase backwards compatibility
         run: |
           export ISF_USE_MDB=1
           pixi r pytest -n 5 -rsx -vv --color=yes --durations=15 --dask_server_port 38786 tests/test_data_base/
