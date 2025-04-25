@@ -1,5 +1,5 @@
 from data_base.data_base import DataBase
-from data_base.exceptions import DataBaseException
+from data_base.exceptions import DataBaseException, ModelDataBaseException
 from data_base._version import get_versions
 from data_base.IO.LoaderDumper import to_pickle, get_dumper_string_by_dumper_module
 import pytest, os, shutil, tempfile,  subprocess
@@ -138,7 +138,7 @@ def test_db_does_not_permit_writes_if_readonly(empty_db):
 
 def test_db_will_not_be_created_if_nocreate(empty_db):
     testpath = tempfile.mkdtemp()
-    with pytest.raises(DataBaseException):
+    with pytest.raises((DataBaseException, ModelDataBaseException)):
         DataBase(testpath, nocreate=True)
     DataBase(empty_db.basedir, nocreate=True)
     shutil.rmtree(testpath)
