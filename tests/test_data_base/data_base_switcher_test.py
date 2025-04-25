@@ -18,7 +18,7 @@ def test_switch_db_backend(tmp_path):
         db = data_base.DataBase(tmp_path)
         assert isinstance(db, data_base.isf_data_base.ISFDataBase), "Database is not of type ISFDataBase"
         from data_base import IO
-        assert IO.__name__.endswith("data_base.isf_data_base.IO"), \
+        assert IO.__name__.startswith("data_base.isf_data_base.IO"), \
             f"Wrong IO package imported. Expected 'data_base.isf_data_base.IO', but got '{IO.__name__}'"
 
         # Clean up the context
@@ -32,7 +32,7 @@ def test_switch_db_backend(tmp_path):
         db = data_base.DataBase(tmp_path)
         assert isinstance(db, data_base.model_data_base.ModelDataBase), "Database is not of type ModelDataBase"
         from data_base import IO
-        assert IO.__name__.endswith("data_base.model_data_base.IO"), \
+        assert IO.__name__.startswith("data_base.model_data_base.IO"), \
             f"Wrong IO package imported. Expected 'data_base.model_data_base.IO', but got '{IO.__name__}'"
 
     finally:
