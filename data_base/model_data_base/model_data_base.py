@@ -8,8 +8,8 @@ from __future__ import absolute_import
 import os, random, string, threading, contextlib, shutil, tempfile, datetime, yaml
 import cloudpickle as pickle
 from .IO.LoaderDumper import get_dumper_string_by_savedir
-from data_base import data_base_register
-from data_base import _module_versions
+from data_base.exceptions import DataBaseException
+from data_base import data_base_register, _module_versions
 VC = _module_versions.version_cached
 from compatibility import YamlLoader
 if 'ISF_MDB_CONFIG' in os.environ:
@@ -101,7 +101,7 @@ class FunctionWrapper:
     def __init__(self, fun):
         self.fun = fun
                 
-class MdbException(Exception):
+class MdbException(DataBaseException):
     '''Typical mdb errors'''
     pass        
 
