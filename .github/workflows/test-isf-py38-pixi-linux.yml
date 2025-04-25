@@ -54,13 +54,13 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Run first test suite
+      - name: Test ISF
         run: |
           pixi r pytest -n 5 -rsx -vv --color=yes --durations=15 --cov-report xml:tests/logs/report_py38.xml --cov=. --dask_server_port 38786 tests || exit 1
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Run second test suite
+      - name: ModelDataBase backwards compatibility test
         run: |
           export ISF_USE_MDB=1
           pixi r pytest -n 5 -rsx -vv --color=yes --durations=15 --dask_server_port 38786 tests/test_data_base/
