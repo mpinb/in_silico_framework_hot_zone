@@ -1,12 +1,8 @@
 from data_base.data_base import DataBase
-from data_base.exceptions import  DataBaseException
+from data_base.exceptions import DataBaseException
 from data_base._version import get_versions
-from data_base.IO.LoaderDumper import pandas_to_msgpack, to_pickle, get_dumper_string_by_dumper_module
-import pytest, os, shutil, six, tempfile,  subprocess
-from getting_started import parent as getting_started_parent
-from pandas.util.testing import assert_frame_equal
-from data_base.db_initializers.load_simrun_general import init
-from data_base.utils import silence_stdout
+from data_base.IO.LoaderDumper import to_pickle, get_dumper_string_by_dumper_module
+import pytest, os, shutil, tempfile,  subprocess
 from config import isf_is_using_mdb
 
 parent = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
@@ -142,7 +138,7 @@ def test_db_does_not_permit_writes_if_readonly(empty_db):
 
 def test_db_will_not_be_created_if_nocreate(empty_db):
     testpath = tempfile.mkdtemp()
-    with pytest.raises(Exception):
+    with pytest.raises(DataBaseException):
         DataBase(testpath, nocreate=True)
     DataBase(empty_db.basedir, nocreate=True)
     shutil.rmtree(testpath)
