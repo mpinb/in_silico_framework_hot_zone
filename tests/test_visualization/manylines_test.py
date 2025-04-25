@@ -72,6 +72,7 @@ class TestManyLines:
                 'manylines_grouped_dask.png'))
         plt.close()
 
+    @pytest.mark.skipif(sys.platform == "darwin", reason="GUI can't be created in a non-main thread")
     def test_manylines_no_group_returnPixelObject(self, client):
         df = self.df.drop('attribute', axis=1)
         po = manylines(
@@ -81,9 +82,7 @@ class TestManyLines:
             scheduler=client)
         assert isinstance(po, PixelObject)
         fig, ax = plt.subplots()
-        if sys.platform != "darwin":
-            # On macOS, gui cant be created in a non-main thread
-            show_pixel_object(po, ax=ax)
+        show_pixel_object(po, ax=ax)
         if savefigs:
             fig.savefig(
                 os.path.join(self.tempdir, 'manylines_no_group_po_pandas.png'))
