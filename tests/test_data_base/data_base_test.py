@@ -7,6 +7,7 @@ from getting_started import parent as getting_started_parent
 from pandas.util.testing import assert_frame_equal
 from data_base.db_initializers.load_simrun_general import init
 from data_base.utils import silence_stdout
+from config import isf_is_using_mdb
 
 parent = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 
@@ -81,12 +82,15 @@ def test_metadata_update(empty_db):
         'metadata_creation_time'] == 'together_with_new_key'
 
     # directly after deleting metadata database, every information is "unknown"
-    metadata_db_path = os.path.join(empty_db.basedir, 'test', 'metadata.json')
-    assert os.path.exists(metadata_db_path)
-    os.remove(metadata_db_path)
-    metadata_db_path = os.path.join(empty_db.basedir, 'test2', 'metadata.json')
-    assert os.path.exists(metadata_db_path)
-    os.remove(metadata_db_path)
+    def _remove_metadata(path):
+        metadata_db_path = os.path.join(path)
+        assert os.path.exists(metadata_db_path)
+        os.remove(metadata_db_path)
+    if isf_is_using_mdb():
+        _remove_metadata(os.path.join(empty_db.basedir, "metadata.db"))
+    else:
+        _remove_metadata(os.path.join(empty_db.basedir, 'test', 'metadata.json'))
+        _remove_metadata(os.path.join(empty_db.basedir, 'test2', 'metadata.json'))
 
     assert empty_db.metadata['test']['dumper'] == 'unknown'
     assert empty_db.metadata['test2']['dumper'] == 'unknown'
@@ -274,5 +278,10 @@ def test_check_if_key_exists_can_handle_str_and_tuple_keys(empty_db):
     assert empty_db.check_if_key_exists(('a',))
     assert empty_db.check_if_key_exists(('b', 'b'))
     assert not empty_db.check_if_key_exists(('a', 'b'))
+
+@pytest.mark.skipif(isf_is_using_mdb(), reason="ModelDataBase.check_if_key_exists cannot recurse into tuple keys by itself.")
+def test_check_if_nested_key_exists_can_handle_str(empty_db):
+    empty_db['a'] = 1
+    empty_db['b', 'b'] = 1
     # this functionality is not supported in ModelDataBase, but it is in ISFDataBase
     assert empty_db.check_if_key_exists('b')
