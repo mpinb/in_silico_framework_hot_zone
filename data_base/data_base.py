@@ -54,8 +54,8 @@ class DataBase(object):
 def _make_mdb_forwards_compatible(mdb):
     """Compatibility function to account for API changes from mdb to isf_db
     """
-    mdb.set = db.setitem
-    mdb.get = db.getitem
+    mdb.set = mdb.setitem
+    mdb.get = mdb.getitem
     mdb._convert_key_to_path = mdb._get_path
     mdb.save_db_state = mdb.save_mdb
     mdb.create_sub_db = mdb.create_sub_mdb
