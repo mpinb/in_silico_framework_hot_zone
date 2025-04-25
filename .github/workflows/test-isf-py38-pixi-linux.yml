@@ -53,13 +53,6 @@ jobs:
           (pixi r dask-worker localhost:38786 --nthreads 1 --nprocs 10 --memory-limit=100e15 --local-directory="." > ./tests/logs/dask_workers_${{ github.run_id }}.log 2>&1) &
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Test ISF
-        run: |
-          pixi r pytest -n 5 -rsx -vv --color=yes --durations=15 --cov-report xml:tests/logs/report_py38.xml --cov=. --dask_server_port 38786 tests || exit 1
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Test ModelDataBase backwards compatibility
         run: |
           export ISF_USE_MDB=1
@@ -67,7 +60,11 @@ jobs:
           unset ISF_USE_MDB
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
+      - name: Test ISF
+        run: |
+          pixi r pytest -n 5 -rsx -vv --color=yes --durations=15 --cov-report xml:tests/logs/report_py38.xml --cov=. --dask_server_port 38786 tests || exit 1
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Save test logs
         uses: actions/upload-artifact@v4
         if: ${{ always() }} 

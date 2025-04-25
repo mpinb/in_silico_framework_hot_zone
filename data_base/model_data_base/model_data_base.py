@@ -187,7 +187,7 @@ class ModelDataBase(object):
         
         try:
             self.read_mdb()
-        except:
+        except Exception:
             errstr = "Did not find a database in {path}. ".format(path = basedir) + \
                     "A new empty database will not be created since "+\
                     "{mode} is set to True."
