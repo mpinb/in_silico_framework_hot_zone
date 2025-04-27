@@ -15,8 +15,14 @@ __author__  = 'Robert Egger'
 __date__    = '2013-02-01'
 
 
-def create_synapse_realization(pname):
-    """Create a synapse realization from a :ref:`network_parameters_format` file."""
+def create_synapse_realization(pname, write_synapses=False):
+    """
+    Create a synapse realization from a :ref:`network_parameters_format` file.
+    
+    Args:
+        pname (str): :ref:`network_parameters_format` file.
+        write_synapses (bool): Write synapse locations to a `.landmarkAscii` file for visualization in AMIRA. Default is False.
+    """
     parameters = build_parameters(pname)
     cellParam = parameters.network.post
     preParam = parameters.network.pre
@@ -41,7 +47,8 @@ def create_synapse_realization(pname):
         synapseList = []
         for syn in cell.synapses[synType]:
             synapseList.append(syn.coordinates)
-        writer.write_landmark_file(name, synapseList)
+        if write_synapses:
+            writer.write_synapse_file(name, synapseList)
         tmpSyns = {}
         tmpSyns[synType] = cell.synapses[synType]
         writer.write_cell_synapse_locations(name + '.syn', tmpSyns, cell.id)
