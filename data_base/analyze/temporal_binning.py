@@ -1,6 +1,6 @@
 """Bin :ref:`spike_times_format` and :ref:`syn_activation_format` dataframes by time.
 
-This is used in :py:mod:`data_base.isf_data_base.db_initializers.synapse_activation_binning` to bin
+This is used in :py:mod:`data_base.db_initializers.synapse_activation_binning` to bin
 synapse activations.
 """
 

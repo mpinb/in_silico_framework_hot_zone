@@ -1,18 +1,17 @@
 """:py:mod:`data_base` specific exceptions.
 """
-import warnings
 
 class DataBaseException(Exception):
     '''Typical data_base errors'''
     pass
 
-class ModelDataBaseException(Exception):
+class ModelDataBaseException(DataBaseException):
     '''Typical model_data_base errors
     
     :skip-doc:'''
     pass
 
-class ISFDataBaseException(Exception):
+class ISFDataBaseException(DataBaseException):
     '''Typical isf_data_base errors'''
     pass
 
