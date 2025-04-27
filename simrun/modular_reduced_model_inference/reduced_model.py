@@ -2,6 +2,7 @@
 
 This module provides a top-level class to run reduced model inference.
 Each reduced model contains:
+
 - a :py:class:~`DataView` object to access data
 - a :py:class:`DataSplitEvaluation` object to split data and evaluate the optimization results
 - one or more :py:class:`~simrun.modular_reduced_model_inference.data_extractor.DataExtractor` objects to preprocess the data
@@ -36,7 +37,7 @@ def get_n_workers_per_ip(workers, n):
 
 
 class Rm(object):
-    """Reduced model class.
+    r"""Reduced model class.
     
     This is the top-level class for running reduced model inference.
     It provides an interface to add data extractors and strategies, and to run the optimization.

@@ -4,6 +4,7 @@ This module implements solvers that can optimize a given cost function by adapti
 The cost function is usually defined by a :py:class:`~simrun.modular_reduced_model_inference.strategy._Strategy` object.
 
 Different solvers can be defined here, to provide different optimization schemes.
+Currently, we provide a :cite:t:`COBYLA` solver.
 """
 
 
@@ -113,7 +114,7 @@ class _Solver(object):
 
 
 class Solver_COBYLA(_Solver):
-    """COBYLA solver strategy for reduced models.
+    """A :cite:t:`COBYLA` solver strategy for reduced models.
     
     See also:
         :py:mod:`~simrun.modular_reduced_model_inference.strategy` for available strategies and their
