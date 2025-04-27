@@ -613,8 +613,7 @@ def load_cell_number_file(cellNumberFileName):
     Example:
         >>> load_cell_number_file(
         ...    'getting_started/example_data/anatomical_constraints/'
-        ...    '86_L5_CDK20041214_nr3L5B_dend_PC_neuron_transform_registered_C2center_synapses_20150504-1611_10389/'
-        ...    '86_L5_CDK20041214_nr3L5B_dend_PC_neuron_transform_registered_C2center_synapses_20150504-1611_10389/'
+        ...    'example_embedding_86_C2_center/'
         ...    'NumberOfConnectedCells.csv'
         ...    )
         {
