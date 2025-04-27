@@ -317,7 +317,7 @@ class DataSplitEvaluation(object):
     def add_random_split(self, name, percentage_train=.7, l=None):
         """Set the train-test split randomly.
         
-        Args:sudo dmidecode
+        Args:
             name (str): Name of the split
             percentage_train (float): Percentage of trials to use for training
             l (list): List of indices to use for the split. If None, use all trials.
