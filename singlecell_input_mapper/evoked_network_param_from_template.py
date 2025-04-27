@@ -22,8 +22,7 @@ evokedPrefix = os.path.join(
     getting_started.parent,
     'example_data',
     'functional_constraints',
-    'evoked_activity',
-    'PW_SuW_RF_CDK') + '/'
+    'evoked_activity') + '/'
 #L2EvokedName = evokedPrefix + 'L2_3x3_PSTH_template_0-50_10ms.param'
 #L34EvokedName = evokedPrefix + 'L34_3x3_PSTH_template_0-20_1ms_20-50_10ms.param'
 #L4pyEvokedName = evokedPrefix + 'L4py_3x3_PSTH_template_0-50_10ms.param'
