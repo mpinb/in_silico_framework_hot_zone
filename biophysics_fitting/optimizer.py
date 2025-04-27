@@ -1,6 +1,6 @@
 """Multi-objective optimization algorithm.
 
-This code has been adapted from [BluePyOpt](https://github.com/BlueBrain/BluePyOpt) :cite:`Van_Geit_Gevaert_Chindemi_Roessert_Courcol_Muller_Schuermann_Segev_Markram_2016`
+This code has been adapted from `BluePyOpt <https://github.com/BlueBrain/BluePyOpt>`_ :cite:`Van_Geit_Gevaert_Chindemi_Roessert_Courcol_Muller_Schuermann_Segev_Markram_2016`
 such that:
 
 - a start population can be defined.
@@ -14,7 +14,7 @@ Note:
     Part of this module is licensed under the GNU Lesser General Public License version 3.0 as published by the Free Software Foundation:
     
     Copyright (c) 2016, EPFL/Blue Brain Project. 
-    Part of this file is part of BluePyOpt <https://github.com/BlueBrain/BluePyOpt>. 
+    Part of this file is part of `BluePyOpt <https://github.com/BlueBrain/BluePyOpt>`_. 
     This library is free software; you can redistribute it and/or modify it under
     the terms of the GNU Lesser General Public License version 3.0 as published
     by the Free Software Foundation. 
@@ -241,7 +241,6 @@ def get_mymap(db_setup, db_run, c, satisfactory_boundary_dict=None, n_reschedule
                 db_setup['satisfactory'] = [
                     i for (i, x) in enumerate(all_err_below_boundary) if x
                     ]
-
 
          # all_err_below_3 = [all(x<3 for x in list(dict_.values())) for dict_ in combined_objectives_dict]
          # if any(all_err_below_3):

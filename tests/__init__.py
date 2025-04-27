@@ -1,5 +1,8 @@
 import os
 import neuron
+import socket
+import distributed
+import pytest
 
 h = neuron.h
 import single_cell_parser as scp
@@ -76,3 +79,24 @@ def setup_synapse_activation_experiment(
     evokedNW.re_init_network()
 
     return cell
+
+def is_port_open(host, port):
+    try:
+        port = int(port)
+    except ValueError as e:
+        raise ValueError("Port must be an integer or integer-convertible") from e
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
+        sock.settimeout(1)  # 1 second timeout
+        result = sock.connect_ex((host, port))
+        return result == 0
+
+
+def client(port):
+    if is_port_open("localhost", port):
+        host = "localhost"
+    else:
+        host = socket.gethostbyname(socket.gethostname())
+
+    c = distributed.Client(f"{host}:{port}")
+    return c
+

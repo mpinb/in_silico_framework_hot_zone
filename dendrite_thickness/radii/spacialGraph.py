@@ -87,7 +87,7 @@ def getSpatialGraphPoints(spatial_graph):
     return edge_point_coords
 
 
-def write_spacial_graph_with_thickness(inpath, outpath, radii):
+def write_spatial_graph_with_thickness(inpath, outpath, radii):
     '''by arco'''
     with open(inpath) as f:
         data = f.readlines()

@@ -1,9 +1,10 @@
-"""
-.. deprecated:: 0.2.0
-   The pandas-msgpack format is set to be deprecated in the future.
-   Please consider using parquet instead.
+"""Save and load dask dataframes to msgpack.
 
-:skip-doc:
+This uses a fork of the original `pandas_to_msgpack` package, `available on PyPI <https://pypi.org/project/isf-pandas-msgpack/>`_
+
+See also:
+    :py:mod:`~data_base.isf_data_base.IO.LoaderDumper.dask_to_parquet` for saving dask dataframes to parquet files.
+
 """
 
 
@@ -16,10 +17,6 @@ check = dask_to_categorized_msgpack.check
 
 def dump(obj, savedir, repartition=False, scheduler=None, client=None):
     import os
-    if not "ISF_IS_TESTING" in os.environ:
-        # Module was not called from within the test suite
-        raise RuntimeError(
-            'pandas-msgpack is not supported anymore in the data_base')
     return dask_to_categorized_msgpack.dump(
         obj,
         savedir,

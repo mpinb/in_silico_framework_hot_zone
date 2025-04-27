@@ -32,7 +32,7 @@ Other ways of network realization are also possible, depending on the empirical 
 If you want to use other methods, please familiarize yourself with the data formats such that you can either:
 
 1. Convert the input data to the required input format for ISF and run the same network realization pipeline. Input file formats are described in more detail in :py:mod:`singlecell_input_mapper.map_singlecell_inputs`.
-2. Create your own network realization, and convert the output to the format used in ISF. These are `.syn` and `.con` files, and described in more detail in the [tutorials](../getting_started/tutorials/2. network models/2.1 Anatomical embedding.ipynb).
+2. Create your own network realization, and convert the output to the format used in ISF. These are :ref:`.syn` and :ref:`.con` files. For more info on how to generate and use these, refer to the network modeling section of the :ref:`tutorials`
 
 .. _activity:
 
@@ -42,8 +42,8 @@ Activity
 This section is responsible for generating activity patterns for the assigned synapses based in empirically observed PSTHs of the presynaptic neurons.
 ISF distinguishes two kinds of activity:
 
-1. Ongoing activity: the baseline synaptic activity patterns in the absence of the in-vivo condition of interest. The ongoing activity is defined in tandem with the network parameters in a :ref:`network_parameters_format` file.
-2. Evoked activity: the activity patterns in response to a specific in-vivo condition. Its file format is described in :ref:`activity_data_format`. 
+1. Ongoing activity: the baseline synaptic activity patterns in the absence of the in vivo condition of interest. The ongoing activity is defined in tandem with the network parameters in a :ref:`network_parameters_format` file.
+2. Evoked activity: the activity patterns in response to a specific in vivo condition. Its file format is described in :ref:`activity_data_format`. 
 
 The general workflow is as follows:
 

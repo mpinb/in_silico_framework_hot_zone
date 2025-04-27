@@ -80,9 +80,9 @@ def build_parameters(filename, fast_but_security_risk=True):
     Returns:
         NTParameterSet: The parameter file as a NTParameterSet object.
     """
-    from data_base.dbopen import resolve_db_path
+    from data_base.dbopen import resolve_modular_db_path
 
-    filename = resolve_db_path(filename)
+    filename = resolve_modular_db_path(filename)
 
     if fast_but_security_risk:
         # taking advantage of the fact that sumatra NTParameterSet produces
@@ -125,7 +125,11 @@ def load_NMODL_parameters(parameters):
 
 
 def create_cell(
-    parameters, scaleFunc=None, allPoints=False, setUpBiophysics=True, silent=False
+    parameters, 
+    scaleFunc=None, 
+    allPoints=False, 
+    setUpBiophysics=True, 
+    silent=False
 ):
     """Creating NEURON cell models from cell parameters.
 

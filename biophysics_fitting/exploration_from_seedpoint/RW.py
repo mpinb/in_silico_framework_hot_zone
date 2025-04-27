@@ -59,12 +59,22 @@ class RW:
             to find before stopping exploration
         normalized_aim_params (pd.Series): normalized aim parameters
     """
-    def __init__(self, df_seeds = None, param_ranges = None, 
-                params_to_explore = None, evaluation_function = None, 
-                MAIN_DIRECTORY = None, min_step_size = 0, max_step_size = 0.02, 
-                checkpoint_every = 100, checkpoint_by_time = None, 
-                concat_every_n_save = 60, n_iterations = 60000,
-                mode = None, aim_params=None, stop_n_inside_with_aim_params = -1):
+    def __init__(
+        self, 
+        df_seeds = None, 
+        param_ranges = None, 
+        params_to_explore = None, 
+        evaluation_function = None, 
+        MAIN_DIRECTORY = None, 
+        min_step_size = 0, 
+        max_step_size = 0.02, 
+        checkpoint_every = 100, 
+        checkpoint_by_time = None, 
+        concat_every_n_save = 60, 
+        n_iterations = 60000,
+        mode = None, 
+        aim_params=None, 
+        stop_n_inside_with_aim_params = -1):
         '''
         Args:
             df_seeds (pd.DataFrame): individual seed points as rows and the parameters as columns

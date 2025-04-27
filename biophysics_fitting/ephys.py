@@ -488,7 +488,7 @@ def BPAPatt(t, v_dend, thresh="+2mV", stim_onset=None):
         t (array): Time array.
         v_dend (array): Dendritic voltage array.
         thresh (str or float): Threshold voltage for detecting the bAP. Default is '+2mV'.
-        stim_onset (float): Time of the stimulus onset. Default is None.
+        stim_onset (float): Time of the stimulus onset. Default is ``None``.
 
     Returns:
         float: Amplitude of the bAP at the dendrite.
@@ -637,14 +637,18 @@ def STEP_adaptation_index(t, v, stim_end=2000, thresh=None):
 
 
 def STEP_coef_var(t, v, stim_end, thresh=None):
-    r"""
+    """
     Computes the coefficient of variation (CV) of the Inter-Spike Interval (ISI) of a voltage trace for a step stimulus.
 
-    The CV is calculated as :math:`\frac{\sigma_{ISI}}{\mu_{ISI}}`.
+    The CV is calculated as:
+    
+    .. math::
+        
+        \\frac{\sigma_{ISI}}{\mu_{ISI}}
 
     Note:
         We are considering a population sample (rather than a complete population), and so we must Bessel-correct the standard deviation.
-        In this case, the standard deviation is calculated with 1 degree of freedom, i.e. a denominator of :math:`N-1` instead of :math:`N`.
+        In this case, the standard deviation is calculated with 1 degree of freedom i.e. a denominator of :math:`N-1` instead of :math:`N`.
 
     Args:
         t (numpy.ndarray): Array of time values.
@@ -707,7 +711,7 @@ def STEP_time_to_first_spike(t, v, stim_onset, thresh=None):
     return t[spikes[0]] - stim_onset
 
 
-def STEP_fast_ahp_depth(t, v, thresh=None, time_scale=5):
+def STEP_fast_ahp_depth(t, v, thresh=None, time_scale=5, start=1):
     """
     Computes the average depth of the fast afterhyperpolarization (fAHP) of a voltage trace for a step stimulus.
 
@@ -723,6 +727,7 @@ def STEP_fast_ahp_depth(t, v, thresh=None, time_scale=5):
         v (numpy.ndarray): Array of voltage values.
         thresh (float, optional): Voltage threshold for spike detection. Defaults to None.
         time_scale (float, optional): Time scale in milliseconds. Defaults to 5.
+        start (int): Index of the first AP to be considered. Defaults to 1: Omit the first AP with index 0.
 
     Returns:
         float: Depth of the fAHP.
@@ -730,7 +735,6 @@ def STEP_fast_ahp_depth(t, v, thresh=None, time_scale=5):
     spike_time_indices = find_crossing(v, thresh)[0]
     d = []
 
-    start = 1
     for ind_t_spike_1, ind_t_spike_2 in zip(
         spike_time_indices[start:-1], spike_time_indices[start + 1 :]
     ):
@@ -744,13 +748,13 @@ def STEP_fast_ahp_depth(t, v, thresh=None, time_scale=5):
             end_ind = np.searchsorted(t, t_spike_1 + time_scale)
 
         # Find minimum V between this spike and the next spike (or next 5 ms)
-        d.append(np.min(v[begin_ind:end_ind]))
+        d.append(np.min(v[begin_ind:end_ind+1]))
 
     d = np.array(d)
     return d
 
 
-def STEP_slow_ahp_depth(t, v, thresh=None, time_scale=5):
+def STEP_slow_ahp_depth(t, v, thresh=None, time_scale=5, start=1):
     """
     Computes the average depth of the slow afterhyperpolarization (sAHP) of a voltage trace for a step stimulus.
 
@@ -766,6 +770,7 @@ def STEP_slow_ahp_depth(t, v, thresh=None, time_scale=5):
         v (numpy.ndarray): Array of voltage values.
         thresh (float, optional): Voltage threshold for spike detection. Defaults to None.
         time_scale (float, optional): Time scale in milliseconds. Defaults to 5 ms.
+        start (int): Index of the first AP to be considered. Defaults to 1: Omit the first AP with index 0.
 
     Returns:
         float: Depth of the sAHP.
@@ -773,7 +778,6 @@ def STEP_slow_ahp_depth(t, v, thresh=None, time_scale=5):
     spike_time_indices = find_crossing(v, thresh)[0]
     d = []
 
-    start = 1
     for ind_t_spike_1, ind_t_spike_2 in zip(
         spike_time_indices[start:-1], spike_time_indices[start + 1 :]
     ):
@@ -785,13 +789,13 @@ def STEP_slow_ahp_depth(t, v, thresh=None, time_scale=5):
         else:
             begin_ind = np.searchsorted(t, t_spike_1 + time_scale)
 
-        d.append(np.min(v[begin_ind:end_ind]))
+        d.append(np.min(v[begin_ind:end_ind+1]))
 
     d = np.array(d)
     return d
 
 
-def STEP_slow_ahp_time(t, v, thresh=None, time_scale=5):
+def STEP_slow_ahp_time(t, v, thresh=None, time_scale=5, start=1):
     """
     Calculates the time of the slow afterhyperpolarization (sAHP) of a voltage trace for a step stimulus.
 
@@ -812,6 +816,7 @@ def STEP_slow_ahp_time(t, v, thresh=None, time_scale=5):
         v (numpy.ndarray): Array of voltage values.
         thresh (float, optional): Voltage threshold for spike detection. Defaults to None.
         time_scale (float, optional): Time scale in milliseconds. Defaults to 5 ms.
+        start (int): Index of the first AP to be considered. Defaults to 1: Omit the first AP with index 0.
 
     Returns:
         np.ndarray: Array of sAHP times.
@@ -819,7 +824,6 @@ def STEP_slow_ahp_time(t, v, thresh=None, time_scale=5):
     spike_time_indices = find_crossing(v, thresh)[0]
     d = []
 
-    start = 1  # ignore first spike
     for ind_t_spike_1, ind_t_spike_2 in zip(
         spike_time_indices[start:-1], spike_time_indices[start + 1 :]
     ):
@@ -832,7 +836,7 @@ def STEP_slow_ahp_time(t, v, thresh=None, time_scale=5):
             begin_ind = np.searchsorted(t, t_spike_1 + time_scale)
 
         # Find the index of the minimum voltage value between ti1 and ti2
-        min_v_ind = begin_ind + np.argmin(v[begin_ind:end_ind])
+        min_v_ind = begin_ind + np.argmin(v[begin_ind:end_ind+1])
         t_sahp = t[min_v_ind]
         rel_time = (t_sahp - t_spike_1) / (t_spike_2 - t_spike_1)
         d.append(rel_time)

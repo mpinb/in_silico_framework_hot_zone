@@ -2,7 +2,6 @@
 
 This module provides a top-level class to run reduced model inference.
 Each reduced model contains:
-
 - a :py:class:~`DataView` object to access data
 - a :py:class:`DataSplitEvaluation` object to split data and evaluate the optimization results
 - one or more :py:class:`~simrun.modular_reduced_model_inference.data_extractor.DataExtractor` objects to preprocess the data
@@ -48,7 +47,7 @@ class Rm(object):
         tmin (float): Minimum time for the simulation
         tmax (float): Maximum time for the simulation
         width (float): Width of the temporal kernel. 
-            This will be used as the domain e.g. the :math:`\tau` domain in :py:class:`~simrun.modular_reduced_model_inference.strategy.RaisedCosineBases`
+            This will be used as the domain e.g. the :math:`\\tau` domain in :py:class:`~simrun.modular_reduced_model_inference.strategy.RaisedCosineBasis`
         n_trials (int): Amount of trials
         data_extractors (dict): Dictionary of :py:class:`~simrun.modular_reduced_model_inference.data_extractor._DataExtractor` objects
         strategies (dict): Dictionary of :py:class:`~simrun.modular_reduced_model_inference.strategy.Strategy` objects
@@ -71,7 +70,7 @@ class Rm(object):
             db (str): Path to the database
             tmin (float): Minimum time for the simulation
             tmax (float): Maximum time for the simulation
-            width (float): Width of the temporal kernel. This will be used as the :math:`\tau` domain in e.g. :py:class:`simrun.modular_reduced_model_inference.strategy.RaisedCosineBases`
+            width (float): Width of the temporal kernel. This will be used as the :math:`\\tau` domain in e.g. :py:class:`~simrun.modular_reduced_model_inference.strategy.RaisedCosineBasis`
             selected_indices (list): List/nested list of integer indices for selected simulation trials
         """
         self.name = name
@@ -318,7 +317,7 @@ class DataSplitEvaluation(object):
     def add_random_split(self, name, percentage_train=.7, l=None):
         """Set the train-test split randomly.
         
-        Args:
+        Args:sudo dmidecode
             name (str): Name of the split
             percentage_train (float): Percentage of trials to use for training
             l (list): List of indices to use for the split. If None, use all trials.

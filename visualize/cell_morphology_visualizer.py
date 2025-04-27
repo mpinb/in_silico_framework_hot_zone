@@ -578,7 +578,7 @@ class CMVDataParser:
         Args:
             keyword (str): keyword to determine the scalar data. Can be a color, ion dynamics, or membrane voltage.
             time_point (float): time point at which we want to retrieve the data.
-            return_as_color (bool): whether to return the data as a color. Default is False.
+            return_as_color (bool): whether to return the data as a color. Default is ``False``.
             color_dict (dict): dictionary mapping section labels to colors. Only used if keyword is "dendrites" or "dendritic group".
             
         Returns:
@@ -674,8 +674,8 @@ class CMVDataParser:
         
         Args:
             cmap (str): colormap to use. Default is "jet". For available colormaps, see https://matplotlib.org/stable/gallery/color/colormap_reference.html
-            vmin (float): minimum value of the colormap. Default is None.
-            vmax (float): maximum value of the colormap. Default is None.
+            vmin (float): minimum value of the colormap. Default is ``None``.
+            vmax (float): maximum value of the colormap. Default is ``None``.
         
         Returns:
             None: Nothing. 
@@ -886,10 +886,12 @@ class CellMorphologyVisualizer(CMVDataParser):
             self._update_times_to_show()
             if show_legend:
                 legend = self.scalar_mappable
+            colors = self._calc_scalar_data_from_keyword(color, time_point, return_as_color=True)
+        else:
+            colors = color
         if show_synapses:
             self._calc_synapses_timeseries()
         
-        colors = self._calc_scalar_data_from_keyword(color, time_point, return_as_color=True)
         
         fig, ax = get_3d_plot_morphology(
             self._morphology_connected,
@@ -1528,7 +1530,7 @@ def get_3d_plot_morphology(
     ax.azim, ax.dist, ax.elev, ax.roll = camera_position['azim'], camera_position['dist'], camera_position['elev'], camera_position['roll']
 
     #----------------- map color
-    sections = lookup_table['sec_n'].unique()
+    sections = sorted(lookup_table['sec_n'].unique())
     if isinstance(colors, str):
         colors = [colors for _ in sections]
     else:
@@ -1538,9 +1540,12 @@ def get_3d_plot_morphology(
     #----------------- plot neuron morphology
     for sec_n in sections:
         points = lookup_table[lookup_table['sec_n'] == sec_n]
-        linewidths = points['diameter'][:-1].values + points['diameter'][1:].values / 2 #* 1.5 + 0.2 
+        linewidths = (points['diameter'][:-1].values + points['diameter'][1:].values) / 2 #* 1.5 + 0.2 
         points = points[['x', 'y', 'z']].values.reshape(-1, 1, 3)
         segments = np.concatenate([points[:-1], points[1:]], axis=1)
+        assert len(segments) == len(colors[sec_n]) or len(colors[sec_n]) == 1, \
+            "Number of colors ({}) does not match number of points ({}) in section ({}). Either provide one color per segment, or group line segment colors by section.".format(
+                len(colors[sec_n]), len(segments), sec_n)
         lc = Line3DCollection(
             segments, 
             linewidths=linewidths, 

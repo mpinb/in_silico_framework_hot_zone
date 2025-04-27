@@ -1,5 +1,5 @@
 """
-Efficient, reproducable and flexible database with dictionary-like API. 
+Efficient, reproducible and flexible database with dictionary-like API. 
 This package provides efficient and scalable methods to store and access simulation results at a terrabyte scale.
 Each data base entry contains metadata, indicating when the data was written, and the exact version of the source code that was used at this timepoint.
 A wide variety of input data and output file formats are supported (see :py:mod:`data_base.IO.LoaderDumper`), including:
@@ -46,6 +46,11 @@ Example:
             "error": null
         }
 """
-import compatibility
-compatibility.init_data_base_compatibility()
+# Register the database IO and initializers submodules/-packages
+import sys
+from data_base.isf_data_base import IO, db_initializers
+sys.modules['data_base.IO'] = IO
+sys.modules['data_base.db_initializers'] = db_initializers
+
+# Bring wrapper class to the front
 from .data_base import DataBase

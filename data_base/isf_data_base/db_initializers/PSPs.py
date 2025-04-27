@@ -9,7 +9,8 @@ I currently leave this undocumented until I (or someone else) can properly docum
 import os
 import single_cell_parser as scp
 from data_base.dbopen import create_db_path, resolve_db_path
-from data_base.isf_data_base.IO.LoaderDumper import pandas_to_parquet
+from data_base.isf_data_base.IO.LoaderDumper import pandas_to_msgpack
+# from data_base.isf_data_base.IO.LoaderDumper import pandas_to_parquet
 
 
 def get_confile_form_network_param(n):
@@ -53,14 +54,14 @@ def get_parameterfiles_df_with_confile_and_neuron_param_path(db):
     parameterfiles['confile'] = parameterfiles.hash_network.map(
         map_to_confilepath)
     map_to_parampath = {
-        v: create_db_path(os.path.join(db['parameterfiles_cell_folder'], v))
+        v: create_modular_db_path(os.path.join(db['parameterfiles_cell_folder'], v))
         for k, v, in six.iteritems(parameterfiles.hash_neuron.drop_duplicates())
     }
     parameterfiles['neuron_param_dbpath'] = parameterfiles['hash_neuron'].map(
         map_to_parampath)
     map_to_parampath = {
         v:
-            create_db_path(
+            create_modular_db_path(
                 os.path.join(db['parameterfiles_network_folder'], v)) for k, v,
         in six.iteritems(parameterfiles.hash_network.drop_duplicates())
     }
@@ -120,7 +121,7 @@ def init(
     pspdb.set(
         'parameterfiles',
         get_parameterfiles_df_with_confile_and_neuron_param_path(db),
-        dumper=pandas_to_parquet)
+        dumper=pandas_to_msgpack)
     psps_out = []
     keys_out = []
     for index, row in pdf.iterrows():

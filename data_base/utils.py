@@ -587,7 +587,7 @@ def colorize_key(key):
         c = ""
     return c + key.name + bcolors.ENDC
 
-def colorize(key, bcolor):
+def colorize_str(key, bcolor):
     """Colorize a string with a terminal color.
     
     Simply concatenates the string with escape sequences that colroize the text in a terminal.
@@ -618,9 +618,9 @@ def calc_recursive_filetree(
         max_depth (int): Maximum depth to recurse into the directory tree
         max_lines (int): Maximum number of lines to print. Default is 30.
         max_lines_per_key (int): Maximum number of lines per key. Default is 3.
-        lines (list): List of strings to append to during recursion. Default is None.
-        all_files (bool): If True, all files are shown (including e.g. /db subfolders). If False, only files that are keys in the database are shown. Default is False.
-        colorize (bool): If True, colorizes the keys. Default is True.
+        lines (list): List of strings to append to during recursion. Default is ``None``.
+        all_files (bool): If True, all files are shown (including e.g. /db subfolders). If False, only files that are keys in the database are shown. Default is ``False``.
+        colorize (bool): If True, colorizes the keys. Default is ``True``.
         
     Returns:
         list: The formatted tree structure as a list of strings.
