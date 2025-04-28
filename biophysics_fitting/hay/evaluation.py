@@ -103,7 +103,7 @@ def nan_if_error(fun):
 class BAC:
     """Evaluate the :math:`BAC` stimulus protocol.
 
-    These metrics were introduced by :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011`, and illustrated in :cite:t:`Guest_Bast_Narayanan_Oberlaender`.
+    These metrics were introduced by :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011`, and illustrated in :cite:t:`Bast_Guest_Fruengel_Narayanan_de_Kock_Oberlaender_2023`.
 
     See also:
         :py:meth:`biophysics_fitting.setup_stim.setup_BAC` for more information on the stimulus protocol.
@@ -436,7 +436,7 @@ class BAC:
 class bAP:
     """Evaluate the :math:`bAP` stimulus protocol.
 
-    These metrics were introduced by :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011`, and illustrated in :cite:t:`Guest_Bast_Narayanan_Oberlaender`.
+    These metrics were introduced by :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011`, and illustrated in :cite:t:`Bast_Guest_Fruengel_Narayanan_de_Kock_Oberlaender_2023`.
 
     See also:
         :py:meth:`biophysics_fitting.setup_stim.setup_bAP` for more information on the stimulus protocol.
@@ -700,7 +700,7 @@ class bAP:
 class _Step:
     """Template class for evaluating step current injections.
 
-    These metrics were introduced by :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011`, and illustrated in :cite:t:`Guest_Bast_Narayanan_Oberlaender`.
+    These metrics were introduced by :cite:t:`Hay_Hill_Schuermann_Markram_Segev_2011`, and illustrated in :cite:t:`Bast_Guest_Fruengel_Narayanan_de_Kock_Oberlaender_2023`.
 
     See also:
         :py:meth:`biophysics_fitting.setup_stim` for more information on the stimulus protocols.

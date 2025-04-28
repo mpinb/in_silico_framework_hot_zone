@@ -2,7 +2,7 @@
 
 Data extractors initialize from ReducedModel objects.
 Depending on the reduced model object, the data extractors fetch data from the database and return it in a structured way.
-These data extrcators are specific to match a :py:class:`simrun.modular_reduced_model_inference.Strategy` object.
+These data extractors are specific to match a :py:class:`simrun.modular_reduced_model_inference.Strategy` object.
 For example, the spatiotemporal raised cosine strategy requires to bin the synapse activations spatiotemporally.
 This is then handled with the :py:class:`DataExtractor_spatiotemporalSynapseActivation` class.
 """

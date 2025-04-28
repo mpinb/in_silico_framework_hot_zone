@@ -21,8 +21,8 @@ class PixelObject():
         """
         Args:
             extent (list): The extent of the plot.
-            ax (matplotlib.pyplot.Axes): The axis to convert to a pixel array. Default is `None`.
-            array (numpy.ndarray): The pixel array to store. Default is `None`.
+            ax (matplotlib.pyplot.Axes): The axis to convert to a pixel array. Default is ``None``.
+            array (numpy.ndarray): The pixel array to store. Default is ``None``.
         """
         if ax is None and array is None:
             raise ValueError("Please specify an ax or an array (not both)")

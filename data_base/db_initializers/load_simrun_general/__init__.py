@@ -5,8 +5,8 @@ The voltage traces are written to a single ``.csv`` file (since the amount of ti
 but the synapse and cell activation data is written to a separate file for each simulation trial (the amount 
 of spikes and synapse activations is not known in advance).
 
-This module provides functions to gather and parse this data to pandas and dask dataframes. It merges al trials in a single dataframe.
-This saves IO time, disk space, and is strongly recommended for HPC systems and other shared filesystems in genereal, as it reduces the amount of inodes required. 
+This module provides functions to gather and parse this data to pandas and dask dataframes. It merges all trials in a single dataframe.
+This saves IO time, disk space, and is strongly recommended for HPC systems and other shared filesystems in general, as it reduces the amount of inodes required. 
 
 After running :py:meth:`~data_base.db_initializers.load_simrun_general.init`, a database is created containing
 the following keys:
@@ -58,7 +58,7 @@ After initialization, you can access the data from the data_base in the followin
     >>> db['spike_times']
     <spike times dataframe>
     
-If you intialize the database with ``rewrite_in_optimized_format=True`` (default), the keys are written as dask dataframes to the parquet format.
+If you intialize the database with ``rewrite_in_optimized_format=True`` (default), the keys are written as dask dataframes to whichever format is configured as the optimized format (see :py:mod:`~data_base.isf_data_base.db_initializers.load_simrun_general.config`).
 If ``rewrite_in_optimized_format=False`` instead, these keys are pickled dask dataframes, containing relative links to the
 original ``.csv`` files. In essence, the dask dataframes contain the insturctions to build the dataframe, not the data itself.
 This is useful for fast intermediate analysis. It is not intended and strongly discouraged for long term storage. 
@@ -142,7 +142,7 @@ def init(
             Parse and write the dendritic spike times to the database.
             See also: :py:meth:`~data_base.db_initializers.load_simrun_general.add_dendritic_spike_times`
         dendritic_spike_times_threshold (float, optional):
-            Threshold for the dendritic spike times in mV. Default is :math:`-30`.
+            Threshold for the dendritic spike times in :math:`mV`. Default is :math:`-30 mV`.
             See also: :py:meth:`~data_base.db_initializers.load_simrun_general.add_dendritic_spike_times`
         synapse_activation (bool, optional):
             Parse and write the synapse activation data to the database.
@@ -169,7 +169,7 @@ def init(
         scheduler (dask.distributed.Client, optional)
             Scheduler to use for parallellized parsing of dask dataframes.
             can e.g. be simply the ``distributed.Client.get`` method.
-            Default is None.
+            Default is ``None``.
         dumper (module, optional, deprecated):
             Dumper to use for saving pandas dataframes.
             Default is :py:mod:`~data_base.isf_data_base.IO.LoaderDumper.pandas_to_msgpack`.
@@ -258,15 +258,15 @@ def add_dendritic_voltage_traces(
             The database to which the data should be added.
         rewrite_in_optimized_format (bool, optional):
             If True, the data is converted to a high performance format.
-            Default is True.
+            Default is ``True``.
         dendritic_spike_times (bool, optional):
             If True, the dendritic spike times are added to the database.
-            Default is True.
+            Default is ``True``.
         repartition (bool, optional):
             If True, the dask dataframe is repartitioned to 5000 partitions (only if it contains over :math:`10000` entries).
-            Default is True.
+            Default is ``True``.
         dendritic_spike_times_threshold (float, optional):
-            Threshold for the dendritic spike times in mV. Default is :math:`-30`.
+            Threshold for the dendritic spike times in :math:`mV`. Default is :math:`-30 mV`.
             See also: :py:meth:`~data_base.db_initializers.load_simrun_general.add_dendritic_spike_times`
         client (:py:class:`~dask.distributed.client.Client`, optional):
             Distributed Client object for parallel computation.
@@ -294,7 +294,7 @@ def add_dendritic_spike_times(db, dendritic_spike_times_threshold=-30.0):
         db (:py:class:`~data_base.DataBase`):
             The database to which the data should be added.
         dendritic_spike_times_threshold (float, optional):
-            Threshold for the dendritic spike times in mV. Default is :math:`-30`.
+            Threshold for the dendritic spike times in :math:`mV`. Default is :math:`-30 mV`.
             See also: :py:meth:`~data_base.analyze.spike_detection`
     """
     m = db.create_sub_db("dendritic_spike_times")
@@ -322,13 +322,13 @@ def optimize(
         db (:py:class:`~data_base.DataBase`):
             The database to optimize.
         select (list, optional):
-            List of keys to optimize. Default is None, and all data is optimized:
+            List of keys to optimize. Default is ``None``, and all data is optimized:
             ``['synapse_activation', 'cell_activation', 'voltage_traces', 'dendritic_recordings']``.
         client (distributed.Client, optional):
             Distributed Client object for parallel computation.
         dumper (module, deprecated):
             Dumper to use for re-saving the data in a new format.
-            Default is None, and the dumper is inferred from the data type.
+            Default is ``None``, and the dumper is inferred from the data type.
             See also: :py:meth:`~data_base.db_initializers._get_dumper`
             
     .. deprecated:: 0.5.0
@@ -387,10 +387,10 @@ def load_initialized_cell_and_evokedNW_from_db(
         sti (str):
             For which simulation trial index to load the parameter files.
         allPoints (bool, optional):
-            If True, all points of the cell are used. Default is False.
+            If True, all points of the cell are used. Default is ``False``.
             See also: :py:meth:`single_cell_parser.create_cell`
         reconnect_synapses (bool, optional):
-            If True, the synapses are reconnected to the cell. Default is True.
+            If True, the synapses are reconnected to the cell. Default is ``True``.
             See also: :py:meth:`single_cell_parser.NetworkMapper.reconnect_saved_synapses`
 
     See also:

@@ -1,5 +1,6 @@
 """
 This module provides routines to analyze the results of a random walk exploration through biophysical parameter space.
+
 See also:
     :py:mod:`~biophysics_fitting.exploration_from_seedpoint.RW`
 """
@@ -215,6 +216,7 @@ def get_depolarization_index(dataframe):
     This index is defined as:
     
     .. math::
+
         \\frac{Ca_{LVA} - Ca_{HVA}}{Ca_{HVA} + Ca_{LVA}}
     
     Args:
@@ -235,6 +237,7 @@ def get_hyperpolarization_index(dataframe):
     This index is defined as:
     
     .. math::
+
         \\frac{I_{SK} - I_{m}}{I_{SK} + I_{m}}
         
     Returns:

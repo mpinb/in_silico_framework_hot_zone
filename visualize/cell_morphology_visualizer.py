@@ -578,7 +578,7 @@ class CMVDataParser:
         Args:
             keyword (str): keyword to determine the scalar data. Can be a color, ion dynamics, or membrane voltage.
             time_point (float): time point at which we want to retrieve the data.
-            return_as_color (bool): whether to return the data as a color. Default is False.
+            return_as_color (bool): whether to return the data as a color. Default is ``False``.
             color_dict (dict): dictionary mapping section labels to colors. Only used if keyword is "dendrites" or "dendritic group".
             
         Returns:
@@ -674,8 +674,8 @@ class CMVDataParser:
         
         Args:
             cmap (str): colormap to use. Default is "jet". For available colormaps, see https://matplotlib.org/stable/gallery/color/colormap_reference.html
-            vmin (float): minimum value of the colormap. Default is None.
-            vmax (float): maximum value of the colormap. Default is None.
+            vmin (float): minimum value of the colormap. Default is ``None``.
+            vmax (float): maximum value of the colormap. Default is ``None``.
         
         Returns:
             None: Nothing. 

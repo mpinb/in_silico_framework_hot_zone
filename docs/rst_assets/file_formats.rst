@@ -78,7 +78,7 @@ Cell parameters
 :ref:`param_file_format` file to store biophysical parameters of a cell.
 Includes a reference to a :ref:`hoc_file_format` morphology file, 
 biophysical properties of the cell per cellular structure (i.e. soma, dendrite, axon initial segment ...),
-and basic simulation parameters. Conductance densities are given in :math:`S/cm^2`, spatial coordinates and distances in `\mu m`, and time in :math:`ms`.
+and basic simulation parameters. Conductance densities are given in :math:`S/cm^2`, spatial coordinates and distances in :math:`\mu m`, and time in :math:`ms`.
 Simulation parameters are usually overridden by higher level modules, such as :py:mod:`simrun`.
 
 To access different structures of a cell::
@@ -592,7 +592,7 @@ Example::
 
 .mod
 ****
-NEURON :cite:`hines2001neuron` file format for neuron mechanisms. refer to the `NEURON NMOL documentation <https://neuron.yale.edu/neuron/docs/using-nmodl-files>`_ for more info.
+NEURON :cite:`hines2001neuron` file format for neuron mechanisms. refer to the `NEURON NMODL documentation <https://neuron.yale.edu/neuron/docs/using-nmodl-files>`_ for more info.
 Used to define channel and synapse dynamics in NEURON simulations.
 See the folder `mechanisms` in the project source.
 

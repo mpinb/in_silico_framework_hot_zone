@@ -473,7 +473,7 @@ class SynapseDensity(object):
                 :py:class:`~singlecell_input_mapper.singlecell_input_mapper.calar_field.ScalarField` objects as values
             likeAmira (bool):
                 Set to True if the diamlist of each section denotes the radius, rather than the diameter.
-                Default is False.
+                Default is ``False``.
                 
         Returns:
             None. Fills the scalar fields in place.

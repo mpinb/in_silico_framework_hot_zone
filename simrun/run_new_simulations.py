@@ -267,7 +267,7 @@ def run_new_simulations(
             Trial-to-trial variability is introduced by the random seed in terms of
             different network activity and connectivity realizations (see :py:meth:`~single_cell_parser.network.NetworkMapper.created_saved_network2`).
         tStop (float): Duration of each simulation in ms.
-        tStim (float): Time in ms at which the in-vivo evoked synaptic input should start.
+        tStim (float): Time in ms at which the in vivo evoked synaptic input should start.
         scale_apical (callable, DEPRECATED): Function to scale the apical dendrite. Assumes the cell has an apical dendrite - see below.
         cell_generator (callable): Function to generate the cell. If provided, :paramref:`cellParamName` is ignored.
         tar (bool): If True, the output directory is compressed to a tarball after the simulation is finished.

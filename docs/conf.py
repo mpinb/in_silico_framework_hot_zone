@@ -230,8 +230,11 @@ html_theme_options = {
         },
     ],
     # "sidebar_hide_name": True,
+    "globaltoc_depth": -1,
     'features': [
-        'toc.follow'
+        "navigation.tabs",          # overridden from default immaterial: tab sections on top: broken, unless we upgrade the theme, which requires other upgrades as well.
+        # "navigation.sections",      # overridden from default immaterial: nav sidebar left has expanded sections.
+        # "navigation.tabs.sticky",   # overridden from default behavior: keep tab sections on top visible
         ],
 }
 
@@ -296,10 +299,10 @@ html_js_files = [
 html_show_sourcelink = False
 
 
-# If true, "Created using Sphinx" is shown in the HTML footer. Default is True.
+# If true, "Created using Sphinx" is shown in the HTML footer. Default is ``True``.
 # html_show_sphinx = True
 
-# If true, "(C) Copyright ..." is shown in the HTML footer. Default is True.
+# If true, "(C) Copyright ..." is shown in the HTML footer. Default is ``True``.
 # html_show_copyright = True
 
 # If true, an OpenSearch description file will be output, and all pages will
