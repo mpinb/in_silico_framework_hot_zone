@@ -1,5 +1,5 @@
 # 3D presynaptic soma location file; only valid with input map realization:
-# /nas1/Data_regger/AXON_SAGA/Axon4/PassiveTouch/L5tt/network_embedding/postsynaptic_location/3x3_C2_sampling/C2center/86_L5_CDK20041214_nr3L5B_dend_PC_neuron_transform_registered_C2center_synapses_20150504-1611_10389/presynaptic_somata/presynaptic_somata.csv
+# /nas1/Data_regger/AXON_SAGA/Axon4/PassiveTouch/L5tt/network_embedding/postsynaptic_location/3x3_C2_sampling/C2center/86_C2_center/presynaptic_somata/presynaptic_somata.csv
 # Type - cell ID - soma x - soma y - soma z
 
 L45Peak_D1	0	-626.213	20.344	-58.270
