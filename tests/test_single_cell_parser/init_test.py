@@ -37,9 +37,13 @@ class TestSingleCellParserInit:
     def test_cell_modify_functions_in_neuron_param_is_respected(self):
         from mechanisms import l5pt as l5pt_mechanisms
         neuron_param = scp.build_parameters(getting_started.neuronParam)
+        
+        # unscaled diameters
+        neuron_param.neuron['cell_modify_functions'] = {}
         cell = scp.create_cell(neuron_param.neuron)
         diam_unscaled = next(
             s for s in cell.sections if s.label == 'ApicalDendrite').diam
+
         neuron_param.neuron['cell_modify_functions'] = scp.NTParameterSet(
             {'scale_apical': {
                 'scale': 10
