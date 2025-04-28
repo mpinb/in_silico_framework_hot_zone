@@ -8,11 +8,14 @@
 [![OSX](https://github.com/mpinb/in_silico_framework/actions/workflows/test-isf-py38-pixi-macos.yml/badge.svg)](https://github.com/mpinb/in_silico_framework/actions/workflows/test-isf-py38-pixi-macos.yml)
 [![codecov](https://codecov.io/gh/mpinb/in_silico_framework/graph/badge.svg?token=V4P4QMFM12)](https://codecov.io/gh/mpinb/in_silico_framework)
 
-https://github.com/mpinb/in_silico_framework/blob/master/docs/_static/_videos/sequence_dark.mp4
+<video width="600" controls>
+  <source src="https://github.com/mpinb/in_silico_framework/blob/master/docs/_static/_videos/sequence_dark.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
 
 </div>
 
-ISF is a multi-scale simulation environment for generating, simulating and analyzing neuron-network models during *in-vivo* conditions.
+ISF is an In Silico Framework for multi-scale modeling and analysis of *in vivo* neuron-network mechanisms
 
 ## Documentation
 
