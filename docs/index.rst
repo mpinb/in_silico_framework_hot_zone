@@ -1,4 +1,4 @@
-The In-Silico Framework (ISF)
+The In Silico Framework (ISF)
 =============================
 
 .. toctree::
