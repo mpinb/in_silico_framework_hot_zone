@@ -134,7 +134,7 @@ def simtrial_to_cell_object(
         to recreate a single simulation trial from parameter files instead of a database.
         
     See also:
-        :py:mod:`data_base.isf_data_base.db_initializers.init_simrun_general` to initialize a database object
+        :py:mod:`data_base.db_initializers.init_simrun_general` to initialize a database object
         from raw `simrun` output, i.e. a "simrun-initialized" database object.
     
     Returns:

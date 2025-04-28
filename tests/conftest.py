@@ -22,9 +22,7 @@ from .fixtures.dataframe_fixtures import ddf, pdf
 if six.PY3:  # pytest can be parallellized on py3: use unique ids for dbs
     from .fixtures.data_base_fixtures_py3 import (
         empty_db,
-        empty_mdb,
         fresh_db,
-        fresh_mdb,
         sqlite_db,
     )
 elif (
@@ -32,9 +30,7 @@ elif (
 ):  # old pytest version needs explicit @pytest.yield_fixture markers. has been deprecated since 6.2.0
     from .fixtures.data_base_fixtures_py2 import (
         fresh_db,
-        fresh_mdb,
         empty_db,
-        empty_mdb,
         sqlite_db,
     )
 

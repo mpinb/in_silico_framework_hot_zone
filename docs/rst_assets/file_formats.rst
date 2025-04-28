@@ -262,7 +262,7 @@ The output format of various simulation pipelines are usually a dataframe. below
 The :py:mod:`simrun` package produces output files in ``.csv`` or ``.npz`` format. many of these files
 need to be created for each individual simulation trial. 
 These raw output files are usually parsed into single dataframes for further analysis using a ``db_initializers`` submodule (see e.g. 
-:py:mod:`~data_base.isf_data_base.db_initializers.load_simrun_general`).
+:py:mod:`~data_base.db_initializers.load_simrun_general`).
 
 
 .. _syn_activation_format:
@@ -465,7 +465,7 @@ Writers:
 
 - :py:meth:`~single_cell_parser.writer.write_presynaptic_spike_file` is used by :py:mod:`simrun` and :py:mod:`~single_cell_parser.analyze.synanalysis`
    to write raw output data.
-- :py:meth:`data_base.isf_data_base.db_initializers.load_simrun_general.init` parses these files into a pandas dataframe.
+- :py:meth:`data_base.db_initializers.load_simrun_general.init` parses these files into a pandas dataframe.
 
 .. attention::
 
@@ -527,7 +527,7 @@ Voltage trace ``.npz``
 Voltage trace dataframe
 -----------------------
 
-The parsed dataframe is usually created by the :py:meth:`data_base.isf_data_base.db_initializers.load_simrun_general.init` function.
+The parsed dataframe is usually created by the :py:meth:`data_base.db_initializers.load_simrun_general.init` function.
 
 .. list-table:: ``voltage trace dataframe``
    :header-rows: 1

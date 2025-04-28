@@ -4,7 +4,7 @@ This module provides methods for binning and aggregating synapse activations, sp
 as convenience methods to analyze the results of :py:mod:`simrun.reduced_model`.
 
 See also:
-    :py:mod:`data_base.isf_data_base.db_initializers.load_simrun_general` for initializing databases from :py:mod:`simrun` results.
+    :py:mod:`data_base.db_initializers.load_simrun_general` for initializing databases from :py:mod:`simrun` results.
 """
 
 

@@ -1,4 +1,4 @@
-import matplotlib
+import matplotlib, pytest
 
 matplotlib.use('agg')
 
@@ -72,6 +72,7 @@ class TestManyLines:
                 'manylines_grouped_dask.png'))
         plt.close()
 
+    @pytest.mark.skipif(sys.platform == "darwin", reason="GUI can't be created in a non-main thread")
     def test_manylines_no_group_returnPixelObject(self, client):
         df = self.df.drop('attribute', axis=1)
         po = manylines(

@@ -59,15 +59,15 @@ def create_average_celltype_PSTH_from_clusters(cellTypeFolder, outFileName):
     
     Example:
         >>> create_average_celltype_PSTH_from_clusters(
-            'getting_started/example_data/functional_constraints/evoked_activity/PW_SuW_RF_CDK/L5tt/L5tt_84', 
+            'getting_started/example_data/functional_constraints/evoked_activity/L5tt/L5tt_84', 
             'L5_PSTH_UpState.param')
         {
-            "getting_started/example_data/functional_constraints/evoked_activity/PW_SuW_RF_CDK/L5tt/L5tt_84_B1": {
+            "getting_started/example_data/functional_constraints/evoked_activity/L5tt/L5tt_84_B1": {
                 "distribution": "PSTH",
                 "intervals": [(6.0,7.0)],
                 "probabilities": [0.0216],
             },
-            "getting_started/example_data/functional_constraints/evoked_activity/PW_SuW_RF_CDK/L5tt/L5tt_84_B2": {
+            "getting_started/example_data/functional_constraints/evoked_activity/L5tt/L5tt_84_B2": {
                 ...
             },
         }
@@ -247,7 +247,7 @@ def create_evoked_PSTH(spikeTimesName, cellType, ongoingRate, outFileName):
     
     Example:
         >>> create_evoked_PSTH(
-            'getting_started/example_data/functional_constraints/evoked_activity/PW_SuW_RF_CDK/L5tt/L5tt_84/C1_040929-129-ctx.cluster1', 
+            'getting_started/example_data/functional_constraints/evoked_activity/L5tt/L5tt_84/C1_040929-129-ctx.cluster1', 
             cellType='L5tt', 
             ongoingrate=2.64, 
             outFileName='PSTH.param')
@@ -381,7 +381,7 @@ def load_cluster_trials(fname):
         dict: A dictionary with the spike times for each trial.
         
     Example:
-        >>> load_cluster_trials('getting_started/example_data/functional_constraints/evoked_activity/PW_SuW_RF_CDK/L5tt/L5tt_84/C1_040929-129-ctx.cluster1')
+        >>> load_cluster_trials('getting_started/example_data/functional_constraints/evoked_activity/L5tt/L5tt_84/C1_040929-129-ctx.cluster1')
         {
             0: [87.80000000000001, 138.70000000000002, 151.6, 430.40000000000003, 471.1, 478.90000000000003], 
             1: [], 
