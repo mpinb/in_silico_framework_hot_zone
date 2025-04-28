@@ -2,12 +2,12 @@
 
 This module provides a function to resimulate a network-embedded neuron simulation from a simrun-initialized database.
 It allows to modify either the cell or the network with modification functions.
-The database is expected to have been initialized with :py:mod:`data_base.db_initializers.init_simrun_general`. 
+The database is expected to have been initialized with :py:mod:`data_base.db_initializers.load_simrun_general`. 
 The function :py:func:`rerun_db` takes a database and a directory as input and resimulates the network-embedded neuron simulation for each simulation trial in the database. 
 The results are stored in the specified directory.
 
 See also:
-    :py:mod:`~data_base.db_initializers.init_simrun_general` for initializing a database from raw :py:mod:`simrun` output.
+    :py:mod:`~data_base.db_initializers.load_simrun_general` for initializing a database from raw :py:mod:`simrun` output.
 
 See also:
     :py:mod:`~single_cell_parser.cell_modify_functions` and :py:mod:`~single_cell_parser.network_modify_functions` 
