@@ -26,7 +26,7 @@ class TestSerializeCell:
         cell_param.neuron.filename = os.path.join(
             TEST_DATA_FOLDER,
             'anatomical_constraints',
-            '86_L5_CDK20041214_nr3L5B_dend_PC_neuron_transform_registered_C2center_scaled_diameters.hoc')
+            '86_C2_center_scaled_diameters.hoc')
         with silence_stdout:
             cell = scp.create_cell(cell_param.neuron)
 

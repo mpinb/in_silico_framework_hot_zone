@@ -32,7 +32,7 @@ generate_param_files_with_valid_references()
 hocfile = os.path.join(
     example_data_dir,
     'anatomical_constraints',
-    '86_L5_CDK20041214_nr3L5B_dend_PC_neuron_transform_registered_C2center_scaled_diameters.hoc'
+    '86_C2_center_scaled_diameters.hoc'
 )
 networkParam = os.path.join(
     example_data_dir,
