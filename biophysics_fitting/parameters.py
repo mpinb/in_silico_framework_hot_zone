@@ -26,10 +26,9 @@ def param_selector(params, s):
     '''Select parameters from a Series with an Index like a.b.c, a.b.d.
 
     params is a series with an index that contains strings seperated by "."
-    Therefore, params can reflect a hierarchy, e.g.:
+    Therefore, params can reflect a hierarchy.
     
-    .. highlight:: python
-    .. code-block:: python
+    Example::
     
         a.a   1
         a.b   2
@@ -38,7 +37,7 @@ def param_selector(params, s):
     
     This method allows to select from that Series using a string.
     
-    Examples::
+    Example::
         
         >>> param_selector(params, 'a'):
         a    1

@@ -266,9 +266,10 @@ class CMVDataParser:
                 # print(sec_n)
                 x, y, z = self.soma_center
                 # soma size
-                mn, mx = np.min(cell.soma.pts, axis=0), np.max(cell.soma.pts, axis=0)
-                d_range = [mx_ - mn_ for mx_, mn_ in zip(mx, mn)]
-                d = max(d_range)
+                # mn, mx = np.min(cell.soma.pts, axis=0), np.max(cell.soma.pts, axis=0)
+                # d_range = [mx_ - mn_ for mx_, mn_ in zip(mx, mn)]
+                # d = max(d_range)
+                d = np.mean([sec.diamList[i] for i in range(len(sec.pts))])
                 points.append([x, y, z, d, sec_n, 0])
             elif sec.label in ['AIS', 'Myelin']:
                 continue
@@ -885,10 +886,12 @@ class CellMorphologyVisualizer(CMVDataParser):
             self._update_times_to_show()
             if show_legend:
                 legend = self.scalar_mappable
+            colors = self._calc_scalar_data_from_keyword(color, time_point, return_as_color=True)
+        else:
+            colors = color
         if show_synapses:
             self._calc_synapses_timeseries()
         
-        colors = self._calc_scalar_data_from_keyword(color, time_point, return_as_color=True)
         
         fig, ax = get_3d_plot_morphology(
             self._morphology_connected,
@@ -1527,7 +1530,7 @@ def get_3d_plot_morphology(
     ax.azim, ax.dist, ax.elev, ax.roll = camera_position['azim'], camera_position['dist'], camera_position['elev'], camera_position['roll']
 
     #----------------- map color
-    sections = lookup_table['sec_n'].unique()
+    sections = sorted(lookup_table['sec_n'].unique())
     if isinstance(colors, str):
         colors = [colors for _ in sections]
     else:
@@ -1537,7 +1540,7 @@ def get_3d_plot_morphology(
     #----------------- plot neuron morphology
     for sec_n in sections:
         points = lookup_table[lookup_table['sec_n'] == sec_n]
-        linewidths = points['diameter'][:-1].values + points['diameter'][1:].values / 2 #* 1.5 + 0.2 
+        linewidths = (points['diameter'][:-1].values + points['diameter'][1:].values) / 2 #* 1.5 + 0.2 
         points = points[['x', 'y', 'z']].values.reshape(-1, 1, 3)
         segments = np.concatenate([points[:-1], points[1:]], axis=1)
         lc = Line3DCollection(

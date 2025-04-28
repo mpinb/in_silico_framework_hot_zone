@@ -31,8 +31,8 @@ import time
 from data_base.utils import chunkIt, myrepartition, mkdtemp
 import distributed
 import six
-# import pandas_msgpack # do not import this; it will break pickle in loaded dataframes
-from pandas_msgpack import to_msgpack, read_msgpack
+# import isf_pandas_msgpack # do not import this; it will break pickle in loaded dataframes
+from isf_pandas_msgpack import to_msgpack, read_msgpack
 
 
 ####
@@ -299,10 +299,6 @@ def dump(obj,
         RuntimeError: _description_
     """
     import os
-    if not "ISF_IS_TESTING" in os.environ:
-        # Module was not called from within the test suite
-        raise RuntimeError(
-            'pandas-msgpack is not supported anymore in the model_data_base')
     if client is None:
         assert get is not None
         client = get

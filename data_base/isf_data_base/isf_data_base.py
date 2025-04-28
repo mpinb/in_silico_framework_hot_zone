@@ -8,7 +8,7 @@ import os, tempfile, string, json, threading, random, shutil, inspect, datetime,
 from pathlib import Path
 from data_base import _module_versions, data_base_register
 import data_base.exceptions as db_exceptions
-from data_base.utils import colorize
+from data_base.utils import colorize_str
 VC = _module_versions.version_cached
 
 logger = logging.getLogger("ISF").getChild(__name__)
@@ -187,7 +187,7 @@ class ISFDataBase:
          - Which data dumper was used to save this result. Its corresponding Loader can always be found in the same file. See :py:mod:`~data_base.isf_data_base.IO.LoaderDumper` for all dumpers and loaders.
        * - ``time``
          - Time at which this results was saved.
-       * - ``conda_list``
+       * - ``module_list``
          - A full list of all modules installed in the conda environment that was used to produce this result.
        * - ``module_versions``
          - The versions of all modules in the environment that was used to produce this result. See also: :py:mod:`~data_base._module_versions.Versions_cached.get_module_versions`.
@@ -285,7 +285,7 @@ class ISFDataBase:
         keys_in_db_without_metadata = set(self.keys()).difference(set(self.metadata.keys()))
         for key_str in keys_in_db_without_metadata:
             key = self._convert_key_to_path(key_str)
-            logger.info("Updating metadata for key {key}".format(key = key.name))
+            logger.debug("Updating metadata for key {key}".format(key = key.name))
             try:
                 dumper = get_dumper_string_by_savedir(str(key))
             except EnvironmentError as e:
@@ -418,6 +418,7 @@ class ISFDataBase:
             ValueError: If the key is over 100 characters long.
             ValueError: If the key contains characters that are not allowed (only numeric or latin alphabetic characters, "-" and "_" are allowed)
         """
+        MAX_KEY_LEN = 120
         assert isinstance(key_str_tuple, str) or isinstance(key_str_tuple, tuple), "Any key must be a string or tuple of strings. {} is type {}".format(key_str_tuple, type(key_str_tuple))
         if isinstance(key_str_tuple, str):
             key_str_tuple = key_str_tuple,  # convert to tuple
@@ -425,8 +426,8 @@ class ISFDataBase:
 
         # Check if individual characters are allowed
         for subkey in key_str_tuple:
-            if len(subkey) > 100:
-                raise ValueError('keys must be shorter than 100 characters')
+            if len(subkey) > MAX_KEY_LEN:
+                raise ValueError('keys must be shorter than {} characters, but the following is {} long: {}'.format(MAX_KEY_LEN, len(subkey), subkey))
             allowed_characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_.1234567890'
             for c in subkey:
                 if not c in allowed_characters:
@@ -480,7 +481,7 @@ class ISFDataBase:
 
         out = {'dumper': dumper_string,
                'time': tuple(datetime.datetime.utcnow().timetuple()), 
-               'conda_list': VC.get_conda_list(),
+               'module_list': VC.get_module_list(),
                'module_versions': make_all_str(VC.get_module_versions()),
                'history': VC.get_history(),
                'hostname': VC.get_hostname(),
@@ -1010,7 +1011,7 @@ class ISFDataBase:
         """
         return self._get_str()  # print with default depth and max_lines
 
-    def ls(self, depth=0, max_depth=2, max_lines=20, all_files=False, max_lines_per_key=3):
+    def ls(self, depth=0, max_depth=2, max_lines=20, all_files=False, max_lines_per_key=3, color=True):
         """Prints out the content of the database in a tree structure.
         
         In addition to simply printing it out, this method allows to specify how the tree should look.
@@ -1026,9 +1027,9 @@ class ISFDataBase:
         """
         print(self._get_str(
             depth=depth, max_depth=max_depth, max_lines=max_lines, 
-            all_files=all_files, max_lines_per_key=max_lines_per_key))
+            all_files=all_files, max_lines_per_key=max_lines_per_key, color=color))
     
-    def _get_str(self, depth=0, max_depth=2, max_lines=20, all_files=False, max_lines_per_key=3):
+    def _get_str(self, depth=0, max_depth=2, max_lines=20, all_files=False, max_lines_per_key=3, color=True):
         """Fetches a string representation for this db in a tree structure.
         
         This is internal API and should never be called directly.
@@ -1047,10 +1048,17 @@ class ISFDataBase:
         str_.append("Located at {}".format(self._basedir))
         # str_.append("{1}DataBases{0} | {2}Directories{0} | {3}Keys{0}".format(
         #     bcolors.ENDC, bcolors.OKGREEN, bcolors.WARNING, bcolors.OKCYAN) )
-        str_.append(colorize(self._basedir.name, bcolors.OKGREEN))
+        if color:
+            str_.append(colorize_str(self._basedir.name, bcolors.OKGREEN))
+        else:
+            str_.append(self._basedir.name)
         lines = calc_recursive_filetree(
             self, Path(self._basedir), 
-            depth=depth, max_depth=max_depth, max_lines_per_key=max_lines_per_key, all_files=all_files, max_lines=max_lines)
+            depth=depth, max_depth=max_depth, 
+            max_lines_per_key=max_lines_per_key, 
+            all_files=all_files, 
+            max_lines=max_lines,
+            colorize=color)
         for line in lines:
             str_.append(line)
         return "\n".join(str_)

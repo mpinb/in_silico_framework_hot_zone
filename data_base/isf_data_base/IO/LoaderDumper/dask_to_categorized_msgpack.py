@@ -1,27 +1,21 @@
-'''
-Save and load dask dataframes to msgpack files.
+'''Save and load dask dataframes to msgpack with categorical columns.
 
 This dumper is designed for dataframes with the following properties:
 
-- the index is str
+- The index is str
 - The columns have a lot of repetitive values, so they can be grouped.
  
-If the number of partitions is very big (>10000), it will repartition the 
-dataframe to 5000 partitions. Loading such a dataframe is normaly possible
-within 1 second.
+If the number of partitions is very large (>10000), it will repartition the 
+dataframe to 5000 partitions. 
+Loading such a dataframe is normaly possible within 1 second.
 
 Before saving, all str-columns will be converted to ``pd.Categorical``s
 In each respective partition, if the part of unique values in the respective column is <= 20%. The original datatype
 will be restored if the dataframe is loaded. 
-This therefore only serves as optimization to increase loading speed and
-reduce network traffic for suitable dataframes. Suitable dataframes are for example the synapse_activation dataframe.
-Limitations: This is not tested to work well with dataframes that natively contain categoricals
+This therefore only serves as optimization to increase loading speed and reduce network traffic for suitable dataframes. 
+Suitable dataframes are for example the :ref:`syn_activations_format` dataframe.
 
-.. deprecated:: 0.2.0
-   The pandas-msgpack format is set to be deprecated in the future.
-   Please consider using parquet instead.
-
-:skip-doc:
+This uses a fork of the original `pandas_to_msgpack` package, `available on PyPI <https://pypi.org/project/isf-pandas-msgpack/>`_
 '''
 
 import os, yaml
@@ -35,7 +29,7 @@ import glob
 from data_base.utils import chunkIt, myrepartition, convertible_to_int 
 import six
 import numpy as np
-from pandas_msgpack import to_msgpack, read_msgpack
+from isf_pandas_msgpack import to_msgpack, read_msgpack
 import json
 from .utils import save_object_meta
 
@@ -193,7 +187,7 @@ def my_dask_writer(
         path,
         optimize_graph=False,
         categorize=True,
-        client=None):  #get = compatibility.multiprocessing_scheduler,
+        client=None):
     ''' Very simple method to store a dask dataframe to a bunch of files.
     There was a lot of frustration with the respective dask method, which has some weired hard-to-reproduce issues, e.g. it sometimes 
     takes all the ram (512GB!) or takes a very long time to "optimize" / merge the graph.
@@ -210,7 +204,7 @@ def my_dask_writer(
         dask_options = dask.context._globals
         dask.config.set(callbacks=set())  #disable progress bars etc.
         for number in numbers:
-            pdf = ddf.get_partition(number).compute(scheduler="synchronous")  #get = compatibility.synchronous_scheduler
+            pdf = ddf.get_partition(number).compute(scheduler="synchronous")
             fun(pdf, path, number, ndigits)
         dask.context._globals = dask_options
 
@@ -336,10 +330,6 @@ def dump(
         RuntimeError: _description_
     """
     import os
-    if not "ISF_IS_TESTING" in os.environ:
-        # Module was not called from within the test suite
-        raise RuntimeError(
-            'pandas-msgpack is not supported anymore in the data_base')
     if client is None:
         assert get is not None
         client = get
