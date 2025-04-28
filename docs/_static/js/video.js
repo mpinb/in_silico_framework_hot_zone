@@ -1,8 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const videoPlayer = document.getElementById("video-player");
-    const video = videoPlayer.getElementsByTagName("video")[0];
     const videoSource = document.getElementById("video-source");
-    const htmlElement = document.documentElement; // The <html> element
+    const htmlElement = document.documentElement; 
 
     function updateVideoSource() {
         const theme = htmlElement.lastChild.getAttribute("data-md-color-scheme");
@@ -13,26 +11,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
         videoSource.parentElement.load(); // Reload the video with the new source
     }
-
-
-    // Play video after the first user interaction
-    function enableAutoplayOnInteraction() {
-        videoSource.parentElement.load(); // Reload the video
-        video.muted = true; // Mute the video to allow autoplay
-        video.play().catch((error) => {
-            console.warn("Autoplay failed after user interaction:", error);
-        });
-
-        // Remove event listeners after the first interaction
-        document.removeEventListener("click", enableAutoplayOnInteraction);
-        document.removeEventListener("keydown", enableAutoplayOnInteraction);
-        document.removeEventListener("mousemove", enableAutoplayOnInteraction);
-    }
-
-    // Add event listeners for user interaction
-    document.addEventListener("click", enableAutoplayOnInteraction);
-    document.addEventListener("keydown", enableAutoplayOnInteraction);
-    document.addEventListener("mousemove", enableAutoplayOnInteraction);
 
     // Initial check
     updateVideoSource();

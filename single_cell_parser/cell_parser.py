@@ -831,7 +831,7 @@ class CellParser(object):
                 seg.g_pas = seg.g_pas * F
 
     def _add_spines_ar(self, label, spineParam):
-        r'''Adds passive spines to anomalously rectifying membrane :cite:`Waters_Helmchen_2006`.
+        '''Adds passive spines to anomalously rectifying membrane :cite:`Waters_Helmchen_2006`.
         
         Spines are added according to spine parameters for individual (dendritic) structures
         by scaling :math:`C_m` and :math:`R_{N,0}` by :math:`F` and :math:`1/F` respectively, where
@@ -953,9 +953,9 @@ class CellParser(object):
         '''Determine the number of segments for each section according to the d-lambda rule.
 
         Args:
-            f (float, optional): frequency used for determining discretization. Default is 100.0 Hz.
-            full (bool, optional): Whether or not to use full spatial discretization (one segment per morphology point). Default is False.
-            max_seg_length (float, optional): Maximum segment length. Default is None.
+            f (float, optional): frequency used for determining discretization. Default is :math:`100.0 Hz`.
+            full (bool, optional): Whether or not to use full spatial discretization (one segment per morphology point). Default is ``False``.
+            max_seg_length (float, optional): Maximum segment length. Default is ``None``.
             
         Note:
             The d-lambda rule predicates the spatial grid on the AC length constant :math:`\\lambda_f`

@@ -91,7 +91,7 @@ def rasterplot2_pdf_grouped(
         ax (matplotlib.axes.Axes, optional):
             An optional Matplotlib Axes object to plot on. If not provided, a new figure and axes are created.
         xlim (tuple, optional):
-            The x-axis limits for the plot. Default is None.
+            The x-axis limits for the plot. Default is ``None``.
         x_offset (float, optional):
             An offset to apply to the x-values (event times). Default is 0.
         color (str, optional):
@@ -160,13 +160,13 @@ def rasterplot(
         ax (matplotlib.axes.Axes, optional):
             An optional Matplotlib Axes object to plot on. If not provided, a new figure and axes are created.
         label (str, optional):
-            The label for the plot. Default is None.
+            The label for the plot. Default is ``None``.
         groupby_attribute (str, optional):
-            The column name in the DataFrame to group by. Default is None.
+            The column name in the DataFrame to group by. Default is ``None``.
         tlim (tuple, optional):
-            The x-axis limits for the plot. Default is None.
+            The x-axis limits for the plot. Default is ``None``.
         reset_index (bool, optional):
-            If True, reset the index of the DataFrame. Default is True.
+            If True, reset the index of the DataFrame. Default is ``True``.
 
     Returns:
         matplotlib.pyplot.Figure: Figure object containing the rasterplot. 

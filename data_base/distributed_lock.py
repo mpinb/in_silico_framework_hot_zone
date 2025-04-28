@@ -188,7 +188,8 @@ class InterProcessLockNoWritePermission:
         path (str): path to check.
 
     See also:
-        [Fasteners InterProcessLock](https://fasteners.readthedocs.io/en/latest/guide/inter_process/)
+    
+        `Fasteners InterProcessLock <https://fasteners.readthedocs.io/en/latest/guide/inter_process/>`_
 
     Attributes:
         lock (:py:class:`~fasteners.InterProcessLock` or None): The lock object if the user has write permissions, None otherwise.

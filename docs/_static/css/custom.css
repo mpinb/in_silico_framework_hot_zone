@@ -19,7 +19,7 @@ span.summarylabel {
   }
 }
 
-/* until nbpshinx merges my PR: https://github.com/spatialaudio/nbsphinx/pull/831 */
+/* force-scroll output longer than 600px in notebooks - see also: https://github.com/spatialaudio/nbsphinx/pull/831 */
 div.nboutput.container div.output_area:has(pre) {
     max-height: 600px;
     scrollbar-width: thin;
@@ -30,3 +30,10 @@ div.nbsphinx-gallery {
     grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
 }
 
+/* 
+sphinx-immaterial: hide integreated toc, since it is redundant with any nested items. 
+this is a quick and dirty patch of the issue, but it works for now.
+*/
+.md-nav__item--active.md-nav__current-nested + .md-nav__item--active.md-nav__current-toc {
+    display: none;
+}

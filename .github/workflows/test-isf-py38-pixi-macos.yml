@@ -8,6 +8,7 @@ on:
       - .gitignore
     branches:
       - develop
+      - master
   push:
     branches:
       - master

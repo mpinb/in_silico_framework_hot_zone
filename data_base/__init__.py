@@ -1,5 +1,5 @@
 """
-Efficient, reproducable and flexible database with dictionary-like API. 
+Efficient, reproducible and flexible database with dictionary-like API. 
 This package provides efficient and scalable methods to store and access simulation results at a terrabyte scale.
 Each data base entry contains metadata, indicating when the data was written, and the exact version of the source code that was used at this timepoint.
 A wide variety of input data and output file formats are supported (see :py:mod:`data_base.IO.LoaderDumper`), including:

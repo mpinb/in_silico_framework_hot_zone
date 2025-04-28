@@ -513,7 +513,7 @@ def set_hot_zone(cell_param, min_=None, max_=None, outsidescale_sections=None):
         
     Note:
         This method is specific for a L5PT.
-        For more information about the hot zone, refer to :cite:t:`Guest_Bast_Narayanan_Oberlaender`
+        For more information about the hot zone, refer to :cite:t:`Bast_Guest_Fruengel_Narayanan_de_Kock_Oberlaender_2023`
     """
     hotzone_params = ['ApicalDendrite.Ca_HVA.begin', 'ApicalDendrite.Ca_HVA.end', 
                       'ApicalDendrite.Ca_LVAst.begin', 'ApicalDendrite.Ca_LVAst.end']

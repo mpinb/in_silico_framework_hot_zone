@@ -99,7 +99,7 @@ def amFileWithRadiusAndUncertainty(inpath, outpath, pointsWithRad,
             f.write(str(rel_ucr[1]) + '\n')
 
 
-def write_spacial_graph_with_error(inpath, outpath, radii):
+def write_spatial_graph_with_error(inpath, outpath, radii):
     """
     This function write the radii of specialGraphFile in the
     outputFIile path provided as parameter.
@@ -132,7 +132,7 @@ def multipleAmFilesWithRadiusAndUncertainty(inputFolderPath, outputFolderPath,
                                             amFilesWithError):
     """
     write the pints with their radii and uncertainties for bunch of amfiles.
-    if you want to only write one amFile you can use write_spacial_graph_with_error() function.
+    if you want to only write one amFile you can use write_spatial_graph_with_error() function.
 
     """
     points = []
@@ -142,9 +142,9 @@ def multipleAmFilesWithRadiusAndUncertainty(inputFolderPath, outputFolderPath,
         for specialGraphFile in os.listdir(inputFolderPath):
             if specialGraphFile.endswith(".am"):
 
-                spacialGraphIndicator = re.findall(r'[sS]\d+',
+                spatialGraphIndicator = re.findall(r'[sS]\d+',
                                                    specialGraphFile)[0]
-                am_file = spacialGraphIndicator + "_with_r" + ".am"
+                am_file = spatialGraphIndicator + "_with_r" + ".am"
 
                 points = amFilesWithError[str(am_file)]
                 pointsWithRad = [point[0:4] for point in points]
@@ -153,7 +153,7 @@ def multipleAmFilesWithRadiusAndUncertainty(inputFolderPath, outputFolderPath,
                 inputFile = inputFolderPath + str(specialGraphFile)
                 outputFile = outputFolderPath + str(specialGraphFile)
 
-                # write_spacial_graph_with_error(inputFile, outputFile, ucr)
+                # write_spatial_graph_with_error(inputFile, outputFile, ucr)
                 amFileWithRadiusAndUncertainty(inputFile, outputFile,
                                                pointsWithRad, ucrs)
     else:
