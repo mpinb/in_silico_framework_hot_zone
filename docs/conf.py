@@ -222,7 +222,7 @@ html_theme_options = {
             "media": "(prefers-color-scheme: dark)",
             "scheme": "slate",
             "primary": "indigo",
-            "accent": "orange",
+            "accent": "pink",
             "toggle": {
                 "icon": "material/toggle-switch",
                 "name": "Switch to light mode",
