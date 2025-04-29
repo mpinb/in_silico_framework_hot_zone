@@ -730,7 +730,7 @@ class PySection(nrn.Section):
     def get_range_conductances(self, range_vars, density=True):
         """Get the transmembrane conductance of each range variable separately.
         
-        Given a nested dictionary of range variables, this function computes the cunductance of each variable in each segment.
+        Given a nested dictionary of range variables, this function computes the conductance of each variable in each segment.
         The conductance for each segment is not necessarily equal to the :ref:`cell_parameters_format`, but may be spatially distributed
         according to a non-uniform distribution. 
         This method explicitly fetches the conductance from the NEURON sections after spatial distribution.
