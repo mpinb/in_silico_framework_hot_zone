@@ -151,7 +151,6 @@ root_logger.addHandler(logger_stream_handler)
 
 # Filters
 logger_stream_handler.addFilter(LastPartFilter())
-logger_stream_handler.addFilter(RecordFilter('pandas_msgpack'))  # filter out warnings from pandas-msgpack
 
 # Add custom logging levels
 add_logging_level("ATTENTION", logging.WARNING - 5)
