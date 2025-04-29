@@ -6,11 +6,7 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-import os
-import sys
-
-import toml
-
+import os, sys, toml
 project_root = os.path.join(os.path.abspath(os.pardir))
 sys.path.insert(0, project_root)
 
@@ -34,8 +30,9 @@ with open(pyproject_path, "r") as f:
     release = pyproject_data["project"]["version"]
     version = release
 project = "ISF"
-copyright = "ISF Copyright (C) 2025 Max Planck Institute for Neurobiology of Behavior - CAESAR"
+copyright = "2025 Max Planck Institute for Neurobiology of Behavior - CAESAR"
 author = "Arco Bast, Robert Egger, Bjorge Meulemeester, Maria Royo Cano, Rieke Fruengel, Matt Keaton, Omar Valerio"
+
 
 
 # copy over tutorials and convert links to python files to sphinx documentation directives
@@ -207,6 +204,11 @@ html_logo = "_static/_images/isf-logo-white.png"
 # This is done to ensure the videos match the background color, even after updating the theme.
 html_theme_options = {
     "repo_url": "https://github.com/mpinb/in_silico_framework",
+    # "version_dropdown": True,
+    # "version_info" : [
+    #     {"version": "v0.5.0-beta", "title": "0.5.0-beta", "aliases": ["latest"]},
+    #     {"version": "v0.4.0-beta", "title": "0.4.0-beta", "aliases": []}
+    # ],
     "palette": [
         {
             "media": "(prefers-color-scheme: light)",
@@ -243,7 +245,7 @@ html_theme_options = {
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
-# html_title = None
+html_title = "In Silico Framework"
 
 # A shorter title for the navigation bar.  Default is the same as html_title.
 # html_short_title = None
