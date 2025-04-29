@@ -1,4 +1,3 @@
-
 GNU General Public License
 ==========================
 

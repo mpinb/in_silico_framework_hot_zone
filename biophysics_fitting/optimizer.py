@@ -1,3 +1,19 @@
+# In Silico Framework
+# Copyright (C) 2025  Max Planck Institute for Neurobiology of Behavior - CAESAR
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+# The full license text is also available in the LICENSE file in the root of this repository.
 """Multi-objective optimization algorithm.
 
 This code has been adapted from `BluePyOpt <https://github.com/BlueBrain/BluePyOpt>`_ :cite:`Van_Geit_Gevaert_Chindemi_Roessert_Courcol_Muller_Schuermann_Segev_Markram_2016`
@@ -283,7 +299,7 @@ class my_ibea_evaluator(bpop.evaluators.Evaluator):
 
 ############################################################
 # The code below is taken from bluepyopt.deapext.algorithms.py
-# it is changed such that the checkpoint only saves the population, but not the history
+# it is changed by @abast on 11/11/2018 such that the checkpoint only saves the population, but not the history
 # and hall of fame, as this can be easily reconstructed from the data saved by mymap
 
 # Copyright (c) 2016, EPFL/Blue Brain Project

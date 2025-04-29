@@ -32,15 +32,13 @@ Note:
     limitations under the License.
     
 Note:
-    The original code has been modified to use cloudpickle instead of pickle for serialization.
-    Author: abast
-    Date: 2016-09-27
+    The original code has been modified by @abast (2016-09-27) to use cloudpickle instead of pickle for serialization.
 
 Note:
     This code was inspired by:
 
-     - http://code.activestate.com/recipes/576638-draft-for-an-sqlite3-based-dbm/
-     - http://code.activestate.com/recipes/526618/
+    - http://code.activestate.com/recipes/576638-draft-for-an-sqlite3-based-dbm/
+    - http://code.activestate.com/recipes/526618/
 
 """
 from __future__ import absolute_import
