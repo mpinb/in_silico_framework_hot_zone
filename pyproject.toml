@@ -152,6 +152,7 @@ test_mdb = {cmd = [
 
 download_bc_model = {cmd = ["./download_bc_model.sh"], description = "Download ISF's barrel cortex model from Harvard Datverse", cwd="installer"}
 
+
 [tool.pixi.feature.docs.tasks]
 # Removing tutorials from doctrees and build is necessary to avoid slow recursion issues when building repeatedly
 remove_tutorial_content = {cmd = [
