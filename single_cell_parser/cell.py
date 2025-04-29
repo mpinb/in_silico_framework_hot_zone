@@ -747,7 +747,7 @@ class PySection(nrn.Section):
             range_vars (dict): 
                 A nested dictionary of range variables.
                 The keys must match the segment's nested attributes.
-                It is possible to simply pass subsections of the :ref:`cell_prameters_format` here, e.g. ``neup[sec.label]["mechanisms"]["range"]``
+                It is possible to simply pass subsections of the :ref:`cell_parameters_format` here, e.g. ``neup[sec.label]["mechanisms"]["range"]``
             density (bool, optional): 
                 If ``True`` (default), the conductance is returned in units of conductance density: :math:`S / cm ^2`.
                 If ``False``, the total amount of conductivity is returned for each segment in units :math:`nS`
