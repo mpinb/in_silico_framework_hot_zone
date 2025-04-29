@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 # The full license text is also available in the LICENSE file in the root of this repository.
-'''Save and load dask dataframes to msgpack with categorical columns.
+r"""Save and load dask dataframes to msgpack with categorical columns.
 
 This dumper is designed for dataframes with the following properties:
 
@@ -29,10 +29,10 @@ Before saving, all str-columns will be converted to ``pd.Categorical``s
 In each respective partition, if the part of unique values in the respective column is <= 20%. The original datatype
 will be restored if the dataframe is loaded. 
 This therefore only serves as optimization to increase loading speed and reduce network traffic for suitable dataframes. 
-Suitable dataframes are for example the :ref:`syn_activations_format` dataframe.
+Suitable dataframes are for example the :ref:`syn_activation_format` dataframe.
 
 This uses a fork of the original `pandas_to_msgpack` package, `available on PyPI <https://pypi.org/project/isf-pandas-msgpack/>`_
-'''
+"""
 
 import os, yaml
 import cloudpickle
