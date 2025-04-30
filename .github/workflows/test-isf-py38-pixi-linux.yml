@@ -18,6 +18,32 @@ jobs:
   test:
     name: Test pixi linux
     runs-on: ['ibs3005', 'self-hosted']
+    services:
+      dask-scheduler:
+        image: daskdev/dask
+        ports:
+          - 8786:8786  # Dask scheduler port
+          - 8787:8787  # Dask dashboard port
+        options: >-
+          --name dask-scheduler
+          --detach
+          --rm
+          dask-scheduler
+          --port=8786
+          --bokeh-port=8787
+          --host=0.0.0.0
+      dask-worker:
+        image: daskdev/dask
+        options: >-
+          --name dask-worker
+          --detach
+          --rm
+          dask-worker tcp://dask-scheduler:8786
+          --nthreads 1
+          --nprocs 10
+          --memory-limit=100e15
+          --local-directory="/tmp"
+
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -29,37 +55,19 @@ jobs:
           auth-host: prefix.dev
           auth-token: ${{ secrets.PREFIX_DEV_TOKEN }}
           manifest-path: pyproject.toml
-      - name: Preliminary setup
-        run: |
-          echo "------------ Preliminary setup for tests -------------"
-          echo "Creating tests/logs/ directory..."
-          mkdir -p ./tests/logs/
 
-          echo "------------ Configuring Dask -------------"
-          port_number=38786
-          bokeh_port=38787
-          echo "Launching Dask server"
-          echo "Using port $port_number and bokeh port $bokeh_port"
-          export DASK_CONFIG=./config/dask_config.yml
+      - name: Capture Dask Scheduler Logs
+        run: docker logs dask-scheduler > ./tests/logs/dask_scheduler_${{ github.run_id }}.log 2>&1
 
-          unset DISPLAY
-          if [ ! -d "$HOME/tmp" ]; then
-            mkdir $HOME/tmp
-          fi
-          export TMPDIR=$HOME/tmp
-
-      - name: Launch Dask scheduler and workers
-        run: |
-          (pixi r dask-scheduler --port=38786 --bokeh-port=38787 --host=localhost > ./tests/logs/dask_scheduler_${{ github.run_id }}.log 2>&1) & \
-          (pixi r dask-worker localhost:38786 --nthreads 1 --nprocs 10 --memory-limit=100e15 --local-directory="." > ./tests/logs/dask_workers_${{ github.run_id }}.log 2>&1) &
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Capture Dask Worker Logs
+        run: docker logs dask-worker > ./tests/logs/dask_worker_${{ github.run_id }}.log 2>&1
 
       - name: Test ISF
         run: |
           pixi r pytest -n 5 -rsx -vv --color=yes --durations=15 --cov-report xml:tests/logs/report_py38.xml --cov=. --dask_server_port 38786 tests || exit 1
-        env:
+        env: 
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Test ModelDataBase backwards compatibility
         run: |
           export ISF_USE_MDB=1
@@ -67,6 +75,7 @@ jobs:
           unset ISF_USE_MDB
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Save test logs
         uses: actions/upload-artifact@v4
         if: ${{ always() }} 
