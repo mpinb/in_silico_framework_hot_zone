@@ -20,12 +20,11 @@ jobs:
     runs-on: ['ibs3005', 'self-hosted']
     services:
       dask-scheduler:
-        image: ghcr.io/dask/dask
+        image: daskdev/dask
         ports:
           - 8786:8786  # Dask scheduler port
           - 8787:8787  # Dask dashboard port
         options: >-
-          --name dask-scheduler
           --rm
           dask-scheduler
           --port=8786
@@ -34,7 +33,6 @@ jobs:
       dask-worker:
         image: daskdev/dask
         options: >-
-          --name dask-worker
           --rm
           dask-worker tcp://dask-scheduler:8786
           --nthreads 1
