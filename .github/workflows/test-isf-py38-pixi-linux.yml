@@ -18,25 +18,6 @@ jobs:
   test:
     name: Test pixi linux
     runs-on: ['ibs3005', 'self-hosted']
-    services:
-      dask-scheduler:
-        image: daskdev/dask
-        ports:
-          - 8786:8786  # Dask scheduler port
-          - 8787:8787  # Dask dashboard port
-        options: >-
-          dask-scheduler
-          --port=8786
-          --bokeh-port=8787
-          --host=0.0.0.0
-      dask-worker:
-        image: daskdev/dask
-        options: >-
-          dask-worker tcp://dask-scheduler:8786
-          --nthreads 1
-          --nprocs 10
-          --memory-limit=100e15
-          --local-directory="/tmp"
 
     steps:
       - name: Checkout
@@ -50,22 +31,49 @@ jobs:
           auth-token: ${{ secrets.PREFIX_DEV_TOKEN }}
           manifest-path: pyproject.toml
 
-      - name: Capture Dask Scheduler Logs
-        run: docker logs dask-scheduler > ./tests/logs/dask_scheduler_${{ github.run_id }}.log 2>&1
+      - name: Preliminary setup
+        run: |
+          echo "------------ Preliminary setup for tests -------------"
+          echo "Creating tests/logs/ directory..."
+          mkdir -p ./tests/logs/
 
-      - name: Capture Dask Worker Logs
-        run: docker logs dask-worker > ./tests/logs/dask_worker_${{ github.run_id }}.log 2>&1
+          echo "------------ Configuring Dask -------------"
+          export DASK_CONFIG=./config/dask_config.yml
+
+          unset DISPLAY
+          if [ ! -d "$HOME/tmp" ]; then
+            mkdir $HOME/tmp
+          fi
+          export TMPDIR=$HOME/tmp
+
+      - name: Launch Dask scheduler and workers
+        run: |
+          echo "Launching Dask scheduler..."
+          (pixi r dask-scheduler --port=8786 --bokeh-port=8787 --host=localhost > ./tests/logs/dask_scheduler_${{ github.run_id }}.log 2>&1) &
+
+          echo "Launching Dask workers..."
+          (pixi r dask-worker localhost:8786 --nthreads 1 --nprocs 10 --memory-limit=100e15 --local-directory="." > ./tests/logs/dask_workers_${{ github.run_id }}.log 2>&1) &
+
+          echo "Waiting for Dask scheduler to be ready..."
+          for i in {1..30}; do
+            if nc -z localhost 8786; then
+              echo "Dask scheduler is ready!"
+              break
+            fi
+            echo "Waiting for Dask scheduler..."
+            sleep 2
+          done
 
       - name: Test ISF
         run: |
-          pixi r pytest -n 5 -rsx -vv --color=yes --durations=15 --cov-report xml:tests/logs/report_py38.xml --cov=. --dask_server_port 38786 tests || exit 1
+          pixi r pytest -n 5 -rsx -vv --color=yes --durations=15 --cov-report xml:tests/logs/report_py38.xml --cov=. --dask_server_port 8786 tests || exit 1
         env: 
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Test ModelDataBase backwards compatibility
         run: |
           export ISF_USE_MDB=1
-          pixi r pytest -n 5 -rsx -vv --color=yes --durations=15 --dask_server_port 38786 tests/test_data_base/
+          pixi r pytest -n 5 -rsx -vv --color=yes --durations=15 --dask_server_port 8786 tests/test_data_base/
           unset ISF_USE_MDB
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
