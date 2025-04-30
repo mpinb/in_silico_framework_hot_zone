@@ -26,7 +26,6 @@ jobs:
           - 8787:8787  # Dask dashboard port
         options: >-
           --name dask-scheduler
-          --detach
           --rm
           dask-scheduler
           --port=8786
@@ -36,7 +35,6 @@ jobs:
         image: daskdev/dask
         options: >-
           --name dask-worker
-          --detach
           --rm
           dask-worker tcp://dask-scheduler:8786
           --nthreads 1
