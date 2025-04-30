@@ -25,7 +25,6 @@ jobs:
           - 8786:8786  # Dask scheduler port
           - 8787:8787  # Dask dashboard port
         options: >-
-          --rm
           dask-scheduler
           --port=8786
           --bokeh-port=8787
@@ -33,7 +32,6 @@ jobs:
       dask-worker:
         image: daskdev/dask
         options: >-
-          --rm
           dask-worker tcp://dask-scheduler:8786
           --nthreads 1
           --nprocs 10
