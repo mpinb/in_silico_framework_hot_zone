@@ -459,3 +459,9 @@ class ParameterSet:
         Return the keys of the ParameterSet.
         """
         return self._data.keys()
+
+    def values(self):
+        """
+        Return the values of the ParameterSet.
+        """
+        return self._data.values()
