@@ -73,21 +73,22 @@ class CellParser(object):
         self.membraneParams = {}
         self.cell_modify_functions_applied = False
 
-    def spatialgraph_to_cell(self, parameters, axon=False, scaleFunc=None):
+    def spatialgraph_to_cell(self, parameters=None, axon=False, scaleFunc=None):
         '''Create a :py:class:`~single_cell_parser.cell.Cell` object from an AMIRA spatial graph in :ref:`hoc_file_format` format.
         
         Reads cell morphology from Amira hoc file and sets up PySections and Cell object.
         
         Args:
-            parameters (:py:class:`~sumatra.parameters.NTParameterSet`): Neuron biophysical parameters, read from a :ref:`cell_parameters_format` file.
             axon (bool): Whether or not to add an axon initial segment (AIS). AIS creation is according to :cite:t:`Hay_Schuermann_Markram_Segev_2013`.
-            scaleFunc (callable, optional): Optional function object that scales dendritic diameters.
-                **Deprecated**: This argument is deprecated and will be removed in a future version.
         
         .. deprecated:: 0.1.0
             The `scaleFunc` argument is deprecated and will be removed in a future version.
-            To ensure reproducability, scaleFunc should be specified in the parameters, as 
+            To ensure simulation reproducability, scaleFunc should be specified in the parameters, as 
             described in :py:mod:`~single_cell_parser.cell_modify_funs`
+
+        .. deprecated:: 0.1.0
+            The ``parameters`` keyword is optional for this method. It was previously used to check for spines.
+            The :ref:`cell_parameters_format` file is however used to apply biophysical mechanisms in :py:meth:`set_up_biophysics`.
         
         '''
         edgeList = reader.read_hoc_file(self.hoc_path)
@@ -119,6 +120,7 @@ class CellParser(object):
         try:
             if 'rieke_spines' in list(
                     parameters.spatialgraph_modify_functions.keys()):
+                logger.warning("DeprecationWarning: The rieke_spines function is deprecated.")
                 self.rieke_spines(parameters)
             else:
                 logger.info("No spines are being added...")
