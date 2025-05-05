@@ -72,7 +72,7 @@ class TestManyLines:
                 'manylines_grouped_dask.png'))
         plt.close()
 
-    @pytest.mark.skipif(sys.platform == "darwin", reason="GUI can't be created in a non-main thread")
+    @pytest.mark.skipif(sys.platform == "darwin", reason="GUI can't be created in a non-main thread on OSX")
     def test_manylines_no_group_returnPixelObject(self, client):
         df = self.df.drop('attribute', axis=1)
         po = manylines(
@@ -88,6 +88,7 @@ class TestManyLines:
                 os.path.join(self.tempdir, 'manylines_no_group_po_pandas.png'))
         plt.close()
 
+    @pytest.mark.skipif(sys.platform == "darwin", reason="GUI can't be created in a non-main thread on OSX")
     def test_manylines_grouped_returnPixelObject(self, client):
         df = self.df
         ddf = dd.from_pandas(df, npartitions=3)
