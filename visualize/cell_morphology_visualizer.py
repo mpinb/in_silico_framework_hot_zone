@@ -179,7 +179,9 @@ class CMVDataParser:
     def _has_simulation_data(self):
         """Test if the cell object has been simulated by checking if it has voltage data at the soma.
         """
-        return len(self.soma.recVList[0]) > 0
+        if hasattr(self.soma, "recVList"):
+            return (len(self.soma.recVList) > 0 and len(self.soma.recVList[0]) > 0)
+        return False
 
     def _init_simulation_data(self):
         """Initializes the variables associated with simulation data. Does not fill these variables until they actually need to be calculated.
