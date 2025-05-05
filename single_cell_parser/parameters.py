@@ -169,3 +169,13 @@ class ParameterSet(MutableMapping):
         Set the state of the ParameterSet after unpickling.
         """
         self._data = {key: self._wrap(value) for key, value in state.items()}
+
+    def save(self, filename):
+        """
+        Save the ParameterSet to a file in JSON format.
+
+        Args:
+            filename (str): The name of the file to save to.
+        """
+        with open(filename, 'w') as f:
+            json.dump(self.to_dict(), f, indent=4)
