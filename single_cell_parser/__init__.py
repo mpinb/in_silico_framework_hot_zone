@@ -88,7 +88,7 @@ __credits__ = ["Robert Egger", "Arco Bast"]
 # commonly used functions required for running single neuron simulations
 # ------------------------------------------------------------------------------
 def build_parameters(filename, fast_but_security_risk=True):
-    """Read in a parameter file and return a NTParameterSet object.
+    """Read in a :ref:`param_file_format` file and return a ParameterSet object.
 
     Args:
         filename (str): path to the parameter file
@@ -97,19 +97,24 @@ def build_parameters(filename, fast_but_security_risk=True):
     Returns:
         NTParameterSet: The parameter file as a NTParameterSet object.
     """
-    from data_base.dbopen import resolve_modular_db_path
-
     filename = resolve_modular_db_path(filename)
+    with dbopen(filename, "r") as f:
+        content = f.read()
 
-    if fast_but_security_risk:
-        # taking advantage of the fact that sumatra NTParameterSet produces
-        # valid python code
-        with dbopen(filename, "r") as f:
-            dummy = eval(f.read())
-        return NTParameterSet(dummy)
-    else:
-        # slow, but does not call the evil 'eval'
-        return build_parameters_sumatra(filename)
+    # Replace single quotes with double quotes
+    content = content.replace("'", '"')
+
+    # Remove trailing commas using regex
+    content = re.sub(r",(\s*[}\]])", r"\1", content)
+
+    # Replace Python-style tuples (x, y) with JSON arrays [x, y]
+    content = re.sub(r"\(([^()]+)\)", r"[\1]", content)
+    
+    try:
+        data = json.loads(content)
+    except json.JSONDecodeError as e:
+        raise ValueError(f"Error decoding .param file with JSON parsing: {e}")
+    return ParameterSet(data)
 
 
 def load_NMODL_parameters(parameters):
