@@ -40,14 +40,13 @@ logger = logging.getLogger("ISF").getChild(__name__)
 import warnings
 
 # from sim_control import SimControl
-import neuron
-import numpy as np
+import neuron, json, re
 import tables  # so florida servers have no problem with neuron
 from sumatra.parameters import NTParameterSet
 from sumatra.parameters import build_parameters as build_parameters_sumatra
 
 from config.cell_types import EXCITATORY
-from data_base.dbopen import dbopen
+from data_base.dbopen import dbopen, resolve_modular_db_path
 
 from . import network_param_modify_functions
 from .cell import Cell, PointCell, PySection, SynParameterChanger
@@ -344,3 +343,119 @@ def spines_update_network_paramfile(
         )
     network_param.save(new_network_paramfile)
     logger.info("Success: network.param file updated")
+
+
+class ParameterSet:
+    """
+    A wrapper class for dictionaries that allows attribute-style access to keys.
+    Works recursively for nested dictionaries.
+
+    This class is inspired by the `NTParameterSet` class from the `sumatra` package.
+
+    Example::
+    
+        >>> params = ParameterSet({
+        ...     'key1': 'value1',
+        ...     'key2': {
+        ...         'subkey1': 'subvalue1',
+        ...         'subkey2': 'subvalue2'
+        ...     },
+        ...     'key3': ['item1', 'item2']
+        ... })
+        >>> params.key1
+        'value1'
+        >>> params.key2.subkey1
+        'subvalue1'
+        >>> params.key3[0]
+        'item1'
+        
+    """
+
+    def __init__(self, data):
+        """
+        Args:
+            data (dict): The dictionary to wrap.
+
+        Raises:
+            TypeError: If the input data is not a dictionary.
+        """
+        if not isinstance(data, dict):
+            raise TypeError("ParameterSet can only wrap dictionaries.")
+        self._data = {key: self._wrap(value) for key, value in data.items()}
+
+    def _wrap(self, value):
+        """
+        Recursively wrap dictionaries as ParameterSet objects.
+        """
+        if isinstance(value, dict):
+            return ParameterSet(value)
+        elif isinstance(value, list):
+            # Wrap dictionaries inside lists
+            return [self._wrap(item) for item in value]
+        return value
+
+    def __getattr__(self, name):
+        """
+        Allow attribute-style access to dictionary keys.
+        """
+        if name in self._data:
+            return self._data[name]
+        raise AttributeError(f"'ParameterSet' object has no attribute '{name}'")
+
+    def __setattr__(self, name, value):
+        """
+        Allow setting attributes, except for internal attributes.
+        """
+        if name == "_data":
+            super().__setattr__(name, value)
+        else:
+            self._data[name] = self._wrap(value)
+
+    def __getitem__(self, key):
+        """
+        Allow dictionary-style access to keys.
+        """
+        return self._data[key]
+
+    def __setitem__(self, key, value):
+        """
+        Allow dictionary-style setting of keys.
+        """
+        self._data[key] = self._wrap(value)
+
+    def __delitem__(self, key):
+        """
+        Allow dictionary-style deletion of keys.
+        """
+        del self._data[key]
+
+    def __contains__(self, key):
+        """
+        Allow use of the `in` keyword to check for keys.
+        """
+        return key in self._data
+
+    def __repr__(self):
+        """
+        String representation of the ParameterSet object.
+        """
+        return f"ParameterSet({self._data})"
+
+    def to_dict(self):
+        """
+        Convert the ParameterSet back to a regular dictionary.
+        """
+        def unwrap(value):
+            if isinstance(value, ParameterSet):
+                return value.to_dict()
+            elif isinstance(value, list):
+                return [unwrap(item) for item in value]
+            return value
+
+        return {key: unwrap(value) for key, value in self._data.items()}
+
+    def keys(self):
+        """
+        Return the keys of the ParameterSet.
+        """
+        return self._data.keys()
