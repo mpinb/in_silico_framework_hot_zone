@@ -40,16 +40,15 @@ logger = logging.getLogger("ISF").getChild(__name__)
 import warnings
 
 # from sim_control import SimControl
-import neuron, json, re
+import neuron
 import tables  # so florida servers have no problem with neuron
 
 from config.cell_types import EXCITATORY
-from data_base.dbopen import dbopen, resolve_modular_db_path
 
 from . import network_param_modify_functions
 from .cell import Cell, PointCell, PySection, SynParameterChanger
 from .cell_parser import CellParser
-from .parameters import ParameterSet
+from .parameters import ParameterSet, build_parameters, load_NMODL_parameters
 
 # from synapse import activate_functional_synapse
 from .network import NetworkMapper
@@ -80,68 +79,6 @@ from .writer import (
 
 __author__ = "Robert Egger"
 __credits__ = ["Robert Egger", "Arco Bast"]
-
-
-# ------------------------------------------------------------------------------
-# commonly used functions required for running single neuron simulations
-# ------------------------------------------------------------------------------
-def build_parameters(filename, fast_but_security_risk=True):
-    """Read in a :ref:`param_file_format` file and return a ParameterSet object.
-
-    Args:
-        filename (str): path to the parameter file
-        fast_but_security_risk (bool): If True, the parameter file is read in using eval. This is faster, but can be a security risk if the file is not trusted.
-
-    Returns:
-        :py:class:`~single_cell_parser.parameters.ParameterSet`: The parameter file as a :py:class:`~single_cell_parser.parameters.ParameterSet` object.
-    """
-    filename = resolve_modular_db_path(filename)
-    with dbopen(filename, "r") as f:
-        content = f.read()
-
-    # Replace single quotes with double quotes
-    content = content.replace("'", '"')
-
-    # Remove trailing commas using regex
-    content = re.sub(r",(\s*[}\]])", r"\1", content)
-
-    # Replace Python-style tuples (x, y) with JSON arrays [x, y]
-    content = re.sub(r"\(([^()]+)\)", r"[\1]", content)
-    
-    try:
-        data = json.loads(content)
-    except json.JSONDecodeError as e:
-        raise ValueError(f"Error decoding .param file with JSON parsing: {e}")
-    return ParameterSet(data)
-
-
-def load_NMODL_parameters(parameters):
-    """Load NMODL mechanisms from paths in parameter file.
-
-    Parameters are added to the NEURON namespace by executing string Hoc commands.
-
-    See also: https://www.neuron.yale.edu/neuron/static/new_doc/programming/neuronpython.html#important-names-and-sub-packages
-
-    Args:
-        parameters (:py:class:`~single_cell_parser.parameters.ParameterSet` | dict):
-            The neuron parameters to load.
-            Must contain the key `NMODL_mechanisms`.
-            May contain the key `mech_globals`.
-
-    Returns:
-        None. Adds parameters to the NEURON namespace.
-    """
-    for mech in list(parameters.NMODL_mechanisms.values()):
-        neuron.load_mechanisms(mech)
-    try:
-        for mech in list(parameters.mech_globals.keys()):
-            for param in parameters.mech_globals[mech]:
-                paramStr = param + "_" + mech + "="
-                paramStr += str(parameters.mech_globals[mech][param])
-                print("Setting global parameter", paramStr)
-                neuron.h(paramStr)
-    except AttributeError:
-        pass
 
 
 def create_cell(

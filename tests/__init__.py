@@ -3,6 +3,7 @@ import neuron
 import socket
 import distributed
 import pytest
+import getting_started
 
 h = neuron.h
 import single_cell_parser as scp
@@ -56,9 +57,6 @@ def setup_synapse_activation_experiment(
     Returns:
         cell: a cell object that contains the simulation.
     """
-    
-    import getting_started
-    import single_cell_parser as scp
 
     rangevars = rangevars or []
     

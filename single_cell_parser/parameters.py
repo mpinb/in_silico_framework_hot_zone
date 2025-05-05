@@ -2,6 +2,71 @@
 """
 
 from collections.abc import MutableMapping
+import json, re, neuron
+from data_base.dbopen import dbopen, resolve_modular_db_path
+
+def _read_params_to_dict(filename):
+    filename = resolve_modular_db_path(filename)
+    with dbopen(filename, "r") as f:
+        content = f.read()
+
+    # Replace single quotes with double quotes
+    content = content.replace("'", '"')
+
+    # Remove trailing commas using regex
+    content = re.sub(r",(\s*[}\]])", r"\1", content)
+
+    # Replace Python-style tuples (x, y) with JSON arrays [x, y]
+    content = re.sub(r"\(([^()]+)\)", r"[\1]", content)
+    
+    try:
+        params_dict = json.loads(content)
+    except json.JSONDecodeError as e:
+        raise ValueError(f"Error decoding .param file with JSON parsing: {e}")
+    return params_dict
+
+
+def build_parameters(filename):
+    """Read in a :ref:`param_file_format` file and return a ParameterSet object.
+
+    Args:
+        filename (str): path to the parameter file
+
+    Returns:
+        :py:class:`~single_cell_parser.parameters.ParameterSet`: The parameter file as a :py:class:`~single_cell_parser.parameters.ParameterSet` object.
+    """
+    data = _read_params_to_dict(filename)
+    return ParameterSet(data)
+
+
+def load_NMODL_parameters(parameters):
+    """Load NMODL mechanisms from paths in parameter file.
+
+    Parameters are added to the NEURON namespace by executing string Hoc commands.
+
+    See also: https://www.neuron.yale.edu/neuron/static/new_doc/programming/neuronpython.html#important-names-and-sub-packages
+
+    Args:
+        parameters (:py:class:`~single_cell_parser.parameters.ParameterSet` | dict):
+            The neuron parameters to load.
+            Must contain the key `NMODL_mechanisms`.
+            May contain the key `mech_globals`.
+
+    Returns:
+        None. Adds parameters to the NEURON namespace.
+    """
+    for mech in list(parameters.NMODL_mechanisms.values()):
+        neuron.load_mechanisms(mech)
+    try:
+        for mech in list(parameters.mech_globals.keys()):
+            for param in parameters.mech_globals[mech]:
+                paramStr = param + "_" + mech + "="
+                paramStr += str(parameters.mech_globals[mech][param])
+                print("Setting global parameter", paramStr)
+                neuron.h(paramStr)
+    except AttributeError:
+        pass
+
 
 class ParameterSet(MutableMapping):
     """
@@ -17,6 +82,8 @@ class ParameterSet(MutableMapping):
         Raises:
             TypeError: If the input data is not a dictionary.
         """
+        if isinstance(data, str):
+            data = _read_params_to_dict(data)
         if not (isinstance(data, dict) or isinstance(data, ParameterSet)):
             raise TypeError(f"ParameterSet can only wrap dictionaries. You provided {type(data)}.")
         self._data = {key: self._wrap(value) for key, value in data.items()}
