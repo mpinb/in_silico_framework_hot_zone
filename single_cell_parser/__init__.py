@@ -435,6 +435,16 @@ class ParameterSet:
         """
         return key in self._data
 
+    def __eq__(self, other):
+        """
+        Check equality with another ParameterSet or dictionary.
+        """
+        if isinstance(other, ParameterSet):
+            return self._data == other._data
+        elif isinstance(other, dict):
+            return self._data == other
+        return False
+
     def __repr__(self):
         """
         String representation of the ParameterSet object.
