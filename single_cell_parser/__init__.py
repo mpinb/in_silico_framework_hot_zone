@@ -441,18 +441,17 @@ class ParameterSet:
         """
         return f"ParameterSet({self._data})"
 
-    def to_dict(self):
+    def __getstate__(self):
         """
-        Convert the ParameterSet back to a regular dictionary.
+        Get the state of the ParameterSet for pickling.
         """
-        def unwrap(value):
-            if isinstance(value, ParameterSet):
-                return value.to_dict()
-            elif isinstance(value, list):
-                return [unwrap(item) for item in value]
-            return value
+        return self._data
 
-        return {key: unwrap(value) for key, value in self._data.items()}
+    def __setstate__(self, state):
+        """
+        Set the state of the ParameterSet after unpickling.
+        """
+        self._data = {key: self._wrap(value) for key, value in state.items()}
 
     def keys(self):
         """
@@ -465,3 +464,16 @@ class ParameterSet:
         Return the values of the ParameterSet.
         """
         return self._data.values()
+
+    def to_dict(self):
+        """
+        Convert the ParameterSet back to a regular dictionary.
+        """
+        def unwrap(value):
+            if isinstance(value, ParameterSet):
+                return value.to_dict()
+            elif isinstance(value, list):
+                return [unwrap(item) for item in value]
+            return value
+
+        return {key: unwrap(value) for key, value in self._data.items()}
