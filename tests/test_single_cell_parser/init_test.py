@@ -44,7 +44,7 @@ class TestSingleCellParserInit:
         diam_unscaled = next(
             s for s in cell.sections if s.label == 'ApicalDendrite').diam
 
-        neuron_param.neuron['cell_modify_functions'] = scp.NTParameterSet(
+        neuron_param.neuron['cell_modify_functions'] = scp.ParameterSet(
             {'scale_apical': {
                 'scale': 10
             }})
