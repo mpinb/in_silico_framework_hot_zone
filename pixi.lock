@@ -341,7 +341,7 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/da/71/ae30dadffc90b9006d77af76b393cb9dfbfc9629f339fc1574a1c52e6806/future-1.0.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/a7/25/de419a2b22fa6e18ce3b2a5adb01d33ec7b2784530f76fa36ba43d8f0fac/greenlet-3.1.1-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
       - pypi: https://files.pythonhosted.org/packages/59/3f/f1736d4771388d91db3af22e2aa07ca9af514744f40994adc8cb30675ac6/ipyparallel-9.0.1-py3-none-any.whl
-      - pypi: https://files.pythonhosted.org/packages/fb/47/a08dfb2d011c2ab60257c31600b56c07a1d20b7fc663b0026bf6610682fd/isf_pandas_msgpack-0.2.3.tar.gz
+      - pypi: https://files.pythonhosted.org/packages/4d/b6/fb22937991b34f3849dcff135625a7638683ab4dcb9c9ca31d6fb6a85a11/isf_pandas_msgpack-0.3.0.tar.gz
       - pypi: https://files.pythonhosted.org/packages/47/7f/51deed26600013c9fb6d3c0129a32a1b1b3aa1e2ea8163cfaad647fc8501/neo-0.11.1.tar.gz
       - pypi: https://files.pythonhosted.org/packages/0d/47/a2ede0e136a8ddc288b447c260aa035f3e75251f808aa61f6454b16dfd04/numexpr-2.8.6-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
       - pypi: https://files.pythonhosted.org/packages/4d/a7/bece0e6b17b75506c4bf13eb79728931e2f240d7928a02f0e6d2ca9c41e9/pebble-5.1.1-py3-none-any.whl
@@ -603,7 +603,7 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/da/71/ae30dadffc90b9006d77af76b393cb9dfbfc9629f339fc1574a1c52e6806/future-1.0.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/97/83/bdf5f69fcf304065ec7cf8fc7c08248479cfed9bcca02bf0001c07e000aa/greenlet-3.1.1-cp38-cp38-macosx_11_0_universal2.whl
       - pypi: https://files.pythonhosted.org/packages/59/3f/f1736d4771388d91db3af22e2aa07ca9af514744f40994adc8cb30675ac6/ipyparallel-9.0.1-py3-none-any.whl
-      - pypi: https://files.pythonhosted.org/packages/fb/47/a08dfb2d011c2ab60257c31600b56c07a1d20b7fc663b0026bf6610682fd/isf_pandas_msgpack-0.2.3.tar.gz
+      - pypi: https://files.pythonhosted.org/packages/4d/b6/fb22937991b34f3849dcff135625a7638683ab4dcb9c9ca31d6fb6a85a11/isf_pandas_msgpack-0.3.0.tar.gz
       - pypi: https://files.pythonhosted.org/packages/96/78/3e62ce6bb858d308b69d8c76dd800491dccc15443fdc7e21c9b95b09e430/neo-0.13.3-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/2a/b2/db65da640af421658bfaa455b4f3825f5b6ca693424e971d8d73362ffd50/NEURON-8.2.6-cp38-cp38-macosx_11_0_arm64.whl
       - pypi: https://files.pythonhosted.org/packages/4d/a7/bece0e6b17b75506c4bf13eb79728931e2f240d7928a02f0e6d2ca9c41e9/pebble-5.1.1-py3-none-any.whl
@@ -1026,7 +1026,7 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/da/71/ae30dadffc90b9006d77af76b393cb9dfbfc9629f339fc1574a1c52e6806/future-1.0.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/a7/25/de419a2b22fa6e18ce3b2a5adb01d33ec7b2784530f76fa36ba43d8f0fac/greenlet-3.1.1-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
       - pypi: https://files.pythonhosted.org/packages/59/3f/f1736d4771388d91db3af22e2aa07ca9af514744f40994adc8cb30675ac6/ipyparallel-9.0.1-py3-none-any.whl
-      - pypi: https://files.pythonhosted.org/packages/fb/47/a08dfb2d011c2ab60257c31600b56c07a1d20b7fc663b0026bf6610682fd/isf_pandas_msgpack-0.2.3.tar.gz
+      - pypi: https://files.pythonhosted.org/packages/4d/b6/fb22937991b34f3849dcff135625a7638683ab4dcb9c9ca31d6fb6a85a11/isf_pandas_msgpack-0.3.0.tar.gz
       - pypi: https://files.pythonhosted.org/packages/47/7f/51deed26600013c9fb6d3c0129a32a1b1b3aa1e2ea8163cfaad647fc8501/neo-0.11.1.tar.gz
       - pypi: https://files.pythonhosted.org/packages/0d/47/a2ede0e136a8ddc288b447c260aa035f3e75251f808aa61f6454b16dfd04/numexpr-2.8.6-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
       - pypi: https://files.pythonhosted.org/packages/4d/a7/bece0e6b17b75506c4bf13eb79728931e2f240d7928a02f0e6d2ca9c41e9/pebble-5.1.1-py3-none-any.whl
@@ -1381,7 +1381,7 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/da/71/ae30dadffc90b9006d77af76b393cb9dfbfc9629f339fc1574a1c52e6806/future-1.0.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/97/83/bdf5f69fcf304065ec7cf8fc7c08248479cfed9bcca02bf0001c07e000aa/greenlet-3.1.1-cp38-cp38-macosx_11_0_universal2.whl
       - pypi: https://files.pythonhosted.org/packages/59/3f/f1736d4771388d91db3af22e2aa07ca9af514744f40994adc8cb30675ac6/ipyparallel-9.0.1-py3-none-any.whl
-      - pypi: https://files.pythonhosted.org/packages/fb/47/a08dfb2d011c2ab60257c31600b56c07a1d20b7fc663b0026bf6610682fd/isf_pandas_msgpack-0.2.3.tar.gz
+      - pypi: https://files.pythonhosted.org/packages/4d/b6/fb22937991b34f3849dcff135625a7638683ab4dcb9c9ca31d6fb6a85a11/isf_pandas_msgpack-0.3.0.tar.gz
       - pypi: https://files.pythonhosted.org/packages/96/78/3e62ce6bb858d308b69d8c76dd800491dccc15443fdc7e21c9b95b09e430/neo-0.13.3-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/2a/b2/db65da640af421658bfaa455b4f3825f5b6ca693424e971d8d73362ffd50/NEURON-8.2.6-cp38-cp38-macosx_11_0_arm64.whl
       - pypi: https://files.pythonhosted.org/packages/4d/a7/bece0e6b17b75506c4bf13eb79728931e2f240d7928a02f0e6d2ca9c41e9/pebble-5.1.1-py3-none-any.whl
@@ -3665,10 +3665,10 @@ packages:
   - pkg:pypi/ipywidgets?source=hash-mapping
   size: 113497
   timestamp: 1724334989324
-- pypi: https://files.pythonhosted.org/packages/fb/47/a08dfb2d011c2ab60257c31600b56c07a1d20b7fc663b0026bf6610682fd/isf_pandas_msgpack-0.2.3.tar.gz
+- pypi: https://files.pythonhosted.org/packages/4d/b6/fb22937991b34f3849dcff135625a7638683ab4dcb9c9ca31d6fb6a85a11/isf_pandas_msgpack-0.3.0.tar.gz
   name: isf-pandas-msgpack
-  version: 0.2.3
-  sha256: 3b9c8e438bce727c70ff92e570dedb99a494c7efbe6d8f3fdb767e994b67cc23
+  version: 0.3.0
+  sha256: 14bf1c7d8891cbf2238745bcaf3a60aa85e627fdd447cd6acc7156ea73e2ecde
   requires_dist:
   - pandas>=1.1.0,<3
   - packaging>=24.2,<26
