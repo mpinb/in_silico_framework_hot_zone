@@ -14,7 +14,9 @@ An In Silico Framework for multi-scale modeling and analysis of *in vivo* neuron
 
 ## Documentation
 
-Web-hosted documentation is coming soon. For now, you can self-host using
+Web-hosted documentation is available [here](https://wwwuser.gwdguser.de/~b.meulemeester/index.html)
+
+You can self-host using
 
 ```bash
 pixi r build_docs
