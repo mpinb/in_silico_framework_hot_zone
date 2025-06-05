@@ -152,6 +152,8 @@ if six.PY3:
 
 from data_base.IO.roberts_formats import write_pandas_synapse_activation_to_roberts_format
 from data_base.IO.roberts_formats import read_pandas_synapse_activation_from_roberts_format
+# add alias with better naming
+csv_synapse_activation_to_pandas = read_pandas_synapse_activation_from_roberts_format
 from data_base.IO.roberts_formats import read_pandas_cell_activation_from_roberts_format
 from data_base.IO.roberts_formats import read_InputMapper_summary
 from data_base.db_initializers import load_simrun_general as db_init_simrun_general
