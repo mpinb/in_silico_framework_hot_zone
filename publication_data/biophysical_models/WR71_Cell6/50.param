@@ -1,0 +1,366 @@
+{
+    "neuron": {
+        "AIS": {
+            "mechanisms": {
+                "global": {},
+                "range": {
+                    "CaDynamics_E2_v2": {
+                        "decay": 410.93529470565335,
+                        "gamma": 0.00363143069224962,
+                        "spatial": "uniform"
+                    },
+                    "Ca_HVA": {
+                        "gCa_HVAbar": 0.00023567543000045345,
+                        "spatial": "uniform"
+                    },
+                    "Ca_LVAst": {
+                        "gCa_LVAstbar": 0.0003312983530651607,
+                        "spatial": "uniform"
+                    },
+                    "Ih": {
+                        "gIhbar": 8e-05,
+                        "spatial": "uniform"
+                    },
+                    "K_Pst": {
+                        "gK_Pstbar": 0.7945762449881149,
+                        "spatial": "uniform"
+                    },
+                    "K_Tst": {
+                        "gK_Tstbar": 0.031317839967215245,
+                        "spatial": "uniform"
+                    },
+                    "NaTa_t": {
+                        "gNaTa_tbar": 0.8910290155288032,
+                        "spatial": "uniform"
+                    },
+                    "Nap_Et2": {
+                        "gNap_Et2bar": 0.00594961280620201,
+                        "spatial": "uniform"
+                    },
+                    "SK_E2": {
+                        "gSK_E2bar": 0.02986498899638237,
+                        "spatial": "uniform"
+                    },
+                    "SKv3_1": {
+                        "gSKv3_1bar": 1.693331851845218,
+                        "spatial": "uniform"
+                    },
+                    "pas": {
+                        "e": -90,
+                        "g": 3.9496167495166285e-05,
+                        "spatial": "uniform"
+                    }
+                }
+            },
+            "properties": {
+                "Ra": 100.0,
+                "cm": 1.0,
+                "ions": {
+                    "ek": -85.0,
+                    "ena": 50.0
+                }
+            }
+        },
+        "ApicalDendrite": {
+            "mechanisms": {
+                "global": {},
+                "range": {
+                    "CaDynamics_E2_v2": {
+                        "decay": 55.5200108890661,
+                        "gamma": 0.0005746541938021917,
+                        "spatial": "uniform"
+                    },
+                    "Ca_HVA": {
+                        "begin": 222.0802933594905,
+                        "end": 422.0802933594905,
+                        "gCa_HVAbar": 0.0013015183410355362,
+                        "outsidescale": 0.1,
+                        "spatial": "uniform_range",
+                        "outsidescale_sections": [
+                            11,
+                            12,
+                            13,
+                            15,
+                            16,
+                            17,
+                            18,
+                            19,
+                            20,
+                            21,
+                            22,
+                            23,
+                            26,
+                            27,
+                            28,
+                            31,
+                            32,
+                            33,
+                            35,
+                            38,
+                            39,
+                            40,
+                            42,
+                            49,
+                            54,
+                            57,
+                            61,
+                            62,
+                            63,
+                            67,
+                            70,
+                            74,
+                            77,
+                            97,
+                            99,
+                            104,
+                            107,
+                            108,
+                            114,
+                            115,
+                            120,
+                            121,
+                            122,
+                            123,
+                            124,
+                            125,
+                            126,
+                            127,
+                            128,
+                            129,
+                            130,
+                            131,
+                            132,
+                            133,
+                            134,
+                            135,
+                            136
+                        ]
+                    },
+                    "Ca_LVAst": {
+                        "begin": 222.0802933594905,
+                        "end": 422.0802933594905,
+                        "gCa_LVAstbar": 0.18019224093070435,
+                        "outsidescale": 0.01,
+                        "spatial": "uniform_range",
+                        "outsidescale_sections": [
+                            11,
+                            12,
+                            13,
+                            15,
+                            16,
+                            17,
+                            18,
+                            19,
+                            20,
+                            21,
+                            22,
+                            23,
+                            26,
+                            27,
+                            28,
+                            31,
+                            32,
+                            33,
+                            35,
+                            38,
+                            39,
+                            40,
+                            42,
+                            49,
+                            54,
+                            57,
+                            61,
+                            62,
+                            63,
+                            67,
+                            70,
+                            74,
+                            77,
+                            97,
+                            99,
+                            104,
+                            107,
+                            108,
+                            114,
+                            115,
+                            120,
+                            121,
+                            122,
+                            123,
+                            124,
+                            125,
+                            126,
+                            127,
+                            128,
+                            129,
+                            130,
+                            131,
+                            132,
+                            133,
+                            134,
+                            135,
+                            136
+                        ]
+                    },
+                    "Ih": {
+                        "_lambda": 3.6161,
+                        "distance": "relative",
+                        "gIhbar": 0.0002,
+                        "linScale": 2.087,
+                        "offset": -0.8696,
+                        "spatial": "exponential",
+                        "xOffset": 0.0
+                    },
+                    "Im": {
+                        "gImbar": 3.9567120186805064e-05,
+                        "spatial": "uniform"
+                    },
+                    "NaTa_t": {
+                        "gNaTa_tbar": 0.015713268497518685,
+                        "spatial": "uniform"
+                    },
+                    "SK_E2": {
+                        "gSK_E2bar": 0.000693295855511174,
+                        "spatial": "uniform"
+                    },
+                    "SKv3_1": {
+                        "distance": "relative",
+                        "gSKv3_1bar": 0.00013134871772730957,
+                        "offset": 0.581577422339672,
+                        "slope": -2.995240225773237,
+                        "spatial": "linear"
+                    },
+                    "pas": {
+                        "e": -90,
+                        "g": 4.954188883559249e-05,
+                        "spatial": "uniform"
+                    }
+                }
+            },
+            "properties": {
+                "Ra": 100.0,
+                "cm": 2.0,
+                "ions": {
+                    "ek": -85.0,
+                    "ena": 50.0
+                }
+            }
+        },
+        "Dendrite": {
+            "mechanisms": {
+                "global": {},
+                "range": {
+                    "Ih": {
+                        "gIhbar": 0.0002,
+                        "spatial": "uniform"
+                    },
+                    "pas": {
+                        "e": -90.0,
+                        "g": 5.365358008847639e-05,
+                        "spatial": "uniform"
+                    }
+                }
+            },
+            "properties": {
+                "Ra": 100.0,
+                "cm": 2.0
+            }
+        },
+        "Myelin": {
+            "mechanisms": {
+                "global": {},
+                "range": {
+                    "pas": {
+                        "e": -90.0,
+                        "g": 4e-05,
+                        "spatial": "uniform"
+                    }
+                }
+            },
+            "properties": {
+                "Ra": 100.0,
+                "cm": 0.02
+            }
+        },
+        "Soma": {
+            "mechanisms": {
+                "global": {},
+                "range": {
+                    "CaDynamics_E2_v2": {
+                        "decay": 87.72076368274809,
+                        "gamma": 0.0023310626897980937,
+                        "spatial": "uniform"
+                    },
+                    "Ca_HVA": {
+                        "gCa_HVAbar": 0.00027391514603262003,
+                        "spatial": "uniform"
+                    },
+                    "Ca_LVAst": {
+                        "gCa_LVAstbar": 0.0035276314797175116,
+                        "spatial": "uniform"
+                    },
+                    "Ih": {
+                        "gIhbar": 8e-05,
+                        "spatial": "uniform"
+                    },
+                    "K_Pst": {
+                        "gK_Pstbar": 0.0138073395451284,
+                        "spatial": "uniform"
+                    },
+                    "K_Tst": {
+                        "gK_Tstbar": 0.0838433585146896,
+                        "spatial": "uniform"
+                    },
+                    "NaTa_t": {
+                        "gNaTa_tbar": 1.4573664574331913,
+                        "spatial": "uniform"
+                    },
+                    "Nap_Et2": {
+                        "gNap_Et2bar": 0.003255982844663724,
+                        "spatial": "uniform"
+                    },
+                    "SK_E2": {
+                        "gSK_E2bar": 0.02485390396762535,
+                        "spatial": "uniform"
+                    },
+                    "SKv3_1": {
+                        "gSKv3_1bar": 0.3076812953588058,
+                        "spatial": "uniform"
+                    },
+                    "pas": {
+                        "e": -90,
+                        "g": 3.9884517968570724e-05,
+                        "spatial": "uniform"
+                    }
+                }
+            },
+            "properties": {
+                "Ra": 100.0,
+                "cm": 1.0,
+                "ions": {
+                    "ek": -85.0,
+                    "ena": 50.0
+                }
+            }
+        },
+        "cell_modify_functions": {
+            "scale_apical": {
+                "scale": 1.3848433553056807
+            }
+        },
+        "filename": "reldb://morphologies/{morphology}.hoc",
+        "discretization": {
+            "max_seg_length": 50,
+            "f": 100
+        }
+    },
+    "sim": {
+        "tStart": 0.0,
+        "tStop": 645,
+        "dt": 0.025,
+        "Vinit": -75.0,
+        "T": 34.0,
+        "recordingSites": "reldb://morphologies/{morphology}.landmarkAscii"
+    },
+    "NMODL_mechanisms": {}
+}

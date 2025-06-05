@@ -1,0 +1,284 @@
+{
+    "neuron": {
+        "AIS": {
+            "mechanisms": {
+                "global": {},
+                "range": {
+                    "CaDynamics_E2_v2": {
+                        "decay": 67.04565600809,
+                        "gamma": 0.008434977159305064,
+                        "spatial": "uniform"
+                    },
+                    "Ca_HVA": {
+                        "gCa_HVAbar": 0.00024810139659870963,
+                        "spatial": "uniform"
+                    },
+                    "Ca_LVAst": {
+                        "gCa_LVAstbar": 9.455723807845725e-06,
+                        "spatial": "uniform"
+                    },
+                    "Ih": {
+                        "gIhbar": 8e-05,
+                        "spatial": "uniform"
+                    },
+                    "K_Pst": {
+                        "gK_Pstbar": 0.44462634195045037,
+                        "spatial": "uniform"
+                    },
+                    "K_Tst": {
+                        "gK_Tstbar": 0.03746290186754328,
+                        "spatial": "uniform"
+                    },
+                    "NaTa_t": {
+                        "gNaTa_tbar": 1.6577695459842476,
+                        "spatial": "uniform"
+                    },
+                    "Nap_Et2": {
+                        "gNap_Et2bar": 0.004196423325395792,
+                        "spatial": "uniform"
+                    },
+                    "SK_E2": {
+                        "gSK_E2bar": 0.047066525337175306,
+                        "spatial": "uniform"
+                    },
+                    "SKv3_1": {
+                        "gSKv3_1bar": 0.780606635216098,
+                        "spatial": "uniform"
+                    },
+                    "pas": {
+                        "e": -90,
+                        "g": 3.73853140401576e-05,
+                        "spatial": "uniform"
+                    }
+                }
+            },
+            "properties": {
+                "Ra": 100.0,
+                "cm": 1.0,
+                "ions": {
+                    "ek": -85.0,
+                    "ena": 50.0
+                }
+            }
+        },
+        "ApicalDendrite": {
+            "mechanisms": {
+                "global": {},
+                "range": {
+                    "CaDynamics_E2_v2": {
+                        "decay": 109.59384054800447,
+                        "gamma": 0.0070326243285976624,
+                        "spatial": "uniform"
+                    },
+                    "Ca_HVA": {
+                        "begin": 753.0996147066406,
+                        "end": 953.0996147066406,
+                        "gCa_HVAbar": 0.00018226542645867412,
+                        "outsidescale": 0.1,
+                        "spatial": "uniform_range",
+                        "outsidescale_sections": [
+                            54,
+                            55,
+                            56,
+                            57,
+                            58,
+                            59,
+                            60,
+                            64,
+                            67,
+                            69,
+                            72,
+                            108,
+                            109,
+                            110,
+                            111,
+                            112
+                        ]
+                    },
+                    "Ca_LVAst": {
+                        "begin": 753.0996147066406,
+                        "end": 953.0996147066406,
+                        "gCa_LVAstbar": 0.19763164437966058,
+                        "outsidescale": 0.01,
+                        "spatial": "uniform_range",
+                        "outsidescale_sections": [
+                            54,
+                            55,
+                            56,
+                            57,
+                            58,
+                            59,
+                            60,
+                            64,
+                            67,
+                            69,
+                            72,
+                            108,
+                            109,
+                            110,
+                            111,
+                            112
+                        ]
+                    },
+                    "Ih": {
+                        "_lambda": 3.6161,
+                        "distance": "relative",
+                        "gIhbar": 0.0002,
+                        "linScale": 2.087,
+                        "offset": -0.8696,
+                        "spatial": "exponential",
+                        "xOffset": 0.0
+                    },
+                    "Im": {
+                        "gImbar": 7.592515307871969e-06,
+                        "spatial": "uniform"
+                    },
+                    "NaTa_t": {
+                        "gNaTa_tbar": 0.016225416583863873,
+                        "spatial": "uniform"
+                    },
+                    "SK_E2": {
+                        "gSK_E2bar": 1.1823820448660736e-05,
+                        "spatial": "uniform"
+                    },
+                    "SKv3_1": {
+                        "distance": "relative",
+                        "gSKv3_1bar": 4.1693778254757956e-05,
+                        "offset": 0.12943158886148023,
+                        "slope": -2.3991053948728736,
+                        "spatial": "linear"
+                    },
+                    "pas": {
+                        "e": -90,
+                        "g": 6.39121372662045e-05,
+                        "spatial": "uniform"
+                    }
+                }
+            },
+            "properties": {
+                "Ra": 100.0,
+                "cm": 2.0,
+                "ions": {
+                    "ek": -85.0,
+                    "ena": 50.0
+                }
+            }
+        },
+        "Dendrite": {
+            "mechanisms": {
+                "global": {},
+                "range": {
+                    "Ih": {
+                        "gIhbar": 0.0002,
+                        "spatial": "uniform"
+                    },
+                    "pas": {
+                        "e": -90.0,
+                        "g": 7.204398024684915e-05,
+                        "spatial": "uniform"
+                    }
+                }
+            },
+            "properties": {
+                "Ra": 100.0,
+                "cm": 2.0
+            }
+        },
+        "Myelin": {
+            "mechanisms": {
+                "global": {},
+                "range": {
+                    "pas": {
+                        "e": -90.0,
+                        "g": 4e-05,
+                        "spatial": "uniform"
+                    }
+                }
+            },
+            "properties": {
+                "Ra": 100.0,
+                "cm": 0.02
+            }
+        },
+        "Soma": {
+            "mechanisms": {
+                "global": {},
+                "range": {
+                    "CaDynamics_E2_v2": {
+                        "decay": 504.4453208660155,
+                        "gamma": 0.0009763175875249961,
+                        "spatial": "uniform"
+                    },
+                    "Ca_HVA": {
+                        "gCa_HVAbar": 0.00021504571404657206,
+                        "spatial": "uniform"
+                    },
+                    "Ca_LVAst": {
+                        "gCa_LVAstbar": 5.114773735655376e-05,
+                        "spatial": "uniform"
+                    },
+                    "Ih": {
+                        "gIhbar": 8e-05,
+                        "spatial": "uniform"
+                    },
+                    "K_Pst": {
+                        "gK_Pstbar": 0.021988954818091405,
+                        "spatial": "uniform"
+                    },
+                    "K_Tst": {
+                        "gK_Tstbar": 0.06265736506904135,
+                        "spatial": "uniform"
+                    },
+                    "NaTa_t": {
+                        "gNaTa_tbar": 1.770932970194014,
+                        "spatial": "uniform"
+                    },
+                    "Nap_Et2": {
+                        "gNap_Et2bar": 0.006185557771440237,
+                        "spatial": "uniform"
+                    },
+                    "SK_E2": {
+                        "gSK_E2bar": 0.07948128064793569,
+                        "spatial": "uniform"
+                    },
+                    "SKv3_1": {
+                        "gSKv3_1bar": 0.9723176015540204,
+                        "spatial": "uniform"
+                    },
+                    "pas": {
+                        "e": -90,
+                        "g": 3.138913323223348e-05,
+                        "spatial": "uniform"
+                    }
+                }
+            },
+            "properties": {
+                "Ra": 100.0,
+                "cm": 1.0,
+                "ions": {
+                    "ek": -85.0,
+                    "ena": 50.0
+                }
+            }
+        },
+        "cell_modify_functions": {
+            "scale_apical": {
+                "scale": 2.987794493750022
+            }
+        },
+        "filename": "reldb://morphologies/{morphology}.hoc",
+        "discretization": {
+            "max_seg_length": 50,
+            "f": 100
+        }
+    },
+    "sim": {
+        "tStart": 0.0,
+        "tStop": 645,
+        "dt": 0.025,
+        "Vinit": -75.0,
+        "T": 34.0,
+        "recordingSites": "reldb://morphologies/{morphology}.landmarkAscii"
+    },
+    "NMODL_mechanisms": {}
+}
