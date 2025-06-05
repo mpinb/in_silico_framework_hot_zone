@@ -42,6 +42,7 @@ from inspect import getmodule
 import importlib
 import pandas as pd
 import numpy as np
+from . import just_create_folder
 
 
 def load(savedir, load_data=True, loader_kwargs={}):
@@ -66,6 +67,10 @@ def load(savedir, load_data=True, loader_kwargs={}):
         myloader = compatibility.pandas_unpickle_fun(
             os.path.join(savedir, 'Loader.pickle'))
     else:
+        if not os.path.exists(os.path.join(savedir, 'Loader.json')):
+            if os.path.isdir(savedir):
+                # assume managed folder
+                return just_create_folder.Loader().get(savedir)
         with open(os.path.join(savedir, 'Loader.json'), 'r') as f:
             loader_init_kwargs = json.load(f)
         loader = loader_init_kwargs['Loader']
