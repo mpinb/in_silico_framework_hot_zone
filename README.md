@@ -36,7 +36,7 @@ For installation and environment management, ISF uses [pixi](pixi.sh). You can i
 curl -fsSL https://pixi.sh/install.sh | sh
 ```
 
-You may need to restart your shell, or source your shell configuration.
+You may need to restart your shell, or source your shell configuration for the `pixi` command to be available..
 
 Once `pixi` is available, you can install this version of ISF by running:
 ```bash
