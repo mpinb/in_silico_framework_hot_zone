@@ -26,6 +26,8 @@ pixi r host_docs
 
 ## Installation
 
+Installation instructions can be found [here](https://wwwuser.gwdguser.de/~b.meulemeester/rst_assets/installation.html), but are repeated below for convenience.
+
 This version of ISF is available for Linux and macOS.
 
 For installation and environment management, ISF uses [pixi](pixi.sh). You can install pixi from the CLI by running:
