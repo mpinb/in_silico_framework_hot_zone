@@ -44,7 +44,10 @@ See also:
 
 import os
 import time
-from collections import Sequence
+try:
+    from collections import Sequence
+except ImportError:
+    from collections.abc import Sequence
 import numpy as np
 from .cell import PointCell, SpikeTrain
 from . import reader
