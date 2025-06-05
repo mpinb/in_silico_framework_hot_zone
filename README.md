@@ -3,14 +3,15 @@
 <img src=./docs/_static/_images/isf-logo-white.png#gh-dark-mode-only width='350'>
 <img src=./docs/_static/_images/isf-logo-black.png#gh-light-mode-only width='350'>
 
-# The In Silico Framework (ISF)
+# The In Silico Framework (ISF) - hotzone
 [![Linux](https://github.com/mpinb/in_silico_framework/actions/workflows/test-isf-py38-pixi-linux.yml/badge.svg)](https://github.com/mpinb/in_silico_framework/actions/workflows/test-isf-py38-pixi-linux.yml)
 [![OSX](https://github.com/mpinb/in_silico_framework/actions/workflows/test-isf-py38-pixi-macos.yml/badge.svg)](https://github.com/mpinb/in_silico_framework/actions/workflows/test-isf-py38-pixi-macos.yml)
 [![codecov](https://codecov.io/gh/mpinb/in_silico_framework/graph/badge.svg?token=V4P4QMFM12)](https://codecov.io/gh/mpinb/in_silico_framework)
 
 </div>
 
-An In Silico Framework for multi-scale modeling and analysis of *in vivo* neuron-network mechanisms
+[ISF](https://www.github.com/mpinb/in_silico_framework) is an In Silico Framework for multi-scale modeling and analysis of *in vivo* neuron-network mechanisms.
+This repository provides a fork of ISF for reproducing simulations of the hotzone project.
 
 ## Documentation
 
@@ -25,6 +26,8 @@ pixi r host_docs
 
 ## Installation
 
+Installation instructions can be found [here](https://wwwuser.gwdguser.de/~b.meulemeester/rst_assets/installation.html), but are repeated below for convenience.
+
 This version of ISF is available for Linux and macOS.
 
 For installation and environment management, ISF uses [pixi](pixi.sh). You can install pixi from the CLI by running:
@@ -33,7 +36,7 @@ For installation and environment management, ISF uses [pixi](pixi.sh). You can i
 curl -fsSL https://pixi.sh/install.sh | sh
 ```
 
-You may need to restart your shell, or source your shell configuration.
+You may need to restart your shell, or source your shell configuration for the `pixi` command to be available..
 
 Once `pixi` is available, you can install this version of ISF by running:
 ```bash
