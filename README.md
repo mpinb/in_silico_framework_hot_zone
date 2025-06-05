@@ -27,13 +27,15 @@ pixi r host_docs
 
 This version of ISF is available for Linux and macOS.
 
-For installation and environment management, ISF uses [pixi](pixi.sh). You can install pixi by running:
+For installation and environment management, ISF uses [pixi](pixi.sh). You can install pixi from the CLI by running:
 
 ```bash
 curl -fsSL https://pixi.sh/install.sh | sh
 ```
 
-You can then install this version of ISF by running:
+You may need to restart your shell, or source your shell configuration.
+
+Once `pixi` is available, you can install this version of ISF by running:
 ```bash
 git clone https://github.com/mpinb/in_silico_framework_hot_zone.git --depth 1 &&
 cd in_silico_framework_hot_zone &&
