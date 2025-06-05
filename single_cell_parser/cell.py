@@ -27,7 +27,6 @@ For neuron-network multiscale simulations, you should consult :py:mod:`simrun`.
 #from neuron import h, nrn
 import numpy as np
 from . import synapse
-from collections import Sequence
 import neuron
 
 nrn = neuron.nrn
