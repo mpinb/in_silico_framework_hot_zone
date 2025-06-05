@@ -21,7 +21,8 @@ import os
 import compatibility
 from . import parent_classes
 import json
-
+from data_base.utils import calc_recursive_filetree, bcolors, colorize_str
+from pathlib import Path
 
 def check(obj):
     """Check whether the object can be saved with this dumper
@@ -69,7 +70,10 @@ class ManagedFolder(str):
 
     def listdir(self):
         """List the files in the folder"""
-        return [f for f in os.listdir(self) if not f == 'Loader.pickle']
+        return [f for f in os.listdir(self) if not f in ['Loader.pickle', 'Loader.json', 'metadata.json']]
+    
+    def keys(self):
+        return self.listdir()
 
     def get_file(self, suffix):
         '''Get the files that end with the specified suffix.
@@ -94,6 +98,77 @@ class ManagedFolder(str):
                 format(self, suffix))
         else:
             return os.path.join(self, l[0])
+        
+    def __getitem__(self, key):
+        if not isinstance(key, str):
+            raise ValueError(f"Key must be string but is {type(key)}")
+        if key in ['.', '..']:
+            raise NotImplementedError()
+        path = self.join(key)
+        if not os.path.exists(path):
+            raise ValueError(f"Path {path} does not exist")
+        if not os.path.isdir(path):
+            raise ValueError(f"{path} is not a directory")
+        return path
+    
+    def __delitem__(self):
+        shutil.rmtree(self)
+        
+    def __repr__(self):
+        """Get a string representation of the database.
+        
+        This method is called when you print the database object.
+        
+        Example::
+        
+            >>> print(my_data_base)
+            <data_base.isf_data_base.ISFDataBase object at 0x7f0d8d3d4a90>
+            Located at <path>
+            db
+            └── key
+                ├── subkey1
+                ├── subkey2
+                ... (n more)
+        
+        Returns:
+            str: A string representation of the database.
+        """
+        return self._get_str()  # print with default depth and max_lines
+    
+    def _get_str(self, depth=0, max_depth=2, max_lines=20, all_files=False, max_lines_per_key=3, color=True):
+        """Fetches a string representation for this db in a tree structure.
+        
+        This is internal API and should never be called directly.
+        
+        Args:
+            max_depth (int, optional): How deep you want the filestructure to be. Defaults to 2.
+            max_lines (int, optional): How long you want your total filelist to be. Defaults to 20.
+            max_lines_per_key (int, optional): How many lines to print per key. Useful to limit visual output of subdatabases. Defaults to 3.
+            all_files (bool, optional): Whether to print all files (including e.g. ``Loader.json``), or only keys. Defaults to False.
+
+        Returns:
+            str: A string representation of this db in a tree structure.
+        """
+
+        str_ = ['<{}.{} object at {}>'.format(self.__class__.__module__, self.__class__.__name__, hex(id(self)))]
+        str_.append("Located at {}".format(self))
+        # str_.append("{1}DataBases{0} | {2}Directories{0} | {3}Keys{0}".format(
+        #     bcolors.ENDC, bcolors.OKGREEN, bcolors.WARNING, bcolors.OKCYAN) )
+        if color:
+            str_.append(colorize_str(self, bcolors.OKGREEN))
+        else:
+            str_.append(self)
+        lines = calc_recursive_filetree(
+            self, Path(self), 
+            depth=depth, max_depth=max_depth, 
+            max_lines_per_key=max_lines_per_key, 
+            all_files=all_files, 
+            max_lines=max_lines,
+            colorize=color)
+        for line in lines:
+            str_.append(line)
+        return "\n".join(str_)
+    
 
 
 class Loader(parent_classes.Loader):
