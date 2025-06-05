@@ -67,6 +67,10 @@ dependencies = { numpy = "==1.21", pytables = ">=3.7.0,<4" }
 dependencies = { neuron = "==7.8.2", numpy = "==1.19.2", distributed = "==2.30.0"}
 pypi-dependencies = { tables = ">=3.8.0,<4" }
 
+[tool.pixi.target.unix.activation.env]
+PYTHONPATH = "$(pwd):$PYTHONPATH"
+ISF_HOME="$(pwd)"
+
 [tool.pixi.environments]
 docs = ["docs"]
 default = ["isf"]
