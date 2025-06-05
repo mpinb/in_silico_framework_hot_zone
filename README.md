@@ -23,6 +23,40 @@ pixi r build_docs
 pixi r host_docs
 ```
 
+## Installation
+
+This version of ISF is available for Linux and macOS.
+
+For installation and environment management, ISF uses [pixi](pixi.sh). You can install pixi by running:
+
+```bash
+curl -fsSL https://pixi.sh/install.sh | sh
+```
+
+You can then install this version of ISF by running:
+```bash
+git clone https://github.com/mpinb/in_silico_framework_hot_zone.git --depth 1 &&
+cd in_silico_framework_hot_zone &&
+pixi install
+```
+
+## Usage
+
+Launch a jupyter server:
+```bash
+pixi r launch_jupyter_server
+```
+
+Launch a dask server and workers for parallel computing (optional, but recommended):
+```bash
+pixi r launch_dask_server
+```
+```bash
+pixi r launch_dask_workers
+```
+
+You can then connect to the jupyter server in your browser and start coding using ISF.
+
 ## Tutorials
 
 Please visit the tutorials (either in `getting_started/tutorials` or on the documentation page) for a walkthrough of ISF's most important workflows.
