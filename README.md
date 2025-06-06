@@ -11,7 +11,7 @@
 </div>
 
 [ISF](https://www.github.com/mpinb/in_silico_framework) is an In Silico Framework for multi-scale modeling and analysis of *in vivo* neuron-network mechanisms.
-This repository provides a fork of ISF for reproducing simulations of the study [Thalamus enables active dendritic coupling of inputs arriving at different cortical layers](https://www.biorxiv.org/content/10.1101/2021.10.21.465325v2).
+This repository provides a fork of ISF for reproducing simulations of the study 'Thalamus enables active dendritic coupling of inputs arriving at different cortical layers'.
 
 A minimal interactive demo is accessible here: [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/mpinb/in_silico_framework_hot_zone/blob/master/demo_google_colab.ipynb)
 ## Documentation
